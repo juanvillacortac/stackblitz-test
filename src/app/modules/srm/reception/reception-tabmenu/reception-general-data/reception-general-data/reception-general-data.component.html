@@ -1,0 +1,194 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-card header="{{ 'srm.reception.general_data' | translate }}" class="p-fluid">
+            <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.responsible_user' | translate }}</label>
+                        <div class="p-inputgroup">
+                            <input type="text" pInputText placeholder="{{ 'srm.reception.document.general_data.responsible_user' | translate }}"
+                                (keyup.enter)="save()"  [(ngModel)]="reception.receivingOperator.name" disabled>
+                                <button type="button" [disabled]="receptionProperties.responsibleOperatorDisabled" pButton pRipple icon="pi pi-search" (click)="showOperatorModal('responsible')"></button>      
+                        </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.validating_user' | translate }}</label>
+                        <div class="p-inputgroup">
+                            <input type="text" pInputText placeholder="{{ 'srm.reception.document.general_data.validating_user' | translate }}"
+                                (keyup.enter)="save()" disabled [(ngModel)]="this.reception.validatorOperator.name">
+                                <button type="button" [disabled]="receptionProperties.validatorOperatorDisabled" pButton pRipple icon="pi pi-search" (click)="showOperatorModal('validator')"></button>      
+                        </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.documentType' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown  [options]="documentTypes" [(ngModel)]="reception.documentTypeId" placeholder="Seleccione..."
+                    (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [showClear]="true"
+                     appendTo="body"   emptyMessage="{{ 'not_found' | translate }}" 
+                     [disabled]="reception.estatus >statusreception.started || iduserlogin!=this.reception.receivingOperator.id"></p-dropdown>               
+                    <small class="p-invalid" *ngIf="reception.documentTypeId <=0">{{ 'srm.reception.document.validations.document_type_required' | translate }}</small>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.reception_area' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="receptionAreas" placeholder="{{ 'selection_default' | translate }}" [(ngModel)]="reception.receptionAreaId"
+                    (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [showClear]="true" 
+                    emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id" [disabled]="receptionProperties.headReceptionDataDisabled">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="!isvalid('area_required')">{{ 'srm.reception.document.validations.area_required' | translate }}</small>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.invoice_number' | translate }}</label>
+                        <input type="text" pInputText placeholder="{{ 'srm.reception.document.associated_document.invoice_number' | translate }}"
+                                (keyup.enter)="save()" [(ngModel)]="reception.invoiceNumber" [disabled]="reception.estatus >statusreception.started || iduserlogin!=this.reception.receivingOperator.id">
+                    <!-- <small class="p-invalid" *ngIf="!isvalid('invoice_number_required')">{{ 'srm.reception.document.validations.invoice_number_required' | translate }}</small> -->
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.control_number' | translate }}</label>
+                        <input type="text" pInputText [(ngModel)]="reception.controlNumber" placeholder="{{ 'srm.reception.document.associated_document.control_number' | translate }}"
+                                (keyup.enter)="save()" [disabled]="reception.estatus >statusreception.started || iduserlogin!=this.reception.receivingOperator.id">
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.serial_number' | translate }}</label>
+                        <input type="text" [(ngModel)]="reception.serieNumber" pInputText placeholder="{{ 'srm.reception.document.associated_document.serial_number' | translate }}"
+                                (keyup.enter)="save()" [disabled]="reception.estatus >statusreception.started || iduserlogin!=this.reception.receivingOperator.id">
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.arrive_date' | translate }}</label>
+                    <p-calendar [(ngModel)]="arrivalTime" [disabled]="receptionProperties.headReceptionDataDisabled" (keyup.enter)="save()" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [showTime]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.starting_date' | translate }}</label>
+                    <p-calendar [(ngModel)]="startTime" (keyup.enter)="save()" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [showTime]="true" [disabled]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.finalized_date' | translate }}</label>
+                    <p-calendar [(ngModel)]="finalizedDate" (keyup.enter)="save()" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [showTime]="true" [disabled]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.starting_validation_date' | translate }}</label>
+                    <p-calendar [(ngModel)]="validateStartDate" (keyup.enter)="save()" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [showTime]="true" [disabled]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.general_data.end_validation_date' | translate }}</label>
+                    <p-calendar [(ngModel)]="validateFinalizedDate" (keyup.enter)="save()" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [showTime]="true" [disabled]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-mb-2 p-fluid">
+                    <div>
+                        <p>{{ 'srm.reception.document.general_data.waiting_time' | translate }}</p>
+                        <i class="pi pi-clock">
+                            <label class="sp-text-light" style="margin-left: 5px;">{{this.timeStringArrival}}</label>
+                        </i>
+                    </div>
+                    <!-- <app-timer-viewer [title]="'srm.reception.document.general_data.waiting_time'" [startDate]="arrivalTime" [finalizedDate]="startTime"></app-timer-viewer> -->
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-mb-2 p-fluid">
+                    <div>
+                        <p>{{ 'srm.reception.document.general_data.reception_time' | translate }}</p>
+                        <i class="pi pi-clock">
+                            <label class="sp-text-light" style="margin-left: 5px;">{{this.timeString}}</label>
+                        </i>
+                    </div>
+                    <!-- <app-timer-viewer [title]="'srm.reception.document.general_data.reception_time'" [startDate]="startTime" [finalizedDate]="finalizedDate"></app-timer-viewer> -->
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-mb-2 p-fluid">
+                    <div>
+                        <p>{{ 'srm.reception.document.general_data.validation_time' | translate }}</p>
+                        <i class="pi pi-clock">
+                            <label class="sp-text-light" style="margin-left: 5px;">{{this.timeStringvalidate}}</label>
+                        </i>
+                    </div>
+                    <!-- <app-timer-viewer [title]="'srm.reception.document.general_data.validation_time'" [startDate]="validateStartDate" [finalizedDate]="validateFinalizedDate"></app-timer-viewer> -->
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-mb-2 p-fluid">
+                    <div>
+                        <p>{{ 'srm.reception.document.general_data.validation_time' | translate }}</p>
+                        <i class="pi pi-clock">
+                            <label class="sp-text-light" style="margin-left: 5px;">{{this.duration}}</label>
+                        </i>
+                    </div>
+                    <!-- <app-timer-viewer [title]="'srm.reception.document.general_data.duration'" [startDate]="arrivalTime" [finalizedDate]="validateFinalizedDate"></app-timer-viewer> -->
+                </div>
+            </div>
+        </p-card>
+    </div>
+    <br/>
+    <div class="p-col-12">
+        <p-card header="{{ 'srm.reception.document.associated_document.associated_document' | translate }}" class="p-mt-4">
+            <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.document_type' | translate }}</label>
+                    <p-dropdown [options]="associatedDocumentTypes" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+                    (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="reception.documentTypeRelatedId" [disabled]="true"
+                    emptyMessage="{{ 'not_found' | translate }}" optionLabel= "documentTypeRelated" optionValue="documentTypeRelatedId" >
+                    </p-dropdown>
+                    
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.document_number' | translate }}</label>
+                        <input  type="text" pInputText placeholder="{{ 'srm.reception.document.associated_document.document_type' | translate }}"
+                                (keyup.enter)="save()" [(ngModel)]="reception.purchaseOrderRelated " disabled>
+                </div>            
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.negociated_payment_currency' | translate }}</label>
+                    <p-dropdown [options]="currencies" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+                    (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="reception.supplierCurrencyId"
+                    emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id" [disabled]="true">
+                    </p-dropdown>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.negotiated_payment_rate' | translate }}</label>
+                    <p-inputNumber (keyup.enter)="save()" [(ngModel)]="reception.supplierExchangeType" [disabled]="true" placeholder="{{ 'srm.reception.document.associated_document.negotiated_payment_rate' | translate }}" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+                    </p-inputNumber >   
+                </div>
+
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label>{{ 'srm.reception.document.associated_document.external_document_number' | translate }}</label>
+                        <input type="text" pInputText 
+                                (keyup.enter)="save()" [(ngModel)]="reception.externalDocumentNumber" [disabled]="receptionProperties.associatedDocumentDisabled">
+                </div>
+
+                <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                    <label class="p-mr-4" >{{ 'srm.reception.document.associated_document.centralized_invoice' | translate }}</label>
+                    <p-inputSwitch class="p-mr-4" [disabled]="true" [(ngModel)]="reception.centralizedInvoiceInd"></p-inputSwitch>
+                </div>
+            </div>
+        </p-card>
+    </div>
+    <br/>
+    <div class="p-col-4">
+        <p-card header="{{ 'srm.reception.document.supplier.supplier' | translate }}">
+            <app-reception-supplier [supplier]="reception.supplier" [disabled]="receptionProperties.providerDataDisabled"></app-reception-supplier>
+        </p-card>
+    </div>
+    <div class="p-col-8">
+        <p-card header="{{ 'srm.reception.document.negotiation.negotiation' | translate }}">
+            <app-reception-payment-negotation [paymentNegotiation]="reception.paymentNegotiation" [legalCurrencyId]="legalCurrencyId"></app-reception-payment-negotation>
+        </p-card>
+    </div>
+    <br/>
+    <div class="p-col-12 p-fluid">
+        <div class="card-body my-2">
+            <div class="p-grid pb-3">
+                <p-card class="p-col-12 p-lg-12 p-fluid" header="{{ 'srm.reception.document.transport.transport' | translate }}">
+                    <app-reception-transport [transport]="reception.transport"></app-reception-transport>
+                </p-card>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="p-col-12 p-fluid">
+        <div class="card-body my-2">
+            <div class="p-grid pb-3">
+                <p-card class="p-col-12 p-lg-12 p-fluid" header="{{ 'srm.reception.document.internal_use.internal_use' | translate }}">
+                    <app-reception-calculation-basis [calculationBasis]="reception.calculationBasis" [legalCurrencyId]="legalCurrencyId" [conversionCurrencyId]="conversionCurrencyId" [currenciesBase]="currenciesBase"></app-reception-calculation-basis>
+                </p-card>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<operator-modal-list [showDialog]="showOperatorDialog" (onSubmit)="submitOperator($event)" (onToggle)="hideOperator($event)" [multiples]="false"></operator-modal-list>

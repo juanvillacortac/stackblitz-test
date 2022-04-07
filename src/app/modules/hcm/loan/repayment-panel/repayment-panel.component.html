@@ -1,0 +1,175 @@
+<p-sidebar [(visible)]="visible" (onShow)="ngOnInit()" [blockScroll]="true" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>Pago de amortización</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>    
+    <hr/>
+    <div class="p-col-12">
+        <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+                
+                <div class="p-grid p-col-12">
+                    <div class="p-col-12">
+                        <label class="p-col-12" for="active">Forma de pago<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="paymentTypeDropdown" [(ngModel)]="paymentTypeSelect" placeholder="Seleccione..." (keyup.enter)="submit()" optionLabel="label" 
+                            [class]="submitted && paymentTypeSelect.value == -1 ? 'p-col-12  ng-dirty ng-invalid' : 'p-col-12 '" (onChange)="paymentTypeChange()">
+                        </p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && paymentTypeSelect.value == -1"> La forma de pago es requerida</small>
+                    </div>
+                </div>
+                <div class="p-grid p-col-12" *ngIf="transferenceType">
+                    <div class="p-col-12">
+                        <label class="p-col-12" for="active">Cuenta bancaria<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="bankAccountDropdown" [(ngModel)]="bankAccountSelect" placeholder="Seleccione..." optionLabel="label" 
+                            [class]="submitted && bankAccountSelect.value == -1 ? 'p-col-12  ng-dirty ng-invalid' : 'p-col-12 '" (keyup.enter)="submit()">
+                        </p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && bankAccountSelect.value == -1"> La cuenta bancaria es requerida</small>
+                    </div>
+                </div>
+              
+                <div class="p-field p-grid p-col-12" *ngIf="transferenceType">
+                    <div class="p-col-12">
+                        <label class="p-col-12" for="active">Referencia<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input type="text" [(ngModel)]="newRedemption.reference" pInputText maxlength="70" (keyup.enter)="submit()" 
+                            [class]="submitted && (newRedemption.reference == '' || newRedemption.reference == null) ? 'ng-dirty ng-invalid' : ''"/>
+                        <small class="p-invalid" *ngIf="submitted && (newRedemption.reference == '' || newRedemption.reference == null)"> La referencia es requerida</small>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12 p-lg-6 inside">
+                        <label class="p-col-12" for="active">Monto<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber mode="decimal" [(ngModel)]="newRedemption.paymentAmount" maxlength="19" [minFractionDigits]="2" 
+                            [class]="submitted && (newRedemption.paymentAmount <= 0 || newRedemption.paymentAmount == null) ? 'ng-dirty ng-invalid' : ''" [maxFractionDigits]="2" life="500">
+                        </p-inputNumber>
+                        <small class="p-invalid" *ngIf="submitted && (newRedemption.paymentAmount <= 0 || newRedemption.paymentAmount == null)"> El monto es requerido</small>
+                    </div>
+
+                    <div class="p-col-12 p-lg-6">
+                        <label for="active">Fecha de pago<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-calendar [(ngModel)]="paymentDate" dateFormat="dd/mm/yy" readonlyInput="true" [maxDate]="today"
+                            [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" yearRange="1900:2200"
+                            [class]="submitted && paymentDate == null ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                        </p-calendar>
+                        <small class="p-invalid" *ngIf="submitted && paymentDate == null">La fecha de pago es requerida</small>
+                    </div>
+                </div>
+                <div class="p-field p-col-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                  </div>
+                <div class="p-col-12 p-d-flex p-jc-end p-pr-4" id="div-button">
+                    <button pButton pRipple class="p-button p-button-success p-ml-2" (click)="add()"
+                        pTooltip="agregar" tooltipPosition="top" icon="pi pi-plus">
+                    </button>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                    <p-table #dt [rowHover]="true" [value]="newPaymentList" [showCurrentPageReport]="true">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="p-text-center">Forma de pago </th>
+                                <th class="p-text-center">Monto</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-redemptionList>
+                            <tr *ngIf="redemptionList.length != 0">
+                                <td class="p-text-center" *ngIf="redemptionList.idPaymentType != 1"><p>{{redemptionList.paymentType}} - {{redemptionList.companyBankAccount}}</p></td>
+                                <td class="p-text-center" *ngIf="redemptionList.idPaymentType == 1"><p>{{redemptionList.paymentType}}</p></td>
+                                <td class="p-text-center"><p>{{redemptionList.paymentAmount | number}}</p></td>
+                            </tr>
+                            <tr *ngIf="redemptionList.length == 0">
+                                <p-messages severity="info">
+                                    <ng-template pTemplate>
+                                        <div class="p-ml-2">No existen registros de pagos.</div>
+                                    </ng-template>
+                                </p-messages>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 
+        
+        
+        
+       
+        
+        
+        
+        
+        
+        
+        
+        
+        <div class="p-grid" style="height: 30px;">
+        <div  id="header" class="p-col-11" style="margin-top: 5px;">
+            <h5>Carga familiar</h5>
+        </div>
+        <div class="p-col-1">
+            <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+        </div>
+      </div>    
+      <hr />
+        <div class="p-col-12">
+          <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+    
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6 inside">
+                  <label for="active">Tipo de documento<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <p-dropdown  placeholder="Seleccione..."   (keyup.enter)="submit()"></p-dropdown>
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6">
+                  <label for="active">Número de documento<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <input type="text"  pInputText maxlength="70" (keyup.enter)="submit()" /> 
+                  </div>
+                </div>
+                
+              </div>
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6 inside">
+                  <label for="active">Género<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <p-dropdown inputId="gender" 
+                     placeholder="Seleccione..."  (keyup.enter)="submit()" >
+                    </p-dropdown>
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6">
+                  <label for="active">Parentesco<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <p-dropdown (keyup.enter)="submit()"></p-dropdown>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="p-field p-col-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+              </div>
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12">
+                  <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div> -->
+
+</p-sidebar>

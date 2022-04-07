@@ -1,0 +1,57 @@
+<div class="card">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+          <!--<label *ngIf="!showFilters" id="filterTitle">Empresas</label>-->
+          <h4 *ngIf="!showFilters" id="filterTitle">Incidencias</h4>
+        </div>
+        <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row">
+            <div>
+              <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+              (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+            </div>
+        </div>
+    </div>   
+    <app-incidents-main-filter (onSearch)="search()" (cleanCardList)="cleanCardList()" [cleanList]="cleanList" [expanded]="showFilters" [filters]="incidentsDetailFilterList" [loading]="loading"></app-incidents-main-filter>
+</div>
+
+<div class="card" *ngIf="cleanList">
+  <!-- Star table -->
+  <p-table [resizableColumns]="false" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" 
+  #dt [columns]="displayedColumns" [rowHover]="true" [value]="incidentsModel" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+  currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" >
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <ng-container *ngFor="let col of columns">
+        <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }" pResizableColumn [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      </ng-container>  
+      <th></th>    
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-incidentsModel let-columns="columns" let-index="rowIndex">
+    <tr>
+      <ng-container *ngFor="let col of columns">
+        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+          <span>{{col.template(incidentsModel)}} </span>
+        </td>
+      </ng-container>
+      <td>
+        <!-- <button *ngIf="holidayCycle.idStatus == 83 && this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)" pButton pRipple type="button" icon="pi pi-plus" (click)="editHolidayCycle(index)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Crear nuevo" tooltipPosition="top" placeholder="Top"></button>
+        <button *ngIf="holidayCycle.idStatus == 84 && this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)" pButton pRipple type="button" icon="pi pi-pencil" (click)="editHolidayCycle(index)"  class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button> -->
+      </td>
+    </tr>
+  </ng-template> 
+  <ng-template pTemplate="footer" let-columns>
+    <ng-container>
+      <tr *ngIf="incidentsModel && incidentsModel.length == 0 && showMenssage" >
+        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+          <p-message severity="info"  text="No existen resultados que coincidan con la búsqueda." styleClass="p-col-12 p-mr-2"></p-message>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+</p-table>
+<!-- End Table -->
+</div>

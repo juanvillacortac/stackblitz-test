@@ -1,0 +1,33 @@
+@media only screen and (max-width: 440px) {
+    :host ::ng-deep .p-steps-item {
+        padding-bottom: 15px;
+      }
+      
+      :host ::ng-deep .p-steps ul {
+        display: block;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      
+      :host ::ng-deep .p-steps .p-steps-item:before {
+        content: none;
+      }
+
+      :host ::ng-deep .btnclose {
+    /* left: auto; */
+        right: 50px;
+      }
+      :host ::ng-deep .headertext {
+        /* left: auto; */
+              font-size: initial;
+          }
+     
+      
+   
+  }
+  @media only screen and (max-width: 320px) {
+    :host ::ng-deep .groupbtn {
+      margin-top: 0.2rem;
+    }
+}

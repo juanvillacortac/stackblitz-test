@@ -1,0 +1,68 @@
+:host ::ng-deep {
+    .ButtonMath {
+        background-color:#44c767;
+        border:1px solid #18ab29;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:1.25rem;
+        margin-left: 0.25rem;
+        margin-bottom: 0.25rem;
+        width: 2.5rem;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #2f6627;
+    }
+    .ButtonMath:hover {
+        background-color:#5cbf2a;
+    }
+    .ButtonMath:active {
+        position:relative;
+        top:1px;
+    }
+    .ButtonMath .xslw{
+        width: 3.2rem;
+        padding: 7px 0px;
+    }
+
+    @media screen and (min-width: 768px){
+        .column-buttons{
+            width: 130px;
+        }
+        .celda{
+            width: 95px;
+            text-align: center !important;
+        }
+        .button-right{
+            text-align: right !important;
+        }
+
+        .p-instruction-line{
+            text-align: center !important;
+        }
+    }
+
+    .p-panel {
+        box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+        border-radius: 4px!important;
+        margin: 0.5rem;
+        margin-top: 0;
+        padding: 0px;
+  }  
+
+    .p-panel .p-panel-header {
+        border: 1px solid transparent;
+        padding: 1rem 1.25rem;
+        background: #fff;
+        
+      }
+
+      .p-panel .p-panel-header .p-panel-title  {
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+      }
+    
+
+}
+
+   

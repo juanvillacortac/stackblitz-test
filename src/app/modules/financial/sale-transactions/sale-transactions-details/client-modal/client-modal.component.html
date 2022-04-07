@@ -1,0 +1,97 @@
+<p-dialog (onShow)="ngOnInit()" [(visible)]="displayModal" [closable]="false" [draggable]="false" [modal]="true"
+    [breakpoints]="{'640px': '90vw', '980px': '80vw'}" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [focusOnShow]="true">
+
+    <ng-template pTemplate="header">
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <h4 style="margin: 0">Buscar cliente</h4>
+            <button class="p-dialog-header-close p-dialog-header-icon p-link ng-star-inserted" (click)="hideDialog()">
+                <span class="pi pi-times"></span>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="p-grid p-align-center p-mb-2 vertical-container">
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input [(ngModel)]="socialReason" id="name" pInputText maxlength="35">
+                        <label for="name">Razón social<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <span class="p-float-label">
+                    <p-dropdown [id]="'app'" [(ngModel)]="classification" [autoDisplayFirst]="false" [showClear]="true"
+                        [options]="classifications" appendTo="body" [baseZIndex]="10000000000"
+                        [optionLabel]="'supplierclasification'" [optionValue]="'id'">
+                    </p-dropdown>
+                    <label for="app">Clasificación <span [ngStyle]="{'color':'red'}">*</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input [(ngModel)]="documentnumber" id="name" pInputText maxlength="35">
+                        <label for="name">Documento de identidad<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: relative;">
+            <p-table [resizableColumns]="false" #dt [columns]="displayedColumns"
+                styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows p-mt-3"
+                [rowHover]="true" [value]="filterTable(clients)" [rows]="4" [showCurrentPageReport]="true"
+                [paginator]="true"
+                currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word', 'text-align':  'center'}"
+                                pResizableColumn>
+                                {{col.header}} <span *ngIf="col.field == 'rates'" [ngStyle]="{'color':'red'}">*</span>
+                            </th>
+                        </ng-container>
+                        <th style="width:60px"></th>
+                    </tr>
+
+                </ng-template>
+
+                <ng-template pTemplate="body" let-client let-columns="columns" let-i="rowIndex">
+                    <tr style="position: relative;">
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'text-align': col.field !== 'rates' ? 'center' : 'left'}"
+                                class="ui-resizable-column">
+                                <span>{{col.template(client)}}</span>
+                            </td>
+                        </ng-container>
+                        <td>
+                            <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-mr-2"
+                                (click)="select(client)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns let-i="rowIndex">
+                    <tr>
+                        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length + 1">
+                            <p-message severity="info" text="No existen resultados que coincidan con la búsqueda."
+                                styleClass="p-col-12 p-mr-2">
+                            </p-message>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [baseZIndex]="1000000000000"></p-confirmDialog>

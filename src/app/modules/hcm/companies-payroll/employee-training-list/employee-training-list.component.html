@@ -1,0 +1,127 @@
+<ng-container *ngIf="(recordList && recordList.length > 0)">
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+    </span>
+    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus p-button-success" tooltipPosition="top" pTooltip="Agregar" class="p-button-success p-mr-2" (click)="sendPanel()" [disabled]="disabledSave > 0"></button>
+  </div>
+  
+  <p-table #dt2 [value]="recordList" [globalFilterFields]="['naming','description','objective','training']" [rows]="10" rowGroupMode="subheader" 
+    groupRowsBy="naming" responsiveLayout="scroll" scrollHeight="500px" 
+    styleClass="p-datatable-responsive-demo p-datatable-sm" [showCurrentPageReport]="true"  editMode="row" 
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" dataKey="idTraining" sortField="idTraining">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 10%;"></th>
+            <th pSortableColumn="naming" class="p-text-center">Nomenclatura <p-sortIcon field="naming"></p-sortIcon></th>
+            <th pSortableColumn="training" class="p-text-center">Tipo <p-sortIcon field="training"></p-sortIcon></th>
+            <th pSortableColumn="description" class="p-text-center">Descripción <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="objective" class="p-text-center">Objetivo/Horas <p-sortIcon field="objective"></p-sortIcon></th>
+            <!-- <th class="p-text-center">Asociado</th> -->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-record let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+            <td class="p-text-center">
+                <button type="button" pButton pRipple [pRowToggler]="record" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td class="p-text-center">
+                {{record.naming}}
+            </td>
+            <td class="p-text-center">
+                {{record.training}}
+            </td>
+            <td class="p-text-center">
+                {{record.description}}
+            </td>
+            <td class="p-text-center">
+                {{record.objective}}
+            </td>
+        </tr>
+        <!-- <p-message severity="info" text="Debe crear una relación laboral para el trabajador actual para poder utilizar esta sección." styleClass="p-col-12 p-mr-2"></p-message> -->
+    </ng-template>
+
+    <ng-template pTemplate="rowexpansion" let-record let-editing="editing" let-ri="rowIndex">
+        <tr style="background-color: #e9ecef; height: 40px;">
+            <th></th>
+            <th pSortableColumn="assignedValue" class="p-text-center">
+              Valor {{record.idTrainingType == 1 ?'(Horas/días) ':'(Puntaje/%) '}}
+              <p-sortIcon field="assignedValue"></p-sortIcon></th>
+            <th pSortableColumn="startDate" class="p-text-center">Fecha inicio <p-sortIcon field="startDate"></p-sortIcon></th>
+            <th pSortableColumn="endDate" class="p-text-center">Fecha fin <p-sortIcon field="endDate"></p-sortIcon></th>
+            <th></th>
+        </tr>      
+        <tr [pEditableRow]="record" style="background-color: #e9ecef; height: 40px;">
+            <td class="p-text-center">
+                
+            </td>
+          <td class="p-text-center" style="overflow-wrap: break-word">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <p-inputNumber [(ngModel)]="record.assignedValue" [minFractionDigits]="2" [maxFractionDigits]="4" 
+                [maxlength]="6" class="inputValue" [class]="assignedValueMessage != '' ? 'ng-invalid ng-dirty' : '' "></p-inputNumber>
+              </ng-template>
+              <ng-template pTemplate="output" >
+                <span *ngIf="record.assignedValue != ''">{{record.assignedValue}}</span>
+                <span *ngIf="record.assignedValue == ''">No asignado</span>
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td class="p-text-center" style="overflow-wrap: break-word">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-calendar [(ngModel)]="record.startDateCalendar" dateFormat="dd/mm/yy" inputId="employmentDate" placeholder="Fecha inicio" (keyup.enter)="submit()"
+                      readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" yearRange="1900:2200" 
+                      [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" appendTo="body" [maxDate]="record.endDateCalendar"
+                      [class]="record.startDateCalendar == null ? 'ng-invalid ng-dirty' : '' ">
+                  </p-calendar>
+              
+                </ng-template>
+                <ng-template pTemplate="output" >
+                  <span *ngIf="record.startDateCalendar != null">{{record.startDateCalendar | date: "dd/MM/yyyy"}}</span>
+                  <span *ngIf="record.startDateCalendar == null">No asignado</span>
+                </ng-template>
+              </p-cellEditor>
+          </td>
+          <td class="p-text-center" style="overflow-wrap: break-word">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-calendar [(ngModel)]="record.endDateCalendar" dateFormat="dd/mm/yy" inputId="employmentDate" placeholder="Fecha fin" (keyup.enter)="submit()"
+                      readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" yearRange="1900:2200"
+                      [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" appendTo="body" [maxDate]="maxDate" [minDate]="record.startDateCalendar"
+                      [class]="record.endDateCalendar == null ? 'ng-invalid ng-dirty' : '' ">
+                  </p-calendar>
+                </ng-template>
+                <ng-template pTemplate="output" >
+                  <span *ngIf="record.endDateCalendar != null">{{record.endDateCalendar | date: "dd/MM/yyyy"}}</span>
+                  <span *ngIf="record.endDateCalendar == null">No asignado</span>
+                </ng-template>
+              </p-cellEditor>
+          </td>
+          
+          <td class="p-text-center" style="width:8rem">
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && !showEditing[ri]" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(record, ri)" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && !showEditing[ri]" pButton pRipple type="button" pSaveEditableRow icon="pi pi-trash" (click)="deletedEmployeeTraining(record)" pTooltip="Eliminar" class="p-button-rounded p-button-danger p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && showEditing[ri]" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(record, ri)" pTooltip="Guardar" class="p-button-rounded p-button-success p-button-text p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && showEditing[ri]" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(record, ri)" pTooltip="Cancelar" class="p-button-rounded p-button-danger p-button-text" tooltipPosition="top" placeholder="Top"></button>
+            <!-- <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(recordList, ri)" pTooltip="Regresar" class="p-button-rounded p-button-danger" tooltipPosition="top" placeholder="Top"></button> -->
+          </td>
+        </tr>                
+      </ng-template>
+  </p-table>
+</ng-container>
+
+<ng-container  *ngIf="recordList.length == 0">
+  <div class="p-text-right p-mb-3">
+    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus p-button-success" tooltipPosition="top" pTooltip="Agregar" class="p-button-success p-mr-2" (click)="sendPanel()" [disabled]="disabledSave > 0"></button>
+  </div>
+  <p-messages severity="info" >
+    <ng-template pTemplate>
+        <div class="p-ml-2">No existen cursos o evaluaciones asociadas a este trabajador.</div>
+    </ng-template>
+  </p-messages>
+</ng-container>
+
+  <app-employee-training-panel *ngIf="showSidebar" [trainingArray]="trainingEmployee.training" [showSidebar]="showSidebar" [maxDate]="maxDate" [record]="newTraining" (backUnChanged)="hiddenSidebar($event)" (saveRecord)="savingTraining($event)"></app-employee-training-panel>
+  

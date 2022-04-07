@@ -1,0 +1,78 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+     
+        <div class=" p-fluid p-col-12 p-md-6 p-lg-4">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filter.lotName" (keyup.enter)="search()"   (input)="_validations.toCapitalizeSimbology($event)"
+                     maxlength="20" minlength="3" name="name" id="name" type="text" pInputText>
+                    <label>Número de lote</label>
+                </span>
+            </div>
+        </div>
+
+    
+    
+         <div [formGroup]="myGroup"  class=" p-fluid p-col-12 p-md-6 p-lg-4">
+
+                <span class="p-float-label">
+                        <p-calendar  [(maxDate)]="DatesCreateEndTop"  (keyup.enter)="search()"   [(ngModel)]="DatesCreateStart"  [showIcon]="true" readonlyInput="true"  (onSelect)="onSelectMethodDateStart($event)"  
+                        dateFormat="dd/mm/yy"  p formControlName="date" ></p-calendar>
+                       <label>Fecha inicio de creación</label>
+                </span>
+
+        </div>
+
+        <div  [formGroup]="myGroup"  class=" p-fluid p-col-12 p-md-6 p-lg-4">
+                    <span class="p-float-label">
+                            <p-calendar     [(minDate)]="DatesCreateStart"  (keyup.enter)="search()"   [(maxDate)]="DatesCreateEndTop"  [(ngModel)]="DatesCreateEnd" [showIcon]="true" readonlyInput="true"  (onSelect)="onSelectMethodDateEnd($event)" dateFormat="dd/mm/yy"   formControlName="date2"></p-calendar>
+                        <label>Fecha fin de creación</label>
+                    </span>
+         </div>
+      
+            <!-- <div  class="p-fluid p-col-4 p-md-4 p-sm-4">
+                <span class="p-float-label">
+                      
+                  <p-dropdown  pInput="dropdownEstatus" name="cboactive" [options]="stateList" (keyup.enter)="search()"  appendTo="body" [(ngModel)]="filter.indStatusLot"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                  ></p-dropdown>
+                  <label for="dropdownEstatus">Estatus</label>
+                    </span>
+              </div>
+         
+
+              <div class="p-fluid p-col-4 p-md-4 p-sm-4">
+                    <span class="p-float-label">
+                        
+                  <p-dropdown  pInput="permiteEntrada" name="cboactive" [options]="permiteEntrada"  (keyup.enter)="search()"  appendTo="body" [(ngModel)]="filter.allowsEntry"   emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                  ></p-dropdown>
+                  <label for="permiteEntrada">Permite entrada</label>
+                  </span>
+              </div> -->
+
+              <div class="p-fluid p-col-12 p-mt-4 p-md-4 p-lg-4 campos">
+                        <p-dropdown placeholder="Estatus" 
+                        [options]="stateList" (keyup.enter)="search()"  appendTo="body" [(ngModel)]="filter.indStatusLot" 
+                       >
+                        </p-dropdown>
+                </div>
+
+                <div class="p-fluid p-col-12 p-mt-4 p-md-4 p-lg-4 campos">                    
+                        <p-dropdown [options]="permiteEntrada" placeholder="Permite entrada"
+                           (keyup.enter)="search()"  appendTo="body" [(ngModel)]="filter.allowsEntry" 
+                            >
+                            </p-dropdown>
+                    </div>
+        
+<!--         
+          <div class="p-fluid p-col-3 p-md-3 p-lg-3 p-fluid">
+               
+                <p-checkbox [binary]="true" label="Permite entrada" [(ngModel)]="checkFilter"></p-checkbox>
+                permiteEntrada
+            </div>
+             -->
+        
+        <div class="p-d-flex p-jc-end p-col-12 p-md-3 p-lg-12">
+            <button #focusContent pButton pRipple label="Buscar" [(disabled)]="loading"  (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+            <button   pButton pRipple label="Limpiar"   (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+        </div>
+</div>

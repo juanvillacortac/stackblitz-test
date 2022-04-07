@@ -1,0 +1,9 @@
+:host ::ng-deep {
+
+    @media screen and (max-width: 767px){
+       
+        .p-field{
+            margin-bottom: 2rem;
+        }
+    }
+}

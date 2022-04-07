@@ -1,0 +1,21 @@
+:host ::ng-deep {
+    .p-card .p-card-body {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .p-card .p-card-content {
+        padding: 1rem 0;
+    }
+
+    .p-card-title {
+      padding-top: 1.5rem;
+    }
+  }
+
+ .generic-margin
+ {
+     margin-top: -25px !important;
+ }

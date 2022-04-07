@@ -1,0 +1,69 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.requestNumber" maxlength="25" name="name" id="name" type="text" pInputText
+          (keyup.enter)="search()">
+        <label>Número de la solicitud</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="requestTypeList" [(ngModel)]="filters.requestTypeId" appendTo="body"
+      placeholder="Tipo de solicitud" [filter]="true" emptyFilterMessage="Sin resultados."
+      emptyMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.requestTypeId >0 ? true : false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <span class="p-float-label" style="display: block;">
+        <p-calendar [(ngModel)]="filters.startDate" [monthNavigator]="true" [yearNavigator]="true" dateFormat="dd/mm/yy"
+          yearRange="2000:2030" inputId="navigators" (keyup.enter)="search()"></p-calendar>
+        <label for="navigators">Fecha inicio</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <span class="p-float-label" style="display: block;">
+        <p-calendar [(ngModel)]="filters.endDate" [monthNavigator]="true" [yearNavigator]="true" dateFormat="dd/mm/yy"
+          yearRange="2000:2030" inputId="navigators" (keyup.enter)="search()"></p-calendar>
+        <label for="navigators">Fecha fin</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="branchOfficeList" [(ngModel)]="filters.demandBranchId" appendTo="body" [filter]="true"
+      placeholder="Sucursal demanda" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+      (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="useTypeList" [(ngModel)]="filters.useTypeId" appendTo="body"
+      [(ngModel)]="filters.originTypeId" placeholder="Tipo de uso" [filter]="true" emptyFilterMessage="Sin resultados."
+      emptyMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.originTypeId >0 ? true : false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="categoriesList" [(ngModel)]="filters.categoryId" appendTo="body" placeholder="Categoría"
+      [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.categoryId >0 ? true : false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="statusList" [(ngModel)]="filters.statusId" appendTo="body" placeholder="Estatus"
+      [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.statusId >0 ? true : false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-12 p-lg-12 p-jc-end" style="text-align: right;">
+    <button pButton pRipple label="Limpiar" [disabled]="loading" icon="pi pi-ban" class="p-button-secondary p-mr-2"
+      (click)="clearFilters()"></button>
+
+    <button pButton pRipple label="Buscar" [disabled]="loading" icon="pi pi-search" class="p-button-info p-mr-2"
+      (click)="search()"></button>
+
+    <button pButton pRipple label="Exportar excel" [disabled]="loading" icon="pi pi-file-excel"
+      class="p-button-primary p-mr-2" (click)="exportExcel()"></button>
+
+  </div>
+</div>

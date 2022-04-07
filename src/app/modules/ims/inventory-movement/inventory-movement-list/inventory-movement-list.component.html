@@ -1,0 +1,65 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Monedas <span *ngIf="showFilters">> Filtrar</span></h5> -->
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>                  
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters " pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+    </div>
+
+    <inventory-movement-filter (onSearch)="search()" [(filters)]="filter" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></inventory-movement-filter>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="_Service._List" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+            <th></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-movement let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display ,'overflow-wrap': 'break-word'}">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="movement[col.field]"></app-active-label>                
+                    <ng-template #textCell>
+                        <span>{{col.template(movement)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+              <td>
+                  <button   pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2" (click)="open(movement)"  pTooltip="Ver detalle"></button>         
+                </td>
+          </tr>
+      </ng-template>
+      <!-- <ng-template pTemplate="footer" let-columns>
+        
+        <ng-container *ngIf="_Service._List==null || _Service._List?.length==0 ">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-2">
+            <span>No existen resultados</span>
+          </td>
+        </tr>
+        </ng-container>
+      </ng-template> -->
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-2">No existen resultados</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>

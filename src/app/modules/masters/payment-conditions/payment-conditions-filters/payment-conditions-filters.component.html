@@ -1,0 +1,29 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <input [(ngModel)]="filters.name" type="text" (keyup.enter)="search()" maxlength="100" pInputText>
+            <label for="input">Nombre</label>
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">  
+        <span class="p-float-label">
+            <label for="dropdown">Tipo de descuento</label> 
+            <p-dropdown [(ngModel)]="filters.idDiscountType" (keyup.enter)="search()" [options]="cboDiscountRates" placeholder="Tipo de descuento" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown> 
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <label for="dropdown">Estatus</label>
+            <p-dropdown [(ngModel)]="filters.active" (keyup.enter)="search()" [options]="statuslist" placeholder="Estatus" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-12 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

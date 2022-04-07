@@ -1,0 +1,324 @@
+:host ::ng-deep .p-panel .p-panel-header {
+    border: 1px solid transparent;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    font-size: 1.5rem;
+  }
+:host ::ng-deep .p-panel {
+      box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+      border-radius: 4px!important;
+      margin: 0.5rem;
+      margin-top: 0;
+      padding: 0px;
+}
+
+
+ :host ::ng-deep {
+
+    button.p-datepicker-prev.p-link.p-ripple.ng-star-inserted,
+    button.p-datepicker-next.p-link.p-ripple.ng-star-inserted {
+        display: none !important;
+    }
+
+
+    .p-fileupload.p-fileupload-basic.p-component.ng-star-inserted p-messages {
+      display: none !important;
+    }
+
+    .p-card-title, #corporateEmailLabel {
+      color: #5E81AC;
+    }
+
+    #personalEmailLabel {
+      color: #5E81AC;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .readOnlyInfo{
+      color: #6c757d;
+    }
+
+    .p-panel-title {
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+    }
+
+    .user-card-maintext {
+      font-size: 22px;
+      color: black;
+      font-weight: 700;
+  }
+
+  .user-card-secondtext {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 700;
+}
+
+   @media screen and (min-width: 769px){
+
+     #primaryInfo {
+       position: fixed;  
+       width: 19%;
+     }
+    
+     #formTabsDiv {
+        height: 5.5rem; 
+     }
+
+    #formButtonsDiv {
+        height: 5.5rem;
+        margin: 0 auto !important;
+    }
+
+    // .container-input{
+    //   margin-right: -3.5%;
+    // }
+
+   }
+
+   #tagAlta > span {
+      background: #28a745;
+      border: 1px solid #28a745;
+   }
+
+   #tagBaja > span {
+      background: #6f42c1;
+      border: 1px solid #6f42c1;
+   }
+
+   #tagBorrador > span {
+      background: #5E81AC; 
+      border: 1px solid #5E81AC;
+   }
+
+   #tagSuspendido > span {
+      background: #6c757d; 
+      border: 1px solid #6c757d;
+    }
+
+   .styleActive {
+      border-bottom: 2px solid #5E81AC;
+      border-radius: 0px;
+      font-weight: bold;
+      //padding: 10px;
+    }
+    .p-fileupload.p-fileupload-basic.p-component.ng-star-inserted {
+        margin-top: -40px !important;
+    }
+
+    span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple,
+    span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected {
+      // background-color: unset !important;
+      border: none !important;
+
+      // border-color: #17a2b8 !important;
+      // background-color: #17a2b8 !important;
+      background-color:#ffffff3d !important;
+  }
+    span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:focus,
+    span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:focus-visible,
+    span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:visited,
+    span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:hover,
+    span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected:hover,
+    span.p-fileupload-choose:not(.p-disabled):hover
+    span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected:focus,
+    span.p-fileupload-choose:not(.p-disabled):focus {
+        // background-color: unset !important;
+        border: none !important;
+
+        // border-color: #17a2b8 !important;
+        // background-color: #17a2b8 !important;
+        background-color:#ffffff3d !important;
+    }
+
+    @media screen and (min-width: 768px){
+      .miniCardNomina {
+        // height: 15rem;
+        // max-height: 20rem;
+        height: 19rem;
+        max-height: 25rem;
+      }
+
+      .miniCardNomina > div {
+        // height: 15rem;
+        height: 18rem;
+      }
+
+      .miniCardNomina > .p-card.p-component {
+        border-left: 4px solid;
+        border-left-color: #17a2b8;
+      }
+
+      .miniCardDatosP {
+        // height: 22rem;
+        // max-height: 25rem;
+        height: 21rem;
+        max-height: 22rem;
+      }
+
+      .miniCardDatosP > div {
+        // height: 21rem;
+        // height: 22rem;
+        height: 22rem;
+      }
+
+      .miniCardDatosP > .p-card.p-component {
+        //margin-bottom: 0rem !important;
+        border-left: 4px solid;
+        border-left-color: #17a2b8;
+      }
+
+      .miniDividedCard .p-card-shadow > div {
+        // height: 12rem;
+        height: 10.8rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .readOnlyInfoCol {
+        line-height: 1.5rem !important;
+      }
+      
+      #datosDeProfesionMiniCard > .p-card.p-component {
+        margin-bottom: 0rem !important;
+        border-left: 4px solid;
+        border-left-color: #17a2b8;
+      }
+
+      .miniCardAdditionalD > div {
+        // height: 24.5rem;
+        height: 22rem;
+      }
+      
+      //////////////////////////
+      .innerCard .p-card-body {
+        padding: 1rem;
+      }
+
+      .innerCard > .p-card.p-component {
+        border-left: 4px solid;
+        border-left-color: #17a2b8;
+      }
+
+      .readOnlyCard .p-card-body{
+        padding: 0.5rem !important;
+      }
+    }
+
+    @media screen and (max-width: 768px){
+      #primaryInfo {
+        position: unset;  
+        max-width: 100%;
+      }
+
+      img#employeePicture {
+        width: 230px;
+        height: 230px;
+        margin: 0 auto;
+      }
+    }
+
+    @media screen and (max-width: 767px){
+      #height, #weight{
+        width: 82%;
+      }
+
+      #amount{
+        width: 100%;
+      }
+    
+      .span-input{
+        width: 18%;
+      }
+
+      .inputNumberIC{
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-width: 1199px) and (min-width: 768px){
+      p-inputNumber{
+        width: 70%;
+      }
+    
+      .span-input{
+        padding: 7px 15px;
+      }
+    }
+
+    @media screen and (min-width: 1200px)and (max-width: 2000px){
+      #height, #weight{
+        width: 82%;
+      }
+
+      #amount{
+        width: 100%;
+      }
+    
+      .span-input{
+        padding: 7px 15px;
+      }
+    }
+
+    @media screen and (min-width: 2001px){
+      #height, #weight{
+        width: 90%;
+      }
+
+      #amount{
+        width: 95%;
+      }
+    
+      .span-input{
+        width: 10%;
+      }
+
+    }
+
+    @media screen and (min-width: 1660px){
+      .inputNumberIC{
+        width: 100%;
+      }
+    }
+ }
+
+:host ::ng-deep {
+  .team-member{
+    overflow-wrap: break-word;
+  }
+  // #primaryInfo {
+  //     position: fixed;
+  // }
+  
+  img#employeePicture {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  #height input:first-child,
+  #weight input:first-child{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  #amount input:first-child{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  #regresarDiv {
+    position: fixed;
+    padding: 5px 20px;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+  }
+
+  .inputNumberIC .p-inputnumber-input{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  
+}

@@ -1,0 +1,71 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Cuenta bancaria" [(visible)]="showDialog && _data"
+    [style]="{width:'50vw'}" [modal]="true" class="address-dialog">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="card">
+                <div class="p-fluid p-grid p-formgrid">
+
+                    <div class="p-field p-col-12 p-md-6 p-sm-6">
+                        <label for="Uso"> Banco: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                        <p-dropdown [options]="bank" [(ngModel)]="_data.bankId" optionLabel="name" optionValue="id"
+                            [class]="submitted && _data.bankId <= -1 ? 'ng-dirty ng-invalid' : ''"
+                            placeholder="Seleccione..." emptyFilterMessage="Sin resultados."
+                            emptyMessage="Sin resultados."></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _data.bankId<=-1">El banco es
+                            requerido</small>
+
+
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-6 p-sm-6">
+                        <label for="Uso"> Moneda: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                        <p-dropdown [options]="coinsOptions" [(ngModel)]="_data.currencyId"
+                            [class]="submitted && _data.currencyId<= -1 ? 'ng-dirty ng-invalid' : ''"
+                            placeholder="Seleccione..." emptyFilterMessage="Sin resultados."
+                            emptyMessage="Sin resultados."></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _data.currencyId<=-1">La moneda es
+                            requerida</small>
+
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-6 p-sm-6">
+                        <label for="Uso"> Tipo de cuenta: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                        <p-dropdown [options]="typesList" [(ngModel)]="_data.accountTypeId"
+                            [class]="submitted && _data.currencyId<= -1 ? 'ng-dirty ng-invalid' : ''"
+                            placeholder="Seleccione..." emptyFilterMessage="Sin resultados."
+                            emptyMessage="Sin resultados."></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _data.currencyId<=-1">El tipo de cuenta es requerido</small>
+
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="name">Número de cuenta: <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <div class="p-inputgroup">
+                            <input type="text" maxlength="50" [(ngModel)]="_data.accountNumber" pInputText
+                                pKeyFilter="int" placeholder="Cuenta"
+                                [class]="submitted && (!_data.accountNumber || !_data.accountNumber.trim()) ? 'ng-dirty ng-invalid' : ''">
+
+
+                        </div>
+                        <small class="p-invalid"
+                            *ngIf="submitted && (!_data.accountNumber|| !_data.accountNumber.trim())">El
+                            número de cuenta es requerido</small>
+                    </div>
+
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2"></p-button>
+        <p-button icon="pi pi-ban" (click)="showDialog=false" label="Cancelar" styleClass="p-button-secondary">
+        </p-button>
+    </ng-template>
+</p-dialog>

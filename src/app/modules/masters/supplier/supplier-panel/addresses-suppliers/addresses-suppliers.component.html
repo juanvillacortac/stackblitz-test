@@ -1,0 +1,58 @@
+<div class="card p-m-0">
+  
+    <div class="p-d-flex  p-jc-end">
+      <span class=" p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+      </span> 
+      <button  pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="addressDialogVisible=true"  pTooltip="Agregar dirección" tooltipPosition="top"></button> 
+    </div>
+      <p-table #dt [columns]="displayedColumnsAddress" [rowHover]="true" [value]="_dataSupplier.addresses" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+               currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-mt-2">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-address let-columns="columns" let-i="rowIndex">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+               <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="address[col.field]"></app-active-label> 
+                <ng-template #textCell>
+                  <span>{{col.template(address)}} </span>
+                </ng-template>
+              </td>
+            </ng-container>
+          <td style="text-align:center !important">           
+            <button
+              (click)="editAddress(address,i)" pButton pRipple icon="pi pi-pencil"
+              class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button>
+              <button *ngIf="address.id <0 || (address.id >0 && address.idAddressType !=1)"
+                (click)="removeAddress(address)" pButton pRipple icon="pi pi-times"
+                class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"></button>
+          </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-1">No existen resultados</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+      </p-table>
+  
+  </div>
+
+  <app-edit-address (onSubmit)="onSubmitAddress($event)" (onToggle)="onToggleAddress($event)"
+  [visible]="addressDialogVisible" [visibles]="false"></app-edit-address>
+  <!-- <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog> -->

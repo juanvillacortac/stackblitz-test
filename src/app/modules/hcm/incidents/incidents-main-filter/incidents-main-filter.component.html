@@ -1,0 +1,67 @@
+<div class="p-fluid p-formgrid p-grid p-pl-0 p-pr-0" *ngIf="expanded">
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="dropdown">Sucursal</label>
+            <p-dropdown id="TypesVarying"
+            placeholder="Seleccionar..." [filter]="true" (onChange)="loadEmployment()" [(ngModel)]="branchOfficeId" [options]="userOffices" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados">
+            </p-dropdown>      
+        <!-- <small class="p-invalid" *ngIf="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ">Debe completar el campo cargo</small> -->
+    </div>
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label>Tipo de nómina</label>
+        <p-dropdown [(ngModel)]="selectPayrollType" [options]="payrollTypelist" (onChange)="loadPayDates()"  placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+        [class]="submitted && selectPayrollType == 0 ? 'ng-dirty ng-invalid' : ''" > 
+        </p-dropdown>
+        <!-- <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small> -->
+        
+    </div>
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="">Calendario</label>
+        <p-dropdown [(ngModel)]="paymentDate" [options]="payDateList" [disabled]="showCalendarPayroll" placeholder="Seleccionar..." optionLabel="name" [filter]="true" emptyFilterMessage="Sin resultados" 
+        emptyMessage="Sin resultados" [class]="submitted && paymentDate == null ? 'ng-dirty ng-invalid' : ''" life="500" >
+        </p-dropdown>
+        <!-- <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small> -->
+    </div>
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="">Incidencias</label>
+        <p-dropdown id="incidentsList" placeholder="Seleccionar..." [filter]="true" [(ngModel)]="selectConceptsIncidents" [options]="incidentsList" emptyFilterMessage="Sin resultados" 
+            emptyMessage="Sin resultados" [class]="submitted && selectConceptsIncidents == null ? 'ng-dirty ng-invalid' : ''" life="500">
+        </p-dropdown>
+        <!-- <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small> -->
+    </div>
+
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label>Código</label>
+        <input [(ngModel)]="employmentCode" id="employmentCode" [disabled]="enableEmploymentList" name="employmentCode" type="text" (blur)="searchEmploymentForCode()" maxlength="8"
+        pInputText  [class]="code ? 'ng-dirty ng-invalid' : ''">
+    </div>
+
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="dropdown">Trabajador</label>
+            <p-dropdown id="TypesVarying"
+            placeholder="Seleccionar..." [filter]="true" [disabled]="enableEmploymentList" [(ngModel)]="employmentSelect"  [options]="employmentList" emptyFilterMessage="Sin resultados" life="500"
+            emptyMessage="Sin resultados">
+            </p-dropdown>      
+        <!-- <small class="p-invalid" *ngIf="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ">Debe completar el campo cargo</small> -->
+    </div>
+    
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="">Fecha</label>
+        <p-calendar dateFormat="dd/mm/yy" inputId="basic" placeholder="Seleccionar..."
+            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [(ngModel)]="dateIncidents" [maxDate]="maxDate" [readonlyInput]="true" yearRange="1900:2200"
+            [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" appendTo="body" >
+        </p-calendar>
+        <!-- <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small> -->
+    </div>
+    <div class="p-field p-col-12 p-md-6 p-lg-4">
+        <label for="">Estatus</label>
+        <p-dropdown placeholder="Seleccionar..." name="statusSelect" [(ngModel)]="statusSelect" [options]="statusOption" [filter]="true" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados" life="500" >
+        </p-dropdown>
+        <!-- <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small> -->
+    </div>
+</div>
+<div class="p-col-12 p-pl-0 p-pr-0" *ngIf="expanded" align="right">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info button-search"></button>
+    <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"  class="p-button-secondary p-ml-2"></button>
+</div>

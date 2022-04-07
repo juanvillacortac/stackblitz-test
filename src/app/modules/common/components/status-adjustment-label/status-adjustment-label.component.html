@@ -1,0 +1,6 @@
+
+<span *ngIf="idstatus==this.statusIDs.IN_PROGRESS_STATUS_ID"  [class]="'status-badge  status-in-action'"><span class="pi pi-cog p-mt-2"></span>{{idstatus==this.statusIDs.IN_PROGRESS_STATUS_ID ? " En proceso" : "" }}</span> 
+<span *ngIf="idstatus==this.statusIDs.FINALIZED_STATUS_ID"  [class]="'status-badge status-finalize'"><span class="pi pi-check p-mt-2"></span>{{ idstatus==this.statusIDs.FINALIZED_STATUS_ID ? " Finalizado" : "" }}</span> 
+<span *ngIf="idstatus==this.statusIDs.CANCELED_STATUS_ID"   [class]="'status-badge status-canceled'"><span class="pi pi-times-circle p-mt-2"></span>{{ idstatus==this.statusIDs.CANCELED_STATUS_ID ? " Anulado/Cancelado" : "" }}</span>
+<span *ngIf="idstatus==this.statusIDs.WAITING_FOR_ADJUSTMENT_STATUS_ID"  [class]="'status-badge status-waiting'"><span class="pi pi-exclamation-triangle p-mt-2"></span>{{ idstatus==this.statusIDs.WAITING_FOR_ADJUSTMENT_STATUS_ID ? " Pendiente por ajuste" : "" }}</span>
+<span *ngIf="idstatus==this.statusIDs.NO_ASIGNED_STATUS"  [class]="'status-badge status-delayed p-mt-2'"><span class="pi pi-ban p-mt-2"></span>{{ idstatus==this.statusIDs.NO_ASIGNED_STATUS ? " No asignado" : "" }}</span>

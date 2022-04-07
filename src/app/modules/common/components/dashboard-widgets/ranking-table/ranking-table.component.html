@@ -1,0 +1,33 @@
+<div class="p-col-12">
+    <div class="card widget-team">
+        <div class="p-grid p-nogutter">
+            <div class="p-col-12 align-items-right">
+                <span class="sub-title">{{valueTittle}}</span> 
+
+            </div>
+        </div>
+        <ul>
+            <ng-template ngFor let-item [ngForOf]="dataPerPage" let-i="index">
+                <li>
+                    <div class="p-grid member">
+                        <div class="p-col-2 timeline-content">  
+                            <span class="position" >  {{ item.position}} </span>
+                            <span *ngIf="item.position > 0 && item.position <= 3" class="material-icons trophy"  
+                                [ngClass]="{'firstPlace': item.position === 1, 'secondPlace': item.position === 2,'thirdPlace': item.position === 3}" 
+                                 >emoji_events</span>
+                        </div>
+
+                        <div class="p-col-6 ">
+                             <app-user-image [userName]="item.name" [userId]="item.id" [img]="item.image" [width]="50" [fontSize]="14" ></app-user-image>
+                        </div>
+    
+                        <div class="p-col-4 align-items-right">  
+                               <span class="value-font">{{item.value}}</span>   
+                        </div>
+                    </div>
+                </li>
+            </ng-template>
+            <p-paginator *ngIf="data.length  > maxRow" [rows]="maxRow" [totalRecords]="data.length" (onPageChange)="paginate($event)"></p-paginator>            
+        </ul>
+    </div>
+</div>

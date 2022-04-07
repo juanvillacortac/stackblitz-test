@@ -1,0 +1,61 @@
+:host ::ng-deep {   
+    #background-panel .p-tabview .p-tabview-panels {
+        background: #eceff4 !important ;
+       // margin-left: -20px;
+    }
+
+    .tabview-custom {
+        i, span {
+            vertical-align: middle;
+        }
+    
+        // span {
+        //     margin: 0 .5rem;
+        // }
+    }
+
+    .p-tabview p {
+        line-height: 1.5;
+        margin: 0;
+    }
+
+
+    #background-panel div ul li a
+    {
+        background: #eceff4;
+        border-color: #eceff4;
+        color: #5E81AC;
+    }
+
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+        background:#eceff4;
+        border-color: #5E81AC!important;
+        border-width: 0 0 2px 0;
+    }
+
+
+    .generic-font-size
+    {
+        font-size: 1.5rem;
+    }
+     
+    .generic-float-text
+    {
+        float:right;
+    }
+  
+
+
+    @media only screen and (max-width: 540px) {
+         
+        .generic-margin
+        {
+            margin-top: 0rem!important;
+        }
+        .generic-float-text
+        {
+            float:unset;
+            
+        }
+     }
+}

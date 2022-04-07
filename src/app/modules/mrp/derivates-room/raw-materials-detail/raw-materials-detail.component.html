@@ -1,0 +1,30 @@
+
+<h2 class="p-m-0">{{ 'mrp.derivatives.raw_materials' | translate }}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12" *ngIf="!isEdit()">
+        <app-search-ingredients class="p-col-12" (getResult)="getItemsSelected($event)" [(exceptions)]="addedIngredients" [(showSearching)]="showSearching" [isSingleMode]="true" loadKey="product"></app-search-ingredients>
+    </div>
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">{{ 'name' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText [(ngModel)]="rawMaterial.name" #name maxlength="300" required/> 
+                    <small class="p-invalid" *ngIf="validateForm('name').isValid">{{ validateForm('name').error | translate }}</small>                    
+                </div>
+            </div>
+
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span class="p-invalid">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2"(click)="onSave()" label="Guardar"></button>
+            </div> 
+        </div>
+    </div>
+    </div>
+    <p-toast position="top-right" key="raw-material"></p-toast>
+</div>
+

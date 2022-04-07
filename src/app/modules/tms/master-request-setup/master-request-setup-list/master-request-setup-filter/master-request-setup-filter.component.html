@@ -1,0 +1,37 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    
+      <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <p-dropdown [options]="branchOfficeRequestList" [(ngModel)]="_filters.branchOfficeRequestID" placeholder="Sucursal que demanda" (keyup.enter)="search()"></p-dropdown>
+    </div>
+
+      <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <p-dropdown [options]="branchOfficeDispatchesList" [(ngModel)]="_filters.branchOfficeDispatchesID" placeholder="Sucursal que despacha" (keyup.enter)="search()"></p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+      <p-dropdown [options]="categoryList" [(ngModel)]="_filters.categoryID" [filter]="true"
+              placeholder="Categoría" emptyFilterMessage="Sin resultados." (keyup.enter)="search()" [showClear]="_filters.categoryID>-1 ?true:false">        
+            </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+      <p-dropdown [options]="priorityList" [(ngModel)]="_filters.priorityID" placeholder="Prioridad" (keyup.enter)="search()"></p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeRequestlist" [(ngModel)]="_filters.requestTypeID" placeholder="Tipo de solicitud" ></p-dropdown>                       
+</div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <p-multiSelect [options]="daysWeekList" [(ngModel)]="selectedDaysWeek" defaultLabel="Frecuencia" optionLabel="name" display="chip" (keyup.enter)="search()"></p-multiSelect>
+</div>  
+    
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <p-dropdown [options]="statusList" [(ngModel)]="_filters.active" placeholder="Estatus" (keyup.enter)="search()"></p-dropdown>
+    </div>
+    
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end" >
+        <button pButton pRipple label="Buscar" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

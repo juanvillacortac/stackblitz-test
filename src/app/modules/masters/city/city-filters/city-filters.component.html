@@ -1,0 +1,62 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" firstLetterUpperCase name="name" id="name" (keyup.enter)="search()" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="100" pInputText>
+                <label for="float-input">Ciudad</label>
+            </span>
+        </div>        
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="status" id="status" appendTo="body" [(ngModel)]="filters.active"  (keyup.enter)="search()" [showClear]="false"
+                ></p-dropdown>
+                <label for="status">Estatus</label>
+            </span>
+        </div>  
+    </div>  
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="countries.value" id="countries" appendTo="body" optionLabel="name"  
+                [(ngModel)]="idCountry" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onCountrySelected($event.value)" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="countries">País</label>
+
+            </span>
+        </div>   
+    </div> 
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="states.value" id="states" appendTo="body" optionLabel="name"  
+                [(ngModel)]="idStates" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onStateSelected($event.value)" [disabled]="!countrySelected" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="states">Estado</label>
+
+            </span>
+        </div>   
+    </div> 
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="district.value" id="district" appendTo="body" optionLabel="name"  
+                [(ngModel)]="idDistrict" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onDistrictSelected($event.value)" [disabled]="!stateSelected" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="district">Municipio</label>
+
+            </span>
+        </div>   
+    </div> 
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

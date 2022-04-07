@@ -1,0 +1,65 @@
+<p-dialog id="employee-dialog" header="Agregar trabajadores" (onHide)="outForm()" [(visible)]="showPanel" [blockScroll]="true" [style]="{width: '70vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-4">
+                    <label for="dropdown">Sucursal</label>
+                        <p-dropdown id="TypesVarying"
+                        placeholder="Seleccione..." [filter]="true" [(ngModel)]="branchOfficeId" [options]="userOffices" emptyFilterMessage="Sin resultados"
+                        emptyMessage="Sin resultados">
+                        </p-dropdown>      
+                    <!-- <small class="p-invalid" *ngIf="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ">Debe completar el campo cargo</small> -->
+                </div>
+                <div class="p-col-12 p-lg-4">
+                    <label for="active">Clase de nómina</label>
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                        <p-dropdown [options]="payrollClassDropdown" [(ngModel)]="selectClass" placeholder="Seleccione...">
+                        </p-dropdown>
+                        <!-- <small class="p-invalid" *ngIf="submitted && selectClass == -1">La clase de nómina es requerida</small> -->
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-mb-4" align="right">
+                <div style="display: inline-flex;">
+                    <button pButton pRipple label="Buscar" (click)="loadEmployment()" icon="pi pi-search" class="p-button-info button-search"></button>
+                    <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-ml-2"></button>
+                </div>
+            </div>
+        </div>
+        <div class="p-field p-grid p-col-12" style="min-height: 250px;">
+            <p-table [value]="employeeList" *ngIf="employeeList  && employeeList.length > 0">
+                <ng-template pTemplate="header">
+                  <tr>
+                      <th>Código</th>
+                      <th>Nombre</th>
+                      <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employeeList let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <span>{{employeeList.employmentCode}}</span>
+                        </td>
+                        <td>
+                            <span>{{employeeList.employeeName}}</span>
+                        </td>
+
+                        <td >
+                          <p-checkbox [binary]="true" [(ngModel)]="employeeList.selected" ></p-checkbox>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+                <p-messages class="p-col-12" severity="info" *ngIf="messageSearch != ''" >
+                    <ng-template pTemplate>
+                        <div class="p-ml-2">{{messageSearch}}</div>
+                    </ng-template>
+                </p-messages>
+        </div>
+        <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+            </div>
+          </div>
+    </div>
+</p-dialog>

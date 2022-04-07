@@ -1,0 +1,143 @@
+<div class="card">
+  <h5>Resultado financiero</h5>
+  <!-- <p-toolbar>
+    <div class="p-toolbar-group-left"> 
+      <label for=""> Año</label> <p-splitButton icon=" pi pi-cog" [model]="years"></p-splitButton>
+    </div>
+    <div class="p-toolbar-group-right">
+     <label for=""> Periodo fiscal</label> <p-splitButton icon=" pi pi-cog" [model]="years"></p-splitButton>
+  </div>
+    <div class="p-toolbar-group-right">
+      <label for=""> Periodo fiscal</label> <p-splitButton icon=" pi pi-cog" [model]="years"></p-splitButton> <label for="">Semestre</label> <p-splitButton icon=" pi pi-cog" [model]="items"></p-splitButton>
+    </div>
+</p-toolbar> -->
+
+<div class="card" style="align-content: center; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+  <div class="p-grid">
+      <div class="p-col-12 p-md-5 p-lg-6" style="align-content: center; color: #5E81AC;">
+        <span>     
+            <!-- <h2 class="p-field title">Resultado Financiero </h2>         -->
+            <label >Año: </label>
+            <!-- <p-dropdown [options]="year" appendTo="body" placeholder="Seleccione"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>  -->
+
+
+            <p-multiSelect [options]="year" appendTo="body" placeholder="Seleccione"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." ></p-multiSelect>
+            <!-- <label>Periodo fiscal: </label>
+            <p-dropdown [options]="status"  appendTo="body" placeholder="Seleccione"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown> -->
+      
+         
+        </span>
+
+        <span>
+          <label class="margen">Periodo fiscal: </label>
+          <!-- <p-dropdown [options]="PeridoFiscal"  appendTo="body" placeholder="Seleccione"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+          </p-dropdown> -->
+
+          <p-multiSelect [options]="PeridoFiscal" appendTo="body" placeholder="Seleccione"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." ></p-multiSelect>
+        </span>
+     
+  
+      </div>
+     
+
+      <div class="p-col-12 p-md-7 p-lg-3" style="align-content:right;">
+
+        <!-- <div class="p-field p-grid">
+
+            <p-selectButton [options]="optionsTime" multiple="multiple" [(ngModel)]="value2" optionLabel="label" optionValue="value">
+                
+            </p-selectButton>
+        </div> -->
+ 
+
+        <div class="p-field p-grid">
+         
+          <div class="p-col-12">
+            <p-selectButton StyleClass="pruebaestilo" [options]="optionsTime"  [(ngModel)]="value1" optionLabel="title" optionValue="value">
+                
+            </p-selectButton>
+         
+        </div>
+      </div>
+      </div>
+      
+  </div>
+</div>
+
+
+
+ 
+
+  <!-- <p>Group customers by their representative.</p> -->
+  <p-table [value]="partidas" sortField="etiqueta" [columns]="columns" sortMode="single" dataKey="etiqueta"
+  styleClass="p-datatable-striped p-datatable-gridlines"
+    rowGroupMode="subheader" groupRowsBy="etiqueta" responsiveLayout="scroll" [expandedRowKeys]="expanded">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns; let i = index">
+          <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }" pResizableColumn
+            [pSortableColumn]="col.field">
+            {{col.headerTemplate ? col.headerTemplate() : col.header}}
+            <p-sortIcon [field]="col.field" *ngIf="i > 0"></p-sortIcon>
+          </th>  
+            
+        </ng-container>
+
+        <th>JUN-2020</th>
+    
+        
+       
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-partida let-rowIndex="rowIndex" let-expanded="expanded">
+      <tr *ngIf="partida.etiqueta">
+        <td [attr.colspan]="columns.length">
+          <span class="p-text-bold">{{partida.etiqueta}}</span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="groupfooter" let-partida>
+      <tr class="p-rowgroup-footer">
+        <td colspan="4" style="text-align: right">Total Customers</td>
+        <td>{{partida.etiqueta}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-partida>
+      <ng-container *ngFor="let item of partida.detallesValores; let rowIndex = index">
+        <tr>
+          <!-- <th style="width: 3rem"></th> -->
+          <td *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+            {{col.template(item)}}
+          </td>
+          <td [ngStyle]="{'text-align': 'center'}">
+            ${{formatAmount(partida.valuesLabels[0].value)}}
+          </td>
+        </tr>
+        <tr *ngIf="rowIndex == partida.detallesValores.length - 1" class="p-rowgroup-footer">
+          <td [ngStyle]="{'text-align': 'left','overflow-wrap': 'break-word'}">Total de {{partida.etiqueta}}</td>
+          <td
+            [ngStyle]="{'text-align':  'center','color':'#5E81AC', 'border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[0].value)}}</td>
+          <td
+            [ngStyle]="{'text-align':  'center','color':'#5E81AC', 'border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[1].value)}}</td>
+          <td
+            [ngStyle]="{'text-align':  'center','color':'#5E81AC' ,'border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[2].value)}}</td>
+          <td
+            [ngStyle]="{'text-align':  'center', 'color':'#5E81AC','border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[3].value)}}</td>
+          <td
+            [ngStyle]="{'text-align':  'center', 'color':'#5E81AC','border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[4].value)}}</td>
+            <td
+            [ngStyle]="{'text-align':  'center', 'color':'#5E81AC','border-top': '2px solid black','overflow-wrap': 'break-word'}">
+            ${{formatAmount(partida.valuesLabels[1].value)}}</td>
+        </tr>
+      </ng-container>
+    </ng-template>
+  </p-table>
+</div>
+

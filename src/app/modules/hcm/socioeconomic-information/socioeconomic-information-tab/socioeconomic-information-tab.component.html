@@ -1,0 +1,18 @@
+<p-accordion>
+    <p-accordionTab header="Afección médica" [selected]="true">
+        <app-medical-condition-list [(_medicalConditionList)]="_medicalConditionList" (returnData1)="sendMedicalConditionPanel($event)" (deletedData1)="deletedMedicalCondition($event)"></app-medical-condition-list>
+        <!-- <app-generic-master-list [(genericModel)]="_medicalConditionList" [(cols)]="medicalConditionColumns" [indicator]="1" (returnData1)="editMedicalCondition($event)"></app-generic-master-list> -->
+        <app-medical-condition-panel *ngIf="showSidebar1" [(record)]="medicalConditionModel" [(showSidebar)]="showSidebar1" (backUnChanged)="resetValues($event)" (recordSave)="saveMedicalCondition($event)"></app-medical-condition-panel>
+    </p-accordionTab>
+    <p-accordionTab header="Carga familiar">
+        <app-famili-burden-list [(familyBurdenList)]="_familyBurdenList" (returnData2)="sendFamilyBurdenPanel($event)"></app-famili-burden-list>
+        <!-- <app-generic-master-list [(genericModel)]="_familyBurdenList" [(cols)]="familyBurdenColumns" [indicator]="2" (returnData2)="editFamilyBurden($event)"></app-generic-master-list> -->
+        <app-famili-burden-panel *ngIf="showSidebar2" [(record)]="familyBurdenModel" [(showSidebar)]="showSidebar2" (backUnChanged)="resetValues($event)" (recordSave)="saveFamilyBurden($event)"></app-famili-burden-panel>
+    </p-accordionTab>
+    <p-accordionTab header="Pensión alimentaria">
+        <app-maintenance-claim-list [(maintenanceClaimList)]="maintenanceClaimList" (returnData3)="sendMaintenanceClaimPanel($event)" (deletedData3)="deletedMaintenanceClaim($event)"></app-maintenance-claim-list>
+        <app-maintenance-claim-panel *ngIf="showSidebar3" [(record)]="maintenanceClaimModel" [(showSidebar)]="showSidebar3" (backUnChanged)="resetValues($event)" (recordSave)="saveMaintenanceClaim($event)"></app-maintenance-claim-panel>
+    </p-accordionTab>
+</p-accordion>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+

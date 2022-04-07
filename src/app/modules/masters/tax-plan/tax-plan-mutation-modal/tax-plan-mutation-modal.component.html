@@ -1,0 +1,518 @@
+<p-dialog
+  (onShow)="ngOnInit()"
+  [(visible)]="displayModal"
+  [closable]="false"
+  [draggable]="false"
+  [modal]="true"
+  [breakpoints]="{ '640px': '90vw', '980px': '80vw' }"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+  [focusOnShow]="true"
+>
+  <ng-template pTemplate="header">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+      "
+    >
+      <h4 style="margin: 0">Plan de impuestos</h4>
+      <button
+        class="p-dialog-header-close p-dialog-header-icon p-link ng-star-inserted"
+        (click)="hideDialog()"
+      >
+        <span class="pi pi-times"></span>
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="p-grid p-align-center p-mb-2 vertical-container">
+      <div class="p-fluid p-col-12 p-mt-3 p-md-4" *ngIf="plan.id != -1">
+        <div class="p-inputgroup">
+          <span class="p-float-label">
+            <input [ngModel]="plan.id" id="codigo" pInputText disabled />
+            <label for="codigo">Código</label>
+          </span>
+        </div>
+      </div>
+
+      <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+        <div class="p-inputgroup">
+          <span class="p-float-label">
+            <input
+              [(ngModel)]="plan.name"
+              id="name"
+              pInputText
+              maxlength="35"
+            />
+            <label for="name"
+              >Nombre<span [ngStyle]="{ color: 'red' }"> *</span></label
+            >
+          </span>
+        </div>
+      </div>
+
+      <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+        <span class="p-float-label">
+          <p-dropdown
+            [id]="'app'"
+            [(ngModel)]="plan.taxPlanApplicationTypeId"
+            [autoDisplayFirst]="false"
+            [showClear]="true"
+            [options]="types"
+            appendTo="body"
+            [baseZIndex]="10000000000"
+            [optionLabel]="'name'"
+            [optionValue]="'id'"
+          >
+          </p-dropdown>
+          <label for="app"
+            >Tipo de aplicación
+            <span [ngStyle]="{ color: 'red' }">*</span></label
+          >
+        </span>
+      </div>
+
+      <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+        <span class="p-float-label">
+          <p-dropdown
+            [options]="statusOptions"
+            [(ngModel)]="status"
+            [disabled]="plan.id == -1"
+          >
+          </p-dropdown>
+          <label for="active"
+            >Estatus <span [ngStyle]="{ color: 'red' }">*</span></label
+          >
+        </span>
+      </div>
+    </div>
+
+    <div class="p-grid p-align-center p-mb-2 vertical-container">
+      <div class="p-fluid p-col-12 p-mt-4 p-md-8">
+        <span class="p-float-label">
+          <p-multiSelect
+            pInput="types"
+            appendTo="body"
+            [(ngModel)]="filterAppIds"
+            (onChange)="filterTableEmitter()"
+            [resetFilterOnHide]="true"
+            [options]="appTypes"
+            [baseZIndex]="10000000000"
+            [filter]="true"
+            emptyFilterMessage="Sin resultados."
+            emptyMessage="Sin resultados."
+            [optionLabel]="'name'"
+            [optionValue]="'id'"
+          >
+          </p-multiSelect>
+          <label for="types"
+            >Filtrar por tipos de aplicación de impuestos</label
+          >
+        </span>
+      </div>
+    </div>
+
+    <div style="position: relative">
+      <div
+        *ngIf="!filtered"
+        style="
+          z-index: 1000;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <p-progressSpinner
+          [style]="{ width: '48px', height: '48px' }"
+        ></p-progressSpinner>
+      </div>
+      <div [style]="!filtered ? { pointerEvents: 'none', opacity: 0.5 } : {}">
+        <p-table
+          [resizableColumns]="false"
+          #dt
+          dataKey="id"
+          [columns]="displayedColumns"
+          styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows p-mt-3"
+          [rowHover]="true"
+          [value]="filteredRawTaxes"
+          [rows]="6"
+          rowExpandMode="single"
+          [expandedRowKeys]="expanded"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th
+                  [ngStyle]="{
+                    display: col.display,
+                    'overflow-wrap': 'break-word',
+                    'text-align': 'center'
+                  }"
+                  pResizableColumn
+                >
+                  {{ col.header }}
+                  <span
+                    *ngIf="col.field == 'rates'"
+                    [ngStyle]="{ color: 'red' }"
+                    >*</span
+                  >
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+
+          <ng-template
+            pTemplate="body"
+            let-tax
+            let-columns="columns"
+            let-expanded="expanded"
+            let-i="rowIndex"
+          >
+            <tr *ngIf="!groupIdx && !i">
+              <td
+                [ngStyle]="{ 'text-align': 'center' }"
+                [attr.colspan]="columns.length"
+              >
+                <p-message
+                  severity="info"
+                  text="Seleccione al menos un impuesto."
+                  styleClass="p-col-12 p-mr-2"
+                >
+                </p-message>
+              </td>
+            </tr>
+            <tr *ngIf="groupIdx == i">
+              <td [attr.colspan]="3">
+                <span class="p-text-bold p-ml-2"
+                  >Seleccionar{{
+                    filterAppIds.length ? " (filtrados)" : ""
+                  }}</span
+                >
+              </td>
+            </tr>
+            <tr style="position: relative">
+              <ng-container *ngFor="let col of columns">
+                <td
+                  [ngStyle]="{
+                    'text-align': col.field !== 'rates' ? 'center' : 'left'
+                  }"
+                  class="ui-resizable-column"
+                >
+                  <button
+                    type="button"
+                    pButton
+                    pRipple
+                    class="p-button-text p-button-rounded p-button-plain"
+                    [disabled]="!checkedTaxes[tax.id][0]"
+                    [pRowToggler]="tax"
+                    *ngIf="col.field === 'rate'"
+                    [icon]="
+                      expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+                    "
+                  ></button>
+                  <p-checkbox
+                    [binary]="true"
+                    (onChange)="filterTable()"
+                    [(ngModel)]="checkedTaxes[tax.id][0]"
+                    [pRowToggler]="!checkedTaxes[tax.id][0] ? tax : null"
+                    (onChange)="
+                      checkedTaxes[tax.id][0]
+                        ? null
+                        : (checkedTaxes[tax.id][1] = null);
+                      resetLayout()
+                    "
+                    *ngIf="col.field === 'active'"
+                  >
+                  </p-checkbox>
+                  <ng-container *ngIf="col.field === 'rates'; else textCell">
+                    <p-dropdown
+                      [options]="rateOptions[tax.id]"
+                      placeholder="Seleccione..."
+                      [ngModel]="
+                        checkedTaxes[tax.id][1] &&
+                        checkedTaxes[tax.id][1].toString()
+                      "
+                      (ngModelChange)="checkedTaxes[tax.id][1] = +$event"
+                      appendTo="body"
+                      [showClear]="checkedTaxes[tax.id][1]"
+                      [style]="{ minWidth: '100%' }"
+                      [baseZIndex]="10000000000"
+                      [disabled]="!checkedTaxes[tax.id][0]"
+                    >
+                    </p-dropdown>
+                  </ng-container>
+                  <ng-template #textCell>
+                    <span>{{ col.template(tax) }}</span>
+                  </ng-template>
+                </td>
+              </ng-container>
+            </tr>
+            <tr *ngIf="i == filteredRawTaxes.length - 1 && !filteredCount">
+              <td [attr.colspan]="3">
+                <span class="p-text-bold p-ml-2"
+                  >Seleccionar{{
+                    filterAppIds.length ? " (filtrados)" : ""
+                  }}</span
+                >
+              </td>
+            </tr>
+            <tr *ngIf="i == filteredRawTaxes.length - 1 && !filteredCount">
+              <td [ngStyle]="{ 'text-align': 'center' }" [attr.colspan]="3">
+                <p-message
+                  severity="info"
+                  text="No existen resultados que coincidan con la búsqueda."
+                  styleClass="p-col-12 p-mr-2"
+                >
+                </p-message>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-tax>
+            <tr>
+              <td [attr.colspan]="3">
+                <p-table
+                  [resizableColumns]="false"
+                  [columns]="rateCols"
+                  [value]="crudRates(tax.id)"
+                  styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows p-mt-3"
+                  [showCurrentPageReport]="true"
+                  currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <ng-container *ngFor="let col of columns">
+                        <th
+                          [ngStyle]="{
+                            display: col.display,
+                            'overflow-wrap': 'break-word',
+                            'text-align': 'center'
+                          }"
+                          pResizableColumn
+                        >
+                          {{ col.header }}
+                          <span
+                            *ngIf="col.field == 'rate'"
+                            [ngStyle]="{ color: 'red' }"
+                            >*</span
+                          >
+                        </th>
+                      </ng-container>
+                      <th style="width: 60px"></th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-rate let-columns="rateCols">
+                    <tr style="position: relative">
+                      <ng-container *ngFor="let col of rateCols">
+                        <td
+                          [ngStyle]="{
+                            'text-align': 'center'
+                          }"
+                          class="ui-resizable-column"
+                        >
+                          <p-dropdown
+                            [options]="
+                              col.field == 'rate'
+                                ? filterRates(tax.id, 'normal', rate.rateId)
+                                : filterRates(tax.id, 'base', rate.baseRateId)
+                            "
+                            placeholder="Seleccione..."
+                            emptyMessage="Sin resultados."
+                            [ngModel]="
+                              rate[
+                                col.field == 'rate' ? 'rateId' : 'baseRateId'
+                              ] &&
+                              rate[
+                                col.field == 'rate' ? 'rateId' : 'baseRateId'
+                              ].toString()
+                            "
+                            (ngModelChange)="
+                              rate[
+                                col.field == 'rate' ? 'rateId' : 'baseRateId'
+                              ] = +$event;
+                              filterRates(tax.id)
+                            "
+                            appendTo="body"
+                            [showClear]="
+                              rate[
+                                col.field == 'rate' ? 'rateId' : 'baseRateId'
+                              ] > 0
+                            "
+                            [style]="{ minWidth: '100%' }"
+                            [baseZIndex]="10000000000"
+                          >
+                          </p-dropdown>
+                        </td>
+                      </ng-container>
+                      <td>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-times"
+                          class="p-button-rounded p-button-danger p-mr-2"
+                          appendTo="body"
+                          pTooltip="Quitar"
+                          (click)="rate.active = false"
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template
+                    pTemplate="emptymessage"
+                    let-columns
+                    let-i="rowIndex"
+                  >
+                    <tr>
+                      <td
+                        [ngStyle]="{ 'text-align': 'center' }"
+                        [attr.colspan]="3"
+                      >
+                        <p-message
+                          severity="info"
+                          text="Agrege una tasa"
+                          styleClass="p-col-12 p-mr-2"
+                        >
+                        </p-message>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="footer" let-columns="rateCols">
+                    <tr style="position: relative">
+                      <ng-container *ngFor="let col of rateCols">
+                        <td
+                          [ngStyle]="{
+                            'text-align': 'center'
+                          }"
+                          class="ui-resizable-column"
+                        >
+                          <p-dropdown
+                            [options]="
+                              col.field == 'rate'
+                                ? filterRates(tax.id, 'normal')
+                                : filterRates(tax.id, 'base')
+                            "
+                            emptyMessage="Sin resultados."
+                            placeholder="Seleccione..."
+                            [ngModel]="
+                              checkedRates[tax.id] &&
+                              checkedRates[tax.id][
+                                col.field == 'rate' ? 0 : 1
+                              ].toString()
+                            "
+                            (ngModelChange)="
+                              col.field == 'rate'
+                                ? (checkedRates[tax.id] = [
+                                    +$event,
+                                    checkedRates[tax.id] &&
+                                    checkedRates[tax.id][1]
+                                      ? checkedRates[tax.id][1]
+                                      : -1
+                                  ])
+                                : (checkedRates[tax.id] = [
+                                    checkedRates[tax.id] &&
+                                    checkedRates[tax.id][0]
+                                      ? checkedRates[tax.id][0]
+                                      : -1,
+                                    +$event
+                                  ])
+                            "
+                            appendTo="body"
+                            [showClear]="
+                              checkedRates[tax.id] &&
+                              checkedRates[tax.id][0] > 0
+                            "
+                            [style]="{ minWidth: '100%' }"
+                            [baseZIndex]="10000000000"
+                          >
+                          </p-dropdown>
+                        </td>
+                      </ng-container>
+                      <td>
+                        <button
+                          pButton
+                          pRipple
+                          icon="pi pi-plus"
+                          class="p-button-rounded p-button-success p-mr-2"
+                          pTooltip="Agregar tasa"
+                          appendTo="body"
+                          (click)="addRate(tax.id)"
+                          [disabled]="
+                            !(
+                              checkedRates[tax.id] &&
+                              checkedRates[tax.id][0] > 0
+                            )
+                          "
+                        ></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns let-i="rowIndex">
+            <tr>
+              <td [ngStyle]="{ 'text-align': 'center' }" [attr.colspan]="3">
+                <p-message
+                  severity="info"
+                  text="Seleccione al menos un impuesto."
+                  styleClass="p-col-12 p-mr-2"
+                >
+                </p-message>
+              </td>
+            </tr>
+            <tr>
+              <td [attr.colspan]="3">
+                <span class="p-text-bold p-ml-2">Seleccione</span>
+              </td>
+            </tr>
+            <tr>
+              <td [ngStyle]="{ 'text-align': 'center' }" [attr.colspan]="3">
+                <p-message
+                  severity="info"
+                  text="No existen resultados que coincidan con la búsqueda."
+                  styleClass="p-col-12 p-mr-2"
+                >
+                </p-message>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft"> </ng-template>
+          <ng-template pTemplate="paginatorright"> </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      icon="pi pi-replay p-ripple"
+      class="p-button-secondary"
+      (click)="clear(plan?.id == -1 ? undefined : oldPlan)"
+      [label]="plan?.id == -1 ? 'Limpiar' : 'Reestablecer'"
+      styleClass="p-button-text"
+    ></button>
+    <button
+      pButton
+      pRipple
+      icon="pi pi-save p-ripple"
+      (click)="save()"
+      [disabled]="!canSave(checkedTaxes)"
+      label="Guardar"
+      class="p-button-info"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [baseZIndex]="1000000000000"></p-confirmDialog>

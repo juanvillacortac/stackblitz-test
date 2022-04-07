@@ -1,0 +1,62 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+  <div class="p-grid" style="height: 30px;">
+    <div id="header" class="p-col-11" style="margin-top: 5px;">
+        <h5>Segmento de cuenta</h5>
+    </div>
+    <div class="p-col-1">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+    </div>
+  </div>    
+    <hr/>
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Predeterminado  </label>
+              <p-checkbox [(ngModel)]="checked" binary="true" inputId="binary" (keyup.enter)="submit(checked)"></p-checkbox>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Tipo de segmento<span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [options]="_segmentTypeDropdown" [(ngModel)]="_dataSegment.idSegmentType" placeholder="Seleccione..." (click)="updateType()" [class]="submitted && _dataSegment.idSegmentType == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit(checked)"></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && _dataSegment.idSegmentType == -1"> El tipo de segmento es requerido</small>
+            </div>
+          </div>
+      
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" [(ngModel)]="description1" pInputText [disabled]="true" *ngIf="checked" [class]="checked && submitted && description1 == '' ? 'ng-dirty ng-invalid' : ''" />
+              <input type="text" [(ngModel)]="description2" pInputText maxlength="70"  *ngIf="!checked" [class]="!checked && submitted && description2 == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit(checked)" (input)="_validations.toCapitalizeString($event)"/> 
+              <small class="p-invalid" *ngIf="(!checked && submitted && description2 == '')||(checked && submitted && description1 == '')"> La descripción es requerida</small>
+            </div>
+          </div>
+      
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6" id="identifier">
+              <label for="active">Identificador <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" [(ngModel)]="identifier1" pInputText [disabled]="true" *ngIf="checked" [class]="checked && submitted && identifier1 == '' ? 'ng-dirty ng-invalid' : ''"/>
+              <input type="text" [(ngModel)]="identifier2" pInputText *ngIf="!checked" maxlength="10" [class]="!checked && submitted && identifier2 == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit(checked)" (input)="_validations.toUppercaseString($event)"/>
+              <small class="p-invalid" *ngIf="(!checked && submitted && identifier2 == '')||(checked && submitted && identifier1 == '')"> El identificador es requerido</small>
+            </div>
+            <div class="p-col-12 p-lg-6">
+              <label for="active">Ordinal <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" [(ngModel)]="ordinal" pInputText min="0" maxlength="1" [class]="(submitted && message != '')|| (submitted && ordinal == '') ? 'ng-dirty ng-invalid' : ''"  (keydown)="message=''" (keyup.enter)="submit(checked)" (keypress)="_validations.keyPressOnlyNumbers($event)" (paste)="_validations.PasteOnlyNumbers($event)" />
+              <small class="p-invalid" *ngIf="submitted && ordinal == ''">El ordinal es requerido.</small>
+              <small class="p-invalid" *ngIf="submitted && message != ''">{{message}}</small>
+            </div>
+          </div>
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Agregar" (click)="submit(checked)" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-sidebar>

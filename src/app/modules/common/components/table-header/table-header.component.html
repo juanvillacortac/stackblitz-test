@@ -1,0 +1,10 @@
+<div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="editFilter($event)" placeholder="Buscar..." />
+    </span>
+    <div>
+        <button *ngIf="this.userPermissions.allowed(this.idAddPermission)" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="openAdd()" pTooltip=" {{ 'add' | translate }}" tooltipPosition="top"></button>
+        <button *ngIf="this.userPermissions.allowed(this.idFilterPermission)" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="openFilter()" pTooltip="{{ 'filter' | translate }}" tooltipPosition="top"></button>
+    </div>
+</div>

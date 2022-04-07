@@ -1,0 +1,27 @@
+<div class="p-grid p-mt-2 p-ml-1" *ngIf="expanded">
+    <h5 class="p-col-12">Filtrar</h5>
+    <div class="p-formgroup-inline p-grid p-col-6">
+        <div class="p-field p-col">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.barcode" #barcode numbersOnly type="text" maxlength="150" pInputText>
+                <label for="input">Barra</label>
+            </span>
+        </div>
+        <div class="p-field p-col">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" #name noneSpecialCharacters type="text" maxlength="5" pInputText>
+                <label for="input">Materia prima</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-grid p-col-12 p-jc-end">
+        <div class="p-grid p-jc-end p-fluid p-mr-2">
+            <div class="p-field p-mr-2">
+                <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+            </div>
+            <div class="p-field">
+                <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+            </div>
+        </div>
+    </div>
+</div>

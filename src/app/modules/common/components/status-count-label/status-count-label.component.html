@@ -1,0 +1,9 @@
+<span *ngIf="idstatus==this.statusIDs.IN_DRAFT_STATUS_ID"  [class]="'status-badge status-in-draft '" ><span class="pi pi-align-justify"></span>{{ title }}</span>
+<span *ngIf="idstatus==this.statusIDs.IN_ACTION_STATUS_ID"  [class]="'status-badge  status-in-action'"><span class="pi pi-cog"></span>{{ title }}</span> 
+<span *ngIf="idstatus==this.statusIDs.WAITING_FOR_ADJUSTMENT_STATUS_ID"  [class]="'status-badge status-waiting'"><span class="pi pi-exclamation-triangle"></span>{{ title }}</span>
+<span *ngIf="idstatus==this.statusIDs.FINALIZED_STATUS_ID"  [class]="'status-badge status-finalize'"><span class="pi pi-check"></span>{{ title }}</span> 
+<span *ngIf="idstatus==this.statusIDs.CANCELED_STATUS_ID"   [class]="'status-badge status-canceled'"><span class="pi pi-times-circle"></span>{{ title }}</span>
+<span *ngIf="idstatus==this.statusIDs.NO_ASSIGNED_STATUS_ID"  [class]="'status-badge status-noassgned'"><span class="pi pi-ban"></span>{{ title }}</span> 
+<span *ngIf="idstatus==this.statusIDs.DELAYED_STATUS_ID "  [class]="'status-badge status-delayed'"><span class="pi pi-clock"></span>{{ title }}</span> 
+<span *ngIf="idstatus==this.statusIDs.FINALIZED_ADJUSTEMENT_STATUS_ID"   [class]="'status-badge status-finalize'"><span class="pi pi-check"></span>{{ title }}</span>
+

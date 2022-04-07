@@ -1,0 +1,21 @@
+
+<div class="p-d-flex p-flex-column p-flex-md-row">
+    <div class="card p-mr-4 p-mb-4 p-lg-4"> 
+         <app-list-team [(dataViewModel)]="dataViewModelPLM" [(titleGeneral)]="titleout1" [(paginator)]="paginator" ></app-list-team>
+         <button  pButton pRipple type="button" label="{{ 'view_more' | translate }}"
+         class="p-button-text p-md-4 p-lg-4" style="background-color: white;"></button>
+    </div>
+    <div class="p-mr-4 p-mb-4 p-lg-4" style="contain: content;">
+       <!--  <h5>Ordenes de compra</h5>
+          -->
+        <app-list-number-indicator  [(data)]="indicatorsnumberPLM" style="height:370px ;"></app-list-number-indicator>
+    
+    </div>
+    <div class="card p-mr-4 p-mb-4 p-lg-4">
+
+        <h5>Top 10 de operadores con más items creados y modificados</h5>
+        <p-chart type="doughnut" [data]="dashboardData" [options]="horizontalOptions" [style]="{'width': '50%'}" ></p-chart>
+    </div>
+ 
+</div>
+

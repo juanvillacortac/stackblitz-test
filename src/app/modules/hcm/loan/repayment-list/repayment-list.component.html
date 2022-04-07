@@ -1,0 +1,62 @@
+<p-dialog header="Amortizar prestamo" (onHide)="outForm()" [(visible)]="visible" [blockScroll]="true" [style]="{width: '70vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="p-fluid p-grid p-formgrid">
+        <div class="p-grid p-col-12 p-field p-align-center p-mb-2 vertical-container">
+            <div class="p-fluid p-col-12 p-mt-4 p-md-5">
+                <p class="titleRepayment">Monto por amortizar: {{symbolArray[0]}} {{repaymentAmount | number}}</p>
+            </div>
+            <div class="p-fluid p-col-12 p-mt-4 p-md-5">
+                <p class="titleRepayment">Total por amortizar: {{symbolArray[0]}} {{totalRepaymentAmount| number}}</p>
+            </div>
+            <div class="p-fluid p-col-12 p-mt-0 p-md-2">
+                <button pButton pRipple class="p-button p-button-success p-ml-2" (click)="showPanelPayment = true"
+                    pTooltip="Ingresar forma de pago" tooltipPosition="top" icon="pi pi-plus">
+                </button>
+            </div>
+        </div>
+
+        <div class="p-field p-grid p-col-12">
+          <p-table #dt [rowHover]="true" [value]="repaymentListQuota" [paginator]="true" [rows]="10"
+          [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th class="p-text-center">Fecha de pago </th>
+                <th class="p-text-center">Tipo de nómina</th>
+                <th class="p-text-center">Monto por pagar</th>
+                <th class="p-text-center">Amortizar</th>
+                <th class="p-text-center">Diferencia</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-paymentPlan>
+            <tr *ngIf="paymentPlan != []">
+                <td class="p-text-center"><p>{{paymentPlan.payDate | date: "dd/MM/yyyy"}}</p></td>
+                <td class="p-text-center"><p>{{paymentPlan.payrollType}}</p></td>
+                <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.pendingAmount| number}}</p></td>
+                <td>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">{{symbolArray[0]}}</span>
+                        <p-inputNumber class="shareAmount" id="conversionNeto" [(ngModel)]="paymentPlan.repaymentAmount" [min]="0" [max]="repaymentAmount+paymentPlan.repaymentAmount > paymentPlan.pendingAmount ? paymentPlan.pendingAmount : repaymentAmount+paymentPlan.repaymentAmount" maxlength="16" 
+                            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" required (ngModelChange)="updateData(index)" [disabled]="paymentPlan.repaymentAmount == 0 && repaymentAmount == 0 || paymentPlan.pendingAmount == 0">
+                        </p-inputNumber>
+                    </div>
+                </td>
+                <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.repaymentDifference| number}}</p></td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft"></ng-template>
+          <ng-template pTemplate="paginatorright"></ng-template>
+      </p-table>
+        </div>
+        <!-- <div class="p-field p-grid p-col-12" *ngIf="type == 2"> Exonerar prestamo
+            <textarea [rows]="5" [cols]="50" pInputTextarea placeholder="Motivo de la exoneración"></textarea>
+        </div> -->
+
+        <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+                <button id="Agregar" pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="!(repaymentAmount == 0 && totalRepaymentAmount > 0)"></button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+<app-repayment-panel *ngIf="showPanelPayment" [visible]="showPanelPayment" [payments]="redemptionList" [totalAmount]="totalRepaymentAmount" 
+    [bankAccountDropdown]="bankAccountDropdown" (backUnChange)="resetValues($event)" (saveRedemption)="savePaymentList($event)"></app-repayment-panel>

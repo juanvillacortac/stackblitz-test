@@ -1,0 +1,172 @@
+<!-- <p-card header="Resumen totalizado" styleClass="p-card-shadow" class="p-col-12"> -->
+<div class="p-grid">
+  <div class="card p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+    <div class="p-grid p-jc-end">
+      <div class="col-6  p-md-6 p-sm-6 p-lg-6 p-mt-1 ">
+        <div class="p-inputgroup">
+          <b class="font-title-larger p-mr-1">Tasa interna:</b>
+          <span>{{Purchase.exchangeRateInternal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}</span>
+        </div>
+      </div>
+      <div class="col-6  p-md-6 p-sm-6 p-lg-6 p-mt-1 ">
+        <div class="p-inputgroup">
+          <b class="font-title-larger p-mr-1">Tasa Negociación:</b>
+          <span>{{Purchase.exchangeRateNegotiation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}</span>
+        </div>
+      </div>
+      <div class="col-6  p-md-6 p-sm-6 p-lg-6 p-mt-1 ">
+        <div class="p-inputgroup">
+          <b class="font-title-larger p-mr-1">Tasa sistema:</b>
+          <span> {{exchangeRate.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}</span>
+        </div>
+      </div>
+      <div class="col-6 p-md-6 p-sm-6 p-lg-6 p-mt-1">
+        <div class="p-grid p-jc-end">
+          <button #btn type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2" pTooltip="Agregar"
+            (click)="menu.toggle($event)" *ngIf="(Purchase.idEstatus == statuspurchase.in_Validation) 
+                && (this.userPermissions.allowed(this.permissionsIDs.CONFIGURE_DEDUCTIBLE_HEADER_PERMISSION_ID)||this.userPermissions.allowed(this.permissionsIDs.CONFIGURE_TAXABLE_HEADER_PERMISSION_ID )||
+                this.userPermissions.allowed(this.permissionsIDs.CONFIGURE_TAXABLE_MASIVE_PERMISSION_ID)|| this.userPermissions.allowed(this.permissionsIDs.CONFIGURE_DEDUCTIBLE_MASIVE_PERMISSION_ID) )
+                && iduserlogin==Purchase.idUserValidate
+                && subtotal>0"></button>
+          <p-tieredMenu #menu [model]="items" [popup]="true"></p-tieredMenu>
+
+          <!-- <button #btn2 type="button" pButton icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+          pTooltip="Editar" (click)="menu1.toggle($event)"></button>
+        <p-tieredMenu #menu1 [model]="itemshead" [popup]="true"></p-tieredMenu>
+              </div> -->
+
+
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-1">
+          <h6>Total imponibles de productos</h6>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(4, 4, 31)">{{totaltaxableproduct.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}} </span>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-3 p-shadow-3">
+          <h6>Total deducibles de productos</h6>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(4, 4, 31)">{{totaldeductiblesproduct.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-1 p-shadow-3">
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span style="color:black">Imponibles factura</span>
+            <span class="p-ml-2" (click)="showmodaledit(true,false)" pTooltip="Ver"><i class="pi pi-eye"
+                style="color:black;"></i></span>
+          </div>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{taxableTotalcab.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-3 p-shadow-3">
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span style="color:black">Deducibles factura</span>
+            <span class="p-ml-2" (click)="showmodaledit(true,true)" pTooltip="Ver"><i class="pi pi-eye"
+                style="color:black;"></i></span>
+          </div>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{deductibleTotalcab.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-1 p-shadow-3">
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span style="color:rgb(22, 20, 20)">Total imponibles factura</span>
+          </div>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{taxableTotal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-3 p-shadow-3">
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span style="color:rgb(24, 23, 23)">Total deducibles factura</span>
+          </div>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{deductibleTotal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-grid">
+      <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-1 p-shadow-3">
+          <h4>Total conceptos</h4>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{(taxableTotal-deductibleTotal).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-2 p-shadow-3">
+          <h4>Subtotal</h4>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(4, 4, 31)">{{subtotal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <div class="p-grid p-nogutter widget-overview-box overview-box-2 p-shadow-3">
+          <h4>Total</h4>
+          <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+            <span
+              style="color:rgb(24, 23, 23)">{{(subtotal+taxableTotal-deductibleTotal).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}</span>
+            <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-wiz-masiv-tax [(showDialogWizard)]="showModalImponibleMasivo" [(Products)]="ProductsValidation"
+    [(Purchase)]="Purchase" (_sendTaxablesProdsMasivo)="sendMasivoTax($event)"></app-wiz-masiv-tax>
+  <app-wiz-massive-ded [(showDialogWizard)]="showModalDeducibleMasivo" [(Products)]="ProductsValidation"
+    [(Purchase)]="Purchase"></app-wiz-massive-ded>
+
+  <app-taxdedheader-purchase [(showDialog)]="showModalsubtotal" [indTabdeductible]="indDeductibleheader"
+    [(PurchaseOrder)]="Purchase" [(subtotalHeader)]="subtotal" [reception]="reception"
+    (issavechange)="savetaxded($event)"></app-taxdedheader-purchase>
+  <app-view-tax-ded-purchase [(showDialog)]="showModaledit" [indTabdeductible]="indDeductibleheader"
+    [(PurchaseVal)]="Purchase" [subtotal]="subtotal" (issavechange)="savetaxded($event)"></app-view-tax-ded-purchase>

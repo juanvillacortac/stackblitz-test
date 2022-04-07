@@ -1,0 +1,7 @@
+:host ::ng-deep {
+    @media screen and (max-width: 1024px){
+        .p-sidebar{
+            overflow: scroll;
+        }
+    }
+}

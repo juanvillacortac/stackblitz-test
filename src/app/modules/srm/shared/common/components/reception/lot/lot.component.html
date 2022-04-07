@@ -1,0 +1,108 @@
+
+<p-dialog header="Nuevo lote" (onShow)="onShow()" (onHide)="hideDialog()" [(visible)]="showDialog"  [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '60vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid p-mt-2">
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            
+            <label for="active">Número de lote</label>
+            <input type="text" pInputText id="namelot" (keyup.enter)="save()"
+            (keypress)="_validations.keyPressForNumberLot($event);" maxlength="64"
+            (paste)="_validations.noPaste($event)" [(ngModel)]="lotProduct.numberLot" />
+            <small class="p-invalid"
+            *ngIf="load && (lotProduct.numberLot=='')">Número de lote es requerido.</small>
+        </div>
+        <!-- <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+            <label for="active">Descripción</label>
+            <input type="text" pInputText id="imponible" (keyup.enter)="save()"/>
+        </div> <span [ngStyle]="{'color':'red'}">*</span>-->
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <label>Fecha de vencimiento</label>
+                            <p-calendar id="ToD" dateFormat="dd/mm/yy"
+                                [(ngModel)]="lotProduct.expiredDate" (keyup.enter)="save()"
+                                readonlyInput="true" [showIcon]="true"
+                                [minDate]="this.today" tooltipPosition="right" life="500"
+                                (onSelect)="changEditdate($event)" appendTo="body">
+                            </p-calendar>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <label>Cantidad de días por vencer </label>
+            <p-inputNumber  mode="decimal" [minFractionDigits]="0" [(ngModel)]="lotProduct.cantDays" (keyup.enter)="save()" disabled></p-inputNumber>
+        </div> 
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <label>Cantidad de empaques </label>
+            <p-inputNumber  mode="decimal" [minFractionDigits]="0" [(ngModel)]="lotProduct.cantPackaging" (keyup.enter)="save()"></p-inputNumber>
+            <small class="p-invalid"
+            *ngIf="load && (lotProduct.cantPackaging==0)">Número de emapque debe ser mayor a 0.</small>
+        </div> 
+        <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+            <button pButton pRipple label="Agregar"  (click)="AddLot()" icon="pi pi-plus-circle"
+                class="p-button-secondary p-mr-2"></button>
+        </div>
+    </div>
+    <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-auto p-mr-2">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar" />
+          </span>
+          
+        </div>
+      </div>
+      <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="lotsList"
+        [(selection)]="selectedLots" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        <!--  [(selection)]="selectedLots" <p-tableRadioButton *ngIf="!this.multiple"></p-tableRadioButton> -->
+                    </th>
+                    <ng-container *ngFor="let col of columns">
+    
+                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                    <th [ngStyle]="{'width': '130px'}"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-productlot let-columns="columns">
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="productlot"></p-tableCheckbox>
+                    </td>
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'display': col.display }">
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="productlot[col.field]"></app-active-label>                  
+                            <ng-template #textCell>
+                                <span>{{col.template(productlot)}} </span>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                    <td>
+                        <!-- (click)="onRemoveSpecification(specification.id)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                        <button pButton pRipple icon="pi pi-trash" (click)="onRemove(productlot)"
+                            class="p-button-rounded p-button-danger p-mr-2"
+                            pTooltip="Eliminar"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+        </p-table>
+    
+    </div>
+    <div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Guardar" (click)="save()" icon="pi pi-check-square"
+            class="p-button-info p-mr-2"></button>
+        <!-- <button pButton (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times"
+            class="p-button-secondary [disabled]="load" p-mr-2"></button> -->
+    </div>
+</p-dialog>

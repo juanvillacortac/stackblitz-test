@@ -1,0 +1,20 @@
+<div class="card">
+    
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-6 p-md-3">
+            <div class="p-mb-3 p-text-left"><h5>{{_dataSupplier.name}}</h5></div>
+            <div class="p-mb-3 p-text-left p-text-bold">{{_dataSupplier.secundaryDescription}}</div>
+            <div class="p-mb-3 p-text-left p-text-bold"><h5 class="value">{{_dataSupplier.mainDescription}}</h5></div>
+            <div class="p-mb-3 p-text-left p-text-bold">{{_dataSupplier.secundaryDescriptionSide}}</div>
+        </div>
+    <div class="p-field p-col-6 p-md-8">
+        
+        <div class="card">
+            <!-- <h5>Vertical</h5> -->
+            <p-chart type="bar" [data]="dashboardDataEmployeeLevel" [options]="horizontalOptions"></p-chart>
+        </div>
+           
+        </div>
+       
+    </div>
+</div>

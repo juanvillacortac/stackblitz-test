@@ -1,0 +1,80 @@
+<div *ngIf="expanded">
+    <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">
+            
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="_ReportFilter.transferNumber" name="transferNumber" id="transferNumber" type="text" pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="search()">
+                    <label>Número de transferencia</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown  [(ngModel)]="_ReportFilter.transferType" placeholder="Tipo de transferencia" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="branchOfficeList" [(ngModel)]="_ReportFilter.originBranch" placeholder="Sucursal de origen" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="areaList.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="_ReportFilter.originArea" placeholder="Area origen" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid p-mt-2">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="_ReportFilter.useType" type="text" maxlength="25" pInputText noneSpecialCharacters  (keyup.enter)="search()">
+                    <label for="float-input">Tipo de uso</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown  id="statust" [options]="statuslist.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="_ReportFilter.status" (keyup.enter)="search()" placeholder="Estatus"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="branchOfficeList"  [(ngModel)]="_ReportFilter.destinyBranch" placeholder="Sucursal de destino" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="areaList.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="_ReportFilter.destinyArea" placeholder="Area destino" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid p-mt-2">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="_ReportFilter.productCodeBar" type="text" maxlength="15" numbersOnly pInputText noneSpecialCharacters  (keyup.enter)="search()">
+                    <label for="float-input">Barra</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid p-mt-2">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="_ReportFilter.productDescription" type="text" maxlength="" pInputText noneSpecialCharacters  (keyup.enter)="search()">
+                    <label for="float-input">Nombre producto</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'ims.product_existence.start_date'}}" tooltipPosition="right" class="p-float-label">
+                <p-calendar  inputId="calendar" [(ngModel)]="startDateFilter" [maxDate]="finalDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'ims.product_existence.end_date'}}" tooltipPosition="right" class="p-float-label ">
+                <p-calendar inputId="endCalendar" [(ngModel)]="finalDateFilter" [maxDate]="maxDate" [minDate]="startDateFilter" readonlyInput="true" [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="search()" placeholder="Categoría" disabled>
+                    <app-dropdown-tree [treeData]='_categoryservice._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                     [isDisabled]='false' 
+                    (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="onSearch()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>

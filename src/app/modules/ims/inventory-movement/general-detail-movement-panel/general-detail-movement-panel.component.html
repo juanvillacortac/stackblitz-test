@@ -1,0 +1,13 @@
+<product-inventory-movement [(showproduct)]="showproduct" [(_product)]="_product"></product-inventory-movement>
+<p-tabView (onChange)="handleChange($event)">
+  <p-tabPanel header="Movimiento de inventario" [selected]="true">
+    <detail-movement-list [(show)]="Show" [(filterDetail)]="filterDetail"></detail-movement-list>
+  </p-tabPanel>
+  <p-tabPanel header="Tránsito">
+    <transit-movement-list [(showTransit)]="showTransit" [(filterDetail)]="filterDetail"></transit-movement-list>
+  </p-tabPanel>
+</p-tabView>
+<div class="p-col-12 p-md-3  p-lg-12 p-d-flex p-jc-end">
+  <button pButton pRipple label="Regresar" (click)="backList()" icon="pi pi-arrow-left"
+    class="p-button-secondary p-mr-2"></button>
+</div>

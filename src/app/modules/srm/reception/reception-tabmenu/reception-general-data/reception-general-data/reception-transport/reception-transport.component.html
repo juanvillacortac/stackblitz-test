@@ -1,0 +1,41 @@
+<div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.delivery_method' | translate }}</label>
+        <p-dropdown [options]="deliveryMethods" placeholder="{{ 'selection_default' | translate }}" [showClear]="transport.deliveryOptionId>0?true:false"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" 
+        emptyMessage="{{ 'not_found' | translate }}"  [(ngModel)]="transport.deliveryOptionId">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.identity_number' | translate }}</label>
+        <input type="text" pInputText placeholder="{{ 'srm.reception.document.transport.identity_number'  | translate }}"
+                (keyup.enter)="save()" [(ngModel)]="transport.identifierNumber">
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.cubic' | translate }}</label>
+        <p-inputNumber [(ngModel)]="transport.cubing" [disabled]="true" (keyup.enter)="save()" suffix="cm3" placeholder="{{ 'srm.reception.document.transport.cubic' | translate }}" [minFractionDigits]="0" mode="decimal" min="0" [maxFractionDigits]="0">
+        </p-inputNumber>   
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.transport_type' | translate }}</label>
+        <p-dropdown [options]="transportTypes" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}"  
+        emptyMessage="{{ 'not_found' | translate }}" [(ngModel)]="transport.transportTypeId">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.license_plate' | translate }}</label>
+        <input type="text" pInputText placeholder="{{ 'srm.reception.document.transport.license_plate'  | translate }}"
+                (keyup.enter)="save()" [(ngModel)]="transport.licensePlate">
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.driver_name' | translate }}</label>
+        <input type="text" pInputText placeholder="{{ 'srm.reception.document.transport.driver_name'  | translate }}"
+                (keyup.enter)="save()" [(ngModel)]="transport.driverName">
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-12 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.transport.observations' | translate }}</label>
+        <textarea pInputTextarea rows="1" style="resize: none;" cols="30" style="min-height: 50px;" pInputTextarea
+        maxlength="100"  [(ngModel)]="transport.observations"></textarea>
+    </div>
+</div>

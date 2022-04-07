@@ -1,0 +1,209 @@
+<ng-container >
+  <div class="menorMargen card">
+      <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+          <div style="justify-content: space-between; display: flex; flex-wrap: wrap; width: 100%; gap: 1rem">
+              <div *ngIf="transact.collectionTransactionId>0">
+                  <label for="active">Estatus: <span
+                          [class]="transact.transactionStatusTypeId==3 || transact.transactionStatusTypeId==4 ? 'status-cancelado status-badge' : transact.transactionStatusTypeId==1 ? 'status-borrador status-badge ':'status-contabilizado status-badge' ">
+                          {{transact.transactionStatusType}}</span></label>
+              </div>
+          </div>
+          <div class="p-field p-grid">
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3" *ngIf="transact.collectionTransactionId>0">
+                  <label for="documentNumber">Número de documento</label>
+                  <input type="text" inputId="documentNumber" [disabled]="true" [(ngModel)]="transact.documentNumber" maxlength="255"
+                      pInputText>
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                  <label for="transactionDate">Lote <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-inputgroup">
+                      <input type="text" pInputText pKeyFilter="int" [value]="lot?.lotName"
+                          [class]="false && !client ? 'ng-dirty ng-invalid' : ''" disabled [(ngModel)]="transact.lot">
+                      <button pButton icon="pi pi-times" style="border-radius: 0;" (click)="lot = null"></button>
+                      <button pButton icon="pi pi-search"
+                          style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                          (click)="lotModal = true"></button>
+                  </div>
+                  <small class="p-invalid" *ngIf="(submitted || record) && transact.lotId<=-1">El lote es requerido</small>
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                  <label for="documentDate">Fecha de cobro <span [ngStyle]="{'color':'red'}">*</span> </label>
+                  <p-calendar [showIcon]="true" inputId="documentDate" [(ngModel)]="transact.collectionDate"
+                      [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+                      yearRange="1970:2030" dateFormat="dd/mm/yy"
+                      [maxDate]="maxPostingDate">
+                  </p-calendar>
+                  <small class="p-invalid" *ngIf="(submitted || record) && (!transact.collectionDate)">La fecha del documento es requerida</small>
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                  <label for="accountingDate">Fecha de contabilización <span [ngStyle]="{'color':'red'}">*</span> </label>
+                  <p-calendar [showIcon]="true"  [(ngModel)]="transact.accountingDate"
+                      [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+                      yearRange="1970:2030" dateFormat="dd/mm/yy"
+                      [maxDate]="maxPostingDate">
+                  </p-calendar>
+                  <small class="p-invalid" *ngIf="(submitted || record) && (!transact.accountingDate)">La fecha del documento es requerida</small>
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                <label>Cliente <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <div class="p-inputgroup">
+                    <input type="text" pInputText pKeyFilter="int" [value]="client?.socialReason" [(ngModel)]="transact.businessName"
+                        [class]="false && !client ? 'ng-dirty ng-invalid' : ''" disabled>
+                    <button pButton icon="pi pi-times" style="border-radius: 0;" (click)="client = null"></button>
+                    <button pButton icon="pi pi-search"
+                        style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                        (click)="clientModal = true"></button>
+                </div>
+                <small class="p-invalid" *ngIf="(submitted || record) && !client">El cliente es requerido</small>
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                  <label for="Categoría">Identificación del cliente</label>
+                  <input type="text" maxlength="50" [disabled]="true"
+                      [value]="client ? client.identifier + '-' + client.documentnumber : ''" pInputText [(ngModel)]="transact.documentNumberProviderCustomer">
+              </div>
+
+              <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                <label for="description">Descripción</label>
+                <textarea [rows]="5" [cols]="100" inputId="description" [(ngModel)]="transact.description" pInputTextarea autoResize="autoResize"></textarea>
+              </div>
+          </div>
+      </div>
+      <div class="p-field p-col-12">
+          <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+      </div>
+  </div> 
+
+  
+    <app-collection-transactions-payment-tree [payments]="transact.charges" (paymentsChange)="addCharge($event)" ></app-collection-transactions-payment-tree>
+
+    <app-collection-transactions-documents-to-apply-tree [documents]="transact.documents" (documentsChange)="addDocument($event)" [client]="client" (updateAmounts)='updateAmounts($event)'></app-collection-transactions-documents-to-apply-tree>
+
+    <div class="card">
+
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+            <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+              <i class="p-text-bold pi pi-book"></i> Distribuciones
+            </div>
+        
+            <div class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3">
+              <button pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Agregar" tooltipPosition="top"
+              (click)="showAccountingAccountsModal()">
+              </button>
+            </div>
+        </div>
+
+       <p-table [resizableColumns]="false"
+          styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" #dt
+          [columns]="distributionsCols" [rowHover]="true" [value]="transact.details">
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <ng-container *ngFor="let col of columns">
+                      <th [ngStyle]="{'text-align': col.textAlign, 'display': col.display, 'overflow-wrap': 'break-word','width': col.field === 'active' ? '110px' : '100%' }"
+                          pResizableColumn [pSortableColumn]="col.field">
+                          {{col.header}}
+                      </th>
+                  </ng-container>
+              </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-article let-columns="columns">
+              <tr>
+                  <ng-container *ngFor="let col of columns">
+                      <td
+                      *ngIf="col.field !== 'credit' && col.field !== 'debit'"
+                          [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'text-align': col.textAlign}">
+                          <span [style]="col.style">{{col.template(article)}}</span>
+                      </td>  
+
+                      <td *ngIf=" col.field == 'credit'">
+                        <p-inputNumber mode="decimal" [(ngModel)]="article.credit" prefix="$" [showButtons]="true"
+                            [inputStyle]="{ width: '100%' }" [min]="0" [minFractionDigits]="2"
+                            [maxFractionDigits]="2" [maxlength]="24">
+                        </p-inputNumber>
+                    </td>
+                    <td *ngIf="col.field == 'debit'">
+                        <p-inputNumber mode="decimal" [(ngModel)]="article.debit"
+                            (ngModelChange)="article.debit = $event" prefix="$" [showButtons]="true"
+                            [inputStyle]="{ width: '100%' }" [min]="0" [minFractionDigits]="2"
+                            [maxFractionDigits]="2" [maxlength]="24">
+                        </p-inputNumber>
+                    </td>
+                  </ng-container>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="footer" let-columns>
+              <ng-container *ngIf="distributions.length > 0">
+                  <tr>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}" [attr.colspan]="columns.length - 2">
+                          Total:
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}">
+                           {{debitTotal}}  
+                        
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}">
+                           {{creditTotal}} 
+                      </td>
+                  </tr>
+                  <tr>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border': 0}" [attr.colspan]="columns.length - 2">
+                          Diferencia:
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border': 0, 'color': getDistTotals().color}" colspan="2">
+                          {{debitTotal - creditTotal}}
+                      </td>
+                  </tr>
+              </ng-container>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+              <tr>
+                  <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">
+                      <p-message severity="info" text="Transacciónes de cobros sin distribución cuentas. "
+                          styleClass="p-col-12 p-mr-2">
+                      </p-message>
+                  </td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <app-sale-transactions-lot-modal [(displayModal)]="lotModal" [lots]="lots" (onSelect)="selectLot($event)">
+    </app-sale-transactions-lot-modal>
+
+    <sale-transactions-client-modal [(displayModal)]="clientModal" [clients]="clients"
+      [classifications]="clientClassifications" (onSelect)=" checkClient($event)" ></sale-transactions-client-modal>
+
+    <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <router-outlet>
+        <div style="justify-content: space-between; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem">
+            <div style="gap: 0.5rem; display: flex; flex-wrap: wrap;">
+              <button pButton pRipple label="Anular" (click)="Revoke()"
+                  [disabled]="transact.transactionStatusTypeId==2 ?false:true" class="p-button-secondary"></button>
+              <button pButton type="button" [disabled]="saving" (click)="Cancel()"
+                  [disabled]="transact.transactionStatusTypeId==1 ?false:true" class="p-button-secondary"
+                  label="Cancelar"></button>
+            </div>
+            <div style="gap: 0.5rem; display: flex; flex-wrap: wrap;">
+              <!-- (click)="ToRecord()" -->
+              <button pButton pRipple label="Contabilizar"
+                  [disabled]="transact.transactionStatusTypeId==1 ?false:true" class="p-button-secondary"></button>
+              <button pButton type="button" class="p-button-secondary" icon=" pi pi-arrow-left" label="Regresar"
+                  (click)="back()"></button>
+
+              <button pButton type="button"
+                  [disabled]="transact.transactionStatusTypeId==-1?false:transact.transactionStatusTypeId==1 ?false:true"
+                  class="p-button-info" (click)="send()" icon="pi pi-save" label="Guardar"></button>
+            </div>
+        </div>
+    </router-outlet>
+</ng-container> 
+
+
+
+<app-sale-transaction-acount-modal  idBusiness="-1" [accountingAccounts]="[]"
+        [showDialog]="accountingAccountsModal"  (onCreate)="appendToList($event)" (idCuentaContableChange)="addAccountingAccountId = $event"
+        [_data]="aAccount" [_indArticle]="true" [branchs]="branchOffices"></app-sale-transaction-acount-modal>

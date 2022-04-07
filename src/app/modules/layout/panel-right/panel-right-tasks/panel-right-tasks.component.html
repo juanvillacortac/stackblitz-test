@@ -1,0 +1,70 @@
+<div class="tasks">
+  <div class="tasks-header">
+    <div class="title">
+      <h1>{{'tasks.tasks' | translate }}</h1>
+    </div>
+    <div class="tasks-info">
+<!--      <span>You have</span><span class="highlighted"> {{tasks.length}} tasks</span><span> today</span>-->
+      <span>{{ 'tasks.task_count' | translate: { count: tasks.length  } }}</span>
+    </div>
+  </div>
+  <ul class="tasks-list">
+    <li  *ngFor="let task of tasks">
+      <div class="tasks-list-item">
+        <div class="checkbox" style="max-width: 15rem;">
+          <!--<p-badge severity="{{task.status}}" ></p-badge>-->
+          <div>
+            <span style="font-size: 0.9rem;"><b>{{task.activityName}}</b></span>
+            <br>
+            <span style="font-size: 0.8rem;">{{task.name}}</span>
+          </div>
+        </div>
+        <div class="tasks-day">
+          <span [ngClass]="'time'" style="font-size: 0.8rem;">{{task.elapsedTime}}</span><!--00H:00M:00S-->
+          <i (click)="task.showDetail = !task.showDetail" [ngClass]='task.showDetail ? "pi pi-angle-up" : "pi pi-angle-down"' class="p-m-1"></i>
+        </div>
+      </div>
+      <div [@inOutAnimation] *ngIf="task.showDetail" class="tasks-list-item">
+        <div class="checkbox">
+          <div>
+            <span style="font-size: 0.8rem;">Número documento:</span>
+            <br>
+            <a style="font-size: 0.8rem;">{{task.documentNumber}}</a>
+          </div>
+        </div>
+        <div>
+          <span style="font-size: 0.8rem;">Inicio:</span>
+          <br>
+          <span [class]="'time'" style="font-size: 0.8rem;">{{task.startDate | date: 'dd/MM/yyyy'}}</span>
+        </div>
+
+        <div class="tasks-day">
+          <i *ngIf="isPaused(task.idStatus)" (click)="startTask(task.id)" pTooltip="Iniciar" class="pi pi-play p-m-1"></i>
+          <i *ngIf="isStarted(task.idStatus)" (click)="pauseTask(task.id)" pTooltip="Pausar" class="pi pi-pause p-m-1"></i>
+          <i *ngIf="isStarted(task.idStatus)" (click)="completeTask(task.id)" pTooltip="Completar" class="pi pi-check p-m-1"></i>
+          <i *ngIf="isStarted(task.idStatus) || isPaused(task.idStatus)" (click)="cancelTask(task.id)" pTooltip="Cancelar" class="pi pi-ban p-m-1"></i>
+          <!--TODO: Must implement share task funcionality-->
+          <!--<i (click)="shareTask(task.id)" class="pi pi-share-alt p-m-1"></i>-->
+        </div>
+      </div>
+      <div [@inOutAnimation] *ngIf="task.showDetail" class="tasks-list-item">
+        <div class="checkbox">
+
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<p-dialog header="Cancelación tarea" [(visible)]="displayDialog" [style]="{width: '30vw'}">
+  <div class="p-field" >
+    <b>{{ 'tasks.task_cancellation' | translate }}</b>
+    <br><br>
+    <div class="p-fluid p-formgrid p-grid p-col">
+      <input id="float-input" type="text" placeholder="{{ 'tasks.task_cancellation_reason' | translate }}" [(ngModel)]="cancellationReason" maxlength="100" sentenceType pInputText>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-ban" (click)="displayDialog = false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    <p-button icon="pi pi-check" (click)="doCancelTask()" [disabled]="cancellationReason.length < 16" label="Aceptar" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>
+  </ng-template>
+</p-dialog>

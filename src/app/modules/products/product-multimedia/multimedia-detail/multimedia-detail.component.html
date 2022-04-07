@@ -1,0 +1,29 @@
+<p-dialog header="Visualizar archivos" [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [draggable]="false" [closable]="true" [modal]="true" [maximizable]="false" [baseZIndex]="10000" [style]="{'overflow': 'auto', 'width': '50vw'}">
+    <hr />
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 ">
+                <h5>Multimedias</h5>
+                <p-galleria [(value)]="multimediaProducts" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '640px','min-width':'640px'}" [numVisible]="5"
+                    [showThumbnails]="false" [showIndicators]="true" [(activeIndex)]="activeIndex"> 
+                    <ng-template pTemplate="item" let-multimediaProduct>
+                        <img *ngIf="activeTab == 0" [src]="multimediaProduct.url" style="width: 100%; display: block;" />
+                        <video *ngIf="activeTab == 1" loop controls [src]="multimediaProduct.url" style="width: 100%; display: block;"></video>
+                    </ng-template>
+                    <ng-template pTemplate="thumbnail" let-item>
+                        <div class="p-grid p-nogutter p-justify-center">
+                            <img [src]="multimediaProduct.url" style="display: block;" />
+                        </div>
+                    </ng-template>
+                </p-galleria>
+          </div>
+            <!-- <div class="p-field p-col-12 p-md-12">
+              <button pButton pRipple label="Guardar" (click)="saveMultimediaProduct()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>

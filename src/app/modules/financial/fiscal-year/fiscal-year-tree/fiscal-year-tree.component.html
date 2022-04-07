@@ -1,0 +1,177 @@
+<div class="p-m-1 card">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!--titulo con icono filtar-->
+    <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12" [class]="showFilters ? 'p-mb-lg-3' : ''">
+      <i class="p-text-bold pi pi-book"></i> Ejercicios Fiscales
+    </div>
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3" [class]="showFilters ? 'p-mb-3' : 'p-mb-md-0 p-mb-lg-0'">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="treeRef.filterGlobal($event.target.value, 'contains')"
+             placeholder="Buscar..." />
+    </span>
+    <div [class]="showFilters ? 'p-mb-3' : ''">
+      <button pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="showModal()"
+              pTooltip="Crear nuevo" tooltipPosition="top">
+      </button>
+      <button pButton pRipple icon="pi pi-filter" class="p-button-help p-ml-2"
+              [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"
+              tooltipPosition="top"></button>
+    </div>
+  </div>
+  <div>
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<!--p-treeTable [value]="tree" [columns]="cols" styleClass="p-treetable-sm" [autoLayout]="true" #treeRef [rowHover]="true"
+  [paginator]="true" [rows]="10" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+  [showCurrentPageReport]="true">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+        {{col.header}}
+      </th>
+      <th [ngStyle]="{'text-align': 'center'}">
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-node let-rowNode let-rowData let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+        <app-active-label *ngIf="col.field === 'active' && rowNode.node.data.year; else textCell"
+          [active]="rowNode.node.data.active">
+        </app-active-label>
+        <div [ngStyle]="{'display': col.field === 'itemName' ? 'flex' : ''}">
+          <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+          <span
+            [ngStyle]="{'font-weight': (i == 0 || i == 3) && rowNode.node.children?.length ? 'bold' : 'initial'}">{{toField(col.field,
+            rowNode.node.data)}}</span>
+        </div>
+        <span
+          [class]="rowNode.node.data.indClosed === 'No' ? 'status-ind-open' : (rowNode.node.data.indClosed === 'Si' ? 'status-ind-closed' : 'status-ind-partial')"
+          *ngIf="col.field === 'indClosed' && rowNode.node.data.indClosed">{{rowNode.node.data.indClosed}}</span>
+      </td>
+      <td [ngStyle]="{'text-align': 'center'}">
+        <button *ngIf="rowNode.node.children" pButton pRipple icon="pi pi-pencil"
+          class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"
+          (click)="edit(nodes[rowNode.node.data.id])"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="footer" let-columns>
+    <ng-container *ngIf="!tree?.length">
+      <tr>
+        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+          <p-message severity="info" *ngIf="showFilters" text="No existen resultados que coincidan con la búsqueda."
+            styleClass="p-col-12 p-mr-2"></p-message>
+          <p-message severity="info" *ngIf="!showFilters" text="No existen registros." styleClass="p-col-12 p-mr-2">
+          </p-message>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+  </ng-template>
+</p-treeTable-->  
+
+<div class="p-m-1">
+  <div [class]="showFilters ? 'p-mb-3' : ''" style="margin-bottom: 1rem">
+    <button pButton type="button" label="Expandir todos" (click)="toggleExpanded(true)"
+            style="margin-right: .5rem; margin-top: 1rem;"></button>
+    <button pButton type="button" class="p-mt-3" label="Contraer todos" (click)="toggleExpanded(false)"></button>
+  </div>
+
+  <p-table #dt dataKey="id" [value]="years" [columns]="yearCols" styleClass="p-table-sm"
+           [autoLayout]="true" #treeRef
+           [rowHover]="true" [paginator]="true" [rows]="10"
+           currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [showCurrentPageReport]="true"
+           [expandedRowKeys]="expanded">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+          {{col.header}}
+        </th>
+        <th [ngStyle]="{'text-align': 'center'}">
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-year let-columns="columns">
+      <tr *ngIf="year">
+        <td>
+          <button type="button" pButton pRipple (click)="expanded[year.id] = (expanded[year.id] !== undefined ? !expanded[year.id] : true)" class="p-button-text p-button-rounded p-button-plain"
+                  [icon]="expanded[year.id] || false ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+          <app-active-label *ngIf="col.field === 'active' && year.year; else textCell" [active]="year.active">
+          </app-active-label>
+          <div [ngStyle]="{'display': col.field === 'itemName' ? 'flex' : ''}">
+            <span>{{toField(col.field, year)}}</span>
+          </div>
+          <span [class]="year.indClosed === 'No' ? 'status-ind-open' : (year.indClosed === 'Si' ? 'status-ind-closed' : 'status-ind-partial')"
+                *ngIf="col.field === 'indClosed' && year.indClosed">{{year.indClosed}}</span>
+        </td>
+        <td [ngStyle]="{'text-align': 'center'}">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"
+                  (click)="edit(nodes[year.id])"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-year>
+      <tr>
+        <td colspan="7">
+          <div class="p-p-3">
+            <p-table [value]="year.fiscalPeriods" [columns]="periodCols" styleClass="p-table-sm" [autoLayout]="true" #treeRef
+                     [rowHover]="true" [paginator]="true" [rows]="6"
+                     currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                     [showCurrentPageReport]="false">
+              <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-fiscalPeriod let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': i == 0 ? 'left' : 'center'}">
+          <div [ngStyle]="{'display': col.field === 'itemName' ? 'flex' : ''}">
+            <span>{{toField(col.field, fiscalPeriod)}}</span>
+          </div>
+          <span [class]="fiscalPeriod.indClosed === 'No' ? 'status-ind-open' : (fiscalPeriod.indClosed === 'Si' ? 'status-ind-closed' : 'status-ind-partial')"
+                *ngIf="col.field === 'indClosed' && fiscalPeriod.indClosed">{{fiscalPeriod.indClosed}}</span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+    </ng-template>
+  </p-table>
+</div>
+           </td>
+        </tr>
+     </ng-template>
+<ng-template pTemplate="footer" let-columns>
+  <ng-container *ngIf="!years?.length">
+    <tr>
+      <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+2">
+        <p-message severity="info" *ngIf="showFilters" text="No existen resultados que coincidan con la búsqueda."
+                   styleClass="p-col-12 p-mr-2"></p-message>
+        <p-message severity="info" *ngIf="!showFilters" text="No existen registros." styleClass="p-col-12 p-mr-2">
+        </p-message>
+      </td>
+    </tr>
+  </ng-container>
+</ng-template>
+<ng-template pTemplate="paginatorleft">
+</ng-template>
+<ng-template pTemplate="paginatorright">
+</ng-template>
+  </p-table>
+  </div>
+

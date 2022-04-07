@@ -1,0 +1,97 @@
+<p-dialog header="Cargo" [(visible)]="showDialog" (onHide)="hideDialog(dd)" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}" [modal]="true" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [resizable]="false" class="p-md-10">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="description">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input type="text" (keyup.enter)="saveJob()" maxlength="80" pInputText id="NombreCargo" [(ngModel)]="jobin.name" [class]="submitted && (!jobin.name || !jobin.name.trim()) ? 'ng-dirty ng-invalid' : ''" />
+            <small *ngIf="submitted && (!jobin.name || !jobin.name.trim())" class="p-invalid">El nombre del cargo es requerido</small>
+          </div>
+          <div class="p-field p-col-6 p-md-6 p-sm-6">
+            <label for="jobin.hierarchicallevel">Nivel <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="levelins" [(ngModel)]="jobin.hierarchicalLevel" optionLabel="description" optionValue="id" placeholder="Seleccione..." (keyup.enter)="saveJob()" #dd
+            emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" [class]="submitted && jobin.hierarchicalLevel == 0 ? 'ng-dirty ng-invalid' : ''" (onChange)="upDateJobPosition($event)"></p-dropdown>
+            <small *ngIf="submitted && jobin.hierarchicalLevel == 0 " class="p-invalid">El nivel es requerido</small>
+          </div>
+          <div class="p-field p-col-6 p-md-6 p-sm-6">
+            <label for="mainJobPosition"> Cargo padre <span [ngStyle]="{'color':'red'}" *ngIf="showObligatory">*</span></label>
+            <p-dropdown [options]="jobins" [(ngModel)]="jobin.mainJobPosition" optionLabel="name" optionValue="id" placeholder="Seleccione..." (keyup.enter)="saveJob()" [disabled]="!showObligatory"
+            emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" [class]="submitted && jobin.mainJobPosition == 0 && showObligatory? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+            <small *ngIf="submitted && jobin.mainJobPosition == 0 && showObligatory" class="p-invalid">El cargo padre es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="MtJobs"> Cargo MINTRA <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown #mTJDropdown [options]="mTJobs" [(ngModel)]="jobin.mtJobPosition" optionLabel="name" (keyup.enter)="saveJob()" [filter]="true" 
+            optionValue="id" placeholder="Seleccione..." [class]="submitted && jobin.mtJobPosition == 0 ? 'ng-dirty ng-invalid' : ''" (keypress)="uploadDropdown($event)"></p-dropdown>
+
+            <small *ngIf="submitted && jobin.mtJobPosition == 0 " class="p-invalid">El cargo MINTRA es requerido</small>
+          </div>
+          <div class="p-field p-col-6 p-md-6 p-sm-6">
+            <label for="temporaryPositions"> Plazas temporales</label>
+            <p-inputNumber (keyup.enter)="saveJob()" id="temporaryPositions" [(ngModel)]="jobin.temporaryPositions" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+              decrementButtonClass="p-button-info" incrementButtonClass="p-button-info" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0" [maxlength]="3">
+            </p-inputNumber>
+            <!-- <small *ngIf="submitted && jobin.temporaryPositions == null" class="p-invalid">Las plazas temporales son requeridas</small> -->
+          </div>
+          <div class="p-field p-col-6 p-md-6 p-sm-6">
+            <label for="fixedPositions"> Plazas fijas</label>
+            <p-inputNumber (keyup.enter)="saveJob()" [(ngModel)]="jobin.fixedPositions" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+              decrementButtonClass="p-button-info" incrementButtonClass="p-button-info" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0" [maxlength]="3">
+            </p-inputNumber>
+            <!-- <small *ngIf="submitted && jobin.fixedPositions == null " class="p-invalid">Las plazas fijas son requeridas</small> -->
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <div class="p-field-checkbox">
+              <label for="jobin.supervisoryPosition"> Supervisor</label>
+              <p-checkbox class="p-ml-2" [(ngModel)]="jobin.supervisoryPosition" binary="true" inputId="SupervisoryPosition"></p-checkbox>
+            </div>
+          </div> 
+          <!-- <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <p-accordion [multiple]="true">
+              <p-accordionTab header="Descripción" [selected]="true">
+                <p-editor [(ngModel)]="jobin.description" [style]="{'height':'300px'}"></p-editor>
+              </p-accordionTab>
+              <p-accordionTab header="Funciones" [selected]="true">
+                <p-editor [(ngModel)]="jobin.duties" [style]="{'height':'300px'}"></p-editor>
+              </p-accordionTab>
+              <p-accordionTab header="Objetivos" [selected]="true">
+                <p-editor [(ngModel)]="jobin.goals" [style]="{'height':'300px'}"></p-editor>
+              </p-accordionTab>
+              <p-accordionTab header="Análisis de riesgo" [selected]="true">
+                <p-editor [(ngModel)]="jobin.riskAnalysis" [style]="{'height':'300px'}"></p-editor>
+              </p-accordionTab>
+            </p-accordion>  
+          </div> -->
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <p-panel header="Descripción" [toggleable]="true" styleClass="dark-panel">
+              <p-editor [(ngModel)]="jobin.description" [style]="{'height':'300px'}"></p-editor>
+            </p-panel>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <p-panel header="Funciones" [toggleable]="true">
+              <p-editor [(ngModel)]="jobin.duties" [style]="{'height':'300px'}"></p-editor>
+            </p-panel>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <p-panel header="Objetivos" [toggleable]="true">
+              <p-editor [(ngModel)]="jobin.goals" [style]="{'height':'300px'}"></p-editor>
+            </p-panel>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <p-panel header="Análisis de riesgo" [toggleable]="true">
+              <p-editor [(ngModel)]="jobin.riskAnalysis" [style]="{'height':'300px'}"></p-editor>
+            </p-panel>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2" (click)="saveJob()"></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

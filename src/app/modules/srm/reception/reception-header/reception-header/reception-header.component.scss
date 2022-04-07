@@ -1,0 +1,19 @@
+.generic-font-size
+{
+    font-size: 1.5rem;
+}
+ 
+.generic-float-text
+{
+    float:right;
+}
+@media only screen and (max-width: 540px) {
+     
+    .generic-float-text
+    {
+        float:unset;
+        
+    }
+ }
+
+

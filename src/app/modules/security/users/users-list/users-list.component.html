@@ -1,0 +1,61 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                   placeholder="{{'searching' | translate}}"/>
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CREATE_USER_PERMISSION_ID)" pButton pRipple
+                    icon="pi pi-plus" class="p-button-success" (click)="openNew()" tooltipPosition="top"
+                    pTooltip="{{'security_module.user.new' | translate}}"></button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <p-table #dt
+             [columns]="displayedColumns"
+             [rowHover]="true"
+             [value]="UserListVM"
+             [paginator]="true"
+             [rows]="10"
+             [showCurrentPageReport]="true"
+             currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}"
+             [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                        {{col.header | translate}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-columns="columns">
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display }">
+                        <span class="p-column-title">{{col.header | translate}}</span>
+                        <div *ngIf="col.field === 'status'; else third" class="p-text-center">
+                            <span *ngIf="user[col.field] === 'ACTIVO'; else second"
+                                  [class]="'status-badge status-active'">ACTIVO</span>
+                            <ng-template #second>
+                                <span *ngIf="user[col.field] === 'INACTIVO'; " [class]="'status-badge status-inactive'">INACTIVO</span>
+                            </ng-template>
+                        </div>
+                        <ng-template #third>
+                            <span>{{user[col.field]}} </span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <td class="p-text-center">
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_USER_PROFILE_ID)" pButton
+                            pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                            (click)="onEdit(user.id)" pTooltip="{{'edit' | translate}}" tooltipPosition="top"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

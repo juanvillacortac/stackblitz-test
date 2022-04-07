@@ -1,0 +1,76 @@
+<div
+  class="flex flex-col space-y-6 m-1 shadow mt-4 card print:border print:shadow-none"
+>
+  <h2 class="font-bold">{{ name }}</h2>
+  <p-table
+    [columns]="cols"
+    [value]="accounts"
+    class="border rounded overflow-hidden"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th
+            [ngStyle]="{
+              display: accounts?.length ? col.display : 'none',
+              'overflow-wrap': 'break-word',
+              'text-align': col.textAlign || 'left',
+              border: '0px'
+            }"
+          >
+            {{ col.header }}
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-report let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td
+            [ngStyle]="{
+              display: col.display,
+              'overflow-wrap': 'break-word',
+              'text-align': col.textAlign || 'left'
+            }"
+          >
+            <span [class]="col.class || ''" [style]="col.style || ''"
+              >{{ col.template(report) }}
+            </span>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td
+          [ngStyle]="{ 'text-align': 'center', border: '0px' }"
+          [attr.colspan]="cols.length"
+        >
+          <p-message
+            severity="info"
+            text="No existen datos analizados."
+            styleClass="p-col-12 p-mr-2"
+          ></p-message>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <tr *ngIf="accounts?.length">
+        <td
+          [ngStyle]="{ 'text-align': 'right', 'border-bottom': '0px' }"
+          [attr.colspan]="cols.length - 1"
+        >
+          <span class="font-bold"
+            >Saldo total en {{ name?.toLowerCase() }}:</span
+          >
+        </td>
+        <td [ngStyle]="{ 'text-align': 'right', 'border-bottom': '0px' }">
+          <span class="font-bold font-mono">{{ total }}</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

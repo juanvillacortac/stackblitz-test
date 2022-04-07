@@ -1,0 +1,126 @@
+<div class="p-grid area-padding">
+    <div class="card-body my-2 p-col-12 p-sm-12 p-md-12 p-lg-12" #productlot>
+    <div class="p-grid">
+        <p-card styleClass="p-card-shadow" id="graphiccard" class="p-col-12 p-sm-12 p-md-12 p-lg-12 fullheightcard">
+            <div class="p-grid">
+              <div class="p-col-2">
+                <div class="p-col-12 p-sm-4 p-md-4 p-lg-4 container-img"> 
+                  <img [src]="_product.image == null || _product.image == ''  ? defectImage.defectImage
+                        : _product.image" [alt]="_product.product"class="imgcatalog" alt="Product" />   
+               </div>  
+               </div>
+              <div class="p-col-12 p-md-4 p-lg-4">
+                  <div class="p-grid">
+                      <div class="p-col-12">
+                           Barra: {{_product.detail.gtin}}
+                      </div>
+                      <div class="p-col-12">
+                          Nombre: {{_product.product}}
+                      </div>
+                      <div class="p-col-12">
+                        Referencia: {{_product.references}}
+                      </div>
+                  </div>
+              </div>
+              <div class="p-col-12 p-md-4 p-lg-4">
+                  <div class="p-grid">
+                      <div class="p-col-12">
+                        Categoría: {{_product.category}}
+                      </div>
+                      <div class="p-col-12">
+                        Empaque: {{_product.detail.presetation}}-{{_product.detail.typePacking}}
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </p-card>
+    </div>
+    <div class="p-grid">
+      <p-card styleClass="p-card-shadow" id="tableproduct" class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+        <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        
+          <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+            <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dtsl.filterGlobal($event.target.value, 'contains')"
+                placeholder="Buscar" />
+            </span> 
+            <div class="p-grid p-col-12 p-sm-12 p-md-12 p-lg-12  p-mt-0 p-g-end">
+              <!-- *ngIf="selectedproduct.length>0" -->
+              <button  pButton pRipple icon="pi pi-times" class="p-button-danger" type="button" 
+              (click)="removeselected(selectedproduct)"
+              *ngIf="this.reception.estatus <= statusreception.started &&this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.reception.receivingOperator.id"
+              pTooltip="Eliminar"></button>
+              </div>    
+          </div>
+        </div>
+
+        <!-- <h4>{{ 'srm.reception.reception_products.reception_product' | translate }}</h4> -->
+        <p-table #dtsl [columns]="displayedColumns" [value]="this._service._detailLot" [scrollable]="true" [paginator]="true"
+          [rows]="10" [showCurrentPageReport]="true" dataKey="productId" [scrollHeight]="innerHeight +'px'"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo p-mt-2" [(selection)]="selectedproduct">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+            <th style="width:5rem;">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+             </th>
+             <th style="width:5rem;">
+             </th>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','font-size':'small'}"
+                  [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-order let-columns="columns">
+            <tr>
+             <td style="width:5rem;">
+                <p-tableHeaderCheckbox [value]="order"></p-tableHeaderCheckbox>
+            </td>
+            <td style="width:5rem;"> 
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+              pTooltip="Editar" (click)="editLote(order)" *ngIf=" this.childReception==undefined &&this.isChieldReception==false && this.reception.estatus <= statusreception.started &&this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.reception.receivingOperator.id"></button>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+              pTooltip="Editar" (click)="editLote(order)" *ngIf="this.childReception !=undefined && this.isChieldReception==true && this.childReception.statusId<= statusreception.started &&this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.childReception.receivingOperatorId"></button>
+            </td>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <div class="container-img" *ngIf="col.field =='image'; else text">
+                    <img [src]="order.image == null || order.image == ''  ?  defectImage.defectImage : order.image"
+                      [alt]="order.product" class="p-shadow-4 imgcatalog" />
+                  </div>
+                  <ng-template #text>
+                    <span>{{col.template(order)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+           Total : {{quantitytotal.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) }}.
+      </div>
+  </ng-template>
+    </p-table>
+    </p-card>
+  </div>
+  </div>
+  </div>
+
+  <app-lot-edit [(showDialog)]="visible" [(lotedit)]="lotedit" (onRecalculate)="Recalculate()"></app-lot-edit>
+  

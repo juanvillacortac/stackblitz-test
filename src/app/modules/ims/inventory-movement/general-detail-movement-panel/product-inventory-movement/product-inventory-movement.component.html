@@ -1,0 +1,35 @@
+<p-card [style]="{'width': '100%', 'margin-bottom': '0.5em'}" styleClass="p-shadow-0 ">
+    <div class="p-grid">
+        <div class="p-col-2"><img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" alt="no image" height="100" width="170" class="p-shadow-4" /></div>
+        <div class="p-col-12 p-md-4 p-lg-4">
+            <div class="p-grid">
+                <div class="p-col-12">
+                     Barra: {{_product.gtin}}
+                </div>
+                <div class="p-col-12">
+                    Nombre: {{_product.product}}
+                </div>
+                <div class="p-col-12">
+                     Área: {{_product.area}}
+                </div>
+                <div class="p-col-12">
+                     Categoría: {{_product.category}}
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-4">
+            <div class="p-grid">
+                <div class="p-col-12">
+                    Marca: {{_product.brand}}
+                </div>
+                <div class="p-col-12">
+                    Proveedor: {{_product.supplier}}
+                </div>
+                <!-- <div class="p-col-12">
+                    ABC: {{_product.abc}}
+                </div> -->
+            </div>
+        </div>
+        <div></div>
+    </div>
+</p-card>

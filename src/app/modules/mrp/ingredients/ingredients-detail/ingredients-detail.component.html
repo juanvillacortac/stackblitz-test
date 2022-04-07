@@ -1,0 +1,45 @@
+<h2 class="p-m-0">{{title}}</h2>
+<hr/>
+
+<div class="p-col-12" *ngIf="!isEdit">
+       <app-search-ingredients (getResult)="finishSearching($event)" [(showSearching)]="showSearching" [(exceptions)]="exceptionsIngredients"   [isSingleMode]="true" loadKey="product"></app-search-ingredients>
+            <div *ngIf="(addedIngredients === null && submitted)" class="card">   
+                    <div class="p-invalid">
+                        <span>Debe elegir un ingrediente.</span>
+                    </div> 
+            </div> 
+</div>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">   
+            <div class="p-fluid p-grid p-formgrid">
+                <div *ngIf="isEdit" class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre</label>
+                        <input id="name" pInputText #name [(ngModel)]="ingredients.name" disabled >  
+                </div>                  
+                <br/>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Tiempo de reposición promedio <span *ngIf="!isEdit" [ngStyle]="{'color':'red'}">*</span></label>
+                    <br/>
+                    <p-inputNumber id="daysToRestocks" name="daysToRestocks"  [(ngModel)]="daysToRestock" #daysToRestocks="ngModel"   mode="decimal"  [minFractionDigits]="0" [maxFractionDigits]="0"  
+                    [showButtons]="true"  suffix=" días" [min]="0" [max]="100" [step]="1"
+                    [ngClass]="{'ng-dirty':(invalidateDaysToRestock && (daysToRestocks.dirty || daysToRestocks.touched || submitted)),'ng-invalid':(invalidateDaysToRestock && (daysToRestocks.dirty || daysToRestocks.touched || submitted))}"
+                     required ></p-inputNumber>   
+                    <div *ngIf="invalidateDaysToRestock && (daysToRestocks.dirty || daysToRestocks.touched || submitted)"
+                    class="p-invalid">
+                          El tiempo de reposición debe ser mayor a 0.
+                  </div>    
+                </div>
+            </div>
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span class="p-invalid">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple label="Guardar" (click)="verifySave()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>

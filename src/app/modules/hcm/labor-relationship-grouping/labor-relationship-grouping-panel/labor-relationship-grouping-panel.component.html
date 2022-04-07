@@ -1,0 +1,61 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow-y': 'unset'}" [baseZIndex]="1000">
+  <div class="p-grid" style="height: 30px;">
+    <div class="p-col-11" style="margin-top: 5px;">
+        <h5>Agrupación</h5>
+    </div>
+    <div class="p-col-1">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+    </div>
+  </div>    
+  <hr />
+
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+            
+            <div class="p-field p-grid p-col-12" style="display: none;">
+              <input type="number" [(ngModel)]="record.idLaborRelationship">
+              <input type="number" [(ngModel)]="record.idLaborRelationshipxGrouping">
+              <input type="number" [(ngModel)]="record.idGrouping">
+              <input type="number" [(ngModel)]="record.createdByUserId">
+              <input type="text" [(ngModel)]="record.updatedByUserId">
+              <input binary="true" inputId="binary" [(ngModel)]="record.active">
+            </div>
+            
+            <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <label for="active">Descripción<span [ngStyle]="{'color':'red'}">*</span></label>
+                <input type="text" [(ngModel)]="record.groups" pInputText maxlength="70" [class]="submitted && record.groups == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                <small class="p-invalid" *ngIf="submitted && record.groups == ''"> La descripción es requerida</small>
+              </div>
+            </div>
+  
+            <div class="p-field p-grid p-col-12">
+              <div class="p-col-12 p-lg-6 inside">
+                <label for="active">Nomenclatura<span [ngStyle]="{'color':'red'}">*</span></label>
+                <div class="p-col-12 p-p-0">
+                  <input type="text" [(ngModel)]="record.abbreviation" pInputText maxlength="7" [class]="submitted && record.abbreviation == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                  <small class="p-invalid" *ngIf="submitted && record.abbreviation == ''"> La nomenclatura es requerida</small>
+                </div>
+              </div>
+              <div class="p-col-12 p-lg-6">
+                <label for="active">Valor</label>
+                <div class="p-col-12 p-p-0">
+                  <input type="text" [(ngModel)]="record.assignedValue" pInputText maxlength="15"  (keypress)="validateAssignedValue($event)" (keyup.enter)="submit()"/> 
+                </div>
+              </div>
+            </div>
+
+            <div class="p-field p-col-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-sidebar>
+  

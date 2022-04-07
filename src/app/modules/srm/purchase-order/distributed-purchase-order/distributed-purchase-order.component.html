@@ -1,0 +1,272 @@
+<div class="p-grid area-padding">
+  <div class="p-col-12 p-md-12 p-lg- p-fluid">
+    <p-card styleClass="p-card-shadow">
+      <ng-template pTemplate="header">
+        <div class="p-grid">
+          <span class="generic-card-title">Sucursales</span>
+          <div style="margin-top: 2rem;" class="p-ml-2">
+            <button #btn *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)"  [disabled]="isDistributedComplete ? true : false" type="button" pButton icon="pi pi-home" class="p-button-success p-mr-2"
+              pTooltip="Agregar sucursal" (click)="BranchOfficeDialogVisible=true"></button>
+          </div>
+        </div>
+      </ng-template>
+      <div class="p-grid p-mb-1">
+        <div class="p-col-12 p-md-12">
+          <p-chips #chipId [disabled]="isDistributedComplete ? true : false" (onRemove)="onRemoveChip($event)" (keydown)="onChangeChip($event)" [(ngModel)]="values">
+            <ng-template let-item pTemplate="item">
+              {{item.branchOfficeName}} - {{item.id == _idBranchOrigin ? "Base" : ""}} &nbsp; <i class="pi pi-home"></i>
+            </ng-template>
+          </p-chips>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+<div class="p-grid area-padding">
+  <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+    <p-card styleClass="p-card-shadow">
+      <ng-template pTemplate="header">
+        <div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+          <div class="p-grid p-mt-2">
+            <p-button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)"
+              [styleClass]="isDistribution == true ?  'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'"
+              (click)="changeDistributionTab(1)" label="Distribución">
+            </p-button>
+            <p-button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)" 
+                      [disabled]="_PurchaseOrderDocumentsList.length<=0" [styleClass]="isDocument == true ? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'"
+              (click)="changeDistributionTab(2)" label="Documentos"></p-button>
+          </div>
+        </div>
+      </ng-template>
+      <div *ngIf="isDistribution" class="p-grid">
+        <div class="p-lg-9"></div>
+<div class="p-lg-2">
+  <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" (input)="dtu.filterGlobal($event.target.value, 'contains')"
+      placeholder="Buscar" />
+  </span>
+</div>
+<div class="p-lg-1" style="text-align: right;">
+  <button *ngIf="selectedProducts.length >= 1 && this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)" [disabled]="isDistributedComplete ? true : false"   pButton pRipple  icon="pi pi-trash" class="p-button-danger" pTooltip="Eliminar productos seleccionados" tooltipPosition="top" (click)="deleteProducts(null,selectedProducts)" style="margin-right: 0.5rem;"></button>
+  <button  *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)" [disabled]="isDistributedComplete ? true : values.length <= 1 ? true : false" #btn type="button" pButton icon="pi pi-plus"
+    class="p-button-success p-mr-2" pTooltip="Agregar productos" tooltipPosition="top" (click)="menu.toggle($event)"></button>
+  <p-tieredMenu #menu [model]="items" [popup]="true"></p-tieredMenu>
+
+</div>
+          
+            
+        <div class="card">
+          <!--TABLA DE PRODUCTOS POR SUCURSALES-->
+          <p-table #dtu [columns]="displayedProductsColumns" [value]="_DistributedProductlist" dataKey="productId"
+            [paginator]="true" [rows]="11" [showCurrentPageReport]="true"  [(selection)]="selectedProducts"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+            <ng-template pTemplate="caption">
+              <div class="p-grid">
+                <p-multiSelect [options]="displayedProductsColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+                  selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px', width:'120px'}"
+                  placeholder="Elija las columnas"></p-multiSelect>
+                  <span style="margin-top: 0.5rem;margin-left: 0.5rem;">
+                   Total de ítems: {{_DistributedProductlist ? _DistributedProductlist.length : 0 }}.</span>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 3rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th style="width: 50px;"></th>
+                <ng-container *ngFor="let col of columns">
+                  <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                  </th>
+                </ng-container>
+                <th style="width: 108px;"></th>
+              </tr>
+            </ng-template>
+  
+            <ng-template pTemplate="body" let-product let-expanded="expanded">
+              <tr>
+                <td>
+                  <button *ngIf="product.branchOffices.length > 0" type="button" pButton pRipple [pRowToggler]="product"
+                    class="p-button-text p-button-rounded p-button-plain"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td>
+                  <p-tableCheckbox [value]="product"></p-tableCheckbox>
+              </td>
+                <td>
+                  <div class="container-img">
+                    <img [src]="product.image == null || product.image == ''  ?  defectImage.defectImage
+                  : product.image" [alt]="product.name" class="p-shadow-4 imgcatalog" />
+                  </div>
+                </td>
+                <td style="overflow-wrap: break-word"><b>{{product.name}}</b></td>
+                <td style="overflow-wrap: break-word">{{product.gtin}}</td>
+                <td style="overflow-wrap: break-word">{{product.packaging}}</td>
+                <td style="overflow-wrap: break-word">{{product.internalReference}}</td>
+                <td style="overflow-wrap: break-word">{{product.packagingQuantity}}</td>
+                <td style="overflow-wrap: break-word">{{product.unitPerPackaging}}</td>
+                <td style="overflow-wrap: break-word"><span *ngIf="product.indHeavy"
+                    [class]="'status-badge status-active'">Pesado</span>
+                  <span *ngIf="!product.indHeavy" [class]="'status-badge status-inactive'">No pesado</span> </td>
+  
+                <td style="width: 50px;">
+                  <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)"  [disabled]="isDistributedComplete ? true : false" (click)="EditProduct(product)" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                    pTooltip="Editar" tooltipPosition="top"></button>
+                  <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_DISTRIBUTION__PURCHASE_ORDER_PERMISSION_ID)"  [disabled]="isDistributedComplete ? true : selectedProducts.length == 0 ? false : true " (click)="deleteProducts(product,null)" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2"
+                    pTooltip="Eliminar"></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-product>
+             
+              <tr>
+                <td colspan="11" style="padding: 5px;padding-left: 20px;padding-right: 20px;">
+                  <div>
+                    <p-table [columns]="displayedBranchOfficeColumns" [value]="product.branchOffices"
+                      dataKey="idDistributedPurchaseOrderDetail">
+               <ng-template pTemplate="header" let-columnsp>
+               <tr>
+                <ng-container *ngFor="let col of columnsp">
+                  <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                  </th>
+                </ng-container>
+            
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-branchTransferDetail let-columnsp="columns">
+              <tr [ngClass]="{'row-isActive': branchTransferDetail.isActive == false}">
+                <ng-container *ngFor="let col of columnsp">
+                  <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                    <span>{{col.template(branchTransferDetail)}} </span>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        </td>
+        </tr>
+           </ng-template>
+          </p-table>
+        </div>
+
+
+
+
+  </div>
+  <div *ngIf="isDocument" class="p-grid">
+    <div class="card p-m-0">
+     <!--TABLA DE DOCUMENTOS-->
+     <p-table #dt [columns]="displayedBaseDocumentsColumns" [value]="_PurchaseOrderDocumentsList" dataKey="idOrderPurchase"
+            [paginator]="true" [rows]="11" [showCurrentPageReport]="true"  [(selection)]="selectedProducts"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 50px;"></th>
+                <ng-container *ngFor="let col of columns">
+                  <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                  </th>
+                </ng-container>
+                <th style="width: 108px;"></th>
+              </tr>
+            </ng-template>
+  
+            <ng-template pTemplate="body" let-document let-expanded="expanded">
+              <tr>
+                <td>
+                  <button *ngIf="document.distributedDocuments.length > 0" type="button" pButton pRipple [pRowToggler]="document"
+                    class="p-button-text p-button-rounded p-button-plain"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td style="overflow-wrap: break-word"><b><a class="linkStyle" [href]="'srm/purchase-order/'+document.idOrderPurchase" >{{document.baseDocumentIdentifierNumber}}</a></b></td>
+                <td style="overflow-wrap: break-word">{{document.branchOfficeName}}</td>
+                <td style="overflow-wrap: break-word">{{document.status}}</td>
+                <td style="overflow-wrap: break-word">{{document.operationDocumentBase}}</td>
+                <td style="overflow-wrap: break-word">{{document.distributionType}}</td>
+                <td style="overflow-wrap: break-word">{{document.items}}</td>
+                <td style="overflow-wrap: break-word">{{document.createdby}}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-document>
+             
+              <tr>
+                <td colspan="9" style="padding: 5px;padding-left: 20px;padding-right: 20px;">
+                  <div>
+                    <p-table [columns]="displayedDocumentsColumns" [value]="document.distributedDocuments"
+                      dataKey="documentRequestId">
+                      <ng-template pTemplate="header" let-columnsp>
+               <tr>
+                <ng-container *ngFor="let col of columnsp">
+                  <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                  </th>
+                </ng-container>
+            
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-documentrequest let-columnsp="columns">
+              <tr>
+  
+                <ng-container *ngFor="let col of columnsp">
+                  <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                    <span *ngIf="col.field==='documentRequestIndentifier' && document.idDistributionType == this.EnumTypeDistribution.distribuida"><a class="linkStyle" [href]="'srm/purchase-order/'+documentrequest.documentRequestId" >{{documentrequest[col.field]}}</a></span>
+                    <span *ngIf="col.field==='documentRequestIndentifier' && document.idDistributionType == this.EnumTypeDistribution.consolidada"><a class="linkStyle" [href]="'srm/merchandise-request/'+documentrequest.documentRequestId" >{{documentrequest[col.field]}}</a></span>
+                    <span *ngIf="col.field==='documentRequestIndentifier' && document.idDistributionType == this.EnumTypeDistribution.facturaCentralizada"><a class="linkStyle" [href]="'/srm/reception/'+documentrequest.documentRequestId" >{{documentrequest[col.field]}}</a></span>
+                    <span *ngIf="col.field!=='documentRequestIndentifier'">{{col.template(documentrequest)}} </span>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        </td>
+        </tr>
+           </ng-template>
+          </p-table>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+  </p-card>
+</div>
+</div>
+
+<app-branchoffice-modal [visible]="BranchOfficeDialogVisible" (onToggle)="onToggleBranchOfficeModal($event)"
+  (_AddBranchOfficesModal)="EmitBranchOfficeList($event)" [(_idCompany)]="_idCompany"
+  [(_idBranchOrigin)]="_idBranchOrigin"></app-branchoffice-modal>
+
+
+  <suppliers-catalog-modal (onSubmit)="onSubmitcatalogsupplier($event)" (onToggle)="onHidecatalogsupplier($event)"
+  [(idCompany)]="_idCompany" [(idbranchOffice)]="_idBranchOrigin" [(_idSupplier)]="PucharseOrderHeader.suppliers.id"
+  [visible]="catalogDialogVisible"></suppliers-catalog-modal>
+
+  <purchase-order-modal (onSubmit)="onSubmitPurchaseOrderModal($event)" [(filterpurchaseorder)]="isfilter" (onToggle)="onHidePurchaseOrderModal($event)"
+  [visible]="PurchaseOrderDialogVisible" [(idCompany)]="_idCompany"></purchase-order-modal>
+
+  <app-product-catalog-modal (onSubmit)="onSubmitProductCatalogModal($event)"
+  (onToggle)="onHideProductCatalogModal($event)" [visible]="ProductCatalogDialogVisible"></app-product-catalog-modal>
+
+<app-distributed-product-panel [(_idCompany)]="_idCompany" [(values)]="values" [(_idBranchOrigin)]="_idBranchOrigin"
+  [(showDialog)]="_showdialog" [(_indConsignment)]="PucharseOrderHeader.purchase.idTypeNegotiation"
+  [(_idPurchaseOrder)]="PucharseOrderHeader.purchase.idOrderPurchase"
+  [(_AgrupationPurchaseOrder)]="PucharseOrderHeader.idAgrupationOrderPurchase"
+  [(_DistributedProductlist)]="_DistributedProductlist" (onSubmit)="onSubmitDistributedProduct($event)">
+</app-distributed-product-panel>

@@ -1,0 +1,46 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    <!-- <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <p-dropdown  [options]="companyTypes" [(ngModel)]="filters.idType" placeholder="Tipo de documento" (keyup.enter)="search()" ></p-dropdown>
+    </div> -->
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.identification" name="identification" id="rif" type="text" pInputText (keyup.enter)="search()">
+                <label>Número de documento</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input id="float-input" [(ngModel)]="filters.socialName" type="text" pInputText (keyup.enter)="search()">
+                <label for="float-input">Razón social</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input id="float-input" [(ngModel)]="filters.name" type="text" pInputText (keyup.enter)="search()">
+                <label for="float-input">Razón comercial</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <p-dropdown  [options]="companyTypes" [(ngModel)]="filters.idType" placeholder="Tipo" (keyup.enter)="search()" ></p-dropdown>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <p-dropdown  [options]="companyGroups" [(ngModel)]="filters.idGroup" placeholder="Grupo" (keyup.enter)="search()" ></p-dropdown>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <p-dropdown  [options]="companyClassifications" [(ngModel)]="filters.idClassification" placeholder="Clasificación" (keyup.enter)="search()" ></p-dropdown>
+    </div>        
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <p-dropdown name="cboactive"  [options]="statuslist" [(ngModel)]="filters.active" placeholder="Estatus" (keyup.enter)="search()"></p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

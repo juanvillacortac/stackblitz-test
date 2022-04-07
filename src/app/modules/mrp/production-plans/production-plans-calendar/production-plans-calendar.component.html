@@ -1,0 +1,119 @@
+
+<div class="p-grid p-p-4">
+    <div class="p-col p-buttonset">
+        <button pButton
+            pRipple
+            mwlCalendarPreviousView
+            type="button"
+            icon="pi pi-chevron-left"
+            class="p-button-success align-center"
+            [disabled]="isLoading"
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()"></button>
+        <button pButton
+            pRipple
+            mwlCalendarNextView
+            type="button"
+            icon="pi pi-chevron-right"
+            class="p-button-success"
+            [disabled]="isLoading"
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()"></button>
+    </div>
+
+    <div class="p-col p-grid">
+        <h2 class="p-mx-auto align-center" (click)="displayCalendar.toggle($event, $event.target)">{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h2>
+    </div>
+
+    <div class="p-col ">
+        <button pButton *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCTION_PLANS_PERMISSION_ID)"
+            pRipple
+            type="button"
+            icon="pi pi-plus"
+            class="p-button-success align-right align-center"
+            pTooltip="{{ 'add' | translate }}"
+            (click)="addNewPlan()"></button>
+    </div>
+</div>
+<p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '3px'}"></p-progressBar>
+
+<div [ngSwitch]="view">
+    <mwl-calendar-month-view
+        *ngSwitchCase="calendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+        [cellTemplate]="customCellTemplate">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="calendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="calendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-day-view>
+</div>
+<ng-template #customCellTemplate let-day="day"
+                let-openDay="openDay"
+                let-locale="locale"
+                let-tooltipPlacement="tooltipPlacement"
+                let-highlightDay="highlightDay"
+                let-unhighlightDay="unhighlightDay"
+                let-eventClicked="eventClicked"
+                let-tooltipTemplate="tooltipTemplate"
+                let-tooltipAppendToBody="tooltipAppendToBody">
+    <div class="cal-cell-top">
+        <span class="cal-day-badge" *ngIf="day.events.length > 0">
+            {{ day.events.length }}
+        </span>
+        <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+        <div *ngIf="day.events.length > 0" class="cal-day-notes">
+            <br/>
+            <div class="p-m-2" *ngFor="let event of day.events">
+                <app-progress-view
+                    (click)="planClicked($event, event.id)"
+                    [id]="event.id"
+                    [barColor]="getPlanStatusColor(event.id)"
+                    [progressText]="event.title"
+                    [progress]="getPlanById(event.id).progress">
+            </app-progress-view>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="false" class="cal-events" >
+        <div class="cal-event"
+            *ngFor="let event of day.events"
+            [style.backgroundColor]="event.color.primary"
+            [ngClass]="event?.cssClass"
+            (mouseenter)="highlightDay.emit({event: event})"
+            (mouseleave)="unhighlightDay.emit({event: event})"
+            [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+            [tooltipPlacement]="tooltipPlacement"
+            [tooltipEvent]="event"
+            [tooltipTemplate]="tooltipTemplate"
+            [tooltipAppendToBody]="tooltipAppendToBody">
+        </div>
+    </div>
+</ng-template>
+
+<p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" [style]="{width: '650px'}">
+    <app-production-plans-resume #planResume></app-production-plans-resume>
+</p-overlayPanel>
+
+<p-overlayPanel #displayCalendar class="display-calendar" [dismissable]="true" [style]="{width: '250px'}">
+  <p-calendar [disabled]="isLoading" [(ngModel)]="viewDate" [inline]="true" view="month" (onSelect)="closeOpenMonthViewDay()"></p-calendar>
+</p-overlayPanel>

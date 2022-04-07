@@ -1,0 +1,97 @@
+<div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+    <div class="p-field p-grid">
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="active">Número de documento</label>
+            <input type="text" [(ngModel)]="filters.documentNumber" maxlength="255" pInputText (keyup.enter)="search()">
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Banco</label>
+            <p-dropdown [filter]="true" [options]="filterData.banks" (keyup.enter)="search()" [(ngModel)]="filters.bankId"
+                (onChange)="filterBankAccounts()" placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Número de cuenta</label>
+            <p-dropdown [filter]="true" [options]="bankAccounts" (keyup.enter)="search()" [(ngModel)]="filters.bankAccountId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Tipo de ajuste</label>
+            <p-dropdown [filter]="true" [options]="filterData.adjustmentsTypes"
+                [(ngModel)]="filters.bankAdjustmentTypeId" placeholder="Seleccione..." (keyup.enter)="search()" [resetFilterOnHide]="true"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Motivo de transacción</label>
+            <p-dropdown [filter]="true" [options]="filterData.reasons" (keyup.enter)="search()" [(ngModel)]="filters.bankReasonId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Fecha a filtrar</label>
+            <p-dropdown [filter]="true" [options]="filterData.date" (keyup.enter)="search()" [(ngModel)]="filters.date"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="transactionDate">Fecha inicio</label>
+            <p-calendar [showIcon]="true" inputId="transactionDate"  [(ngModel)]="filters.startDate"
+                [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+                yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+            </p-calendar>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="transactionDate">Fecha fin</label>
+            <p-calendar [showIcon]="true" inputId="transactionDate" [(ngModel)]="filters.endDate"
+                [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+                yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+            </p-calendar>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="active">Referencia</label>
+            <input type="text" [(ngModel)]="filters.reference" maxlength="50" pInputText (keyup.enter)="search()">
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Moneda</label>
+            <p-dropdown [filter]="true" [options]="filterData.currencies" (keyup.enter)="search()" [(ngModel)]="filters.bankAccountCurrencyId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Estatus de la transacción</label>
+            <p-dropdown [filter]="true" [options]="filterState" (keyup.enter)="search()" [(ngModel)]="filters.typeEstatusTransactionId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        
+    </div>
+</div>
+
+<div class="p-grid p-align-center vertical-container">
+    <div class="p-d-flex p-jc-end p-col-12 p-lg-12" style="width: 100%">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()"  icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>

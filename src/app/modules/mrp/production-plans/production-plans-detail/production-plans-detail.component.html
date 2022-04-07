@@ -1,0 +1,108 @@
+<div class="card">
+    
+    <div class="p-fluid p-md-12">
+        <form [formGroup]="productionPlanForm" >
+            
+            <h2>{{ 'mrp.production_plan.production_plans' | translate }}</h2>
+            <br>
+            <div class="p-fluid p-formgrid p-grid p-md-12">
+                <div class="p-field p-col">
+                    <span class="p-float-label">      
+                        <input pInputText #name id="name" [ngClass]="{ 'p-invalid': isFormFieldValid('name') }" formControlName="name" maxlength="100" sentenceType required/>
+                        <label for="name">{{ 'name' | translate }}</label>
+                    </span>
+                    <small for="name" *ngIf="isFormFieldValid('name')" class="p-error left-margined">{{ 'validations.name_required' | translate}}.</small>
+                </div>
+                <div class="p-field p-col">
+                    <span class="p-float-label">
+                        <p-calendar inputId="calendar" id="deliveryDate" dataType="date" [class]="isFormFieldValid('deliveryDate') ? 'ng-invalid ng-dirty' : ''" dateFormat="dd/mm/yy" [yearNavigator]="true" yearRange="1950:2050" formControlName="deliveryDate" [minDate]="minDate" [maxDate]="maxDate" [readonlyInput]="true" required>
+                        </p-calendar>
+                        <label for="calendar">{{ 'mrp.production_plan.delivery_date' | translate }}</label>
+                    </span>
+                    <small for="deliveryDate" *ngIf="isFormFieldValid('deliveryDate')" class="p-error left-margined">{{ 'mrp.production_plan.validations.delivery_date_required' | translate }}</small>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid p-md-12">
+                <div class="p-field p-col">
+                    <span class="p-float-label">                   
+                        <p-dropdown [options]="planTypes" id="type" [autoDisplayFirst]="false" [showClear]="false" [class]="isFormFieldValid('idType') ? 'ng-invalid ng-dirty' : ''" formControlName="idType" required></p-dropdown>
+                        <label for="type">{{ 'mrp.production_plan.plan_type' | translate }}</label>
+                    </span>
+                    <small for="type" *ngIf="isFormFieldValid('idType')" class="p-error left-margined">{{ 'mrp.production_plan.validations.plan_type_is_required' | translate }}</small>
+                </div>
+                <div class="p-field p-col">
+                    <span class="p-float-label">                   
+                        <p-dropdown [options]="destinyStore" id="destinyStore" [autoDisplayFirst]="false" [showClear]="false" [class]="isFormFieldValid('idDestinyStore') ? 'ng-invalid ng-dirty' : ''" formControlName="idDestinyStore" required></p-dropdown>
+                        <label for="destinyStore">{{ 'mrp.production_plan.destiny_store' | translate }}</label>
+                    </span>
+                    <small for="destinyStore" *ngIf="isFormFieldValid('idDestinyStore')" class="p-error left-margined">{{ 'mrp.production_plan.validations.destiny_store_required' | translate }}</small>
+                </div>
+            </div>
+
+                
+        </form>
+
+        <div class="card p-m-0">
+            <p-table #dt 
+            [columns]="cols"
+            [value]="recipes" 
+            [rowHover]="true" 
+            [paginator]="true" 
+            [showCurrentPageReport]="true" 
+            [rows]="10" 
+            [rowsPerPageOptions]="[10,25,50]"
+            currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+                <ng-template pTemplate="caption" >
+                    <div class="p-d-flex p-ai-center" >
+                        <h5 style="margin-top: 1rem; margin-right: 1rem;">{{'mrp.production_plan.plan_recipe' | translate}}</h5>
+                        <button #search id="search" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="searchRecipe()"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <ng-container *ngFor="let col of cols">
+                            <th [ngStyle]="{'display': col.display}" pSortableColumn={{col.field}}>
+                                {{ col.header | translate }}
+                                <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                            </th>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-recipe >
+                    <tr>
+                        <ng-container *ngFor="let col of cols">
+                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                                
+                                <app-active-label *ngIf="col.field == 'Active'; else numberCell" [active]="recipe[col.field]" [isYesOrNoMode]="true"></app-active-label>
+            
+                                <ng-template #numberCell>
+                                    <div *ngIf="col.field === 'actualCost'; else textCell">
+                                        {{(recipe.actualCost)|number:'1.2-2'}}
+                                    </div>
+                                </ng-template>
+                                
+                                <ng-template #textCell >
+                                    <div *ngIf="col.field !== 'edit'; else detailCell">
+                                        {{recipe[col.field]}}
+                                    </div>
+                                </ng-template>
+            
+                                <ng-template #detailCell >
+                                    <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.CHECK_PLAN_RECIPE_PERMISSION_ID)">
+                                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip=" {{ 'edit' | translate }}" (click)="editRecipe(recipe)"></button>
+                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="{{ 'delete' | translate }}" (click)="removeRecipe(recipe)"></button>
+                                    </ng-container>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <app-footer-form-buttons (acceptPressed)="submitProductionPlan()" (cancelPressed)="cancelPressed()"></app-footer-form-buttons>
+</div>
+
+<app-production-plans-recipe [excludedRecipes]="recipes" [(showPanel)]="showDialog" (recipeSelected)="onRecipeSearched($event)"></app-production-plans-recipe>
+<app-production-plans-recipe-edit [(showEditing)]="showEdit" [editingRecipe]="editingRecipe" (recipeEdited)="onRecipeEdited($event)"></app-production-plans-recipe-edit>

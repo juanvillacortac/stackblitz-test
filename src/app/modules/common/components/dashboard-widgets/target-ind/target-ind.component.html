@@ -1,0 +1,50 @@
+<div class="card overview-box-1 orange margintopInd">
+<!--     <div class="card-header">
+        <h6>{{sublegend}}</h6>
+        <div class="header-buttons">
+            <a href="#">
+                    <i class="pi pi-plus"> </i> Ver más          
+            </a>
+        </div>
+    </div> -->
+    <div class="overview-content p-pt-0">
+        <div class="p-grid">
+            <div class="p-col-8 p-md-4">
+                <!-- <img class="p-offset-1 p-col-12" src="assets/layout/images/dashboard/rateequal.svg"> -->
+                <img class="p-offset-1 p-col-10" src="{{image}}">
+                <h6 class="leyendtext" style="text-align: center;">{{sublegend}}</h6>
+            </div>
+            <div class="info p-col-4 p-md-8">
+                <h4 class="value">{{currentValue}}</h4>
+                <div *ngIf="target">
+                    <h6 class="subtext"> {{objectiveDescription2}} {{target}}</h6>
+                </div>
+<!--                 <div *ngIf="caption">
+                    <h6 class="subtext">{{caption}}</h6>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="overview-footer over">
+        <div *ngIf="target==currentValue && color == ''">
+            <span class="box-status-equal"><i class="pi pi-minus"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+        <div *ngIf="target<currentValue && color == ''">
+            <span class="box-status-up"><i class="pi pi-chevron-up"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+        <div *ngIf="target>currentValue && color == ''">
+            <span class="box-status-down"><i class="pi pi-chevron-down"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+
+        <div *ngIf="color == 'igual'">
+            <span class="box-status-equal"><i class="pi pi-minus"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+        <div *ngIf="color == 'mayor'">
+            <span class="box-status-up"><i class="pi pi-chevron-up"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+        <div *ngIf="color == 'menor'">
+            <span class="box-status-down"><i class="pi pi-chevron-down"></i><span> {{valueVsTarget}}</span> %</span>
+        </div>
+
+    </div>
+</div>

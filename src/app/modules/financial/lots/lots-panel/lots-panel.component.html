@@ -1,0 +1,47 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false"
+[showCloseIcon]="!saving" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Lote</h5>
+    <hr />
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+       
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="name">Número de lote <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input  [disabled]="selectedValues" id="float-input" [(ngModel)]="_data.lotName" type="text" pInputText
+               (input)="_validations.toCapitalizeSimbology($event)" [pKeyFilter]="noneSpecialCharacters"  minlength="3" maxlength="20" [class]="submitted && (!_data.lotName || !_data.lotName.trim()) && selectedValues == false ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()">
+               <small class="p-invalid" *ngIf="this.nomString || submitted && (!_data.lotName|| !_data.lotName.trim()) && selectedValues == false">El número de lote es requerido</small>
+         </div>
+               <div class="p-field p-col-12 p-md-12 p-sm-12">
+               <p-checkbox (click)="changeCheckGenAutomatico()" [binary]="true" [(ngModel)]="selectedValues" label="Generar automáticamente"></p-checkbox>
+               <!-- <small class="p-invalid" *ngIf="submitted && !isNan(_data.accountingAccountCategory.trim())">El nombre debe tener al menos una letra</small> -->
+            </div>
+ 
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Descripción</label>
+                    <textarea  [(ngModel)]="_data.description" [rows]="5" [cols]="30" maxlength="255" pInputTextarea ></textarea>
+
+                  </div>
+
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="active">Módulo <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown name="cboactive" [options]="moduleList" appendTo="body" [(ngModel)]="_data.idModule" placeholder="Seleccione..."  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+                   (keyup.enter)="save()" [class]="submitted &&  _data.idModule == -1 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                   <small class="p-invalid" *ngIf="submitted && _data.idModule == -1">El módulo es requerido</small> 
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12">
+              <button [disabled]="saving" pButton pRipple label="Guardar" (keyup.enter)="save()" (click)="save()" icon="pi pi-save"
+                class="p-button-info p-mr-2"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-sidebar>

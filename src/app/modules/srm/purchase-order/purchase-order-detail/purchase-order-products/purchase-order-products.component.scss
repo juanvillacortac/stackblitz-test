@@ -1,0 +1,188 @@
+:host ::ng-deep {    
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+    .card {
+        padding:2px !important ;
+    }
+    .descriptionitem {
+        font-size: small !important;
+        overflow-wrap: break-word;
+    }
+    .layout-config {
+        position: fixed;
+        padding: 0;
+        top: 0;
+        right: 0;
+        display: block;
+        width: 550px;
+        z-index: 998;
+        height: 100%;
+        transition: transform .4s cubic-bezier(.05,.74,.2,.99);
+        transform: translateX(100%);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    .layout-config.layout-config-active {
+        transform: translateX(0);
+    }
+    .layout-config .layout-config-content-wrapper .layout-config-button {
+        display: block;
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        line-height: 52px;
+        background-color: var(--primary-color);
+        text-align: center;
+        color: var(--primary-color-text);
+        top: 270px;
+        left: -51px;
+        z-index: -1;
+        overflow: hidden;
+        cursor: pointer;
+        outline: 0 none;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;     
+    }
+
+   .row-indconsigment {
+        background-color: #ebcb8b7a !important ;
+    }
+
+     tr.row-indconsigment.p-selectable-row.p-highlight {
+       background: #5E81AC !important;
+       color: #ffffff !important;
+    }
+    .custom-chip {
+        background: #ebcb8b7a !important;
+        color: var(--primary-color-text);
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        border: solid;
+        display: inline-block;
+    }
+        #ChildTab .p-tabview .p-tabview-panels {
+            background: #ffffff !important ;
+        }
+        .status-badge {
+            border-radius: 2px;
+            padding: .25em .5rem; 
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: .3px;
+        
+            &.status-active {
+                background: #C8E6C9;
+                color: #256029;
+                font-size: xx-small;
+            }
+        
+            &.status-inactive {
+                background: #FFCDD2;
+                color: #C63737;
+                font-size: xx-small;
+            }
+        }
+
+        .layout-wrapper-static .layout-sidebar {
+            transform: translate3d(-180px, 0px, 0px)!important;
+        }
+        .layout-wrapper-static .layout-sidebar .layout-menu li > a i.layout-submenu-toggler {
+            display: unset!important;
+        }
+
+        #ChildTab div ul li a
+        {
+            background: #fff;
+            border-color: #eceff4;
+        }
+
+        .fullheightcard .p-card
+        {
+            height: 100%!important;
+        }
+
+        //#tableproduct .p-card-body{
+           // height: 750px!important;
+       // }
+       .p-toast-message-custom {
+        background-color: #E1CFE7;
+        border: solid #8A427A;
+        border-width: 0 0 0 6px;
+        color: #2c1e30;
+        .p-toast-icon-close {
+            color: #2c1e30;
+        }
+    }
+       .ui-tabview-nav li.ui-state-active {
+        background-color: rgb(0,30,355) !important;
+    }
+    
+    .styleActive {
+        border-bottom: 2px solid #5E81AC;
+        border-radius: 0px;
+        font-weight: bold;
+        //padding: 10px;
+      }
+        
+}
+
+
+
+
+@media screen and (max-width: 40rem) {
+    :host ::ng-deep {
+        .p-datatable {
+            &.p-datatable-responsive-demo {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tfoot > tr > td {
+                    display: none !important;
+                }
+
+                .p-datatable-tbody > tr > td {
+                    text-align: left;
+                    display: block;
+                    width: 100%;
+                    float: left;
+                    clear: left;
+                    border: 0 none;
+
+                    .p-column-title {
+                        padding: .4rem;
+                        min-width: 30%;
+                        display: inline-block;
+                        margin: -.4em 1em -.4em -.4rem;
+                        font-weight: bold;
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+@media only screen and (max-width: 540px) {
+    :host::ng-deep 
+    {
+        .p-g-end
+        {
+            justify-content: flex-end;
+        }
+        
+        p-multiselect .p-multiselect
+        {
+            min-width: unset!important;
+        }
+    }
+  
+
+ }

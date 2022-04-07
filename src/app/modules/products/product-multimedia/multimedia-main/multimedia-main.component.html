@@ -1,0 +1,50 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-card header="Búsqueda personalizada">
+            <multimedia-filter [(filter)]="filter" (onOpenNew)="openNew()" (onSearch)="loadMultimedia()" [(loading)]="loading" [(activeTab)]="activeTab"></multimedia-filter>
+        </p-card>
+    </div>
+    <div class="p-col-12">
+        <p-card header="Lista multimedia" >
+            <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeTab">
+                <p-tabPanel>
+                    <ng-template pTemplate = "header">
+                        <i class="pi pi-images p-mr-2"></i>
+                        <span>Imágenes</span>
+                    </ng-template>
+                    <multimedia-list (onSearch)="loadMultimedia()" [(type)]="activeTab" (refreshChangeMain)="refreshChangeMain()" [(selectedPredetermined)]="selectedPredetermined" [(loading)]="loading" [(multimediaProducts)]="multimediaProducts1" [(activeTab)]="img"></multimedia-list>
+                </p-tabPanel>
+                <p-tabPanel  header="Header II">
+                    <ng-template pTemplate = "header">
+                        <i class="pi pi-video p-mr-2"></i>
+                        <span>Videos</span>
+                    </ng-template>
+                    <multimedia-list (onSearch)="loadMultimedia()" [(type)]="activeTab" [(loading)]="loading" [(multimediaProducts)]="multimediaProducts2" [(activeTab)]="vid"></multimedia-list>
+                </p-tabPanel>
+                <!-- <p-tabPanel header="Header III">
+                    <ng-template pTemplate = "header">
+                        <i class="pi pi-file"></i>
+                        <span>Documentos</span>
+                    </ng-template>
+                    <multimedia-list [(loading)]="loading" [(multimediaProducts)]="multimediaProducts3" [(activeTab)]="doc"></multimedia-list>
+                </p-tabPanel>
+                <p-tabPanel header="Header IV">
+                    <ng-template pTemplate = "header">
+                        <i class="pi pi-volume-up"></i>
+                        <span>Audios</span>
+                    </ng-template>
+                    <multimedia-list [(loading)]="loading" [(multimediaProducts)]="multimediaProducts4" [(activeTab)]="aud"></multimedia-list> 
+                </p-tabPanel> -->
+            </p-tabView>
+        </p-card>
+    </div>
+    <div class="p-col-12">
+        <div class="p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+            <button pButton pRipple label="Regresar" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary"></button>
+        </div>
+    </div>
+</div>
+<multimedia-new (onSearch)="loadMultimedia()" [(type)]="type" [(imgCount)]="imgCount" [(vidCount)]="vidCount" [(showDialog)]="multimediaDialog" [(idproduct)]="idproduct"></multimedia-new>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+

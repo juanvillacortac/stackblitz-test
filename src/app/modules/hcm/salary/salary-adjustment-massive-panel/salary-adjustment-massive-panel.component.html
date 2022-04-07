@@ -1,0 +1,110 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>{{title}}</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>    
+      <hr/>
+      <div class="p-col-12">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12 p-lg-4 p-p-0">Tipo de aplicación<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12 p-lg-8 p-p-0 radiobutton-content">
+              <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check">
+                <p-radioButton name="min" value="val1" [(ngModel)]="locked"></p-radioButton>
+                <label for="binary">Por monto</label>
+              </div>
+              <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check">
+                <p-radioButton name="min" value="val2" [(ngModel)]="locked" [disabled]="record.salary.amount == 0"></p-radioButton>
+                <label for="binary">Porcentual</label>
+              </div>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <label for="active" class="p-col-12 p-lg-4 p-p-0">Monto<span [ngStyle]="{'color':'red'}" *ngIf="locked == 'val1'">*</span></label>
+              <div class="p-col-12 p-lg-8 p-p-0" >
+                  <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                      <p-inputNumber id="monto" mode="decimal" [(ngModel)]="amount" maxlength="19" (ngModelChange)="calculateValues(3)" [min]="0"
+                          [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="locked == 'val2'" [class]="submitted && locked == 'val1' && (amount <= 0 || amount == undefined) ? 'ng-dirty ng-invalid' : ''">
+                      </p-inputNumber>
+                    </div>
+                    <small class="p-invalid" *ngIf="submitted && locked == 'val1' && (amount <= 0 || amount == undefined)"> El monto es requerido</small>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12 p-lg-4 p-p-0">Porcentaje<span [ngStyle]="{'color':'red'}" *ngIf="locked == 'val2'">*</span></label>
+            <div class="p-col-12 p-lg-8 p-p-0" >
+                <div class="p-inputgroup">
+                    <p-inputNumber id="porcentaje" mode="decimal" [(ngModel)]="percentage" maxlength="19" (ngModelChange)="calculateValues(4)"
+                      [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="locked == 'val1'" [class]="submitted && locked == 'val2' && (percentage <= 0 || percentage == undefined) ? 'ng-dirty ng-invalid' : ''">
+                    </p-inputNumber>
+                    <span class="p-inputgroup-addon">%</span>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && locked == 'val2' && (percentage <= 0 || percentage == undefined)"> El porcentaje es requerido</small>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12 p-lg-4 p-p-0">Factor</label>
+            <div class="p-col-12 p-lg-8 p-p-0" >
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                    <p-inputNumber id="factor" mode="decimal" [(ngModel)]="rateExchange" maxlength="19" 
+                         [disabled]="true" [minFractionDigits]="2" [maxFractionDigits]="2" life="500">
+                    </p-inputNumber>
+                    <span class="p-inputgroup-addon">x1{{symbolCoin1}}</span>
+                  </div>
+            </div>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-lg-4 p-p-0">Conversión</label>
+          <div class="p-col-12 p-lg-8 p-p-0" >
+              <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                  <p-inputNumber id="conversion" mode="decimal" [(ngModel)]="conversion" maxlength="19" 
+                       [disabled]="true" [minFractionDigits]="2" [maxFractionDigits]="3" life="500">
+                  </p-inputNumber>
+                </div>
+          </div>
+      </div>
+          <div class="p-field p-grid p-col-12">
+              <label for="active" class="p-col-12 p-lg-4 p-p-0">Fecha de factor</label>
+              <div class="p-col-12 p-lg-8 p-p-0">
+                <p-calendar [(ngModel)]="factorDate" dateFormat="dd/mm/yy" [showTime]="true" [showSeconds]="true" [hourFormat]="12" [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true"
+                [class]="submitted && effectiveDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()" [yearNavigator]="true" [disabled]="true">
+                </p-calendar>
+                <small class="p-invalid" *ngIf="submitted && effectiveDateText != ''">{{effectiveDateText}}</small>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12 p-lg-4 p-p-0">Fecha de vigencia<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12 p-lg-8 p-p-0">
+              <p-calendar [(ngModel)]="effectiveDate" dateFormat="dd/mm/yy" [baseZIndex]="1000000000" (keyup.enter)="submit()" [readonlyInput]="true" [minDate]="today"
+              [class]="submitted && effectiveDateText != '' ? 'ng-dirty ng-invalid' : ''" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" >
+              </p-calendar>
+              <small class="p-invalid" *ngIf="submitted && effectiveDate == null ">La fecha de vigencia es requerida</small>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12 p-lg-4 p-p-0">Motivo<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="motives" [(ngModel)]="selectMotive" placeholder="Seleccione..." optionLabel="label" class="p-col-12 p-lg-8 p-p-0"
+            [class]="submitted && selectMotive.value == -1 ? 'ng-dirty ng-invalid' : ''" (onChange)="changeMotive()" (keyup.enter)="submit()"></p-dropdown>
+            <small class="p-invalid p-col-12 p-lg-8 p-lg-offset-4 p-p-0" *ngIf="submitted && selectMotive.value == -1"> El motivo es requerido</small>
+          </div>
+          
+          <div class="p-field p-col-12 p-p-0">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </p-sidebar>
+
+

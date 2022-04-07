@@ -1,0 +1,34 @@
+:host ::ng-deep {
+
+  .menorMargen .p-field {
+    margin-bottom: -0.2rem !important;
+  }
+  .cost-input p-inputnumber {
+    width: 100%;
+  }
+
+
+
+  .status-badge {
+    border-radius: 2px;
+    padding: 0.1em 0.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    margin: 2px;
+
+    &.status-finalize {
+      background: #dee2e6;
+      color: #256029;
+    }
+    &.status-noassgned {
+      background: #ffe5dd;
+      color: #27211b;
+    }
+
+    &.status-delayed {
+      background: #d8eafb;
+      color: #27211b;
+    }
+  }
+}

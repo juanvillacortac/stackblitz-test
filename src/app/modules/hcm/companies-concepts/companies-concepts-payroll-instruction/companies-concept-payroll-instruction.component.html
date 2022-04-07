@@ -1,0 +1,9 @@
+<div class="p-mb-4">
+    <p-dropdown [options]="instructionList" [(ngModel)]="selectedInstruccTypes" [class]=" selectedInstruccTypes.value != 0 ? 'p-col-11 p-d-inline' : 'p-col-11 p-d-inline ng-dirty ng-invalid'"
+    placeholder="Instrucción*" optionLabel="name" (onChange)="changeInstruction()" [disabled]="disabledDropdown"></p-dropdown>
+</div>
+<div class="p-grid p-ml-4 p-mt-4 p-pl-2 p-pt-2 p-instruction" *ngIf="selectedInstruccTypes.value != 0">
+    <app-companies-concept-payroll-assignment style="width: 95%;" *ngIf="selectedInstruccTypes.value == 4" [variables]="variables" [editInstruction]="editInstruction" (returnJson)="buildJson($event)"></app-companies-concept-payroll-assignment>
+    <app-companies-concept-payroll-conditional style="width: 95%;" *ngIf="selectedInstruccTypes.value == 1" [variables]="variables" [editInstruction]="editInstruction" (returnJson)="buildJson($event)"></app-companies-concept-payroll-conditional>
+</div>
+

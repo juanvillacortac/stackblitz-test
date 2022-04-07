@@ -1,0 +1,23 @@
+:host ::ng-deep {
+
+    .customFont{
+        font-size: 20px;
+    }
+    
+    #Agregar{
+        width: 100%;
+    }
+
+    @media screen and (max-width: 1024px){
+        .p-dialog{
+            width: 90%;
+        }
+    }
+
+    @media screen and (min-width: 1025px){
+        .p-dialog{
+            width: 50vw;
+        }
+    }
+}
+

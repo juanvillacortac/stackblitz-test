@@ -1,0 +1,20 @@
+<div class="p-grid p-align-center p-mt-4 vertical-container" *ngIf="expanded">
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <label for="dropdown">Tipo de nómina</label>
+        <p-dropdown [(ngModel)]="selectPayrollType" name="payrollType" [options]="payrollTypelist"  placeholder="Seleccionar..." emptyMessage="Sin resultados">
+        </p-dropdown>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <label for="dropdown">Año</label>
+        <p-inputNumber  id="name" [(ngModel)]="year"  (keyup.enter)="search()" [showButtons]="true" inputId="anio" mode="decimal" [min]="2010" [max]="2050">
+        </p-inputNumber>
+    </div>
+  
+    <div class="p-col-12 p-md-4 p-lg-4 p-jc-end" align="right">
+        <button pButton pRipple label="Buscar"  [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info button-search p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary button-clear"></button>
+    </div>
+</div>
+
+
+

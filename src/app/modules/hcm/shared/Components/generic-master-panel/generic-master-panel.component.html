@@ -1,0 +1,35 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+  <!--<h5 class="p-m-0">{{ModelPanel.Title}}</h5>-->
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <!--<label for="{{ModelPanel.id}}">{{ModelPanel.header}}</label>-->
+            <!--<input id="{{d}}" value="{{data.name}}" type="{{data.type}}" #inp class="form-control">-->
+            <!--<input type="text" (keyup.enter)="saveLevel()" maxlength="80" pInputText id="description" [(ngModel)]="levelin.description" [class]="submitted && (!levelin.description || !levelin.description.trim()) ? 'ng-dirty ng-invalid' : ''" />-->
+            <!--<input type="text" maxlength="80" pInputText id="{{ModelPanel.id}}" class="{{ModelPanel.class}}" [(ngModel)]="Modelin[description]" />-->
+            <!--<small *ngIf="submitted && (!levelin.description || !levelin.description.trim())" class="p-invalid">La descrípción es requerida</small>-->
+          </div> 
+          <!--<div class="p-field p-col-4 p-md-4 p-sm-4">
+            <label for="active"> Nivel <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-inputNumber class="p-field p-col-6 p-md-3 p-text-center" (onInput)="levelValidation(levelin.level)" (keyup.enter)="saveLevel()" [(ngModel)]="levelin.level" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                           decrementButtonClass="p-button-info" incrementButtonClass="p-button-info" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="1">
+            </p-inputNumber>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="description">Código Nomina</label>
+            <input type="text" pInputText (keyup.enter)="saveLevel()" id="payrollcode" [(ngModel)]="levelin.payrollCode" [class]="submitted && (!levelin.payrollcode || !levelin.payrollcode.trim()) ? 'ng-dirty ng-invalid' : ''" />
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>-->
+          <div class="p-field p-col-12 p-md-12">
+            <!--<button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2" (click)="saveLevel()"></button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

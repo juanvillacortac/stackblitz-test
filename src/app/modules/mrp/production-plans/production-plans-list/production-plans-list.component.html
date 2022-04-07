@@ -1,0 +1,68 @@
+<div class="card p-m-0 p-pb-0">
+    <app-table-header 
+        [idAddPermission]="1" 
+        [idFilterPermission]="1" 
+        (addPressed)="newPlan()" 
+        (filterPressed)="showFilters=!showFilters" 
+        (editFilterField)="dt.filterGlobal($event.target.value, 'contains')">
+    </app-table-header>
+
+    <input *ngIf="showFilters" (onSearch)="search()" class="p-mt-3"/>
+</div>
+
+<div class="card p-m-0">
+    <p-table #dt 
+    [columns]="cols"
+    [value]="productionPlans" 
+    [rowHover]="true" 
+    [paginator]="true" 
+    [showCurrentPageReport]="true" 
+    [rows]="10" 
+    [rowsPerPageOptions]="[10,25,50]"
+    currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+        <ng-template pTemplate="header">
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <th [ngStyle]="{'display': col.display}" pSortableColumn={{col.field}}>
+                        {{ col.header | translate }}
+                        <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-plan >
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        
+                        <app-active-label *ngIf="col.field == 'Active'; else progressCell" [active]="plan[col.field]" [isYesOrNoMode]="true"></app-active-label>
+    
+                        <ng-template #progressCell>
+                            <div *ngIf="col.field === 'progress'; else numberCell">
+                                <p-progressBar [value]="plan.progress" [showValue]="false"></p-progressBar>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #numberCell>
+                            <div *ngIf="col.field === 'progress2'; else textCell">
+                                {{(plan.progress)|number:'1.1-2'}}%
+                            </div>
+                        </ng-template>
+                        
+                        <ng-template #textCell >
+                            <div *ngIf="col.field !== 'detail'; else detailCell">
+                                {{plan[col.field]}}
+                            </div>
+                        </ng-template>
+    
+                        <ng-template #detailCell  >
+                            <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.CHECK_PLAN_RECIPE_PERMISSION_ID)">
+                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" (click)="detail(plan)"></button>
+                            </ng-container>
+                        </ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

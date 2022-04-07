@@ -1,0 +1,37 @@
+<p-sidebar styleClass="p-sidebar-md" [style]="{'overflow-y': 'auto'}"
+    [(visible)]="showPanel"
+    (onShow)="ngOnInit()" 
+    (onHide)="hideDialog()" 
+    [blockScroll]="false" 
+    [showCloseIcon]="true"  
+    [dismissible]="false" 
+    position="right" >
+    <h5 class="p-m-0"> {{ 'mrp.product_search' | translate }} </h5>
+<hr/>
+    
+    <div class="p-grid">
+        <div class="p-col-12">
+            <app-search-ingredients *ngIf="showSearching" class="p-col-12" (getResult)= "getItemsSelected($event)"  [(showSearching)]="showSearching" [(exceptions)]="addedIngredients" [isSingleMode]="true" loadKey="product"></app-search-ingredients>
+        </div>
+        <div class="p-col-12"> 
+            <div class="card">       
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="dropdown">Porcentaje<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber suffix= "%" [(ngModel)]="percentage" mode="decimal" [min]="0" [minFractionDigits]="2" maxlength='7'></p-inputNumber>     
+                        <small class="p-invalid" *ngIf="!isValidPercentageForm().isValid && submitted">{{ isValidPercentageForm().error | translate }}</small>            
+                    </div>
+                </div>
+            </div>
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton type="button" pRipple  class="p-button-info p-mr-2" icon="pi pi-save" (click)="loadSelected()" label="{{ 'save' | translate}}"></button>
+                </div> 
+            </div>
+            <p-toast position="top-right" key="materials"></p-toast>
+        </div>
+    </div>
+</p-sidebar>

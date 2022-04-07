@@ -1,0 +1,45 @@
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText [(ngModel)]="state.name" #name maxlength="150" firstLetterUpperCase required />     
+                    <small class="p-invalid" *ngIf="submitted && (!state.name || !state.name.trim())">El campo nombre es requerido</small>                 
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="dropdown">País <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="selectedCountry" placeholder="Seleccionar país" [options]="countries.value"  optionLabel="name" [showClear]="true">
+                  </p-dropdown> 
+                  <small class="p-invalid" *ngIf="submitted && !selectedCountry">El campo país es requerido</small>   
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Abreviatura </label>
+                    <input pInputText [(ngModel)]="state.abbreviation" #abbreviation maxlength="3" lettersOnly required />                     
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="active" [options]="status"  placeholder="Seleccionar estatus" [showClear]="false" [disabled]="!isEdit">
+                  </p-dropdown>
+                  
+                </div>   
+
+            </div>
+        </div>
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton type="button" icon="pi pi-save" [disabled]="loading" pRipple  class="p-button-info p-mr-2" (click)="onSave()" label="Guardar"></button>
+            </div> 
+        </div>
+        <p-toast position="top-right" key="state"></p-toast>
+    </div>
+</div>

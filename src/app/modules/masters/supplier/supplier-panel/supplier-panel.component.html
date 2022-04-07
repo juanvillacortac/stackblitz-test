@@ -1,0 +1,317 @@
+<div class="card">
+  <div class="p-grid">
+    <div class="p-fluid p-col-12 p-md-6 p-lg-4 p-sm-12  p-mt-2">
+      <label for="active">País <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown [options]="countriesList" [(ngModel)]="_dataSupplier.idcountry" placeholder="Seleccione..."
+        (onChange)="onLoadDocumentType(_dataSupplier.idcountry)" [filter]="true" emptyMessage="Sin resultados"
+        emptyFilterMessage="Sin resultados">
+      </p-dropdown>
+      <small class="p-invalid" *ngIf="submitted && _dataSupplier.idcountry <=0">El país es requerido.</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6 p-lg-4  p-mt-2  p-sm-12">
+      <label for="active">Tipo de documento <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown placeholder="Seleccione..." [options]="documentTypeList" (onChange)="onClearInputDocument()"
+        [(ngModel)]="_dataSupplier.ididentifier" [filter]="true" emptyFilterMessage="Sin resultados"
+        emptyMessage="Sin resultados">
+      </p-dropdown>
+      <small class="p-invalid" *ngIf="submitted && _dataSupplier.ididentifier <=0">El tipo de documento es
+        requerido.</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6  p-lg-4  p-mt-2  p-sm-12">
+      <label for="active">Número de documento <span [ngStyle]="{'color':'red'}">*</span></label>
+      <input [(ngModel)]="_dataSupplier.documentnumber" name="documentnumber" id="documentnumber" type="text" pInputText
+        maxlength="25" (keyup.enter)="submit()" (keypress)="onValidateDocumentInput($event)"
+        (paste)="_validations.noPaste($event)" [disabled]="_dataSupplier.ididentifier<=0">
+      <small class="p-invalid"
+        *ngIf="submitted && (!_dataSupplier.documentnumber|| !_dataSupplier.documentnumber.trim() || _dataSupplier.ididentifier<=0)">El
+        número de documento es requerido</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6   p-lg-4   p-sm-12">
+      <label for="active">Razón social <span [ngStyle]="{'color':'red'}">*</span></label>
+      <input [(ngModel)]="_dataSupplier.socialReason" name="socialReason" id="socialReason" type="text" pInputText
+        (input)="_validations.toCapitalizeSimbology($event)" maxlength="100" (keypress)="isFormEdit=true">
+      <small class="p-invalid"
+        *ngIf="submitted && (!_dataSupplier.socialReason|| !_dataSupplier.socialReason.trim())">La razón social es
+        requerida.</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6   p-lg-4  p-sm-12">
+      <label for="active">Razón comercial <span [ngStyle]="{'color':'red'}">*</span></label>
+      <input [(ngModel)]="_dataSupplier.commercialreason" name="commercialreason" id="commercialreason" type="text"
+        pInputText (input)="_validations.toCapitalizeSimbology($event)" maxlength="100">
+      <small class="p-invalid"
+        *ngIf="submitted && (!_dataSupplier.commercialreason|| !_dataSupplier.commercialreason.trim())">La razón
+        comercial es
+        requerida.</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6  p-lg-4 p-sm-12">
+      <label for="active">Correo electrónico</label>
+      <input [(ngModel)]="_dataSupplier.email" name="email" id="email" type="email" pInputText maxlength="50"
+        pKeyFilter="email" [class]="submitted && !valor ? 'ng-dirty ng-invalid' : ''">
+      <small class="p-invalid" *ngIf="submitted && !valor">El formato de correo no es válido.</small>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6  p-lg-4  p-sm-12">
+      <label for="active">Página web </label>
+      <input [(ngModel)]="_dataSupplier.website" name="website" id="website" type="text" pInputText maxlength="50">
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6  p-lg-4 p-sm-12">
+      <label for="active">Teléfono</label>
+      <div class="p-inputgroup">
+        <input [(ngModel)]="_dataSupplier.phone" type="text" disabled pInputText>
+        <button type="button" style="background-color: white;color: black;" pButton pRipple icon="pi pi-times"
+          (click)="clearphone($event)" pTooltip="Borrar Teléfono"></button>
+        <button icon="pi pi-plus" pButton pRipple (click)="showmodal($event)"></button>
+      </div>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-6  p-lg-4  p-sm-12">
+      <label for="active">Tipo de persona</label>
+      <p-dropdown placeholder="Seleccione..." [disabled]="true" [options]="typeList" [ngModel]="selectedType" [filter]="true"
+        emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div style="padding-top: 1rem">
+    <p-fieldset legend="Direcciones" [toggleable]="true" [collapsed]="false">
+      <app-addresses-suppliers [(_dataSupplier)]="_dataSupplier"></app-addresses-suppliers>
+    </p-fieldset>
+  </div>
+</div>
+
+<div style="display: grid; grid-column: auto; gap: 1.5rem" *ngIf="_dataSupplier">
+  <p-fieldset legend="Proveedor" [toggleable]="true" [collapsed]="false">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-8 p-lg-8">
+        <div class="p-grid">
+          <!-- <div class="p-fluid p-col-12 p-md-6   p-lg-4   p-sm-12">
+            <label for="active">Clasificación <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="ClasificationList" [(ngModel)]="_dataSupplier.idsupplierclasification"
+              placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados"
+              emptyMessage="Sin resultados"></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idsupplierclasification <=0">La clasificación es
+              requerida.</small>
+          </div> -->
+
+          <div class="p-fluid p-col-12 p-md-6  p-lg-4   p-sm-12">
+            <label for="active">Tipo contribuyente <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="TaxPayerTypeList" [(ngModel)]="_dataSupplier.idtaxpayertype"
+              placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados"
+              emptyMessage="Sin resultados">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idtaxpayertype <=0">El tipo contribuyente es
+              requerido.</small>
+          </div>
+
+
+          <div class="p-fluid p-col-12 p-md-6  p-lg-4   p-sm-12">
+            <label for="active">Moneda por defecto <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="currencyList" [(ngModel)]="_dataSupplier.idcurrency" placeholder="Seleccione..."
+              [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idcurrency <=0">La moneda por defecto es
+              requerida.</small>
+          </div>
+
+          <div class="p-fluid p-col-12 p-md-6  p-lg-4  p-sm-12">
+            <label for="active">Tipo de tasa por defecto <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="exchangetypeList" [(ngModel)]="_dataSupplier.idexchangetype"
+              placeholder="Seleccione.." [filter]="true" emptyMessage="Sin resultados."
+              emptyFilterMessage="Sin resultados">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idexchangetype <=0">El tipo de tasa por defecto
+              es
+              requerido.</small>
+          </div>
+
+          <div class="p-fluid p-col-12 p-md-6  p-lg-4 p-sm-12">
+            <label for="active">Condición de pago <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="paymentConditionList" [(ngModel)]="_dataSupplier.idpaymentcondition"
+              placeholder="Seleccione.." [filter]="true" emptyMessage="Sin resultados."
+              emptyFilterMessage="Sin resultados"></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idpaymentcondition <=0">La condición de pago es
+              requerida.</small>
+          </div>
+
+          <div class="p-fluid p-col-12 p-md-6  p-lg-4 p-sm-12 p-mt-5 ">
+            <div class="p-field-checkbox ">
+              <p-checkbox [(ngModel)]="_dataSupplier.indconsignment" binary="true" inputId="binary"></p-checkbox>
+              <label for="binary">Permite consignación</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12">
+        <p-fieldset legend="Empresas" class="fieldseth">
+          <div class="p-mb-3">
+            <p-checkbox name="branchOfficeAll" [binary]="true" (click)="checkAllCompanies()"
+              [(ngModel)]="checkAllCompany"></p-checkbox>
+            <label style="margin-left: 0.5rem;">Todos</label>
+          </div>
+          <div *ngFor="let company of companieslist">
+            <div class="p-field-checkbox" style="word-break: break-all;">
+              <p-checkbox name="company" [disabled]="company.active == false" [value]="company" [inputId]="company.id"
+                ng-checked="company == 1" [(ngModel)]="supplierSelectedCompanies" (onChange)="checkedcompany($event)">
+              </p-checkbox>
+              <label [for]="company.id">{{company.socialName}}</label>
+            </div>
+          </div>
+        </p-fieldset>
+        <small class="p-invalid" *ngIf="submitted && !anySelected">Debe asignar al menos una
+          empresa
+          al proveedor.</small>
+      </div>
+    </div>
+
+    <div class="p-mt-3" *ngIf="_dataSupplier.idclientsupplier > 0">
+      <p-fieldset legend="Datos generales" [toggleable]="true" [(id)]="id">
+        <div class="p-grid">
+          <p-tabView class="p-col-12 p-md-12 p-lg-12 p-mt-4" (onChange)="handleChange($event)">
+            <p-tabPanel class="p-mt-1" header="Contactos" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-contacts-suppliers [(_dataSupplierContacts)]="supplier"
+                [(_CompaniesListTemp)]="supplierSelectedCompanies">
+              </app-contacts-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Usuarios" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-users-suppliers [(_CompaniesListTemp)]="supplierSelectedCompanies" [(_dataSupplierUser)]="supplier"
+                [(userexpanded)]="userexpanded"></app-users-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Tasas de cambio" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-exchangerate-suppliers [(_CompaniesListTemp)]="supplierSelectedCompanies"
+                [(_dataSupplierExchangeRate)]="supplier"></app-exchangerate-suppliers>
+            </p-tabPanel>
+
+          </p-tabView>
+        </div>
+      </p-fieldset>
+    </div>
+
+
+    <div class="p-mt-3" *ngIf="_dataSupplier.idclientsupplier > 0">
+      <p-fieldset legend="Configuración financiera" [toggleable]="true" [(id)]="id">
+        <div class="p-grid">
+          <p-tabView class="p-col-12 p-md-12 p-lg-12 p-mt-4" (onChange)="handleChange($event)">
+
+            <p-tabPanel class="p-mt-1" header="Cuentas contables">
+              <app-accounting-account-suppliers [(accounts)]="financialSetup.supplier.accountingAccounts"
+                [companies]="supplierSelectedCompanies">
+              </app-accounting-account-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Cuentas bancarias">
+              <app-bank-account-suppliers [(bankAccounts)]="financialSetup.supplier.bankAccounts"
+                [companies]="supplierSelectedCompanies" [banks]="banks" [currencies]="currencyList">
+              </app-bank-account-suppliers>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </p-fieldset>
+    </div>
+  </p-fieldset>
+
+  <p-fieldset legend="Cliente" [toggleable]="true" [collapsed]="false">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-8 p-lg-8">
+        <div class="p-grid">
+          <div class="p-fluid p-col-12 p-md-6   p-lg-4   p-sm-12">
+            <label for="active">Clasificación <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="ClasificationList" [(ngModel)]="_dataSupplier.idsupplierclasification"
+              placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados"
+              emptyMessage="Sin resultados"></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataSupplier.idsupplierclasification <=0">La clasificación es
+              requerida.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12">
+        <p-fieldset legend="Empresas" class="fieldseth">
+          <div class="p-mb-3">
+            <p-checkbox name="branchOfficeAll" [binary]="true" (click)="checkAllCompanies()"
+              [(ngModel)]="checkAllCompany"></p-checkbox>
+            <label style="margin-left: 0.5rem;">Todos</label>
+          </div>
+          <div *ngFor="let company of companieslist">
+            <div class="p-field-checkbox" style="word-break: break-all;">
+              <p-checkbox name="company" [disabled]="company.active == false" [value]="company" [inputId]="company.id"
+                ng-checked="company == 1" [(ngModel)]="clientSelectedCompanies" (onChange)="checkedcompany($event)">
+              </p-checkbox>
+              <label [for]="company.id">{{company.socialName}}</label>
+            </div>
+          </div>
+        </p-fieldset>
+        <small class="p-invalid" *ngIf="submitted && !anySelected">Debe asignar al menos una
+          empresa
+          al proveedor.</small>
+      </div>
+    </div>
+
+    <div class="p-mt-3" *ngIf="_dataSupplier.idclientsupplier > 0">
+      <p-fieldset legend="Datos generales" [toggleable]="true" [(id)]="id">
+        <div class="p-grid">
+          <p-tabView class="p-col-12 p-md-12 p-lg-12 p-mt-4" (onChange)="handleChange($event)">
+            <p-tabPanel class="p-mt-1" header="Contactos" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-contacts-suppliers [(_dataSupplierContacts)]="client"
+                [(_CompaniesListTemp)]="clientSelectedCompanies">
+              </app-contacts-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Usuarios" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-users-suppliers [(_CompaniesListTemp)]="clientSelectedCompanies" [(_dataSupplierUser)]="client"
+                [(userexpanded)]="userexpanded"></app-users-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Tasas de cambio" [disabled]="_dataSupplier.idclientsupplier<=0">
+              <app-exchangerate-suppliers [(_CompaniesListTemp)]="clientSelectedCompanies"
+                [(_dataSupplierExchangeRate)]="client"></app-exchangerate-suppliers>
+            </p-tabPanel>
+
+          </p-tabView>
+        </div>
+      </p-fieldset>
+    </div>
+
+    <div class="p-mt-3" *ngIf="_dataSupplier.idclientsupplier > 0">
+      <p-fieldset legend="Configuración financiera" [toggleable]="true" [(id)]="id">
+        <div class="p-grid">
+          <p-tabView class="p-col-12 p-md-12 p-lg-12 p-mt-4" (onChange)="handleChange($event)">
+
+            <p-tabPanel class="p-mt-1" header="Cuentas contables">
+              <app-accounting-account-suppliers [(accounts)]="financialSetup.client.accountingAccounts"
+                [companies]="clientSelectedCompanies">
+              </app-accounting-account-suppliers>
+            </p-tabPanel>
+
+            <p-tabPanel class="p-mt-1" header="Cuentas bancarias">
+              <app-bank-account-suppliers [(bankAccounts)]="financialSetup.client.bankAccounts"
+                [companies]="clientSelectedCompanies" [banks]="banks" [currencies]="currencyList">
+              </app-bank-account-suppliers>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </p-fieldset>
+    </div>
+  </p-fieldset>
+</div>
+
+<div class="p-d-flex p-jc-end p-col-12 p-md-8 p-lg-12 p-mt-3">
+  <button pButton pRipple label="Regresar" (click)="BackToList()" icon="pi pi-arrow-left"
+    class="p-button-secondary p-mr-2  btn"></button>
+  <button pButton pRipple n-submit label="Guardar" [disabled]="loading" (click)="submit()" icon="pi pi-save"
+    class="p-button-info p-mr-2 btn"></button>
+</div>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<app-edit-contact-numbers (onSubmit)="onSubmitContactNumber($event)" (onToggle)="onHideContacNumber($event)"
+  [visible]="contactNumberDialogVisible"></app-edit-contact-numbers>

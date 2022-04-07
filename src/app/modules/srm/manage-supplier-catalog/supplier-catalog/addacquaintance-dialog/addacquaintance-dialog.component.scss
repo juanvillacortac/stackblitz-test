@@ -1,0 +1,24 @@
+:host ::ng-deep {    
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+
+    .imgcatalog{
+        max-width: 100%;
+        max-height:100%;
+       }
+
+       .button-radius button{
+        border-radius: 0px 4px 4px 0px;
+    }
+}
+
+.container-img{
+    border-radius: 30%;
+    height:90px;
+    display: flex;
+    width: 90px;
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+  }

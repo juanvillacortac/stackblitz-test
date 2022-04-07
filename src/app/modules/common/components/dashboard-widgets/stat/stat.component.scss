@@ -1,0 +1,223 @@
+@media only screen and (max-width: 3500px )and (min-width: 1981px ) 
+{
+    .total{
+        font-size: 148px !important;      
+    }
+    .sub-title{
+        font-size: 30px !important;
+    }
+    .subtotal{
+        font-size: 90px !important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 21px!important;
+    }
+}
+
+@media only screen and (max-width: 1980px ) and (min-width: 1741px )
+{
+    .total{
+        font-size: 100px !important;       
+    }
+    .sub-title{
+        font-size: 20px !important;
+    }
+    .subtotal{
+        font-size: 62px !important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 18px!important;
+    }
+}
+
+@media only screen and (max-width: 1740px ) and (min-width: 1441px )
+{
+    .total{
+        font-size: 90px !important;     
+    }
+    .sub-title{
+        font-size: 18px !important;
+    }
+    .subtotal{
+        font-size: 45px!important;
+    }
+    .material-icons.position{ 
+        font-size: 18px!important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 14px!important;
+    }
+}
+
+@media only screen and (max-width: 1440px ) and (min-width: 1241px )
+{
+    .total{
+        font-size: 65px !important;         
+    }
+    .sub-title{
+        font-size: 14px !important;
+    }
+    .subtotal{
+        font-size: 45px!important;
+    }
+}
+
+@media only screen and (max-width: 1240px ) and (min-width: 1139px )
+{
+    .total{
+        font-size: 65px !important;     
+    }
+    .sub-title{
+        font-size: 14px !important;
+    }
+    .subtotal{
+        font-size: 45px !important;
+    }
+}
+@media only screen and (max-width: 1140px ) and (min-width: 999px )
+{
+    .total{
+        font-size: 32px !important;     
+    }
+    .sub-title{
+        font-size: 11px !important;
+    }
+    .subtotal{
+        font-size: 25px !important;
+    }
+    .material-icons.position{ 
+        font-size: 8px!important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 5px!important;
+    }
+    .material-icons.firstPlace{ 
+        font-size: 28px!important;
+    }
+}
+
+
+// Mobile
+@media only screen and (max-width: 990px )and (min-width: 741px ) 
+{
+    .total{
+        font-size: 130px !important;      
+    }
+    .sub-title{
+        font-size: 30px !important;
+    }
+    .subtotal{
+        font-size: 100px !important;
+    }
+    .material-icons.position{ 
+        font-size: 32px!important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 24px!important;
+    }
+}
+
+@media only screen and (max-width: 740px )and (min-width: 540px ) 
+{
+    .total{
+        font-size: 125px !important;      
+    }
+    .sub-title{
+        font-size: 25px !important;
+    }
+    .subtotal{
+        font-size: 91px !important;
+    }
+    .material-icons.position{ 
+        font-size: 24px!important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 21px!important;
+    }
+}
+
+
+@media only screen and (max-width: 539px )
+{
+    .total{
+        font-size: 60px !important;      
+    }
+    .sub-title{
+        font-size: 16px !important;
+    }
+    .subtotal{
+        font-size: 38px !important;
+    }
+
+    .material-icons.position{ 
+        font-size: 14px!important;
+    }
+    .material-icons.sub-total-position{ 
+        font-size: 10px!important;
+    }
+}
+
+.center-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+.align-items-center {
+    align-items: center !important;
+    text-align: center!important;
+}
+
+.total{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.subtotal{
+    color: #868e96;
+    font-size: 25px;
+    font-weight: 400;
+    text-align: right;
+    vertical-align: middle;
+}
+
+
+
+.material-icons.main{ 
+    color: #4c566a; 
+    display: inline-flex !important;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.material-icons.avatar{ 
+    color: #868e96; 
+    display: inline-flex !important;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.costDecrease {
+    color: #ff6961!important;
+}
+
+.costIncrease {
+    color: #77dd77!important;
+}
+
+
+:host ::ng-deep { 
+    .widget_panel{
+      width: 100%;
+      height: calc(100% - 15px) !important;
+    }
+}
+
+
+.sub-title{
+    font-weight: 400;
+    font-size: 18px;
+    color: #9199a9;
+  }

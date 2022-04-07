@@ -1,0 +1,71 @@
+.generic-float-text
+{
+    float:right;
+}
+
+.generic-font-size
+{
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 540px) {
+     
+    .generic-float-text
+    {
+        float:unset; 
+        
+    }
+ }
+
+ :host ::ng-deep {
+
+    .p-card .p-card-body {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .p-card .p-card-content {
+        padding: 1rem 0;
+        
+    }
+    .p-card {
+        height: 100%;
+    }
+
+    .p-card-title {
+      padding-top: 1.5rem;
+    }
+    
+    .widget-overview-box.overview-box-1 {
+       
+        background: linear-gradient(256deg, #FBDBDD 0%, #FBDBDD 100%)!important;
+    }
+    
+     .widget-overview-box.overview-box-2 {
+         background: linear-gradient( 256deg, #C6DAE6 0%, #C6DAE6 100%) !important;
+     }
+     .widget-overview-box.overview-box-3 {
+        background: linear-gradient(256deg, #FFECD6 0%, #FFECD6 100%) !important;
+    }
+
+    .readOnlyCard .p-card-title {
+        color: #5E81AC;
+      }
+  }
+
+ .generic-margin
+ {
+     margin-top: -25px !important;
+ }
+
+  .container-imgtable{
+     border-radius: 50%;
+     height: 32px;
+     display: flex;
+     width: 32px;
+     justify-content: center;
+     overflow: hidden;
+     align-items: center;
+   }

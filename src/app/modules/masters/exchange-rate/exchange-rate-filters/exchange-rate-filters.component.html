@@ -1,0 +1,36 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="exchangeRateTypes" #idExchangeRateType [(ngModel)]="filters.idExchangeRateType"  
+        (keyup.enter)="searchExchangeRates()" [showClear]="true" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id" placeholder="{{ getTextTranslateKey('exchange_rate_type') | translate }}"></p-dropdown>
+    </div>  
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="currencies" #idOriginCurrency [(ngModel)]="filters.idOriginCurrency"  
+        (keyup.enter)="searchExchangeRates()" [showClear]="true" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id" placeholder="{{ getTextTranslateKey('currency_of') | translate }}"></p-dropdown>
+    </div>  
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="currencies" #idDestinationCurrency [(ngModel)]="filters.idDestinationCurrency"  
+        (keyup.enter)="searchExchangeRates()" [showClear]="true" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id" placeholder="{{ getTextTranslateKey('currency_to') | translate }}"></p-dropdown>
+    </div>  
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <span pTooltip="{{ 'date' | translate }}" tooltipPosition="right" class="p-float-label">
+            <p-calendar inputId="calendar" [disabled]="disabledCalendar()" [(ngModel)]="selectedDate" [monthNavigator]="false" [yearNavigator]="false" [yearRange]="yearRange" [maxDate]="todayDate" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="field-checkbox">
+            <p-checkbox (onChange)="onChangeWihtDate()" [(ngModel)]="filters.withDate" binary="true" inputId="binary"></p-checkbox>
+            <label for="binary"> {{ getTextTranslateKey('without_date') | translate }}</label>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="{{ 'search' | translate }}" (click)="searchExchangeRates()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="{{ 'clear' | translate }}" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

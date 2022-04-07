@@ -1,0 +1,40 @@
+:host ::ng-deep {
+
+  .menorMargen .p-field {
+    margin-bottom: -0.2rem !important;
+  }
+  .cost-input p-inputnumber {
+    width: 100%;
+  }
+
+  .p-inputgroup-addon:first-child, .p-inputgroup button:first-child {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+
+}
+
+  .status-badge {
+    border-radius: 2px;
+    padding: 0.1em 0.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    margin: 2px;
+
+    &.status-contabilizado {
+      background: #C8E6C9;
+      color: #256029;
+    }
+    &.status-cancelado {
+      background: #ffcdd2;
+      color: #27211b;
+    }
+
+    &.status-borrador {
+      background: #d8eafb;
+      color: #27211b;
+    }
+  }
+}
+
+

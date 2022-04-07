@@ -1,0 +1,57 @@
+
+
+<!-- <div class="p-grid">
+    <div class="p-col-12 p-md-4 p-lg-6">
+        
+     
+        <app-dashboard-layaout  [(dashboardData)]="dashboardData" [(minHeight)]="minHeight" [(titleout)]="titleout1"></app-dashboard-layaout>   
+      
+        
+     </div>
+    <div class="p-col-12 p-md-4 p-lg-6">
+        <app-dashboard-layaout  [(dashboardData)]="dashboardData2" [(titleout)]="titleout1"></app-dashboard-layaout>   
+   </div>
+   
+</div>
+  -->
+
+  <div class="card p-d-flex p-flex-column p-flex-md-row" style="align-content: right; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.3rem;">
+    <div class="p-mr-4 p-mb-6 p-lg-6"> 
+        <h5>Ciclo de vida del producto - ventas en el tiempo</h5>
+        <div class="card" style="align-content: right; padding-bottom: 0.2rem; background-color: white; margin-bottom: 0.2rem;">
+            <p-chart type="bar" [data]="multiAxisData" [options]="basicOptions"></p-chart>
+        </div>
+       
+    </div>
+    <div class="p-mr-4 p-mb-6 p-lg-6">
+        <h5>Datos completados</h5>
+         
+          <div class="card" style="align-content: right; padding-bottom: 0.2rem; background-color: white; margin-right: 0.9rem;">
+            <p-chart type="bar" [data]="basicData" [options]="horizontalOptions"></p-chart>
+          </div>
+          
+    
+    </div>
+    
+ 
+</div>
+
+<div class="card" style="align-content: right; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+    <div class="p-grid">
+ 
+       
+        <div class="p-col-12 p-md-7 p-lg-12" style="text-align: right;">
+
+           
+            <p-selectButton StyleClass="pruebaestilo" [options]="optionsTime1"  [(ngModel)]="value2" optionLabel="title" optionValue="value">
+                  
+              </p-selectButton>
+       </div>
+    </div>
+</div>
+<div class="p-d-flex p-flex-column p-flex-md-row">
+<div class="p-mr-4 p-mb-4 p-lg-12">
+
+    <app-dashboard-layaout  [(dashboardData)]="dashboardData2" [(minHeight)]="minHeight"  [(titleout)]="titleout1"></app-dashboard-layaout>   
+</div>
+</div>

@@ -1,0 +1,195 @@
+<p-dialog header="Asociar producto a un proveedor" (onShow)="ngOnInit()" (onHide)="hideDialogadd()"
+    [(visible)]="showDialogadd" [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+    [style]="{width: '40vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-col-6 p-md-6 p-sm-6 ">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="Proveedor" [(ngModel)]="this.suppliername" disabled>
+
+                <p-button icon="pi pi-search" class="button-radius" class="button-radius"
+                    [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="SupplierDialogVisible=true"
+                    *ngIf="_supplierxproduct.idProductxSupplier==-1 || _supplierxproduct.idProductxSupplier==0">
+                </p-button>
+            </div>
+            <small class="p-invalid" *ngIf="submitted && (!this.suppliername || !this.suppliername.trim())">El proveedor
+                es requerido.</small>
+        </div>
+    </div>
+    <hr>
+    <div class="p-grid p-fluid">
+        <div class="p-col-6 p-md-6 p-sm-6"
+            *ngIf="_supplierxproduct.idProductxSupplier==-1 || _supplierxproduct.idProductxSupplier==0">
+            <div class="p-inputgroup">
+
+                <input [(ngModel)]="this.barcode"
+                    *ngIf="_supplierxproduct.idProductxSupplier==-1 || _supplierxproduct.idProductxSupplier==0"
+                    placeholder="Barra" name="bar" id="bar" type="text"
+                    (keyup.enter)="SearchBar(this.barcode, this.supplierxprod.suppliers.id, 1, _supplierxproduct.idProductxSupplier, 0)"
+                    (keypress)="_validations.keyPressForGtin($event);" (paste)="_validations.PasteOnlyNumbers($event)"
+                    pInputText maxlength="130" [disabled]="this.suppliername==''">
+                <p-button icon="pi pi-search" class="button-radius" class="button-radius"
+                    [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"
+                    (click)="SearchBar(this.barcode, this.supplierxprod.suppliers.id, 1, _supplierxproduct.idProductxSupplier, 0)">
+                </p-button>
+
+            </div>
+            <small class="p-invalid" *ngIf="submitted && (!this.barcode || !this.barcode.trim())">El barra es
+                requerida.</small>
+        </div>
+        <!-- <div class="p-col-6 p-md-6 p-sm-6">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="_supplierxprod.product.referent" name="refInternal" id="refInternal" type="text" pInputText (keyup.enter)="SearchBar()" maxlength="100">
+                    <label>Referencia interna</label>
+                </span>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- datos del producto  -->
+
+    <div class="p-col-12 p-md-12 p-sm-12">
+        <div class="p-grid">
+            <div class="p-col-4 p-md-4 p-sm-4" style="
+        /* display: grid; */
+        align-content: center;
+        display: inline-grid;
+        text-align: center;
+    ">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-sm-12 container-img">
+                        <!-- <img *ngIf="_supplierxproduct.products.idProduct>0"
+                            [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'"
+                            [alt]="_supplierxproduct.products.name" width="75" class="p-shadow-4 imgcatalog" /> -->
+                        <img *ngIf="_supplierxproduct.products.idProduct> 0 " [src]="_supplierxproduct.products.image == null || _supplierxproduct.products.image == ''  ? defectImage.defectImage
+                                : _supplierxproduct.products.image" [alt]="_supplierxproduct.products.name"
+                            class="imgcatalog" alt="Product" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-8 p-md-8 p-sm-8" *ngIf="_supplierxproduct.products.idProduct>0">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label> <b>Nombre:</b> {{_supplierxproduct.products.name}}</label>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Referencia:</b> {{_supplierxproduct.products.reference}}</label>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Categoría:</b> {{_supplierxproduct.category}}</label>
+                    </div>
+
+                    <div *ngIf="_supplierxproduct.idProductxSupplier>0" class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Barra: </b> {{_supplierxproduct.packing.bar}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="p-grid p-fluid">
+        <p-fieldset legend="Empaque">
+            <div class="p-grid">
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label for="active">Referencia proveedor</label>
+                    <!-- <span [ngStyle]="{'color':'red'}">*</span> -->
+                    <input #in2 [(ngModel)]="_supplierxproduct.supplierRef" name="supplierRef" id="supplierRef"
+                        type="text" pInputText maxlength="100" [pKeyFilter]="_validations.LettersNumberandDash"
+                        [disabled]="_supplierxproduct.suppliers.id==-1" (keyup.enter)="in2.input.nativeElement.focus()">
+                    <!-- <small class="p-invalid" *ngIf="submitted && (!_supplierxproduct.supplierRef || !_supplierxproduct.supplierRef.trim())">La referencia es requerido.</small> -->
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-6 p-field">
+                    <!-- [filter]="true" emptyFilterMessage="Sin resultados." -->
+                    <label for="active">Tipo de empaque </label>
+                    <p-dropdown [options]="packingTypeslist" appendTo="body"
+                        [(ngModel)]="_supplierxproduct.packing.idTypePacking" [disabled]="true"
+                        placeholder="Tipo empaque" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-6 p-field">
+                    <label for="active">Empaque </label>
+                    <p-dropdown [(ngModel)]="_supplierxproduct.packing.idPresentacionPackaging"
+                        [options]="packagingpresentationlist" appendTo="body" [disabled]="true" placeholder="Empaque">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Unidad por empaque</label>
+                    <input [(ngModel)]="_supplierxproduct.packing.numberUnist" name="unistnumber" id="unistnumber"
+                        type="text" pInputText (keyup.enter)="savereg()" [disabled]="true">
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Disponible</label>
+                    <p-inputNumber *ngIf="_supplierxproduct.products.heavy==true" #in3
+                        [(ngModel)]="_supplierxproduct.available" (onFocus)="clear($event)" [minFractionDigits]="4"
+                        mode="decimal" min="0" [maxFractionDigits]="4"
+                        (keyup.backspace)="calculate($event.target.value)" (keypress)="calculate($event.target.value)"
+                        [disabled]="_supplierxproduct.products.reference==''"
+                        (keyup.enter)="in3.input.nativeElement.focus()">
+                    </p-inputNumber>
+                    <p-inputNumber *ngIf="_supplierxproduct.products.heavy==false"
+                        [(ngModel)]="_supplierxproduct.available" min="0" (onFocus)="clear($event)"
+                        (keyup.backspace)="calculate($event.target.value)" (keypress)="calculate($event.target.value)"
+                        [disabled]="_supplierxproduct.products.reference==''">
+                    </p-inputNumber>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Total de unidades disponibles</label>
+                    <p-inputNumber [(ngModel)]="this.totalUnits" [disabled]="true"></p-inputNumber>
+                </div>
+
+            </div>
+        </p-fieldset>
+
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <p-fieldset legend="Costo">
+                <div class="p-fluid  p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+                    <b>Tasa conversión: </b><label for="name">{{exchangeRate | number: '.4'}} {{basesymbolcoin}}</label>
+                    <br>
+                </div>
+                <div class="p-grid">
+                    <!-- Monedas -->
+                    <div class="p-field p-col-6 p-md-6 p-sm-6">
+                        <label>Moneda principal </label>
+                        <p-dropdown [options]="coinsList" [disabled]="true" appendTo="body" [(ngModel)]="baseCoin"
+                            placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                        </p-dropdown>
+                    </div>
+                    <!-- Moneda de conversión -->
+                    <div class="p-field p-col-6 p-md-6 p-sm-6">
+                        <label>Moneda de conversión </label>
+                        <p-dropdown [options]="coinsList" [disabled]="true" appendTo="body" [(ngModel)]="conversionCoin"
+                            placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-6 p-md-6 p-sm-6">
+                        <label>Costo por empresa</label>
+                        <p-inputNumber #in4 [(ngModel)]="_supplierxproduct.baseCost" mode="decimal" min="0"
+                            [minFractionDigits]="4" [maxFractionDigits]="4" maxlength="23"
+                            (keyup.backspace)="calculateconversion($event.target.value)"
+                            (keypress)="calculateconversion($event.target.value)"
+                            (keyup.enter)="in4.input.nativeElement.focus()" (onFocus)="clear($event)"
+                            [disabled]="this.suppliername==''"></p-inputNumber>
+
+                    </div>
+                    <div class="p-field p-col-6 p-md-6 p-sm-6">
+                        <label>Costo de conversión por empresa</label>
+                        <p-inputNumber [(ngModel)]="_supplierxproduct.conversionCost" mode="decimal" min="0"
+                            [minFractionDigits]="4" [maxFractionDigits]="4" maxlength="23"
+                            (keyup.backspace)="calculatebase($event.target.value)"
+                            (keypress)="calculatebase($event.target.value)" (onFocus)="clear($event)"
+                            [disabled]="this.suppliername==''"></p-inputNumber>
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" (click)="savereg()" icon="pi pi-save"
+            class="p-button-info p-mr-2"></button>
+        <button pButton (click)="hideDialogadd()" pRipple label="Cerrar" icon="pi pi-times"
+            class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>
+<app-modalsupplier-list (onToggle)="onToggleSupplier($event)" [(supplierinput)]="supplierstring" [(filters)]="filters"
+    [(supplierxprod)]="supplierxprod" [(suppliername)]="suppliername" [visible]="SupplierDialogVisible"
+    [multiple]="false"></app-modalsupplier-list>

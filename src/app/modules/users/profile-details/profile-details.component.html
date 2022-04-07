@@ -1,0 +1,51 @@
+<p-toast position="top-right"></p-toast>
+
+<app-addresses-list [userId]="userId" [addressesVM]="addressesVM"
+                    (displayAddressDialog)="newAddressHandler($event)"
+                    (editAddressEmitter)="editAddressHandler($event)">
+</app-addresses-list>
+
+<app-phones-list [userId]="userId"
+                 [phonesVM]="phones"
+                 (displayPhoneDialog)="newPhoneHandler($event)"
+                 (editPhoneEmitter)="editPhoneHandler($event)">
+</app-phones-list>
+
+<p-sidebar *ngIf="addressDialog"
+           [(visible)]="addressDialog"
+           [blockScroll]="true"
+           [showCloseIcon]="true"
+           [dismissible]="true"
+           [style]="{'overflow-y': 'auto'}"
+           position="right"
+           styleClass="p-sidebar-md">
+    <app-addresses-detail [profile]="profile"
+                          [address]="address"
+                          (onDismissDialog)="onAddressDialogClosed($event)">
+    </app-addresses-detail>
+</p-sidebar>
+
+<p-sidebar *ngIf="phoneDialog"
+           [(visible)]="phoneDialog"
+           [blockScroll]="true"
+           [showCloseIcon]="true"
+           [dismissible]="true"
+           [style]="{'overflow-y': 'auto'}"
+           position="right"
+           styleClass="p-sidebar-md">
+    <app-phones-detail [profile]="profile"
+                       [phone]="phone"
+                       (onDismissDialog)="onPhoneDialogClosed($event)">
+    </app-phones-detail>
+</p-sidebar>
+
+<div class="p-fluid p-col-12">
+    <div class="p-fluid p-grid p-formgrid p-jc-end">
+        <div class="p-field">
+            <button pButton pRipple label="{{'return' | translate}}" (click)="navigateBack()"
+                    pTooltip="{{'return' | translate }}" icon="pi pi-arrow-left"
+                    class="p-button-secondary">
+            </button>
+        </div>
+    </div>
+</div>

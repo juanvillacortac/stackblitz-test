@@ -1,0 +1,31 @@
+:host ::ng-deep { 
+    .ui-panel-title{
+        vertical-align: middle !important;
+    }
+
+    .panelheader{
+        width: 100%; 
+        text-align: center; 
+        font-weight: bold;
+    }
+
+    .fieldseth fieldset{
+        height: 25rem;
+        overflow: scroll;
+    }
+
+
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+        .p-card{
+            box-shadow: none!important;
+        }
+    
+        .p-card .p-card-content{
+            padding: 0%!important;
+        }
+        .imgcatalog{
+            border-radius: 50px;
+        }
+}

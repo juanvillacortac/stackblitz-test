@@ -1,0 +1,94 @@
+<p-dialog
+  header="Agregar descuento"
+  (onShow)="ngOnInit()"
+  [(visible)]="displayModal"
+  (onHide)="hideDialog()"
+  [modal]="true"
+  [style]="{ width: '30vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-m-0 card">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="description"
+          >Descripción:
+          <span [ngStyle]="{ color: 'red' }">{{ requiredd }}</span></label
+        >
+        <input
+          type="text"
+          [(ngModel)]="discount.description"
+          maxlength="255"
+          pInputText
+        />
+        <small
+          class="p-invalid"
+          *ngIf="submitted && discount.description.trim() == ''"
+          >La descripcion es requerida</small
+        >
+      </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="type"
+          >Tipo:
+          <span [ngStyle]="{ color: 'red' }">{{ requiredd }}</span></label
+        >
+        <p-dropdown
+          [filter]="true"
+          [(ngModel)]="discount.discountTypeId"
+          placeholder="Seleccione..."
+          [resetFilterOnHide]="true"
+          [options]="typeDiscountList"
+          emptyFilterMessage="Sin resultados."
+          emptyMessage="Sin resultados."
+          [baseZIndex]="10000000000"
+          appendTo="body"
+        >
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !discount.discountTypeId"
+          >El descuento es requerido</small
+        >
+      </div>
+
+      <div class="p-field p-col">
+        <label for="value"
+          >Valor
+          <span [ngStyle]="{ color: 'red' }">{{ requiredd }}</span></label
+        >
+
+        <p-inputNumber
+          *ngIf="discount.discountTypeId == 1 || discount.discountTypeId == 1"
+          [(ngModel)]="discount.discountValue"
+          maxlength="3"
+          suffix="%"
+          minValue="0"
+          [disabled]="!discount.discountTypeId"
+        ></p-inputNumber>
+
+        <p-inputNumber
+          mode="decimal"
+          *ngIf="discount.discountTypeId == 2"
+          [(ngModel)]="discount.discountValue"
+          [showButtons]="true"
+          [min]="0"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [maxlength]="23"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+
+    <div style="text-align: right" class="">
+      <button
+        pButton
+        type="button"
+        class="p-button-info"
+        icon="pi pi-check"
+        label="Aceptar"
+        (click)="AcceptButtonPresed()"
+      ></button>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,86 @@
+:host ::ng-deep {
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link{
+        font-weight: bold;
+        background-color: transparent;
+        margin-bottom: 1rem;
+        border:none!important;
+    }
+
+    .p-tabview .p-tabview-panels,
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav {
+        background-color: unset;
+        border: unset;
+    }
+
+    .styleActive {
+        border-bottom: 2px solid #5E81AC;
+        border-radius: 0px;
+        font-weight: bold;
+        //padding: 10px;
+      }
+
+    .p-tabview .p-tabview-panels {
+        padding: 1.25rem 1.25rem;
+    }
+
+    .p-tabview .p-tabview-nav li:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {
+        background-color: unset;
+        background-color: rgba(94, 129, 172, 0.04);
+    }
+
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link:hover {
+        font-weight: unset;
+        color: #5E81AC;
+    }
+
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
+        box-shadow: unset !important;
+        border-bottom: 3px solid #5E81AC !important;
+        font-weight: 600 !important;
+    }
+
+    .styleActive {
+        border-bottom: 2px solid #5E81AC;
+        border-radius: 0px;
+        font-weight: bold;
+        //padding: 10px;
+      }
+
+    @media screen and (min-width: 769px){
+        .carrusell{
+            height: 50rem; ///
+        }
+        #primaryInfo {
+            position: fixed; 
+          }
+    }
+
+    @media screen and (max-width: 768px){
+        #primaryInfo {
+          position: unset;  
+          max-width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 769px) and (max-width: 990px){
+        #primaryInfo {
+          width: 23%;
+        }
+    }
+
+    @media screen and (min-width: 991px)and (max-width: 1199px){
+        #primaryInfo {
+          width: 18%;
+        }
+    }
+
+    @media screen and (min-width: 1200px){
+        #primaryInfo {
+            width: calc(18% + 1vw);
+          }
+    }
+
+}

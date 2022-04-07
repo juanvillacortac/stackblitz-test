@@ -1,0 +1,68 @@
+.item-container {
+    border-width: thin;
+    border-radius: 5px;
+    font-size: 12px;
+    width: 100%;
+}
+.item-container label{
+    font-size: 11px;
+}
+
+.item-container p{
+    font-size: 11px;
+}
+
+
+.eraser {
+    border: solid #8a427a;
+    background-color: #e1cfe7;
+}
+
+.execution {
+    border: solid #0891cf;
+    background-color: #B3E5FC;
+}
+
+.processed {
+    border: solid #d9a300;
+    background-color: #FFECB3;
+}
+
+.finalized {
+    border: solid #439446;
+    background-color: #C8E6C9;
+}
+
+.cancelled {
+    border: solid #e60017;
+    background-color: #FFCDD2;
+}
+
+.dispatched {
+    border: solid #d96900;
+    background-color: #ffdeb3;
+}
+
+.total-counts-eraser {
+    color: #8a427a;
+}
+
+.total-counts-execution {
+    color: #0891cf;
+}
+
+.total-counts-processed {
+    color: #d9a300;
+}
+
+.total-counts-finalized {
+    color: #439446;
+}
+
+.total-counts-cancelled {
+    color: #e60017;
+}
+
+.total-counts-dispatched {
+    color: #d96900;
+}

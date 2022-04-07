@@ -1,0 +1,159 @@
+<p-dialog (onShow)="ngOnInit()" [(visible)]="displayModal" [closable]="false"
+    [draggable]="false" [modal]="true" [style]="{width: '90vw'}" [baseZIndex]="10000" [focusOnShow]="true">
+
+    <ng-template pTemplate="header">
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <h4 style="margin: 0">Ejercicio fiscal</h4>
+            <button class="p-dialog-header-close p-dialog-header-icon p-link ng-star-inserted" (click)="hideDialog()">
+                <span class="pi pi-times"></span>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="p-grid p-align-center p-mb-2 vertical-container">
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" [ngClass]="year.id > 0 ? 'p-lg-2' : 'p-lg-3'">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input [(ngModel)]="year.year" id="name" pInputText maxlength="50">
+                        <label for="name">Nombre<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" [ngClass]="year.id > 0 ? 'p-lg-2' : 'p-lg-3'">
+                <span class="p-float-label">
+                    <p-inputNumber [(ngModel)]="periodsQuantity" [showButtons]="true" [min]="1" [max]="48"
+                        (onInput)="onUnitChange($event)" inputId="periodsQuantity">
+                    </p-inputNumber>
+                    <label for="periodsQuantity">Cantidad de períodos<span [ngStyle]="{'color':'red'}">
+                            *</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" [ngClass]="year.id > 0 ? 'p-lg-2' : 'p-lg-3'">
+                <span class="p-float-label">
+                    <p-dropdown [(ngModel)]="unidad" [options]="unidades" [showClear]="true" [autoDisplayFirst]="false"
+                        (onChange)="unidad > 1 ? lock() : null">
+                    </p-dropdown>
+                    <label for="dropdown">Unidad del período<span [ngStyle]="{'color':'red'}"> *</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" [ngClass]="year.id > 0 ? 'p-lg-2' : 'p-lg-3'">
+                <span class="p-float-label">
+                    <p-calendar inputId="range" [(ngModel)]="initDate" [monthNavigator]="true" [yearNavigator]="true"
+                        [style]="{opacity: unidad == null || periodsQuantity == null ? '0.25' : '1'}"
+                        yearRange="1970:2030" dateFormat="dd/mm/yy" [defaultDate]="minInitDate"
+                        [disabledDates]="disabledDates" [readonlyInput]="true"
+                        (onSelect)="lock(); getMinDate(initDate); getMaxEndDate(); endDate = null" appendTo="body"
+                        [baseZIndex]="10000000000" dateFormat="dd/mm/yy" [showIcon]="true"
+                        [disabled]="unidad == null || periodsQuantity == null">
+                    </p-calendar>
+                    <label for="range">Fecha inicio<span [ngStyle]="{'color':'red'}"> *</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" [ngClass]="year.id > 0 ? 'p-lg-2' : 'p-lg-3'">
+                <span class="p-float-label">
+                    <p-calendar inputId="range" [(ngModel)]="endDate" [monthNavigator]="true" [yearNavigator]="true"
+                        yearRange="1970:2030" [disabled]="unidad > 1 || !initDate" [readonlyInput]="true"
+                        [style]="{opacity:  '0.25' }" [minDate]="minEndDate"
+                        [defaultDate]="minEndDate" (onSelect)="console.log($event)"
+                        [maxDate]="maxEndDate" [showIcon]="true" appendTo="body" [baseZIndex]="10000000000"
+                        dateFormat="dd/mm/yy">
+                    </p-calendar>
+                    <label for="range">Fecha fin{{unidad > 1 ? ' (calculada)' : ''}}<span *ngIf="unidad <= 1"
+                            [ngStyle]="{'color':'red'}"> *</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-2" *ngIf="year.id > 0">
+                <span class="p-float-label">
+                    <p-dropdown [options]="statusOptions" [(ngModel)]="status" [disabled]="year.id <= 0">
+                    </p-dropdown>
+                    <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                </span>
+            </div>
+        </div>
+
+        <p class="p-mt-3"><span style="font-weight: bold;">Nota:</span> debe especificar la unidad de los períodos para
+            poder manipular las fechas</p>
+        <p [ngStyle]="{'color':'red'}">(*) Campos obligatorios</p>
+
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row p">
+            <div class="p-mt-3">
+                <ng-container *ngIf="periods?.length">
+                    <button pButton [disabled]="!periods?.length" type="button" label="Seleccionar todos"
+                        style="margin-right: .5rem" (click)="selectAll(true)"></button>
+                    <button pButton [disabled]="!periods?.length" type="button" label="Deseleccionar todos"
+                        (click)="selectAll(false)"></button>
+                </ng-container>
+            </div>
+            <button pButton type="button" label="Calcular períodos" class="p-button-info p-mt-3"
+                (click)="calculate()"></button>
+        </div>
+
+        <p-table [resizableColumns]="false" [autoLayout]="true"
+            styleClass="p-datatable p-component p-datatable-hoverable-rows p-mt-3" #dt [columns]="displayedColumns"
+            [rowHover]="true" [paginator]="true" [rows]="6" [value]="periods" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word', 'text-align': col.field === 'periodNumber' || col.field === 'name' ? 'left' : 'center'}"
+                            pResizableColumn>
+                            {{col.header}}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngFor="let m of modules">
+                        <th [ngStyle]="{'display': 'table-cell', 'overflow-wrap': 'break-word', 'text-align': 'center' }"
+                            pResizableColumn>
+                            {{m.name}}
+                        </th>
+                    </ng-container>
+                </tr>
+
+            </ng-template>
+
+            <ng-template pTemplate="body" let-period let-columns="columns" let-i="rowIndex">
+                <tr style="position: relative;">
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'text-align': col.field === 'periodNumber' || col.field === 'name' ? 'left' : 'center'}"
+                            class="ui-resizable-column">
+                            <input *ngIf="col.field === 'name'; else textCell" [(ngModel)]="periods[i].name" id="name"
+                                pInputText maxlength="25">
+                            <ng-template #textCell>
+                                <span>{{col.template(period)}} </span>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                    <ng-container *ngFor="let m of modules">
+                        <td [style]="{'text-align': 'center', position: 'relative'}">
+                            <p-checkbox [binary]="true"
+                                [(ngModel)]="periods[i].modules[getModuleIdx(periods[i].modules, m.id)].indClosed"
+                                [pTooltip]="periods[i].modules[getModuleIdx(periods[i].modules, m.id)].indClosed ? 'Cerrado' : 'Abierto' + (m.id == 1 ? ' (Si lo cierra, los otros módulos también se cerrarán)' : '')"
+                                [disabled]="periods[i].modules[getModuleIdx(periods[i].modules, 1)].indClosed && m.id != 1"
+                                [tooltipZIndex]="'10000000'" (onChange)="checkEvent(m.id, periods[i].modules)">
+                            </p-checkbox>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+        </p-table>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-replay p-ripple" class="p-button-secondary" (click)="clear()"
+            [label]="year.id <= 0 ? 'Limpiar' : 'Reestablecer'" styleClass="p-button-text"></button>
+        <button pButton pRipple icon="pi pi-save p-ripple" (click)="save()" label="Guardar"
+            [disabled]="!periods?.length || periods?.length !== periodsQuantity || !calculated || !initDate || !endDate || !!!year?.year?.trim()"
+            class="p-button-info"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [baseZIndex]="1000000000000"></p-confirmDialog>

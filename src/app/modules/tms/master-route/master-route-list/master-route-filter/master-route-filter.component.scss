@@ -1,0 +1,8 @@
+:host ::ng-deep { 
+    .p-dropdown .p-dropdown-panel {
+        min-width: 100%;
+        left: 0px!important;
+        z-index: 1007;
+        transform-origin: center bottom;
+    }
+}

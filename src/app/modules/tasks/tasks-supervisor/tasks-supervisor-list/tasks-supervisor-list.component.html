@@ -1,0 +1,59 @@
+<p-progressBar *ngIf="loadingTasks" mode="indeterminate" [style]="{'height': '3px'}"></p-progressBar>
+
+<div class="card p-m-0">
+    <p-table #dt
+            [columns]="cols"
+            [value]="activities"
+            [rowHover]="true"
+            [paginator]="true"
+            [showCurrentPageReport]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10,25,50]"
+            currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    {{ 'primeng.today' | translate }}
+                    <p-button icon="pi pi-plus" (click)="addActivity()" [disabled]="loadingTasks"></p-button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <ng-container *ngFor="let col of cols">
+                        <th [ngStyle]="{'display': col.display, 'width': (col.field === 'id') ? '6rem' : ''}" pSortableColumn={{col.field}}>
+                            {{ col.header | translate }}
+                            <p-sortIcon field={{col.field}} *ngIf="col.field !== 'detail'"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-activity >
+                <tr>
+                    <ng-container *ngFor="let col of cols">
+                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+
+                            <div *ngIf="col.field === 'progress'; else textCell">
+                                <app-progress-view [width]="70" [progress]="activity.progress"></app-progress-view>
+                            </div>
+
+                            <ng-template #textCell >
+                                <div> {{activity[col.field]}}</div>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <ng-container>
+                  <tr *ngIf="activities?.length == 0">
+                    <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="cols.length">
+                        <p-message severity="info" text="No existen registros." *ngIf="activities?.length == 0" styleClass="p-col-12 p-mr-2"></p-message>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-template>
+    </p-table>
+</div>
+
+<p-sidebar [(visible)]="showDialog" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="showDialog" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}" >
+    <app-tasks-supervisor-add (activityCreated)="onActivityAdded($event)"></app-tasks-supervisor-add>
+</p-sidebar>

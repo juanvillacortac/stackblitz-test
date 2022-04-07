@@ -1,0 +1,94 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Usuarios" [(visible)]="visible" [style]="{width:'50%'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" 
+  [modal]="true">
+  <div class="p-grid">
+
+    <div class="p-col-12 p-sm-6 p-md-6 p-lg-6">
+      <label for="active">Correo electrónico</label>
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input [(ngModel)]=" userFilters.mainEmail" type="text" pInputText maxlength="50" (keyup.enter)="search()">
+        </span>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-6 p-md-6 p-lg-6 p-fluid">
+      <label for="active">Rol</label>
+      <p-dropdown [options]="RolList" [(ngModel)]=" userFilters.idRole" placeholder="Seleccione..."
+        (keyup.enter)="search()" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+    </div>
+    </div>
+    <div class="p-field p-grid">
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+        class="btn p-button-info p-mr-2"></button>
+      <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+        class="btn p-button-secondary"></button>
+    </div>
+  </div>
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dtu.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+  </div>
+
+  <div class="card p-m-0">
+    <small class="p-invalid" *ngIf="submitted && selectedUser.length <=0">Debe asignar al menos un usuario
+      al proveedor.</small>
+    <p-table #dtu [columns]="displayedColumns" [rowHover]="true" [value]="_Service._List" [(selection)]="selectedUser"
+      [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
+          </th>
+          <ng-container *ngFor="let col of columns">
+
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns">
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <span class="p-column-title">{{col.header}}</span>
+              <app-active-label *ngIf="col.field === 'status'; else textCell" [active]="user[col.field]">
+              </app-active-label>
+              <ng-template #textCell>
+                <span>{{col.template(user)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+  <!-- <ng-template pTemplate="footer">
+      <button pButton pRipple label="Aceptar" (click)="submitVarious()" icon="pi pi-check"
+        class="p-button-info p-mr-2"></button>
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </ng-template> -->
+    <div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Aceptar" (click)="submitVarious()" icon="pi pi-check"
+        class="p-button-info p-mr-2"></button>
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </div>
+</p-dialog>

@@ -1,0 +1,118 @@
+<div class="card p-m-0 p-pb-0">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+    <div>
+      <!-- <button pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo"
+          (click)="openNew()"></button> -->
+      <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help"
+        [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"
+        tooltipPosition="top"></button>
+    </div>
+  </div>
+  <app-salesreport-filter class="p-mt-3" [loading]="loading" (onSearch)="SearchReport()" [(filters)]="filters"
+    [(listreport)]="listDB" [expanded]="showFilters">
+  </app-salesreport-filter>
+</div>
+<div class="card p-m-0">
+  <div class="p-col-6 p-sm-6 p-md-6 p-lg-6">
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+      <b>Total ventas:</b> {{this.totalsales.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})+' '+ this.basesymbolcoin}}
+    </div>
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+      <b>Total ventas conversión:</b> {{this.totalsalesconv.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})+' '+this.conversionsymbolcoin }} 
+    </div>
+    </div>
+  <p-table #dt [columns]="displayedColumnsProduct" [value]="listreport" dataKey="idProduct" [paginator]="true"
+    [rows]="10" [showCurrentPageReport]="true" [scrollable]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:5rem"></th>
+        <ng-container *ngFor="let col of columns">
+          <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'100px','font-size':'small'}"
+            [pSortableColumn]="col.field">
+            {{col.header}}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-columns="columns" let-expanded="expanded">
+      <tr>
+        <td style="width:5rem">
+          <button type="button" pButton pRipple [pRowToggler]="product"
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <ng-container *ngFor="let col of columns">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'100px' }">
+            <span class="p-column-title">{{col.header}}</span>
+            <app-active-label *ngIf="col.field === 'active'; else text" [active]="product[col.field]"></app-active-label>                               
+            <ng-template #text>
+              <span><b>{{col.template(product)}}</b></span>
+            </ng-template>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-product>
+      <tr>
+        <td colspan="10">
+          <div class="p-p-3">
+            <p-table [columns]="displayedColumns" [value]="product.detail" dataKey="idPackaging" [scrollable]="true"
+              styleClass="p-datatable-sm p-datatable-responsive-demo">
+              <ng-template pTemplate="header" let-columnsp>
+      <tr>
+        <ng-container *ngFor="let col of columnsp">
+          <span class="p-column-title">{{col.header}}</span>
+          <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px' }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-packing let-columnsp="columns">
+      <tr>
+        <ng-container *ngFor="let col of columnsp">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px' }">
+            <div class="p-inputgroup" *ngIf="col.field =='sellingFactor'; else textcell">
+            </div>
+             <ng-template #textcell>
+              <span>{{col.template(packing)}} </span>
+            </ng-template>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="14">No existen
+            resultados</td>
+          <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+            existen resultados</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+<ng-template pTemplate="emptymessage" let-columns>
+  <tr>
+    <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="8">No existen
+        resultados</td>
+      <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+        existen resultados</td>
+  </tr>
+</ng-template>
+</p-table>
+</div>

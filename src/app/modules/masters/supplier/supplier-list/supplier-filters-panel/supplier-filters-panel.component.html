@@ -1,0 +1,64 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [showClear]="filters.idcountry >0 ? true : false" [options]="countriesList"
+      [(ngModel)]="filters.idcountry" placeholder="País" (keyup.enter)="search()" [filter]="true"
+      emptyFilterMessage="Sin resultados" (onChange)="onLoadDocumentType(filters.idcountry)"></p-dropdown>
+  </div>
+  
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [showClear]="filters.ididentifier >0 ? true : false" [options]="documentTypeList"
+      [(ngModel)]="filters.ididentifier" placeholder="Identificador" (keyup.enter)="search()"
+      emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" (onChange)="filters.document=''"></p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.document" name="documentnumber" id="documentnumber" type="text" pInputText
+          noneSpecialCharacters maxlength="50" (keyup.enter)="search()">
+        <label>Número de documento</label>
+      </span>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.socialreason" name="socialreason" id="socialreason" type="text" pInputText
+          noneSpecialCharacters maxlength="50" (keyup.enter)="search()">
+        <label>Razón social</label>
+      </span>
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [showClear]="filters.idSupplierclasification >0 ? true : false" [options]="ClasificationList"
+      [(ngModel)]="filters.idSupplierclasification" placeholder="Clasificación" (keyup.enter)="search()" [filter]="true"
+      emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <span pTooltip="Fecha inicio de creación" tooltipPosition="bottom" life="1000" class="p-float-label">
+      <p-calendar [(ngModel)]="filters.iDate" readonlyInput="true" [showIcon]="true" type="text" [maxDate]="maxDate"
+        datePattern="dd/mm/yy" placeholder="Fecha inicio de creación" dateFormat="dd/mm/yy" (onSelect)="ValidDate(filters.iDate,filters.fDate)"
+        showButtonBar="true"></p-calendar>
+    </span>
+  </div>
+  <div pTooltip="Fecha fin de creación" tooltipPosition="bottom" life="1000" class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <span class="p-float-label">
+      <p-calendar [(ngModel)]="filters.fDate" [minDate]="filters.iDate"  readonlyInput="true" [showIcon]="true" [disabled]="filters.iDate==null" [maxDate]="maxEndDate"
+        type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy" (onSelect)="ValidDate(filters.iDate,filters.fDate)"  placeholder="Fecha fin de creación" 
+        showButtonBar="true"></p-calendar>
+    </span>
+  </div>
+    <div class="p-col-12 p-md-12 p-sm-12 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+        class="p-button-info p-mr-2"></button>
+      <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban"
+        class="p-button-secondary"></button>
+    </div>
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [showClear]="filters.active >0 ? true : false" name="cboactive"  [options]="statuslist" [(ngModel)]="filters.active" placeholder="Estatus" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados"></p-dropdown>
+    </div> -->
+
+  
+</div>
+

@@ -1,0 +1,64 @@
+
+<div class="card ">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <!--<label *ngIf="!showFilters" id="filterTitle">Empresas</label>-->
+        <h4 *ngIf="!showFilters" id="filterTitle">Empresas</h4>
+      </div>
+
+      <div class="p-grid">
+        <div class="p-col-9">
+          <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+          </span>
+        </div>
+
+        <div class="p-col-3">
+            <!-- <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_COMPANIES_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editOrNewCompany()"></button> -->
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+      </div>
+      
+    </div>
+
+    <companies-catalog-filter *ngIf="showFilters" (onSearch)="searchCompanies()" [(filters)]="companiesFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></companies-catalog-filter>
+</div>
+
+<div class="card p-m-0" id="tableDiv">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="_companyService._companiesList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+            <th></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-company let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="company[col.field]"></app-active-label>
+                    <ng-template #textCell>
+                        <span style="white-space: pre-wrap;">{{col.template(company)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+              <td>
+                  <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPANY_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Ver detalles" (click)="onEdit(company.id)"></button>
+            </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<!-- <app-edit-dialog [(filters)]="companiesFilters"></app-edit-dialog> -->

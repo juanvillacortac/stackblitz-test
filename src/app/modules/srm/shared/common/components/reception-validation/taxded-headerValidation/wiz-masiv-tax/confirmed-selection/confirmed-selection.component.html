@@ -1,0 +1,139 @@
+<div class="stepsdemo-content">
+    <p-fieldset legend="Productos" class="p-mb-4" [toggleable]="true" [collapsed]="true">
+      
+        <div class="card p-m-0">
+            <p-table #dt [columns]="displayedColumnsProducts" [rowHover]="true" [value]="Products"
+                [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                [scrollable]="true" scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]"
+                styleClass="p-datatable-responsive-demo">
+                <ng-template pTemplate="colgroup" let-columns>
+    
+                </ng-template>
+    
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+        
+                            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                        </ng-container>
+                        <th [ngStyle]="{'width': '130px'}"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns">
+                    <tr>
+                       
+                        <ng-container *ngFor="let col of columns">
+                        
+                            <td  [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field == 'wasWeighed') ? '60px' : '120px' }">
+                            <span class="p-column-title">{{col.header}}</span>
+                            <app-indheavy-label *ngIf="col.field =='wasWeighed'; else textCell" [indHeavy]="product[col.field]"
+                                  #textheavy> 
+                            </app-indheavy-label>
+                              <ng-template #textCell>
+                                <span>{{ col.template(product) }} </span>
+                              </ng-template>
+                            </td>
+                        </ng-container>
+                        <td [ngStyle]="{'width': '60px'}">
+                            <button pButton pRipple icon="pi pi-trash" (click)="onRemoveProduc(product)"
+                              class="p-button-rounded p-button-danger p-mr-2"
+                                pTooltip="Eliminar"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer" let-columns>
+                    <ng-container
+                        *ngIf="Products==null || Products.length == 0">
+                        <tr>
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="4">
+                                <span>No existen resultados.</span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+    
+            <!-- <div class="p-grid p-nogutter p-justify-end">
+            <p-button label="Atrás" (onClick)="cancelar()" icon="pi pi-angle-left"></p-button>
+            <p-button label="Siguiente" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button> 
+        </div>  -->
+             </div>
+    </p-fieldset>
+   
+    <p-fieldset legend="Imponibles a aplicar" [toggleable]="true" [collapsed]="true">
+        <div class="card p-m-0">
+            <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="selectedTaxable"
+               [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+        
+                            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                        </ng-container>
+                        <th [ngStyle]="{'width': '130px'}"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-taxable let-columns="columns">
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="taxable" (click)="CheckTaxable()"></p-tableCheckbox>
+                        </td> -->
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                                <!-- <app-active-label *ngIf="col.field === 'idProducTax' else textCell" [active]="taxable[col.field]">
+                                </app-active-label> -->
+                                <span class="p-column-title">{{col.header}}</span>
+                                <div class="p-inputgroup" *ngIf="col.field =='idProducTax'; else textCell">
+                                    <span *ngIf="taxable.idProducTax==-1 && !taxable.indOdc" class="status-badge status-active p-mr-1"
+                                    pTooltip="Impuesto de MPC" style="font-size: xx-small;">Si</span>
+                                    <span *ngIf="taxable.idProducTax>0 && !taxable.indOdc" class="status-badge status-inactive p-mr-1"
+                                        pTooltip="Impuesto nuevo" style="font-size: xx-small;">No</span>
+                                <span *ngIf="taxable.idProducTax==-1 && taxable.indOdc" class="status-badge status-active p-mr-1"  
+                                    pTooltip="Impuesto de ODC" style="font-size: xx-small;">Si</span>
+                                    <!-- <i *ngIf="product.indConsignment==0 && this.PucharseOrderHeader.purchase.idTypeNegotiation==this.typenegotiationIDs.consignment_ID" pTooltip="No posee el indicador de consignacion" class="pi pi-times-circle" style="color: #C63737;"></i> -->
+                                </div>
+                                <ng-template #textCell>
+                                    <span>{{col.template(taxable)}} </span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <td>
+                            <!-- (click)="onRemoveSpecification(specification.id)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                            <button pButton pRipple icon="pi pi-trash" (click)="onRemoveTaxable(taxable.idProducTax)"
+                                *ngIf="taxable.idProducTax>0" class="p-button-rounded p-button-danger p-mr-2"
+                                pTooltip="Eliminar"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer" let-columns>
+                    <ng-container
+                        *ngIf="selectedTaxable==null || selectedTaxable.length == 0">
+                        <tr>
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="4">
+                                <span>No existen resultados.</span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        
+        </div>
+    </p-fieldset>
+</div>

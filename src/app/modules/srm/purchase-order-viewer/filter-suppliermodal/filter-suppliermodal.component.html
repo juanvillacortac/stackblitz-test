@@ -1,0 +1,32 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+        <p-dropdown [options]="countryList" appendTo="body" [(ngModel)]="filters.idCountry" (keyup.enter)="loadSuppliers()" placeholder="País" [filter]="true" emptyFilterMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+    <p-dropdown [options]="classificationlist" appendTo="body" [(ngModel)]="filters.classificationId" (keyup.enter)="loadSuppliers()" placeholder="Clasificación" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+</div>
+<div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input [(ngModel)]="filters.socialReason" name="socialReason" id="socialReason" type="text" pInputText (keyup.enter)="loadSuppliers()" maxlength="100">
+            <label>Razón social</label>
+        </span>
+    </div>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input [(ngModel)]="filters.document" name="supplierRef" id="supplierRef" type="text" pInputText (keyup.enter)="loadSuppliers()" maxlength="25">
+            <label>Rif</label>
+        </span>
+    </div>
+</div>
+<div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="load" (click)="loadSuppliers()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+</div>
+</div>

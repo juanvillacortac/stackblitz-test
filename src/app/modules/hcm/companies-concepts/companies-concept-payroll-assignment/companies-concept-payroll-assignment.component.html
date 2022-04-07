@@ -1,0 +1,9 @@
+<div class="p-mb-4">
+    <p class="customFont"> 
+        <p-dropdown [options]="variables" [(ngModel)]="selectVar" [class]=" selectVar.value != 0 ? 'p-col-11 p-d-inline' : 'p-col-11 p-d-inline ng-dirty ng-invalid'"
+        placeholder="Variable*" optionLabel="label" (onChange)="updateString1($event)"></p-dropdown> = 
+    
+        <app-companies-concept-payroll-expression [variables]="variables" [edit]="expressionEdit" (returnJson)="buildJson($event)"></app-companies-concept-payroll-expression>
+    </p>
+</div>
+

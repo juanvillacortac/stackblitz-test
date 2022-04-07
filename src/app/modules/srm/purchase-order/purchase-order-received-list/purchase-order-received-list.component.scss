@@ -1,0 +1,66 @@
+.clipped {
+    clip-path: circle();
+  }
+
+  .customer-etiqueta{
+      border-radius: 20px;
+      padding: 0.25em 0.5rem;
+      background-color: #b3e5fc ;
+      color: #23547b ;
+      font-weight: 500;
+      font-size: 1rem;
+  }
+  .etiqueta-pendiente{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: 
+    
+    #feedaf ;
+    color: #8a5340 ;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.etiqueta-iniciada{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: 
+    #b3e5fc;
+    color: #23547b ;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.etiqueta-finalizada{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: 
+    #c8e6c9;
+    color: #256029;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.etiqueta-validada{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: #c8e6c9;
+    color: #256029 ;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.etiqueta-anulada{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: #ffcdd2;
+    color: #c63737 ;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.etiqueta-default{
+    border-radius: 20px;
+    padding: 0.25em 0.5rem;
+    background-color: #c8c7c1;
+    color: 
+    #1b1b18 ;
+    font-weight: 500;
+    font-size: 1rem;
+}
+

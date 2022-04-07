@@ -1,0 +1,71 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>Variable global</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>   
+          <hr />
+          <div class="p-col-12">
+            <div class="card">
+              <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-grid p-col-12" style="display: none;">
+                    <input type="number" [(ngModel)]="record.idCompanyGroup">
+                    <input type="number" [(ngModel)]="record.id">
+                  <input type="number" [(ngModel)]="record.varyingType">
+                  <p-checkbox [(ngModel)]="record.indInitialConfiguration" [value]="false" binary="true" inputId="binary"></p-checkbox>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                      <label for="active">Nombre<span [ngStyle]="{'color':'red'}">*</span></label>
+                      <input type="text" [(ngModel)]="record.varying" pInputText maxlength="15" [class]="submitted && record.varying == '' ? 'ng-dirty ng-invalid' : ''" 
+                      (keyup.enter)="submit()" (input)="_validations.toCapitalizeSimbology($event)"  [disabled]="record.id > 0"/> 
+                      <small class="p-invalid" *ngIf="submitted && record.varying == ''"> El nombre es requerido</small>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12">
+                        <div class="p-col-12 p-pl-0 p-pr-0">
+                            <label for="active">Descripción<span [ngStyle]="{'color':'red'}">*</span></label>
+                            <input type="text" [(ngModel)]="record.description" pInputText maxlength="30" [class]="submitted && record.description == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                            <small class="p-invalid" *ngIf="submitted && record.description == ''"> La descripción es requerida</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <label for="active">Tipo<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="varTypeDropdown" [(ngModel)]="record.idTypeVarying" placeholder="Seleccione..." [disabled]="true" ></p-dropdown>
+                  </div>
+                </div>
+    
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                      <label for="active">Valor<span [ngStyle]="{'color':'red'}">*</span></label>
+
+                      <input pInputText type="text" [(ngModel)]="record.value" [class]="submitted && record.value == null ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" maxlength="15">
+
+
+                    <small class="p-invalid" *ngIf="submitted && record.value == null"> El valor es requerido</small>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="p-field p-col-12">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </p-sidebar>

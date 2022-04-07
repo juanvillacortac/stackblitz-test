@@ -1,0 +1,84 @@
+<div class="stepsdemo-content">
+    <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="Products"
+            [(selection)]="selectedProductsCom" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [scrollable]="true" scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]"
+            styleClass="p-datatable-responsive-demo">
+            <ng-template pTemplate="colgroup" let-columns>
+
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="display: none;" pSortableColumn="Id">Id</th>
+
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox (click)="CheckProducts()"></p-tableHeaderCheckbox>
+                    </th>
+                    <!-- <th>
+                    </th> -->
+                    <ng-container *ngFor="let col of columns">
+                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                            </div>
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-columns="columns">
+                <tr>
+                    <td style="display: none;">{{product.id}}</td>
+                    <td style="width: 3rem">
+                        <p-tableCheckbox [value]="product" (click)="CheckProducts()"></p-tableCheckbox>
+                    </td>
+                    <!-- <td>
+                         <img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'"
+                            [alt]="product.nameProduct" width="75" class="p-shadow-4 imgcatalog" /> -->
+
+                        <!-- <div class="p-col-12 p-sm-4 p-md-4 p-lg-4 container-img">
+                            <img [src]="product.image == null || product.image == ''  ? defectImage.defectImage
+                            : product.image" [alt]="product.nameProduct" width="75" class="p-shadow-4 imgcatalog"
+                                alt="Product" />
+                        </div> 
+                    </td> -->
+                    <ng-container *ngFor="let col of columns">
+                        <td 
+                        [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field == 'wasWeighed') ? '60px' : '120px' }">
+                        <span class="p-column-title">{{col.header}}</span>
+                        <app-indheavy-label *ngIf="col.field =='wasWeighed'; else textCell" [indHeavy]="product[col.field]"
+                              #textheavy> 
+                        </app-indheavy-label>
+                          <ng-template #textCell>
+                            <span>{{ col.template(product) }} </span>
+                          </ng-template>
+                        </td>
+                    </ng-container>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer" let-columns>
+                <ng-container
+                    *ngIf="Products==null || Products.length == 0">
+                    <tr>
+                        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="4">
+                            <span>No existen resultados.</span>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+        </p-table>
+
+        <!-- <div class="p-grid p-nogutter p-justify-end">
+        <p-button label="Atrás" (onClick)="cancelar()" icon="pi pi-angle-left"></p-button>
+        <p-button label="Siguiente" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button> 
+    </div>  -->
+    </div>
+</div>

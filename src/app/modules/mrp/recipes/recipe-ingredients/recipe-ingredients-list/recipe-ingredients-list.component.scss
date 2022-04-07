@@ -1,0 +1,44 @@
+:host ::ng-deep .p-knob-text{
+    font-size: 1rem !important;
+}
+
+
+:host ::ng-deep .p-slider-handle{
+    background: #da0000 !important;
+    border: 2px solid #da0000 !important;
+}
+
+:host ::ng-deep .p-slider-range {
+    background: #af0303 !important;
+}
+
+.recipePriceBox{
+    background: transparent !important;
+    border: 0px !important;
+    border-bottom: 1px solid #ddd !important;
+    margin-bottom: 0.5em;
+}
+.recipe-price-box-tittle{
+    color:#9199a9;
+    font-size: 12px;
+    font-weight: 600;
+}
+.recipe-price-box-value{
+    color: #555;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+}
+
+:host ::ng-deep .circle-detail{
+    width: 16px;
+    height: 16px;
+    background-color: #ffffff;
+    border-width: 4px;
+    border-style: solid;
+    margin: 0 auto;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    margin-bottom: 0.5em;
+}

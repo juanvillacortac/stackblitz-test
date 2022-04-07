@@ -1,0 +1,31 @@
+<div class="card widget_panel">
+    <div class="p-grid">
+        <div class="p-col-12 flex flex-column align-items-center p-3 ">
+            <span class="total ">
+                    <span *ngIf="position == 1" class="material-icons trophy"  
+                            [ngClass]="{'firstPlace': position === 1}">emoji_events
+                    </span>
+                    <span class="position"> {{position}} </span>
+                    <span class="material-icons position " >radio_button_unchecked</span>
+               
+                    <!-- <span class="material-icons avatar  costDecrease" >arrow_drop_down</span> -->
+            </span>
+            <span class="sub-title">
+                <span>{{positionSummary}}</span>
+            </span>
+        </div>
+
+    </div>
+
+    <div class="p-grid widget_panel">
+        <div class="p-col-12 flex flex-column align-items-center">
+           <span class="sub-total ">
+                    <span class="position"> {{subPosition}} </span>
+                    <span class="material-icons sub-total-position " >radio_button_unchecked</span>   
+            </span>
+            <span style="vertical-align: bottom;">
+                <app-user-image [userName]="userName" [userId]="userId" [img]="img" [width]="width" [fontSize]="fontSize"></app-user-image>
+            </span>
+        </div>
+    </div>
+</div>

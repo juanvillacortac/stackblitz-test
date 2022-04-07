@@ -1,0 +1,65 @@
+<p-dialog header="Costos del artículo" (onShow)="ngOnInit()" [(visible)]="displayModal" (onHide)="hideDialog()"
+    [modal]="true" [style]="{width: '55vw'}" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="body">
+        <div class="card">
+
+            <div class="p-fluid p-grid p-formgrid">
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="_articulo!=''">
+                    <label for="name"><span style="font-weight: bold;">Artículo: </span><span>{{_articulo}}</span>
+                    </label>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name"><span style="font-weight: bold;">Moneda:</span><span>
+                            {{_moneda?.name}}</span></label>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name"><span
+                            style="font-weight: bold;">Costo:&nbsp;</span>{{MonedaSeleccion?.trim()}}{{_costo?.toLocaleString('es-Ve',
+                        { minimumFractionDigits: 4 })}}</label>
+                </div>
+
+            </div>
+
+            <p-table [resizableColumns]="false"
+                styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" #dt
+                [columns]="displayedColumns" [rowHover]="true" [value]="_data">
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word', 'text-align': col.textAlign }"
+                                pResizableColumn [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                        </ng-container>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-costos let-columns="columns" let-rowData>
+                    <tr>
+
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'text-align': col.textAlign, 'display': col.display,'overflow-wrap': 'break-word'}"
+                                class="ui-resizable-column">
+
+                                <span>{{col.template(costos)}} </span>
+
+                            </td>
+                        </ng-container>
+                    </tr>
+
+
+                </ng-template>
+
+
+            </p-table>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+    </ng-template>
+</p-dialog>

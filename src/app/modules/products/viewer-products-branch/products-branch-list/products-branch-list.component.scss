@@ -1,0 +1,85 @@
+:host ::ng-deep {    
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+    .imgcatalog{
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .p-multiselect-token{
+        align-items: center;
+    }
+
+    .p-multiselect-token-icon{
+        margin-left: 0.1rem;
+        margin-right: 0.5rem;
+    }
+}
+table {
+    width: 100%;
+}
+
+.status-badge {
+    border-radius: 2px;
+    padding: .25em .5rem; 
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+
+    &.status-active {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-inactive {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+}
+@media screen and (max-width: 40rem) {
+    :host ::ng-deep {
+        .p-datatable table{
+            width: unset;
+        }
+        .p-datatable {
+            &.p-datatable-responsive-demo {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tfoot > tr > td {
+                    display: none !important;
+                }
+
+                .p-datatable-tbody > tr > td {
+                    text-align: left;
+                    display: block;
+                    width: 100%;
+                    float: left;
+                    clear: left;
+                    border: 0 none;
+
+                    .p-column-title {
+                        padding: .4rem;
+                        min-width: 30%;
+                        display: inline-block;
+                        margin: -.4em 1em -.4em -.4rem;
+                        font-weight: bold;
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.container-img{
+    border-radius: 50%;
+    height: 50px;
+    display: flex;
+    width: 50px;
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+}

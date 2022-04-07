@@ -1,0 +1,26 @@
+<div class="p-col-12 p-md-12 p-grid p-jc-left ng-tns-c70-3" id="formTabsDiv">
+    <div class="p-col-10" style="padding: .5em 0 1em 0">
+        <p-button (click)="tabChange(0)" [styleClass]="activeIndex == 0? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Listado"></p-button>
+        <p-button (click)="tabChange(1)" [styleClass]="activeIndex == 1? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Carga individual"></p-button>
+        <p-button (click)="tabChange(2)" [styleClass]="activeIndex == 2? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Carga masiva"></p-button>
+        <p-button (click)="tabChange(3)" [styleClass]="activeIndex == 3? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Carga por importación"></p-button>
+        <p-button (click)="tabChange(4)" [styleClass]="activeIndex == 4? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Carga por integración"></p-button>
+        
+    </div>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 0">
+    <app-incidents-main-list ></app-incidents-main-list>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 1">
+    <app-incidents-load-single (singleChange)="changeSave($event)"></app-incidents-load-single>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 2">
+    <app-incidents-load-massive (massiveChange)="changeSave($event)"></app-incidents-load-massive>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 3">
+    <app-incidents-load-importation (importChange)="changeSave($event)"></app-incidents-load-importation>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 4">
+   <app-incidents-load-integration (integrationChange)="changeSave($event)"></app-incidents-load-integration>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

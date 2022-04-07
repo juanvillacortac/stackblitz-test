@@ -1,0 +1,114 @@
+<p-sidebar [(visible)]="_showPanel" (onShow)="ngOnInit()" (onHide)="hidePanel()" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}">
+    <h5 class="p-m-0">Configuración de solicitudes automáticas</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                  <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Tipo de solicitud <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="typeRequestlist" [(ngModel)]="_requestSetup.requestTypeID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.requestTypeID <= 0">El tipo de solicitud es requerida</small>                    
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Sucursal que demanda <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="branchOfficeRequestlist" [(ngModel)]="_requestSetup.branchOfficeRequestID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.branchOfficeRequestID <= 0">La sucursal que demanda es requerida</small>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.branchOfficeRequestID > 0 && _requestSetup.branchOfficeRequestID == _requestSetup.branchOfficeDispatchesID">La sucursal que demanda y la sucursal que despacha deben ser diferentes</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Sucursal que despacha <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="branchOfficeDispatcheslist" [(ngModel)]="_requestSetup.branchOfficeDispatchesID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.branchOfficeDispatchesID <= 0">La sucursal que despacha es requerida</small>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.branchOfficeDispatchesID > 0 && _requestSetup.branchOfficeDispatchesID == _requestSetup.branchOfficeRequestID">La sucursal que demanda y la sucursal que despacha deben ser diferentes</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Categoría <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="categoryList" [(ngModel)]="_requestSetup.categoryID" [filter]="true"
+                        placeholder="Seleccione..." emptyFilterMessage="Sin resultados." [showClear]="_filters.categoryID>-1 ?true:false">        
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.categoryID <= 0">La categoría es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Prioridad <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="prioritylist" [(ngModel)]="_requestSetup.priorityID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _requestSetup.priorityID <= 0">La prioridad es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>                    
+                    <p-dropdown name="active" [options]="statuslist" appendTo="body" [(ngModel)]="_requestSetup.active" placeholder="Estatus" [disabled]="_requestSetup.requestSetupID<=0" (keyup.enter)="submit()" ></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12 p-mt-1">                                       
+                    <label for="active"> Frecuencia <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-table #dt [columns]="displayedColumns" dataKey="idDay" editMode="row" [rowHover]="true"
+                            [value]="_frequencyRequestSetup" [paginator]="false" [rows]="10" [(selection)]="_selectedFrequency"
+                            [showCurrentPageReport]="true"
+                            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm">
+                            <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="width: 5rem">
+                                <p-tableHeaderCheckbox (click)="onChangeAllUpdateFrequency(frequency)" pTooltip="Seleccionar todos" ></p-tableHeaderCheckbox> 
+                                </th>                                
+                                <ng-container *ngFor="let col of columns">
+                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                </ng-container>
+                                <th></th>                      
+                            </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-editing="editing" let-frequency let-columns="columns">
+                            <tr [pEditableRow]="frequency">      
+                                <td>
+                                    <p-tableCheckbox (click)="onChangeUpdateFrequency(frequency)" pTooltip="Seleccionar" [value]="frequency"></p-tableCheckbox>
+                                </td>                          
+                                <ng-container *ngFor="let col of columns">                                    
+                                 <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                    <p-cellEditor *ngIf="col.field =='percentageIncrease' else textCell">
+                                        <ng-template pTemplate="input">
+                                            <p-inputNumber (onFocus)="clear($event)" maxlength="6" [(ngModel)]="frequency.percentageIncrease" min="0" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" ></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{frequency.percentageIncrease}}
+                                        </ng-template>
+                                    </p-cellEditor>                                      
+                                    <ng-template #textCell>
+                                        <span>{{col.template(frequency)}}</span>
+                                    </ng-template>                                      
+                                </td> 
+                                </ng-container>                    
+                                <td style="text-align:center">
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow   icon="pi pi-pencil" pTooltip="Editar"   class="p-button-rounded p-button-success p-mr-2 p-mt-1"></button>
+                                    <button *ngIf="editing" (click)="editarRegistro(frequency)"  pButton pRipple type="button" pSaveEditableRow   icon="pi pi-check"  pTooltip="Aceptar"  class="p-button-rounded p-button-text p-button-success p-mr-2 p-mt-2"></button>
+                                    <button *ngIf="editing"  pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"  pTooltip="Cancelar" class="p-button-rounded p-button-text p-button-danger"></button>                                                                      
+                                </td>
+                            </tr>                          
+                            </ng-template>                        
+                            <ng-template pTemplate="paginatorleft">
+                            </ng-template>
+                            <ng-template pTemplate="paginatorright">
+                            </ng-template>
+                        </p-table> 
+                        <small class="p-invalid" *ngIf="submitted && _selectedFrequency.length <= 0">Debe seleccionar al menos un día de frecuencia</small>                   
+                </div>    
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

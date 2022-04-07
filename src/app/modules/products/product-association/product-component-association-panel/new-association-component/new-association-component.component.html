@@ -1,0 +1,34 @@
+<p-dialog header="Información del componente" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid">
+        <div class="p-fluid  p-col-6 p-md-6 p-lg-6">
+            <label for="name">Nombre</label>
+            <input name="name" id="name" type="text" [disabled]="true" [(ngModel)]="productComponent.name" pInputText>
+        </div>
+        <div class="p-fluid p-col-6 p-md-6 p-lg-6">
+            <label>Barra</label>
+            <input name="performaceFactor" [disabled]="true" id="performaceFactor" [(ngModel)]="productComponent.barCode" type="text" pInputText>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <label for="name">Categoría</label>
+            <input name="name" id="name" type="text" [disabled]="true" [(ngModel)]="productComponent.category.name" pInputText>
+        </div>
+        <div class="p-fluid p-col-6 p-md-6 p-lg-6">
+            <label>Tipo de parte <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="PartsTypeList" appendTo="body" (keyup.enter)="AddProductComponent()" [(ngModel)]="productComponent.partsType.id" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && productComponent.partsType.id <= 0">El tipo de parte es requerido</small>
+        </div>
+        <div class="p-fluid p-col-6 p-md-6 p-lg-6">
+            <label>Cantidad de partes <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input name="amount" id="amount" (keyup.enter)="AddProductComponent()" [(ngModel)]="productComponent.amount" type="number" min="0" onkeypress="if (this.value.length > 16) return false;" pInputText>
+            <small class="p-invalid" *ngIf="submitted && productComponent.amount <= 0">La cantidad debe ser mayor a 0</small>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <small class="p-invalid">(*) Campos obligatorios</small>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" [disabled]="saving" (click)="AddProductComponent()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

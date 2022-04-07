@@ -1,0 +1,42 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Unidad de medida</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" (keyup.enter)="saveMeasurementUnits()" [class]="submitted && (!_measurementunits.name || !_measurementunits.name.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText id="name" [(ngModel)]="_measurementunits.name" (input)="_validations.toCapitalizeSimbology($event)" (keypress)="_validations.keyPressOnlyLettersAndNumbers($event);" (paste)="_validations.noPaste($event)" maxlength="100" autofocus />
+                    <small class="p-invalid" *ngIf="submitted && (!_measurementunits.name || !_measurementunits.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="abbreviation">Abreviatura </label>
+                    <input type="text" (keyup.enter)="saveMeasurementUnits()" [class]="(submitted && (_measurementunits.name && _measurementunits.name.trim().toLocaleUpperCase() == _measurementunits.abbreviation.trim().toLocaleUpperCase())) || (_measurementunits.name && _measurementunits.name.trim().toLocaleUpperCase() == _measurementunits.abbreviation.trim().toLocaleUpperCase()) ? 'ng-dirty ng-invalid' : ''" pInputText id="abbreviation" (keypress)="_validations.keyPressAbbreviation($event);" (paste)="_validations.noPaste($event)" [(ngModel)]="_measurementunits.abbreviation" maxlength="5" autofocus />
+                    <small class="p-invalid" *ngIf="(submitted && (_measurementunits.name && _measurementunits.name.trim().toLocaleUpperCase() == _measurementunits.abbreviation.trim().toLocaleUpperCase())) || (_measurementunits.name && _measurementunits.name.trim().toLocaleUpperCase() == _measurementunits.abbreviation.trim().toLocaleUpperCase())">La abreviatura debe ser diferente al nombre</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Agrupación de unidad de medida <span [ngStyle]="{'color':'red'}">*</span></label>
+
+                    <p-dropdown (keyup.enter)="saveMeasurementUnits()" [options]="aggrupationMU" appendTo="body" [(ngModel)]="_measurementunits.idGroupingUnitofMeasure" placeholder="Seleccione...">
+
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _measurementunits.idGroupingUnitofMeasure <= 0">La agrupación es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="status" [disabled]="_measurementunits.id <= 0" appendTo="body" [(ngModel)]="_measurementunits.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="saveMeasurementUnits()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

@@ -1,0 +1,73 @@
+<div class="p-grid nested-grid"  [style]="{'margin-top': '-2em','margin-bottom': '-3em'}">
+    <!-- <div class="p-col-12 p-xl-2 p-lg-2 p-md-4 p-sm-6 box-stretched product-img"><img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" alt="no image" class="p-shadow-4" /></div> -->
+    <div class="p-col-12 p-xl-12 p-lg-12 p-md-12 ">
+        <div class="p-grid">
+            <div class="p-col-12 p-lg-12">
+                <div class="p-grid">
+                    <div class="p-col-12 p-lg-6 p-md-12 p-fluid"[style]="{'margin-top': '-0.5em'}">
+                        <div class="p-col-12 p-md-12 timeline-content">  
+                            <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.bar_code' | translate}}" tooltipPosition="left">qr_code_scanner</span>
+                            <span class="recipe-price-box-value" > {{productSelected.bar}}</span>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 p-md-12  p-fluid" [style]="{'margin-top': '-0.5em'}">
+                        <div class="product-grid-item-top">
+                            <div class="p-col-12 p-md-12 timeline-content">  
+                                <span class="material-icons avatar"  
+                                [ngClass]="{'negative-option':currentExistence <= 0}"
+                                 pTooltip="{{ 'ims.product_existence.existence' | translate}}" tooltipPosition="left">format_list_numbered</span>     
+                                <span class="recipe-price-box-value" 
+                                [ngClass]="{'negative-option':currentExistence <= 0}">  {{currentExistence|number:'1.2-2'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                        <div class="product-grid-item-top">
+                            <div class="p-col-12 p-md-12 timeline-content">  
+                                <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.product' | translate}}" tooltipPosition="left">sell</span>     
+                                <span class="recipe-price-box-value"> {{productSelected.productname}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                        <div class="product-grid-item-top">
+                            <div class="p-col-12 p-md-12 timeline-content">  
+                                <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.presentation' | translate}}" tooltipPosition="left">inventory_2</span>       
+                                <span class="recipe-price-box-value"> {{productSelected.presentation}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                        <div class="product-grid-item-top" >
+                            <div class="p-col-12 p-md-12 timeline-content">  
+                                <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.category' | translate}}" tooltipPosition="left">category</span>    
+                                <span class="recipe-price-box-value"> {{productSelected.category}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                        <div class="product-grid-item-top" >
+                            <div class="p-col-12 p-md-12 timeline-content">  
+                                <span class="material-icons avatar"  
+                                [ngClass]="{'negative-option':totalUnits <= 0}"
+                                pTooltip="{{ 'ims.product_existence.total_units' | translate}}" tooltipPosition="left">summarize</span>    
+                                <span class="recipe-price-box-value"
+                                [ngClass]="{'negative-option':totalUnits <= 0}"> {{totalUnits|number:'1.2-2'}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+               
+            <div class="p-col-12 p-lg-4">
+                <div class="p-grid">
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div> 

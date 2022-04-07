@@ -1,0 +1,9 @@
+<div class="p-m-0" *ngIf="loaded">
+  <app-fiscal-year-tree [years]="years" [tree]="tree" [nodes]="yearNodes" (openModal)="modal.openNew()" #treeComp
+    (onEdit)="modal.edit($event)">
+    <app-fiscal-year-filters [expanded]="treeComp?.showFilters" (onSearch)="fetchData($event)" [modules]="modulesList" #filters>
+    </app-fiscal-year-filters>
+  </app-fiscal-year-tree>
+  <app-fiscal-year-mutation-modal [(displayModal)]="showDialog" [yearList]="mutationModalYearList" [modules]="modules" (onSave)="filters.search()" #modal>
+  </app-fiscal-year-mutation-modal>
+</div>

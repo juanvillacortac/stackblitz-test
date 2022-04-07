@@ -1,0 +1,66 @@
+<div class="p-grid">
+    <div class="p-col-12" >
+        <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <span class="p-float-label">
+                        <input #ean pInputText numbersOnly [(ngModel)]="filter.ean" (keyup.enter)="search()" name="ean" type="text" maxlength="13">
+                        <label for="float-input">Barra</label>
+                    </span>
+                    <br/>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <span class="p-float-label">
+                        <input #name pInputText [(ngModel)]="filter.name" (keyup.enter)="search()" name="name" type="text" maxlength="300">
+                        <label for="float-input">Nombre</label>
+                    </span>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+                <button pButton pRipple label="Buscar"  (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+                <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card p-m-0">
+    <p-table [value]="ingredients"
+    [rowHover]="true"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    [rows]="5"
+    [(selection)]="selectedIngredients"
+    currentPageReportTemplate="{{ 'primeng.footerShort' | translate }}" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="header">
+            <tr>
+                <th [ngStyle]="{'width': '3rem'}">
+                    <p-tableHeaderCheckbox *ngIf="!isSingleMode" ></p-tableHeaderCheckbox>
+                </th>
+                <ng-container *ngFor="let col of cols">
+                    <th [ngStyle]="{'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ingredient>
+            <tr>
+                <td>
+                    <p-tableCheckbox *ngIf="!isSingleMode" [value]="ingredient"></p-tableCheckbox>
+                    <p-tableRadioButton [value]="ingredient" *ngIf="isSingleMode"></p-tableRadioButton>
+                </td>
+                <ng-container *ngFor="let col of cols">
+                    <td [ngStyle]="{'overflow-wrap': 'break-word'}">
+                            <div *ngIf="col.field === 'actualCost'; else textCell">
+                                {{(ingredient.actualCost)|number:'1.2-2'}}
+                            </div>
+                        <ng-template #textCell>{{ingredient[col.field]}}</ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="confirm"></p-confirmDialog>

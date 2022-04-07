@@ -1,0 +1,155 @@
+<p-dialog (onShow)="onShow()" (onHide)="onEmitHideForm(0)" header="{{ 'srm.reception.reception' | translate }}" [(visible)]="visible"
+[breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'75vw','overflow': 'overlay'}"
+[modal]="true" class="address-dialog" [draggable]="false" [resizable]="false" >
+    <div class="p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size">{{ 'srm.reception.child.main' | translate }}: <b>{{ reception.receptionNumber }}</b></p>
+            <p class="generic-font-size">{{ 'srm.reception.child.status' | translate }}: <b>{{ getStatus() | translate }}</b></p>
+            <!-- <p class="generic-font-size">{{ 'srm.reception.child.createdBy' | translate }}: <b>{{ reception.creatorOperator}}</b></p> -->
+            <p class="generic-font-size">{{ 'srm.reception.child.supplier' | translate }}:<b>{{ reception.supplier.socialReason }}</b></p>
+            <p class="generic-font-size">{{ 'srm.reception.child.createdDate' | translate }}: <b>{{ reception.createdDate | date : "dd/MM/yyyy" }}</b></p>
+            <p class="generic-font-size">{{ 'srm.reception.child.arrivedDate' | translate }}: <b>{{ reception.arrivalTime | date : "dd/MM/yyyy" }}</b></p>
+        </div>
+        <!-- <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size generic-float-text"><b>{{ reception.supplier.socialReason }}</b></p>
+        </div> -->
+    </div>
+    <div class="p-grid p-jc-start p-mt-2 p-ml-1">
+        <div class="p-mr-4">
+            <p class="generic-font-size">{{ 'srm.reception.child.responsible_operator' | translate }}</p>
+            <p-chip label="{{ reception.receivingOperator.name }}" image="assets/layout/images/topbar/user-default.png"></p-chip>
+        </div>
+        <div>
+            <p class="generic-font-size">{{ 'srm.reception.child.associated_document' | translate }}</p>
+            <p-chip label="{{ reception.purchaseOrderRelated==undefined ? 'Sin documento': reception.purchaseOrderRelated }}" icon="pi pi-file-o" styleClass="p-mr-2"></p-chip>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="card p-m-0 p-pb-0">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+            <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+                <h4>{{ 'srm.reception.child_create' | translate}}</h4>
+            </div>
+            <div>
+                <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_CHILD_RECEPTIONS_ID)"  pTooltip=" {{ 'add' | translate }}" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+            </div>
+        </div>
+        <div  class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+            <div class="p-col-12 p-md-4 p-lg-4 p-field p-mt-2">
+                <div class="p-inputgroup">
+                    <input type="text" id="adjunctOperator" name="adjunctOperator"
+                        pInputText placeholder="{{ 'srm.reception.child.adjunct_operator' | translate}}"
+                        [(ngModel)]="adjunctOperator"
+                        disabled>
+                    <button pButton pRipple icon="pi pi-search" (click)="operatorDialogVisible=true"></button>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-4 p-field p-mt-2">
+            <span class="p-float-label">
+                 <p-dropdown id="area" name="area" #area="ngModel"
+                  [options]="areaList" optionLabel="name" optionValue="id" [showClear]="true"
+                  [(ngModel)]="receptionAreaSelected"
+                  [filter]="true" display="chip"
+                  emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                  emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                  placeholder="{{ 'srm.merchandise_receptions.filters.receptionAreas' | translate}}"
+                  [ngClass]="{'ng-dirty':(!validateArea && (area.dirty || area.touched || submitted)),
+                              'ng-invalid':(!validateArea && (area.dirty || area.touched || submitted))}">
+                </p-dropdown>
+              <div *ngIf="!validateArea && (area.dirty || area.touched || submitted)" class="p-invalid">
+                  Debe seleccionar una área de recepción
+              </div>
+            </span>
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-4 p-field p-mt-2">
+            <span pTooltip="{{ 'srm.reception.child.arrival_date' | translate}}" tooltipPosition="right" class="p-float-label">
+                <p-calendar inputId="calendar"
+                    [(ngModel)]="startDate"
+                    [minDate]="maxDate"
+                    readonlyInput="true"
+                    [showIcon]="true"
+                    type="text"
+                    appendTo="body"
+                    datePattern="dd/mm/yy"
+                    dateFormat="dd/mm/yy">
+                </p-calendar>
+            </span>
+
+            </div>
+
+            <div class="p-col-12 p-md-12 p-lg-12 p-mb-2 p-fluid">
+            <label>{{ 'srm.reception.child.observations' | translate }}</label>
+            <textarea pInputTextarea rows="1" style="resize: none;" cols="30" style="min-height: 50px;" pInputTextarea placeholder="{{ 'srm.reception.child.observations' | translate }}"
+            maxlength="100"  [(ngModel)]="simpleReception.observation"></textarea>
+            </div>
+            <div class="p-col-12">
+                <div class="p-grid p-jc-end p-mt-2" style="margin-right: -15px !important;">
+                    <app-footer-form-buttons (acceptPressed)="save()" (cancelPressed)="cancel()"></app-footer-form-buttons>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="p-col-12 p-md-12 p-lg-12 p-mb-2 p-fluid">
+        <p-table [value]="simpleReceptions" responsiveLayout="stack" [columns]="cols" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{ 'srm.reception.child.receptions' | translate }}
+                        <!-- <app-updater-button (updateMethod)="getReceptions()"></app-updater-button> -->
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <ng-container *ngFor="let col of columns">
+                          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                            {{ col.header | translate }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                          </th>
+                      </ng-container>
+                          <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-columns="columns" let-childReception>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" >
+
+                                <span *ngIf="col.dataType === 'date'; else textCell">
+                                    <span *ngIf="!isMinimumDateTimeValue((childReception[col.field]))">
+                                        {{ getValidDate((childReception[col.field]))| date: 'dd/MM/yyyy'}}
+                                    </span>
+                                </span>
+
+                                <ng-template #textCell >
+                                    <span>{{(childReception[col.field])}}</span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <td>
+                            <button  pButton pRipple icon="pi pi-ban" class="p-button-rounded p-button-danger p-mr-2" pTooltip="{{ 'void' | translate }}"  (click)="void(childReception)" ></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                    </div>
+                </ng-template>
+        </p-table>
+    </div>
+
+</p-dialog>
+
+<operator-modal-list [showDialog]="operatorDialogVisible" [usertype]="this.userType"
+(onSubmit)="onSubmitOperator($event)" (onToggle)="onToggleOperator($event)"
+[multiples]="false">
+</operator-modal-list>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="confirm"></p-confirmDialog>
+<app-reason-dialog [header]="'srm.reception.void_child_reception'" [showDialog]="showDialogReason" [motiveTypeId]="motiveTypeId" (saveReason)="saveReason($event)" (hideDialogEvent)="hideDialogReason()"></app-reason-dialog>
+

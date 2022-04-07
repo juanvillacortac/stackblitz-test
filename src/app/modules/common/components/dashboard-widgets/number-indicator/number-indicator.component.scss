@@ -1,0 +1,29 @@
+:host ::ng-deep { 
+    .widget_panel{
+      width: 100%;
+      height: 100% !important;
+    //   height: calc(100% - 15px) !important;
+    }
+}
+
+.fs-xxlarge {
+    font-size: 3rem !important;
+}
+
+.overview-box .overview-status {
+    font-weight: 500;
+    border-radius: 2px;
+    color: #f7f7f7;
+}
+
+.info .value {
+    font-weight: 600;
+    font-size: 3rem;
+}
+.info {
+    text-align: right;
+}
+
+ .info .subtext {
+    color: #616161;
+}

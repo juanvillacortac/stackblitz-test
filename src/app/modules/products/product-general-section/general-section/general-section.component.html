@@ -1,0 +1,215 @@
+
+        <p-panel>
+            <ng-template pTemplate="header">
+                <span class="panelheader">Datos básicos</span>
+            </ng-template>
+            <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid" [ngStyle]="{'pointer-events' : eventstatus}">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <label>Nombre principal <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [disabled]="_lockField" [(ngModel)]="_product.name" [class]="(submittedfinish || submittederaser) && (!_product.name || !_product.name.trim()) ? 'ng-dirty ng-invalid' : ''" name="name" id="name" type="text"  (input)="validations.toUppercaseString($event)" pInputText  maxlength="300" (keypress)="ValidateEdit()"> 
+                    <small class="p-invalid" *ngIf="(submittedfinish || submittederaser) && (!_product.name || !_product.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Referencia interna <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [disabled]="_lockField" [(ngModel)]="_product.referent" [class]="(submittedfinish || submittederaser) && (!_product.referent || !_product.referent.trim()) ? 'ng-dirty ng-invalid' : ''" name="referent" id="referent" type="text" [pKeyFilter]="validations.LettersNumberandDash" pInputText maxlength="100" (keypress)="ValidateEdit()">
+                    <small class="p-invalid" *ngIf="(submittedfinish || submittederaser) && (!_product.referent || !_product.referent.trim())">La referencia interna es requerida</small>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Referencia fábrica </label>
+                    <input [disabled]="_lockField" [(ngModel)]="_product.factoryRef" name="factoryRef" [pKeyFilter]="validations.LettersNumberandDash" id="factoryRef" type="text" pInputText maxlength="100" (keypress)="ValidateEdit()"> 
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-6 p-lg-6">
+                    <label>Categoría</label>
+                    <div class="p-inputgroup">
+                        <input type="text" pInputText [(ngModel)]="categoriesString" disabled>
+                        <p-button icon="pi pi-search" (click)="op.toggle($event)" pTooltip="Buscar categoría"></p-button>
+                    </div>
+                    <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+                        <p-treeTable #dt [value]="categorylist" [columns]="cols" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex">
+                                    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                
+                                <tr>
+                                    <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                                        {{col.header}}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                                <tr>
+                                    <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                                        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                                       <!--  <p-radioButton #something name="groupname" [value]="rowNode" *ngIf="rowData.validateOnlyChild == false" (click)="ValidateCheckeds(something,rowData)"></p-radioButton> -->
+                                        <p-treeTableCheckbox #something [value]="rowNode" name="group" selectionMode="single" *ngIf="rowData.validateOnlyChild == false" (click)="ValidateCheckedsCategory(something,rowData)"></p-treeTableCheckbox>
+                                        <ng-template #textCell>
+                                            {{rowData[col.field]}}
+                                        </ng-template>
+                                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-treeTable>
+                    </p-overlayPanel>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-6 p-lg-6 p-fluid">
+                    <label>Clasificación</label>
+                    <p-dropdown [(ngModel)]="_product.classificationId" [options]="classificationlist" appendTo="body" [filter]="true" emptyFilterMessage="Sin resultados." (onChange)="ValidateEdit()">
+                    </p-dropdown>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-3 p-lg-3 p-fluid">
+                    <label>Tipo de origen <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [disabled]="_lockField" [(ngModel)]="_product.originTypeId" [class]="(submittedfinish || submittederaser) && _product.originTypeId <= 0 ? 'ng-dirty ng-invalid' : ''" [options]="origintypelist" appendTo="body" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." (onChange)="ValidateEdit()">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="(submittedfinish || submittederaser) && _product.originTypeId <= 0">El tipo de origen es requerido</small>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-3 p-lg-3 p-fluid">
+                    <label>Tipo de producto</label>
+                    <p-dropdown [disabled]="_lockField" [(ngModel)]="_product.productTypeId" [options]="producttypelist" appendTo="body" [filter]="true" emptyFilterMessage="Sin resultados." (onChange)="ValidateEdit()">
+                    </p-dropdown>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-3 p-lg-3 p-fluid">
+                    <label>Estructura</label>
+                    <p-dropdown [(ngModel)]="_product.structureTypeId" [options]="structuretypelist" appendTo="body" [filter]="true" [disabled]="validateStructure" emptyFilterMessage="Sin resultados." (onChange)="ValidateEdit()">
+                    </p-dropdown>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-3 p-lg-3 p-fluid">
+                    <label>Marca <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [disabled]="_lockField" [(ngModel)]="_product.brandId" [class]="(submittedfinish || submittederaser) && _product.brandId < 0 ? 'ng-dirty ng-invalid' : ''" [virtualScroll]="true" itemSize="30" [options]="brandslist" (onChange)="ValidateEdit()" appendTo="body" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="(submittedfinish || submittederaser) && _product.brandId < 0">El marca es requerida</small>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-6 p-lg-6 p-fluid">
+                    <label>País de origen <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [disabled]="_lockField" [(ngModel)]="_product.countryofOriginId" [class]="(submittedfinish || submittederaser) && _product.countryofOriginId <= 0 ? 'ng-dirty ng-invalid' : ''" [options]="countryslist" (onChange)="ValidateEdit()" appendTo="body" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="(submittedfinish || submittederaser) && _product.countryofOriginId <= 0">El país es requerido</small>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-2 p-lg-2 p-fluid">
+                    <label>CPE</label>
+                    <input [(ngModel)]="_product.cpe" name="cpe" id="cpe" type="text" pInputText maxlength="100" (keypress)="ValidateEdit()">  
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-4 p-lg-3 p-fluid">
+                    <label>Registro sanitario</label>
+                    <input [(ngModel)]="_product.healthRegister" name="healthRegister" name="healthRegister" id="healthRegister" type="text" pInputText maxlength="100" (keypress)="ValidateEdit()">
+                </div>
+                <div class="p-col-12 p-mt-5 p-md-12 p-lg-1 p-fluid">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [disabled]="_lockField" [(ngModel)]="_product.heavyInd" binary="true" inputId="binary" (click)="_product.productId <= 0 && confirmIndHeavy()" [disabled]="_product.productId <= 0 ? false : true"></p-checkbox>
+                        <label for="binary">Pesado</label>
+                    </div>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-7 p-lg-7">
+                    <p-fieldset legend="Pesados" class="fieldseth1">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-10 p-lg-10 p-fluid">
+                                <label>Código balanza</label>
+                                <input [disabled]="_lockField" [(ngModel)]="_product.scalecode" name="scalecode" id="scalecode" type="text" pInputText disabled>
+                            </div>
+                            <div class="p-col-12 p-md-2 p-lg-2 mr-t2" style="text-align: right;display: flex;align-items: flex-end;">
+                                <p-button label="Nuevo" (click)="showDialogWastage()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_GENERAL_SECTION_PERMISSION_ID) && _product.heavyInd"></p-button>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                <p-table #table [value]="_wastageListTemp" [scrollable]="true" scrollHeight="150px" styleClass="p-datatable-responsive-demo">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Tipo de merma</th>
+                                            <th>Factor</th>
+                                            <th>Porcentaje (%)</th>
+                                            <th>Estatus</th>
+                                            <th></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-wastage>
+                                        <tr>
+                                            <td style="overflow-wrap: break-word;">{{wastage.wastageTypeName}}</td>
+                                            <td style="overflow-wrap: break-word;">{{wastage.performaceFactor}}</td>
+                                            <td style="overflow-wrap: break-word;">{{wastage.percent}}</td>
+                                            <td><i [class]="wastage.active == true ? 'pi pi-check' : 'pi pi-times'"></i></td>
+                                            <td><button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="onEditWastage(wastage.productWastageId, wastage.idWastage,wastage.wastageTypeId,wastage.performaceFactor,wastage.percent,wastage.active)" pTooltip="Editar"></button>
+                                                <button *ngIf="wastage.productWastageId <= 0" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-success p-mr-2" (click)="onRemoveWastage(wastage.idWastage)" pTooltip="Eliminar"></button>
+                                                <button *ngIf="wastage.productWastageId > 0" pButton pRipple [icon]="wastage.active == true ? 'pi pi-times' : 'pi pi-check'" class="p-button-rounded p-button-success p-mr-2" (click)="onActiveWastage(wastage.productWastageId,wastage.wastageTypeId)" [pTooltip]="wastage.active == true ? 'Inactivar' : 'Activar'"></button>
+                                            </td>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-5 p-lg-5">
+                    <p-fieldset legend="Empresas" class="fieldseth">
+                        <div class="p-mb-3">
+                            <p-checkbox name="branchOfficeAll" [binary]="true" (click)="checkAllCompanies()" [(ngModel)]="checkAllCompany"></p-checkbox>
+                            <label>   Todos</label>
+                        </div>
+                        <div *ngFor="let company of companieslist">
+                            <div class="p-field-checkbox" style="word-break: break-all;">
+                                <p-checkbox name="company" [disabled]="company.active == false" [value]="company" [inputId]="company.id" ng-checked="company == 1" [(ngModel)]="selectedCompanies" (click)="ValidateCheckedsCompanies($event)"></p-checkbox>
+                                <label [for]="company.id">{{company.socialName}}</label>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div class="p-col-12 p-mt-3 p-md-12 p-lg-12 p-fluid">
+                    <p-fieldset legend="Barra">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-lg-3">
+                                <label>Tipo de generación</label>
+                                <p-dropdown [disabled]="_product.heavyInd == true && _lockField" (onChange)="ValidateGenerationType()" [(ngModel)]="_product.groupingGenerationBarId" [options]="groupinggenerationbarlist" appendTo="body">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-3">
+                                <label>Tipo GTIN <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <p-dropdown   [(ngModel)]="_product.gtinTypeId" [class]="submittedfinish && _product.groupingGenerationBarId == 1 && _product.gtinTypeId < 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." (onChange)="ValidateMaxLength()" [filter]="true" emptyFilterMessage="Sin resultados." [disabled]="_product.groupingGenerationBarId != 1 && _lockField" [options]="gtintypelist" appendTo="body">
+                                </p-dropdown>
+                                <small class="p-invalid" *ngIf="submittedfinish && _product.groupingGenerationBarId == 1 && _product.gtinTypeId < 0">El tipo GTIN es requerido</small>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-3">
+                                <label>GTIN <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <input   name="gtin" [class]="submittedfinish && _product.groupingGenerationBarId == 1 && _product.gtin.trim() =='' ? 'ng-dirty ng-invalid' : ''" [(ngModel)]="_product.gtin" id="gtin" type="text" (keyup)="ValidateGtin($event.target.value)" pInputText [disabled]="_product.groupingGenerationBarId != 1 && _lockField" [maxLength]="maxLength">
+                                <small class="p-invalid" *ngIf="submittedfinish && _product.groupingGenerationBarId == 1 && _product.gtin.trim() ==''">El GTIN es requerido</small>
+                                <small class="p-invalid">{{messagevalidationgtin}}</small>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-3">
+                                <label>Barra unidad <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <div class="p-inputgroup">
+                                    <input [(ngModel)]="_product.gtin2" [class]="submittedfinish && _product.groupingGenerationBarId == 2 && _product.gtin2.trim() =='' ? 'ng-dirty ng-invalid' : ''" type="text" disabled pInputText> 
+                                    <button type="button" style="background-color: white;color: black;" pButton pRipple icon="pi pi-times" (click)="clearInputBarCode()" [disabled]="_product.groupingGenerationBarId == 1 && _lockField" pTooltip="Borrar barra"></button> 
+                                    <button type="button" pButton pRipple icon="pi pi-reply" (click)="showDialogBarCode()"  [disabled]="_product.groupingGenerationBarId == 1 && _lockField" pTooltip="Generar barra" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_GENERAL_SECTION_PERMISSION_ID)"></button>       
+                                </div>
+                                <small class="p-invalid" *ngIf="submittedfinish && _product.groupingGenerationBarId == 2 && _product.gtin2.trim() ==''">La barra es requerida</small>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div class="p-col-12 p-md-12 p-mt-3 p-lg-12 p-fluid">
+                    <label>Observaciones</label>
+                    <textarea [(ngModel)]="_product.additionalComment" rows="2" style="resize: none;" cols="30" pInputTextarea maxlength="100" (keypress)="ValidateEdit()"></textarea>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+                    <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_GENERAL_SECTION_PERMISSION_ID) && _showButtonEraser" label="En borrador" (click)="EraserProduct()" [disabled]="IndGtin == true" icon="pi pi-clone" class="p-button-primary p-mr-2"></button>
+                    <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_FINISH_PRODUCT_PERMISSION_ID) && _showButtonFinish" [label]="stringsave" (click)="FinishProduct()" [disabled]="IndGtin == true" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                    <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_CANCEL_PRODUCT_PERMISSION_ID) && _showButtonCancel" (click)="saveProductCanceled()" label="Anular" icon="pi pi-ban" class="p-button-danger p-mr-2"></button>
+                    <button pButton pRipple label="Regresar" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary"></button>
+                </div>
+            </div>
+        </p-panel>
+   
+        <barcode-panel [(showDialog)]="_showdialogbarcode" [(IdTypeGenerationBar)]="IdTypeGenerationBar" [(BarCode)]="_product.gtin2" [(ScaleCode)]="_product.scalecode" (refreshchange)="refreshchange()" [(IndGenerationBar)]="IndGenerationBar"></barcode-panel>
+        <wastage-panel [(showDialog)]="_showdialogwastage" [(_wastageListTemp)]="_wastageListTemp" [(_wastage)]="_wastage" (refreshchange)="refreshchange()"></wastage-panel>
+        <app-new-association-component [(showDialog)]="showDialogNewAssociationComponent" [(productComponent)]="_productComponent" (addproductcomponent)="SaveNewProductoAssociationComponent()"></app-new-association-component>
+        <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

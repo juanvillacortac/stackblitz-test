@@ -1,0 +1,73 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Buscar productos" [(visible)]="showDialogAddProduct"
+  [style]="{width:'80%'}" [modal]="true" class="address-dialog" [draggable]="false" [resizable]="false">
+  <div class="card p-m-0 p-pb-0">
+    <div class="p-grid p-align-center vertical-container p-p-3" *ngIf="indModule == 2">
+      <div class="p-col-12 p-md-3 p-fluid">
+        <label>Sucursal destino <span [ngStyle]="{'color':'red'}">*</span></label>
+        <p-multiSelect appendTo="body" [options]="branchOfficeDestinationSelected" resetFilterOnHide="true" [(ngModel)]="branchOfficeSelected"
+          placeholder="Seleccione..." emptyMessage="Sin resultados." display="chip" [filter]="true" emptyFilterMessage="Sin resultados.">
+        </p-multiSelect>
+        <small class="p-invalid" *ngIf="submittedAdd && branchOfficeSelected.length == 0">La
+          sucursal destino es requerida</small>
+      </div>
+    </div>
+    <app-advanced-product-search-filter (onSearch)="search()" [(filters)]="filter" [loading]="loading" class="p-mt-3">
+    </app-advanced-product-search-filter>
+  </div>
+  <div class="card p-m-0">
+    <p-table #dtpm [columns]="displayedColumns" [rowHover]="true" [value]="productList"
+      dataKey="idProductBranchOfficePacking" [(selection)]="selectedProduct" [paginator]="true" [rows]="10"
+      [showCurrentPageReport]="true" [scrollable]="true" scrollHeight="245px"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 3rem">
+            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+          </th>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+          <td style="width: 3rem">
+            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display ,'overflow-wrap': 'break-word'}">
+              <span class="p-column-title">{{col.header}}</span>
+              <app-ind-blocked-label *ngIf="col.field === 'indBlocked'; else textCell"
+                [indBlocked]="product[col.field]">
+              </app-ind-blocked-label>
+              <ng-template #textCell>
+                <span>{{col.template(product)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="8">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Agregar" (click)="addProducts()" icon="pi pi-plus"
+      class="btn p-button-info p-mr-2"></button>
+    <button pButton pRipple icon="pi pi-ban" (click)="showDialogAddProduct=false" label="Cancelar"
+      class="btn p-button-secondary">
+    </button>
+  </ng-template>
+  
+</p-dialog>

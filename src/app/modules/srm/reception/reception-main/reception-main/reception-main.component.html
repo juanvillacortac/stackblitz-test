@@ -1,0 +1,2 @@
+<app-reception-header *ngIf="receptionIsLoaded" [reception]="reception" (saveEvent)='save()' [legalCurrencyId]="legalCurrencyId" (voidEvent)="void()" (startEvent)="start()" (finalizeEvent)="finalized()" (rejectEvent)="reject()" [(haveproducts)]="haveproducts"></app-reception-header>
+<app-reception-tabmenu *ngIf="receptionIsLoaded" [reception]="reception" [submitted]="submitted" [receptionProperties]="receptionProperties" (haveChange)="haveproduct($event)"></app-reception-tabmenu>

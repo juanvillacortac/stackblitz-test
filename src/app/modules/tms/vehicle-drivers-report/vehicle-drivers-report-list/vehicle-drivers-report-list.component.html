@@ -1,0 +1,72 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <button *ngIf="this._userPermissions.allowed(this._permissionsIDs.UPDATE_VEHICLE_PERMISSION_ID)" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"></button>
+        </div>
+    </div>
+    <app-vehicle-drivers-report-filter *ngIf="this._userPermissions.allowed(this._permissionsIDs.UPDATE_VEHICLE_PERMISSION_ID)" (search)="search()"  (exportExcel)="exportExcel()" [(filters)]="_ReportFilter" [expanded]="showFilters" [loading]="loading"  [dataUnavailable]="dataUnavailable" class="p-mt-3"></app-vehicle-drivers-report-filter>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="_selectedColumns" [rowHover]="true" [value]="_VehicleDriversReportService._VehicleDriverReport" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+            [scrollable]="true"  currentPageReportTemplate="{{ 'primeng.footerDescription' }}" [rowsPerPageOptions]="[10,25,50]" >      
+                <ng-template pTemplate="caption">
+                    <p-multiSelect [options]="hiddenColumns" [(ngModel)]="selectedColumns" optionLabel="{{ 'header' }}" [maxSelectedLabels]="0"
+                    [disabled]="dataUnavailable" selectedItemsLabel="{{'primeng.multiSelectColumns'}} " [style]="{minWidth: '200px'}" placeholder="Escoger columna">
+                        <ng-template pTemplate="item" let-item>
+                            {{item.header}}
+                        </ng-template>
+                    </p-multiSelect>
+                </ng-template> 
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col *ngFor="let col of columns" style="width:250px"> 
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns" >
+                            <th [ngStyle]="{'display': col.display}" [pSortableColumn]="col.field" >
+                                {{ col.header  }}
+                            <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+                        </th>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns">
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" >
+
+                                <div *ngIf="col.field === 'productEstatus'; else numberCell" >
+                                    <span  [class]="'status-badge status-active'">{{(product[col.field])}}</span>
+                                </div>
+                        
+                                <ng-template #numberCell >
+                                    <span *ngIf="col.dataType === 'number'; else textCell">{{(product[col.field]) |number:'1.2-2'}} </span>
+                                </ng-template>
+
+                                <ng-template #textCell >
+                                    <span>{{(product[col.field])}}</span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                      <td [ngStyle]="{'text-align': 'center', 'font-weight': '600'}" [attr.colspan]="columns.length"> No existen resultados</td>
+                    </tr>
+                  </ng-template>
+
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+    </p-table>
+</div>

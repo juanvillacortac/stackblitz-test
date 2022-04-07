@@ -1,0 +1,27 @@
+:host ::ng-deep {
+
+    .p-formgrid > hr{
+        width: 97%;
+    }
+    
+    .title-span{
+        font-weight: 500;
+    }
+    
+    .p-inputgroup p-dropdown{
+        max-width: 93%;
+        min-width: 93%;
+    }
+
+    .p-inputgroup p-dropdown .p-dropdown{
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+
+    .p-inputgroup .p-inputtext, .p-fluid .p-inputgroup .p-inputtext{
+        width: 100%;
+    }
+
+}
+
+

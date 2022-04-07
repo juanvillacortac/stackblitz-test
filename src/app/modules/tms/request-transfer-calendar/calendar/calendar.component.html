@@ -1,0 +1,109 @@
+<div class="p-grid p-p-3">
+    <div class="p-col p-buttonset">
+        <button pButton 
+            pRipple 
+            mwlCalendarPreviousView
+            type="button" 
+            icon="pi pi-chevron-left" 
+            class="p-button-success align-center" 
+            [view]="view" 
+            [(viewDate)]="viewDate" 
+            (viewDateChange)="closeOpenMonthViewDay()"></button>
+        <button pButton 
+            pRipple 
+            mwlCalendarNextView 
+            type="button" 
+            icon="pi pi-chevron-right" 
+            class="p-button-success" 
+            [view]="view" 
+            [(viewDate)]="viewDate" 
+            (viewDateChange)="closeOpenMonthViewDay()"></button>
+    </div>
+
+    <div class="p-col p-grid">
+        <h2 class="p-mx-auto align-center">{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h2>
+    </div>
+
+    <div class="p-col">
+    </div>
+</div> 
+<div class="p-grid">
+    <div class="p-col-12" style="justify-content: right; display: flex; align-items: center;">
+        
+            <label class="legend-eraser" style="margin-right: 5px;"></label>
+            <label style="margin-right: 10px;line-height: 0px;">Borrador</label>
+            <label class="legend-execution" style="margin-right: 5px;"></label>
+            <label style="margin-right: 10px;line-height: 0px;">Ejecución</label>
+            <label class="legend-processed" style="margin-right: 5px;"></label>
+            <label style="margin-right: 10px;line-height: 0px;">Pocesada</label>
+            <label class="legend-finalized" style="margin-right: 5px;"></label>
+            <label style="margin-right: 10px;line-height: 0px;">Finalizada</label>
+            <label class="legend-cancelled" style="margin-right: 5px;"></label>
+            <label style="margin-right: 10px;line-height: 0px;">Anulada</label>
+            <label class="legend-dispatched" style="margin-right: 5px;"></label>
+            <label>Despachada</label>
+        
+    </div>
+</div>
+<div [ngSwitch]="view" #calendar>
+    <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+        [cellTemplate]="customCellTemplate">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-day-view>
+</div>
+<ng-template #customCellTemplate let-day="day"
+                let-openDay="openDay"
+                let-locale="locale"
+                let-tooltipPlacement="tooltipPlacement"
+                let-highlightDay="highlightDay"
+                let-unhighlightDay="unhighlightDay"
+                let-eventClicked="eventClicked"
+                let-tooltipTemplate="tooltipTemplate"
+                let-tooltipAppendToBody="tooltipAppendToBody">
+    <div class="cal-cell-top" #dayContainer (mouseover)="dayOver(day)" (mouseleave)="dayOut(day)">
+        <div class="p-grid p-p-0 p-m-0">
+            <div class="p-col-4 p-p-0 p-m-0">
+                <button pButton pRipple type="button" *ngIf="day.isMouseOver === true" (click)="createMerchandiseRequest()" pTooltip="Agregar solicitud" tooltipPosition="top" icon="pi pi-plus" class="p-button-rounded p-button-sm p-button-success p-m-2"></button>
+            </div>
+            <div class="p-col-8 p-p-0 p-m-0">
+                <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+            </div>
+        </div>
+       
+        <div *ngIf="day.events.length > 0" class="cal-day-notes">
+            <div class="p-ml-2 p-mr-2 p-mb-2" *ngFor="let event of day.events">
+                <app-merchandise-request-calendar-item (click)="countClicked($event, event)" [event]="event"></app-merchandise-request-calendar-item>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" [style]="{width: '380px'}">
+    <app-merchandise-request-calendar-resume #merchandiseRequestResume></app-merchandise-request-calendar-resume>
+</p-overlayPanel>
+
+<!-- <p-dialog header="Agregar Conteo" [draggable]="false" [resizable]="false" (onHide)="hideDialog()" [(visible)]="showInventoryCount" [modal]="true" [style]="{width: '80vw'}" [baseZIndex]="10000">
+    <inventory-count-panel (countemit)="childCallBack($event)" [(iDate)]="selectedDate" [(fDate)]="selectedDate" [isFromCalendar]="true" *ngIf="showInventoryCount"></inventory-count-panel>
+</p-dialog> -->

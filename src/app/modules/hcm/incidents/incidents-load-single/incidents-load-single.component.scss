@@ -1,0 +1,58 @@
+:host ::ng-deep .p-panel .p-panel-header {
+    border: 1px solid transparent;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    font-size: 1.5rem;
+    
+  }
+  :host ::ng-deep .p-panel {
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 4px!important;
+    margin: 0.5rem;
+    margin-top: 0;
+    padding: 0px;
+   
+}
+
+h6 {
+  font-size: 1.5rem;
+  color: #5e81ac;
+  font-weight: 700;
+  margin-bottom: 0.5rem
+}
+
+#personalFont {
+  font-size: 22px;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: -0.75rem !important;
+  margin-left: 0.5rem
+}
+
+#personalFontSub {
+  font-size: 20px;
+  color: #6c757d;
+  font-weight: 700;
+  margin-bottom: -0.75rem !important;
+  margin-left: 0.5rem
+}
+
+#personalFontID {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: -0.75rem !important;
+  margin-left: 0.5rem
+}
+ #miniCardDatos {
+  border-left: 4px solid;
+  border-left-color: #17a2b8;
+  background-color: white;
+  margin-left: 0.5rem;
+  margin-right: -0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px
+}

@@ -1,0 +1,151 @@
+:host ::ng-deep .p-panel .p-panel-header {
+  border: 1px solid transparent;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  font-size: 1.5rem;
+}
+:host ::ng-deep .p-panel {
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 4px!important;
+  margin: 0.5rem;
+  margin-top: 0;
+  padding: 0px;
+}
+
+
+:host ::ng-deep {
+
+
+  .p-fileupload.p-fileupload-basic.p-component.ng-star-inserted p-messages {
+    display: none !important;
+  }
+
+  .p-fileupload.p-fileupload-basic.p-component.ng-star-inserted {
+    margin-top: -40px !important;
+  }
+
+  span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple,
+  span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected {
+    // background-color: unset !important;
+    border: none !important;
+
+    // border-color: #17a2b8 !important;
+    // background-color: #17a2b8 !important;
+    background-color:#ffffff3d !important;
+  }
+  span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:focus,
+  span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:focus-visible,
+  span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:visited,
+  span.rounded.p-button-info.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-ripple:hover,
+  span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected:hover,
+  span.p-fileupload-choose:not(.p-disabled):hover
+  span.p-button-rounded.p-button-info.p-ripple.p-button.p-component.p-fileupload-choose.p-button-icon-only.p-fileupload-choose-selected:focus,
+  span.p-fileupload-choose:not(.p-disabled):focus {
+    // background-color: unset !important;
+    border: none !important;
+
+    // border-color: #17a2b8 !important;
+    // background-color: #17a2b8 !important;
+    background-color:#ffffff3d !important;
+  }
+
+  @media screen and (max-width: 768px){
+    #primaryInfo {
+      position: unset;
+      max-width: 100%;
+    }
+
+    img#userImage {
+      width: 230px;
+      height: 230px;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (max-width: 767px){
+    #height, #weight{
+      width: 82%;
+    }
+
+    #amount{
+      width: 100%;
+    }
+
+    .span-input{
+      width: 18%;
+    }
+  }
+
+  @media screen and (max-width: 1199px) and (min-width: 768px){
+    p-inputNumber{
+      width: 70%;
+    }
+
+    .span-input{
+      padding: 7px 15px;
+    }
+  }
+
+  @media screen and (min-width: 1200px)and (max-width: 2000px){
+    #height, #weight{
+      width: 82%;
+    }
+
+    #amount{
+      width: 100%;
+    }
+
+    .span-input{
+      padding: 7px 15px;
+    }
+  }
+
+  @media screen and (min-width: 2001px){
+    #height, #weight{
+      width: 90%;
+    }
+
+    #amount{
+      width: 95%;
+    }
+
+    .span-input{
+      width: 10%;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .team-member{
+    overflow-wrap: break-word;
+  }
+  // #primaryInfo {
+  //     position: fixed;
+  // }
+
+  img#userImage {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  #height input:first-child,
+  #weight input:first-child{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  #amount input:first-child{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  #regresarDiv {
+    position: fixed;
+    padding: 5px 20px;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+  }
+
+}

@@ -1,0 +1,27 @@
+<div class="p-grid p-align-center p-mt-4 vertical-container" *ngIf="expanded">
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <label>Código</label>
+        <input [(ngModel)]="filters.employmentCode" id="varying" name="varying" type="text" maxlength="15"
+        pInputText  [class]="code ? 'ng-dirty ng-invalid' : ''">
+        <small class="p-invalid" *ngIf="code">Debe completar el campo código</small>
+        
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <label for="">Tipo de documento</label>
+        <p-dropdown [(ngModel)]="filters.idDocumentType" [options]="documentTypeDropdown" id="TypesVarying"
+            placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados"  [class]="typeDoc ? 'ng-dirty ng-invalid' : ''">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small>
+    </div>
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+        <label for="float-input">Número de documento</label>
+        <input [(ngModel)]="filters.documentNumber" id="documentNumber" name="documentNumber" type="text" maxlength="15"
+        pInputText [class]="numDoc ? 'ng-dirty ng-invalid' : '' ">
+        <small class="p-invalid" *ngIf="numDoc">Debe completar el campo número de documento</small>
+    </div>
+    <div class="p-col-12 p-md-offset-5 p-md-7 p-lg-6 p-lg-offset-6 container-button p-pr-0">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info button-search  p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary button-clear"></button>
+    </div>
+</div>

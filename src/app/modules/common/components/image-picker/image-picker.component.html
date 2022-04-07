@@ -1,0 +1,15 @@
+<div class="p-grid p-mt-1">
+    <div class="p-col-4">
+        <p-button (click)="uploadImageInput.click()" label="Subir imagen" icon="pi pi-upload" styleClass="p-button-sm"></p-button>
+        <input (change)="onSelectIdImage($event)" #uploadImageInput  type="file" style="display:none;" accept="image/*" />
+    </div>
+    <div class="p-col">
+        <div class="box p-shadow-3 box-image p-mb-2">
+            <span class="helper"></span>
+            <img [src]="imageUrl" class="image-viewer" (error)="onImageNotFound($event)"/>
+        </div>
+        <label class="p-ml-2">Dimensiones: 181px * 45px</label>
+    </div>
+</div>
+
+<p-toast position="bottom-center" key="image"></p-toast>

@@ -1,0 +1,34 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <input [(ngModel)]="filters.name" #name noneSpecialCharacters type="text" maxlength="150" pInputText (keyup.enter)="search()">
+            <label for="input">{{ 'srm.weight_instrument.fields.tb_name' | translate }}</label>
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">  
+        <p-multiSelect [options]="weightInstrumentTypes" optionLabel="name" [(ngModel)]="weightInstrumentServiceTypesSelected" placeholder="{{ 'srm.weight_instrument.weight_instrument_types' | translate}}"
+         display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true"
+          emptyFilterMessage="Sin resultados."></p-multiSelect>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <label for="dropdown">{{ 'srm.weight_instrument.fields.tb_status'| translate }}</label>
+            <p-dropdown [(ngModel)]="statusSelected" [options]="status" placeholder="Estatus" [showClear]="true" (keyup.enter)="search()">
+            </p-dropdown>
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <label for="dropdown">{{ 'srm.weight_instrument.fields.tb_transport' | translate }}</label>
+            <p-dropdown [(ngModel)]="indTransport" [options]="indTransportOpt" placeholder="Indicador de transporte" [showClear]="true" (keyup.enter)="search()">
+            </p-dropdown>
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

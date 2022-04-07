@@ -1,0 +1,39 @@
+.drop-down-tree-field {
+    position: relative;
+    }
+    .dropdown-section {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    z-index: 1000;
+    float: left;
+    min-width: 10rem;
+    margin: .125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: .25rem;
+    overflow-y: auto;
+    overflow-x: none;
+    }
+    .hide {
+    display: none;
+    }
+    .drop-down-icon {
+    position: absolute;
+    right: 1%;
+    top: 20%;
+    }
+    .custom-ui-tree {
+    width: 100% !important;
+    height: 100%;
+    }
+    .Centered {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }

@@ -1,0 +1,63 @@
+<div class="p-mb-2">
+    <p-fieldset legend="Perfil de usuario" [toggleable]="true">
+        <div class="p-grid ">
+          <div class="box box-stretched" id="primaryInfo">
+            <div class="p-col-6" >
+
+                <div class="product-image content p-text-center p-mb-2">
+                  <div class="p-grid">
+                    <img
+                      #userImage
+                      id="userImage"
+                      class="p-offset-1 p-col-10"
+                      style="border-radius:50%;"
+                      src="{{defaultImageSource}}"
+                      alt="profile"/>
+
+                  </div>
+                  <p-fileUpload *ngIf="isExternalUser"
+                    #fileUpload
+                    id="fileUpload"
+                    styleClass="p-button-rounded p-button-info"
+                    chooseIcon="pi pi-pencil"
+                    name="myfile[]"
+                    accept=".jpg,.jpeg,.png,.gif,.webp"
+                    [auto]="true"
+                    customUpload="true"
+                    mode="basic"
+                    (uploadHandler)="uploaderFile($event)"
+                    (onSelect)="validateFile($event)"
+                    invalidFileTypeMessageSummary=""
+                    invalidFileTypeMessageDetail="Formato de archivo no permitido">
+                  </p-fileUpload>
+                </div>
+              </div>
+            </div>
+<!--            </div>-->
+<!--                <div class="box">-->
+<!--                    <img width="100%" src="assets/layout/images/placeholder.png" alt="profile" >-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="p-col-6">
+                <div class="box">
+                    <ng-container *ngIf="person">
+                        <div class="p-d-flex p-flex-column">
+                            <div class="p-text-uppercase p-text-light p-mb-3" style="font-size:x-large;">{{person.name}} {{person.lastName}}</div>
+
+                            <div class="p-text-uppercase p-mb-1" style="font-size:medium;">Fecha de nacimiento</div>
+                            <div class="p-text-uppercase p-text-light p-mb-2" style="font-size:smaller">{{person.birthDate | date:'dd-MM-yyyy'}}</div>
+
+                            <div class="p-text-uppercase p-mb-1" style="font-size:medium;">Genero</div>
+                            <div class="p-text-uppercase p-text-light p-mb-2" style="font-size:smaller">{{person.gender}}</div>
+
+                            <div class="p-text-uppercase p-mb-1" style="font-size:medium;">Estado civil</div>
+                            <div class="p-text-uppercase p-text-light" style="font-size:smaller">{{person.maritalStatus}}</div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </p-fieldset>
+    <p-toast position="top-right"></p-toast>
+</div>

@@ -1,0 +1,19 @@
+
+:host ::ng-deep {
+    .pdropdown .p-dropdown{
+        width: 130px;
+    }
+
+    p-inputnumber span .p-inputnumber-input{
+        width: 130px;
+        text-align: right;
+    }
+
+    p-inputnumber.ng-dirty.ng-invalid > .p-inputnumber > .p-inputtext{
+        border-color: #28a745;
+    }
+}
+
+input{
+    width: 130px;
+}

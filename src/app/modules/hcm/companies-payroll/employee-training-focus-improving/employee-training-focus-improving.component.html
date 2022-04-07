@@ -1,0 +1,8 @@
+<p-chips [(ngModel)]="focusImproving" separator="," (keypress)="CalculateMaxString($event)"  (onAdd)="InitializeString()">
+</p-chips>
+<br>
+<small class="p-invalid" *ngIf="submitted && focusImproving.length == 0 "> Foco de mejora es requerido</small>
+    
+<div class="p-col-12 p-md-offset-5 p-md-7 p-lg-6 p-lg-offset-6 container-button p-pr-0">
+    <button pButton pRipple label="Guardar" icon="pi pi-save" (click)="submit()" class="p-button-success p-mr-2"></button>
+</div>

@@ -1,0 +1,40 @@
+:host ::ng-deep {
+
+    .inter-check{
+        margin-bottom: 1rem;
+    }
+
+    #factor input:first-child,
+    #monto input:first-child,
+    #conversion input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    
+    p-inputNumber{
+        width: 100%;
+    }
+
+    #factor input:first-child,
+    #porcentaje input:first-child{
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    @media screen and (max-width: 1024px){
+
+        .inside, .inter-check{
+            margin-bottom: 1rem !important;
+        }
+
+        .p-grid > .p-col-12{
+            width: 100%;
+        }
+
+        .p-sidebar{
+            overflow: scroll;
+        }
+    }  
+    
+}

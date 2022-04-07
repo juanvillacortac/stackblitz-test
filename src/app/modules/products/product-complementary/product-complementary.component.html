@@ -1,0 +1,137 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="panelheader">Datos complementarios</span>
+    </ng-template>
+    <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+        <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+            <p-fieldset legend="Durabilidad" class="fieldseth1">
+                <div class="p-grid p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                    <div class="p-col-12 p-md-2 p-lg-2" style="text-align: right;">
+                        <p-button label="Nuevo" (click)="showDialogDurability()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPLEMENTARY_SECTION_PERMISSION_ID)"></p-button>
+                    </div>
+                    <div class="p-col-6 p-md-2 p-lg-2">
+                        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dtDu.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                        </span>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                        <p-table #dtDu [columns]="displayedColumnsdurability" [value]="_durabilityListTemp" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <ng-container *ngFor="let col of columns">  
+                                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                </ng-container>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-durability let-columns="columns">
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="durability[col.field]"></app-active-label>
+                                        <ng-template #textCell>
+                                            <span>{{col.template(durability)}} </span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <td>
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPLEMENTARY_SECTION_PERMISSION_ID)" pButton pRipple icon="pi pi-pencil" (click)="onEditDurability(durability)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button><!---->
+                                    <button *ngIf="durability.idProductDurability <= 0" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="onRemoveDurability(durability.idDurability)" pTooltip="Eliminar"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer" let-columns>
+                            <ng-container *ngIf="_durabilityListTemp==null || _durabilityListTemp?.length == 0">
+                            <tr>
+                              <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="10">
+                                <span>No existen resultados</span>
+                              </td>
+                            </tr>
+                            </ng-container>
+                        </ng-template>
+                        <ng-template pTemplate="paginatorleft">
+                                </ng-template>
+                                <ng-template pTemplate="paginatorright">
+                                </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+            <p-fieldset legend="Descripciones" class="fieldseth1">
+                <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                    <div class="p-col-6 p-md-2 p-lg-2" style="text-align: right;">
+                        <p-button label="Nuevo" (click)="showDialogDescriptions()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPLEMENTARY_SECTION_PERMISSION_ID)"></p-button>
+                    </div>
+                    <div class="p-col-6 p-md-2 p-lg-2">
+                        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dtDe.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                        </span>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                        <p-table #dtDe [columns]="displayedColumnsDescription" [value]="_descriptionListTemp" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <ng-container *ngFor="let col of columns">  
+                                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                </ng-container>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-description let-columns="columns">
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="description[col.field]"></app-active-label>
+                                        <ng-template #textCell>
+                                            <span>{{col.template(description)}} </span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <td>
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPLEMENTARY_SECTION_PERMISSION_ID)" pButton pRipple icon="pi pi-pencil" (click)="onEditDescription(description)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button><!---->
+                                    <button *ngIf="description.id <= 0" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="onRemoveDescription(description.idDescription)" pTooltip="Eliminar"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer" let-columns>
+                            <ng-container *ngIf="_descriptionListTemp==null || _descriptionListTemp?.length == 0">
+                            <tr>
+                              <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="9">
+                                <span>No existen resultados</span>
+                              </td>
+                            </tr>
+                            </ng-container>
+                        </ng-template>
+                        <ng-template pTemplate="paginatorleft">
+                                </ng-template>
+                                <ng-template pTemplate="paginatorright">
+                                </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+            <button pButton pRipple label="Guardar" (click)="saveComplentarySection()" icon="pi pi-save" class="p-button-primary p-mr-2"></button>
+            <button pButton pRipple label="Regresar" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary"></button>
+        </div>
+    </div>
+</p-panel>
+
+<descriptions-panel [(showDialog)]="_showdialogdescriptions" [(_description)]="_description" [(_descriptionListTemp)]="_descriptionListTemp" (refreshchange)="refreshchangeDescription()"></descriptions-panel>
+<durabilily-panel [(showDialog)]="_showdialogdurability" [(_durability)]="_durability" [(_durabilityListTemp)]="_durabilityListTemp" (refreshchange)="refreshchangeDurability()"></durabilily-panel>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

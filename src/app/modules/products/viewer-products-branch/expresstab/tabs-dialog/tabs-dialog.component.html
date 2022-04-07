@@ -1,0 +1,98 @@
+<p-dialog [header]="indtabsactive == 1 ? 'Ficha del empaque' : 'Ficha del producto'" (onShow)="ngOnShow()"
+  (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '70vw', height: '90%'}"
+  [draggable]="false" [resizable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+  <div class="p-grid">
+    <div class="p-md-2 p-lg-2 p-sm-6" style="text-align: center;">
+      <div>
+        <div class="container-img-viewer" style="margin: auto">
+          <img [src]="productPacking.product.image == null || productPacking.product.image == ''  ? defeatImage
+        : productPacking.product.image" alt="no image" class="p-shadow-4 imgcatalog" />
+        </div>
+      </div>
+    </div>
+    <div class="p-md-5 p-lg-5 p-sm-6" style="padding-left: 2rem;">
+      <div>
+
+        <h5 style="margin: 0%;"><a
+            [href]="'productgeneralsection/'+productPacking.idProduct+'/'+0+'/'+0">{{productPacking.product.name}}</a>
+        </h5>
+
+        <h6 style="margin: 0%;">{{productPacking.product.barcode}}</h6>
+
+        <h6 style="margin: 0%;">Referencia interna: {{productPacking.product.referent}}</h6>
+
+        <h6 style="margin: 0%;">Clasificación: {{productPacking.product.classification.name}}</h6>
+
+        <h6 style="margin: 0%;">Fecha creado: {{productPacking.createDate | date:"dd/MM/yyyy"}}</h6>
+
+        <h6 style="margin: 0%;">{{productPacking.product.category.name}}</h6>
+
+      </div>
+    </div>
+    <div class="p-sm-2 p-md-2 p-lg-2" style="text-align: center;">
+      <!-- <div class="p-grid">
+            <div class="p-col-12">
+                <h5 style="margin-bottom: 0%;">Producto: {{productPacking.product.barcode}}</h5>
+            </div>
+        </div> -->
+    </div>
+  </div>
+  <div class="p-grid">
+    <div class="p-col-12 p-md-12 p-lg-12">
+      <p-fieldset legend="Empaque" class="fieldseth">
+        <p-table #dtDc [columns]="displayedColumnsPricesCosts" [value]="packingBranchOfficeList"
+          [showCurrentPageReport]="true" styleClass="p-datatable-responsive-demo">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display }">
+                  {{col.header}}
+                </th>
+              </ng-container>
+
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-pointOrder let-columns="columns">
+            <tr [pSelectableRow]="pointOrder">
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+
+
+                  <span>{{col.template(pointOrder)}} </span>
+
+                </td>
+              </ng-container>
+
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-fieldset>
+      <p-tabView (onChange)="handleChange($event)" [class]="indtabsactive == 1 ? 'p-tabview' : ''">
+        <p-tabPanel
+          *ngIf="indtabsactive == 1 && (this.userPermissions.allowed(this.permissionsIDs.CHECK_PRICES_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.CHECK_COSTS_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.EDIT_PRICES_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.EDIT_COSTS_PERMISSION_ID))"
+          header="Precios y costos">
+          <app-packing [(productPacking)]="productPacking"></app-packing>
+        </p-tabPanel>
+        <p-tabPanel
+          *ngIf="indtabsactive == 1 && this.userPermissions.allowed(this.permissionsIDs.MANAGE_INDICATORS_BRANCH_PRODUCT_PERMISSION_ID)"
+          header="Indicadores">
+          <app-indicators [(productPacking)]="productPacking"></app-indicators>
+        </p-tabPanel>
+        <p-tabPanel *ngIf="indtabsactive == 0" header="Logísticos">
+          <app-logistic-data [(productPacking)]="productPacking" [(showDialog)]="showDialog"></app-logistic-data>
+        </p-tabPanel>
+        <p-tabPanel *ngIf="indtabsactive == 1" header="Proveedores">
+          <app-suppliers></app-suppliers>
+        </p-tabPanel>
+        <p-tabPanel *ngIf="indtabsactive == 1 && (this.userPermissions.allowed(this.permissionsIDs.MANAGE_VALIDATION_FACTOR_PERMISSION_ID)
+                || this.userPermissions.allowed(this.permissionsIDs.MANAGE_POINT_ORDER_PERMISSION_ID))"
+          header="Valores">
+          <app-values [(productPacking)]="productPacking"></app-values>
+        </p-tabPanel>
+        <p-tabPanel *ngIf="indtabsactive == 1" header="Auditoría">
+          <app-audit></app-audit>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</p-dialog>

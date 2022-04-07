@@ -1,0 +1,74 @@
+<div class="p-grid">
+    <div class="p-col-12 p-lg-12">
+        <button pButton pRipple label="Guardar en lote" (click)="showAddLotPointOrder()" *ngIf="saveLot" class="p-button-info p-mr-2"></button>
+    </div>
+    <div class="p-col-12 p-lg-12">
+        <p-accordion>
+            <p-accordionTab *ngFor="let branchOffice of productBranchOfficeList" (click)="searchPointOrdersbyBranchOffice(branchOffice.idBranchOffice)" [selected]="branchOffice.idBranchOffice == branchexpanded ? true : false">
+                <ng-template pTemplate="header">
+                    <div class="p-grid" style="width: 100%; align-items: center; margin-right: 0px; margin-left: 0px; margin-top: 0px;">
+        
+                        <div class="p-md-5">
+                            <label class="p-mr-2"><i [class]="branchOffice.pointOrder.length > 0 ? 'pi pi-check' : ''"></i></label>
+                            <label>{{branchOffice.branchOffice}}</label>
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-1">
+                            <button pButton pRipple icon="pi pi-plus" *ngIf="branchOffice.managePointOrder" class="p-button-rounded p-button-success" (click)="showAddPanelPointOrder($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="p-grid">
+                    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+                            <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                                <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                    <p-table #dtDc [columns]="displayedColumnsPointOrder" [value]="pointOrderList" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [selectionMode]="'none'" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [(selection)]="selectedPointOrder" (onRowSelect)="onRowSelect($event)">      
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngIf="branchOffice.managePointOrder"></th>
+                                            <ng-container *ngFor="let col of columns">  
+                                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-pointOrder let-columns="columns">
+                                        <tr [pSelectableRow]="pointOrder">
+                                            <td *ngIf="branchOffice.managePointOrder">
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="showEditPanelPointOrder(pointOrder,branchOffice.idBranchOffice)" pTooltip="Editar"></button>
+                                            </td>
+                                            <ng-container *ngFor="let col of columns">
+                                                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="pointOrder[col.field]"></app-active-label>
+                                                    <ng-template #textCell>
+                                                        <span>{{col.template(pointOrder)}} </span>
+                                                    </ng-template>
+                                                </td>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="paginatorleft">
+                                            </ng-template>
+                                            <ng-template pTemplate="paginatorright">
+                                            </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+<app-new-point-order [(showDialog)]="ShowDialog" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(pointOrder)]="pointOrder" [(pointOrderListDB)]="pointOrderListDB" (refreshPointOrder)="refreshLotPointOrder()"></app-new-point-order>
+<app-new-lot-point-order [(showDialog)]="showDialogLot" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(availableCompaniesBranchOfficeApp)]="availableCompaniesBranchOfficeApp" [(pointOrderListDB)]="pointOrderListDB" (refreshLotPointOrder)="refreshLotPointOrder()"></app-new-lot-point-order>

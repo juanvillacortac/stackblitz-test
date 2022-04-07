@@ -1,0 +1,79 @@
+<ng-container *ngIf="familyBurdenList  && familyBurdenList.length > 0">
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..."/>
+    </span>
+    <button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Agregar" tooltipPosition="top" class="p-button-success p-mr-2" (click)="add()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)"></button>
+  </div>
+  <p-table [value]="familyBurdenList" dataKey="idFamilyBurden" #dt [globalFilterFields]="['firstName','lastName','kinship','birthDateString','registrationDateString']"
+    sortField="idLaborRelationshipxFamilyBurden" sortMode="single" [responsive]="true" [showCurrentPageReport]="true" [paginator]="false" [rows]="10" [rowHover]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" autoLayout="true" editMode="row" [rowsPerPageOptions]="[10,25,50]" 
+    styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="p-text-center" style="width: 3rem"></th>
+            <th class="p-text-center" pSortableColumn="firstName">Nombre <p-sortIcon field="firstName"></p-sortIcon></th>
+            <th class="p-text-center" pSortableColumn="kinship" style="width: 130px;">Parentesco <p-sortIcon field="kinship"></p-sortIcon></th>
+            <th class="p-text-center">Fecha de nacimiento</th>
+            <th class="p-text-center">Fecha de registro</th>
+            <th class="p-text-center" pSortableColumn="active">Activo <p-sortIcon field="active"></p-sortIcon></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-familyBurdenList let-expanded="expanded">
+        <tr *ngIf="familyBurdenList != []">
+            <td class="p-text-center">
+                <button type="button" pButton pRipple [pRowToggler]="familyBurdenList" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td class="p-text-center"><p>{{familyBurdenList.firstName}} {{familyBurdenList.lastName}}</p></td>
+            <td class="p-text-center" style="width: 130px;"><p>{{familyBurdenList.kinship}}</p></td>
+            <td class="p-text-center">
+              <p>{{familyBurdenList.birthDateString}}</p>             
+            </td>
+            <td class="p-text-center">       
+              <p>{{familyBurdenList.registrationDateString}}</p>
+            </td>
+            <td class="p-text-center"><app-active-label [active]="familyBurdenList.active"></app-active-label></td>
+        </tr>
+        <p-message severity="info" *ngIf="familyBurdenList == []" text="Debe crear una relación laboral para el trabajador actual para poder utilizar esta sección." styleClass="p-col-12 p-mr-2"></p-message>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-familyBurdenList>
+      <tr style="background-color: #e9ecef; height: 40px;">
+        <th></th>
+        <th pResizableColumn class="p-text-center" style="width: 20%;">Trabaja</th>
+        <th pResizableColumn class="p-text-center" style="width: 20%;">Estudia</th>
+        <th pResizableColumn class="p-text-center" style="width: 20%;">Discapacidad</th>
+        <th pResizableColumn class="p-text-center" style="width: 20%;">ISRL</th>
+        <th pResizableColumn class="p-text-center" style="width: 20%;"></th>
+      </tr>      
+      <tr>
+        <td></td>
+        <td class="p-text-center" style="width: 20%;"> <p-checkbox [binary]="true" readonly="true" [(ngModel)]="familyBurdenList.workFlag"></p-checkbox></td>
+        <td class="p-text-center" style="width: 20%;"> <p-checkbox [binary]="true" readonly="true" [(ngModel)]="familyBurdenList.studyFlag"></p-checkbox></td>
+        <td class="p-text-center" style="width: 20%;"> <p-checkbox [binary]="true" readonly="true" [(ngModel)]="familyBurdenList.impairmentFlag"></p-checkbox></td>
+        <td class="p-text-center" style="width: 20%;"> <p-checkbox [binary]="true" readonly="true" [(ngModel)]="familyBurdenList.declaredFlag"></p-checkbox></td>
+        <td class="p-text-center" style="width: 20%;">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(familyBurdenList)" pTooltip="Editar" tooltipPosition="top" 
+          placeholder="Top" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)"></button>
+        </td>
+      </tr>                
+    </ng-template>
+  </p-table>
+</ng-container>  
+
+<ng-container *ngIf="!(familyBurdenList  && familyBurdenList.length > 0)">
+  <div class="p-text-right p-mb-3">
+    <button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Agregar" tooltipPosition="top" class="p-button-success p-mr-2" (click)="add()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)"></button>
+  </div>
+
+  <p-messages severity="info">
+    <ng-template pTemplate>
+        <div class="p-ml-2">No existen cargas familiares asociadas a este trabajador.</div>
+    </ng-template>
+  </p-messages>
+  
+</ng-container> 
+
+  
+
+

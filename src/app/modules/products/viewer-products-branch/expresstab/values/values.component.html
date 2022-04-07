@@ -1,0 +1,85 @@
+<div class="p-grid">
+    <div class="p-col-12 p-md-12 p-lg-12" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_POINT_ORDER_PERMISSION_ID)">
+        <p-fieldset legend="Puntos de pedido" class="fieldseth1">
+            <div class="p-grid" *ngIf="!indPointOrder">
+                <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+                    <label style="color: red">No posee puntos de pedido configurado.</label>
+                </div>
+            </div>
+
+            <div class="p-grid" *ngIf="indPointOrder">
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label for="name">Temporada <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="seasonList" appendTo="body" (onChange)="changeSeason()" [(ngModel)]="seasonselected" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label for="name">Rango</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown [options]="validationRangeListPO" style="width: 84%;" [disabled]="seasonselected == 0" (onChange)="changeValidationRangePO()" appendTo="body" [(ngModel)]="pointOrder.idValidationRange" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                        </p-dropdown>  
+                        <span class="p-inputgroup-addon" pTooltip="El rango de validación seleccionado es un valor referencial y no se guardará a la hora del registro."><i class="pi pi-info-circle"></i></span>   
+                    </div>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Mínimo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber [(ngModel)]="pointOrder.minFactor" maxlength="16" [disabled]="seasonselected == 0" (onFocus)="clear($event)" (keyup.enter)="in2.input.nativeElement.focus();" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedPO && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Medio <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #in2 [(ngModel)]="pointOrder.midFactor" maxlength="16" [disabled]="seasonselected == 0" (onFocus)="clear($event)" (keyup.enter)="in3.input.nativeElement.focus();" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedPO && pointOrder.midFactor < pointOrder.minFactor">El medio tiene que ser mayor o igual al mínimo</small>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Máximo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #in3 [(ngModel)]="pointOrder.maxFactor" [disabled]="seasonselected == 0" maxlength="16" (onFocus)="clear($event)" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedPO && pointOrder.maxFactor < pointOrder.midFactor">El máximo tiene que ser mayor o igual al medio</small>
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;" *ngIf="seasonselected != 0">
+                    <button pButton pRipple label="Guardar" (click)="savePointOrder()" icon="pi pi-save" class="p-button-info"></button>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_VALIDATION_FACTOR_PERMISSION_ID)">
+        <p-fieldset legend="Factores de validación" class="fieldseth1">
+            <div class="p-grid" *ngIf="!indFactorValidation">
+                <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+                    <label style="color: red">No posee factores de validación configurado.</label>
+                </div>
+            </div>
+            <div class="p-grid" *ngIf="indFactorValidation">
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label for="name">Rango</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown [options]="validationRangeListFV" style="width: 84%;" (onChange)="changeValidationRangeFV()" appendTo="body" [(ngModel)]="validationFactor.idValidationRange" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                        </p-dropdown>  
+                        <span class="p-inputgroup-addon" pTooltip="El rango de validación seleccionado es un valor referencial y no se guardará a la hora del registro."><i class="pi pi-info-circle"></i></span>   
+                    </div>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Mínimo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber [(ngModel)]="validationFactor.minFactor" (onFocus)="clear($event)" maxlength="5" (keyup.enter)="in2.input.nativeElement.focus();" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedFV && validationFactor.minFactor <= 0">El mínimo tiene que ser mayor a 0</small>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Medio <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #in2 [(ngModel)]="validationFactor.midFactor" (onFocus)="clear($event)" maxlength="5" (keyup.enter)="in3.input.nativeElement.focus();" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedFV && validationFactor.midFactor < validationFactor.minFactor">El medio tiene que ser mayor o igual al mínimo</small>
+                </div>
+                <div class="p-fluid p-col-3 p-md-3 p-lg-3">
+                    <label>Máximo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #in3 [(ngModel)]="validationFactor.maxFactor" (onFocus)="clear($event)" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submittedFV && validationFactor.maxFactor < validationFactor.midFactor">El máximo tiene que ser mayor o igual al medio</small>
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;">
+                    <button pButton pRipple label="Guardar" (click)="saveFactorValidation()" icon="pi pi-save" class="p-button-info"></button>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <!-- <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;">
+        <button pButton pRipple label="Guardar" (click)="save()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+      </div> -->
+</div>

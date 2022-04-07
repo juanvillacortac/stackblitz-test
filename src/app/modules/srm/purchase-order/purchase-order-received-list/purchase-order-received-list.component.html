@@ -1,0 +1,213 @@
+
+     <ng-container *ngIf="this.error">
+        <div role="alert" class="p-message p-component ng-tns-c61-50">
+            <div role="alert" class="ng-tns-c61-50 ng-trigger ng-trigger-message Animation p-message p-message-info ng-star-inserted">
+                <div class="p-message-wrapper ng-tns-c61-50">
+                    <span class="ng-tns-c61-50 p-message-icon pi pi-exclamation-triangle"></span>
+                    <span class="p-message-summary ng-tns-c61-50 ng-star-inserted">Esta ODC no posee ninguna recepción.</span><!----><span class="p-message-detail ng-tns-c61-50 ng-star-inserted"></span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="card p-m-0" style="margin-top: 20px!important;">
+        <p-table #dt dataKey="productId" [value]="purchaseOrderReceivedList" [columns]="colsMacro" 
+        [scrollable]="true" scrollHeight="750px" [rowHover]="false" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [showCurrentPageReport]="true" [expandedRowKeys]="expanded" [rowsPerPageOptions]="[5,10,15]" responsiveLayout="scroll">  
+
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <ng-container *ngFor="let col of columns">
+                        <ng-container *ngIf="col.field === 'image'">
+                            <col style="width:50px"> 
+                        </ng-container>
+                        <ng-container *ngIf="col.field !== 'image'"> 
+                            <col style="min-width:100px">
+                        </ng-container>
+                    </ng-container>
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns let-element>
+                <tr>
+                    <th></th>
+                    <ng-container *ngFor="let col of columns">
+                        <ng-container *ngIf="col.field == 'image'">
+                            <th [ngStyle]="{'display': col.display,'text-align': i == 0 ? 'left' : 'left' }">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                {{col.header}}
+                                <span></span>
+                            </div>
+                        </th>
+                        </ng-container>
+                        <ng-container *ngIf="col.field !=='image'">
+                            <th [ngStyle]="{'display': col.display,'text-align': i == 0 ? 'left' : 'left' }"
+                                [pSortableColumn]="col.field">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </div>
+                            </th>
+                        </ng-container>
+                    </ng-container>    
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-element let-columns="columns">
+                <tr *ngIf="element">
+                    <td>
+                        <button type="button" pButton pRipple
+                            (click)="expanded[element.productId] = (expanded[element.productId] !== undefined ? !expanded[element.productId] : true)"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded[element.productId] || false ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'display': col.display,'text-align': i == 0 ? 'left' : 'left' }">
+                            <ng-container *ngIf="col.field === 'productName'">
+                                    <h6>{{col.template(element)}}</h6>
+                            </ng-container>
+                            <span *ngIf="col.field === 'image'">
+                                <col style="width:50px"> 
+                                <img *ngIf="element.image !== 'X'" [src]="element.image" alt="Referencia producto" class="clipped" style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-left: 1rem;">
+                                <img *ngIf="element.image === 'X'" src="https://www.licoresfactory.com/web/image/product.template/75596/image_1024?unique=8a9d2e0" alt="Referencia producto" class="clipped" style="width: 40px; height: 40px; object-fit: cover; vertical-align: middle; margin-left: 1rem;">
+                            </span>
+                            <ng-container *ngIf="col.field !== 'productName' && col.field !== 'image' " >
+                                <span>{{col.template(element)}} </span>
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+           
+            <ng-template pTemplate="rowexpansion" let-element>
+                <tr>
+                    <td colspan="7">
+                        <div class="p-p-12">
+                            <div class="card p-m-0 p-shadow-3">
+                                <p-table [value]="element.ordersReceived" [columns]="colsMicro" styleClass="p-table-sm p-datatable-striped"
+                                    [autoLayout]="true" [rowHover]="true">
+                                    
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <ng-container *ngFor="let col of columns">
+                                                <ng-container *ngIf="col.field === 'blank'">
+                                                    <col style="width:5rem"> 
+                                                </ng-container>
+                                                <ng-container *ngIf="col.field !== 'blank'"> 
+                                                    <col style="min-width:200px">
+                                                </ng-container>
+                                            </ng-container>
+                                        </colgroup>
+                                    </ng-template>
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th  *ngFor="let col of columns; let i = index">
+                                                        <div [ngStyle]="{'display': col.display }">
+                                                            {{col.header}}
+                                                        </div> 
+                                                    </th>   
+                                                </tr>
+                                            </ng-template>
+
+                                            <ng-template pTemplate="body" let-child let-columns="columns">
+                                                <tr>
+                                                    <td *ngFor="let col of columns; let i = index" >
+                                                        <div [ngStyle]="{'display': col.display}">
+                                                            <ng-container *ngIf="col.field === 'status'">
+                                                                <span class="etiqueta-pendiente" *ngIf="col.template(child) === 'Pendiente por recepcion'"> {{col.template(child)}} </span>
+                                                                <span class="etiqueta-iniciada" *ngIf="col.template(child) === 'En recepción'"> {{col.template(child)}} </span>
+                                                                <span class="etiqueta-finalizada" *ngIf="col.template(child) === 'Finalizada'"> {{col.template(child)}} </span>
+                                                                <span class="etiqueta-validada" *ngIf="col.template(child) === 'Validada'"> {{col.template(child)}} </span>
+                                                                <span class="etiqueta-anulada" *ngIf="col.template(child) === 'Anulada'"> {{col.template(child)}} </span>
+                                                                <span class="etiqueta-default" *ngIf="col.template(child) !== 'Pendiente por recepcion' &&
+                                                                                                    col.template(child) !== 'En recepción' &&
+                                                                                                    col.template(child) !== 'Finalizada' &&
+                                                                                                    col.template(child) !== 'Validada'
+                                                                                                    "> {{col.template(child)}} </span>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="col.field === 'reception'">
+                                                                <a *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_VDR_PERMISSION_ID)" pTooltip="Ir a la Recepción" tooltipPosition="top" (click)="goToReception(child)" 
+                                                                                                style="cursor: pointer;"> {{col.template(child)}} <i class="pi pi-eye"></i></a>
+                                                                <a *ngIf="!this.userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_VDR_PERMISSION_ID)" pTooltip="No permitido acceder a la Recepción" tooltipPosition="top"
+                                                                                                style="cursor: not-allowed ;"> {{col.template(child)}} <i class="pi pi-eye"></i></a>
+                                                            </ng-container> 
+                                                            <ng-container *ngIf="col.field !== 'reception' && col.field !=='status'">
+                                                                <span>{{col.template(child)}}</span>
+                                                            </ng-container>
+                                                                
+                                                            
+                                                        </div>   
+                                                        <app-active-label *ngIf="col.field === 'active' && element.element; else textCell" [active]="element.active"></app-active-label>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                                <tr>
+                                                <td *ngIf="this.purchaseOrderReceivedList === undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">No existen
+                                                    resultados</td>
+                                                <td *ngIf="this.purchaseOrderReceivedList === 0" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+                                                    existen resultados</td>
+                                                </tr>
+                                            </ng-template>                        
+                                </p-table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            
+            </ng-template>
+        
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <ng-container *ngIf="!this.timeout">
+                        <ng-container *ngIf="this.purchaseOrderReceivedList === undefined && !this.done">
+                            <td *ngIf="!this.tooLong" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+                                <p-progressSpinner ></p-progressSpinner>
+                                <div>
+                                    <h5>Cargando, por favor espere.</h5>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="this.tooLong && !this.done && this.purchaseOrderReceivedList === undefined">
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+                                <p-progressSpinner ></p-progressSpinner>
+                                <div>
+                                    <h5>Casi listo. Espere.</h5>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="this.done && !this.error">
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+                                <div>
+                                    <i class="pi pi-check-circle" style="font-size: 3.5rem; color: #28a745;"></i>
+                                    <h5>Todo listo.</h5>
+                                </div>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="this.timeout">
+                        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+                            <div>
+                                <h5>Ha ocurrido un error al cargar los datos.</h5>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <td *ngIf="this.error"  [ngStyle]="{'text-align': 'center', 'font-weight': '600'}" [attr.colspan]="7">
+                        <div role="alert" class="p-message p-component ng-tns-c61-50">
+                            <div role="alert" class="ng-tns-c61-50 ng-trigger ng-trigger-message Animation p-message p-message-warn ng-star-inserted">
+                                <div class="p-message-wrapper ng-tns-c61-50">
+                                    <span class="p-message-summary ng-tns-c61-50 ng-star-inserted">No existen resultados.</span><!----><span class="p-message-detail ng-tns-c61-50 ng-star-inserted"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ng-template pTemplate="paginatorleft"></ng-template>
+        <ng-template pTemplate="paginatorright"></ng-template>
+</div>

@@ -1,0 +1,56 @@
+    <div class="cardTable p-field p-col-12">
+        <p-dataView #dv [value]="productTransactionsList" [paginator]="true" [rows]="3"  filterBy="checkOutInvoice" [loading]="loading" 
+        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" [sortField]="sortField" [sortOrder]="sortOrder"
+        [showCurrentPageReport]="true" currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" layout="list">
+            <ng-template pTemplate="header">
+                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">              
+                        
+                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="{{ 'sort_by' | translate }} "  
+                    emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                    [disabled]="dataUnavailable" (onChange)="onSortChange($event)"  styleClass="p-mb-2 p-mb-md-0"></p-dropdown>    
+
+                    <span class=" p-d-none p-d-md-inline-flex">
+                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                    </span>
+                   
+                    <span class=" p-mb-2 p-mb-md-0  p-d-none p-d-md-inline-flex">
+                        <span class="p-mr-2" >
+                            <app-excel-export-button  [disabled]="dataUnavailable" (click)="exportToExcel()"></app-excel-export-button>
+                        </span>
+                        <span class=" p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="search" pInputText placeholder="{{ 'search_by_document' | translate }}" (input)="dv.filter($event.target.value)">
+                        </span>
+                    </span>
+                <!-- Small screen -->
+                    <span class=" p-mb-2 p-mb-md-0  p-d-md-none">
+                        <span class=" p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="search" pInputText placeholder="{{ 'search_by_document' | translate }}" (input)="dv.filter($event.target.value)">
+                        </span>
+                    </span>
+                    <span class=" p-mb-2 p-mb-md-0  p-d-md-none">
+                        <span class="p-mr-2" >
+                            <app-excel-export-button  [disabled]="dataUnavailable" (click)="exportToExcel()"></app-excel-export-button>
+                        </span>
+                        <span class="p-input-icon-left" >
+                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        </span>
+                    </span>
+                <!-- END small screen -->
+                </div>
+            </ng-template>
+
+            <ng-template let-product pTemplate="listItem">
+                <div class="p-col-12 ">
+                    <app-product-existence-transaction-list-view  [product]="product"  ></app-product-existence-transaction-list-view>
+                </div>
+            </ng-template>
+
+            <ng-template let-product pTemplate="gridItem">
+                <div class="p-col-12 p-xl-4 p-lg-6">
+                    <app-product-existence-transaction-grid-view  [product]="product"  ></app-product-existence-transaction-grid-view>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>

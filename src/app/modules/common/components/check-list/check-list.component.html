@@ -1,0 +1,7 @@
+<div class="p-field-checkbox" *ngIf="optionsCount">
+    <a [hidden]=true>{{selectAll}}</a>
+    <p-checkbox name="group2"  [disabled]="itemsDisabled" [(ngModel)]="selectedAll" binary="true" (onChange)="onSelectAll($event)" [label]="selectAllLabel"></p-checkbox>
+</div>
+<div class="p-field-checkbox" *ngFor="let option of options" >
+    <p-checkbox name="group1" [disabled]="itemsDisabled" (onChange)="onOptionsChange()"  [(ngModel)]="option.selected" binary="true" [value]="option.id" [label]="option.name"></p-checkbox>
+</div>

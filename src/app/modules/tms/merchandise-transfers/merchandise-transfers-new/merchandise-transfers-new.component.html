@@ -1,0 +1,253 @@
+<div class="p-grid">
+  <div [class]="transferCancelled ? 'p-md-12 p-lg-12' : showPanelDetail ? 'p-md-9 p-lg-9' : showReceivedProduct ? 'p-md-12 p-lg-12' : 'p-md-9 p-lg-9'">
+    <div class="card p-shadow-4" style="margin-bottom: 15px;">
+      <p-card styleClass="p-shadow-0" header="Transferencia de mercancía">
+        <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Sucursal origen <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="branchOfficeList" appendTo="body" placeholder="Seleccione..." [filter]="true"
+              [(ngModel)]="merchandiseTransfer.originBranch.id" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados." [disabled]="true" (onChange)="changeBranch()">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedSave && (merchandiseTransfer.originBranch.id == undefined || merchandiseTransfer.originBranch.id <= 0)">La
+              sucursal origen es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Área origen <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="areaListOrigin" appendTo="body" placeholder="Seleccione..." [filter]="true"
+              [(ngModel)]="merchandiseTransfer.originArea.id" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados." [disabled]="disableHeadboard">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedSave && (merchandiseTransfer.originArea.id == undefined || merchandiseTransfer.originArea.id <= 0)">El
+              área origen es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Sucursal destino <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-multiSelect [options]="branchOfficeList" resetFilterOnHide="true" [(ngModel)]="branchOfficeSelected"
+              placeholder="Seleccione..." display="chip" [filter]="true" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados." (onChange)="ValidateDestinationBranch()" [disabled]="disableHeadboard">
+            </p-multiSelect>
+            <small class="p-invalid" *ngIf="submittedSave && branchOfficeSelected.length == 0">La
+              sucursal destino es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid" *ngIf="showDetinationArea">
+            <label>Área destino <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="areaListDestination" appendTo="body"
+              placeholder="Seleccione..." [filter]="true" [(ngModel)]="idDestinationArea"
+              emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [disabled]="disabledDestinationArea">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedReceive && idDestinationArea <= 0">El área destino es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Tipo de transferencia <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="transferTypeList" appendTo="body" placeholder="Seleccione..." [filter]="true"
+              [(ngModel)]="merchandiseTransfer.transferType.id" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados." [disabled]="disableHeadboard">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submittedSave && merchandiseTransfer.transferType.id <= 0">El tipo de
+              transferencia es requerido</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Tipo de uso <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="useTypeList" placeholder="Seleccione..." appendTo="body"
+              (onChange)="onChangeUseType()" [(ngModel)]="merchandiseTransfer.useType.id" [filter]="true"
+              emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [disabled]="disableHeadboard">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submittedSave && merchandiseTransfer.useType.id <= 0">El tipo de uso es
+              requerido</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Total unidades enviadas</label>
+            <input name="name" id="name" type="text" pInputText maxlength="300" disabled="true"
+              [(ngModel)]="totalHeaderUnitsShipped">
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Observaciones</label>
+            <input name="name" id="name" type="text" pInputText maxlength="300"
+              [(ngModel)]="merchandiseTransfer.observations" [disabled]="disableHeadboard">
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <small [ngStyle]="{'color':'red'}">(*) Campos obligatorios</small>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;">
+            <!-- <button pButton pRipple label="Tarea" icon="pi pi-table" class="p-button-secondary p-mr-2"
+              (click)="taskMerchadiseTransfer()"></button> -->
+            <button pButton pRipple label="Recibir paleta" icon="pi pi-th-large" class="p-button-primary p-mr-2"
+              (click)="ReceivePallette()"
+              *ngIf="merchandiseTransfer.transferType.id == transferType.CERTIFIEDMERCHANDISETRANSFER && showReceivePalletteButton"></button>
+            <button pButton pRipple label="Recibir" icon="pi pi-th-large" class="p-button-success p-mr-2"
+            (click)="receiveBranchTranfer()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.RECEIVE_TRANSFER_PERMISSION_ID) && showReceiveButton"></button>
+            <button pButton pRipple label="Finalizar" icon="pi pi-th-large" class="p-button-success p-mr-2"
+            (click)="finishBranchTranfer()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.FINALIZE_TRANSFER_PERMISSION_ID) && showFinishButton"></button>
+            <button pButton pRipple label="Recibir todo" icon="pi pi-th-large"
+              class="p-button-secondary p-mr-2" *ngIf="showReceiveAllButton" (click)="receiveAllBranchTranfer()"></button>
+            <button pButton pRipple [label]="textButtonPalletizing" icon="pi pi-th-large" class="p-button-secondary p-mr-2"
+              (click)="showPalletizing()"
+              *ngIf="this.userPermissions.allowed(this.permissionsIDs.SEND_TRANSFER_PERMISSION_ID) && merchandiseTransfer.transferType.id == transferType.CERTIFIEDMERCHANDISETRANSFER && showPalletteButton"></button>
+            <button pButton pRipple label="Datos adicionales" icon="pi pi-bookmark" class="p-button-secondary p-mr-2"
+              (click)="showBranchTransferLitsAdditionalData()"
+              *ngIf="this.userPermissions.allowed(this.permissionsIDs.SEND_TRANSFER_PERMISSION_ID) && showAdditionalData"></button>
+            <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2"
+              (click)="updateMerchadiseTransfer()" *ngIf="showButtonUpdateTransfer"></button>
+            <button
+              *ngIf="this.userPermissions.allowed(this.permissionsIDs.SEND_TRANSFER_PERMISSION_ID) && showButtonSendTransfer"
+              pButton pRipple label="Enviar" icon="pi pi-send" class="p-mr-2" [disabled]="disabledSendButton"
+              (click)="sendMerchadiseTransfer()"></button>
+            <!-- <button pButton pRipple label="Imprimir" icon="pi pi-print" class="p-button-info p-mr-2"
+              (click)="printMerchadiseTransfer()" *ngIf="showPrintTransfer"></button> -->
+            <button pButton pRipple label="Anular" icon="pi pi-times" class="p-button-danger p-mr-2"
+              (click)="cancelMerchandiseTransfer()"
+              *ngIf="showCancelButton"></button>
+            <button pButton pRipple label="Limpiar" icon="pi pi-ban" class="p-button-secondary p-mr-2"
+              (click)="cleanHeaderMerchandiseTransfer()" *ngIf="showCleanButton"></button>
+            <button pButton pRipple label="Regresar" icon="pi pi-arrow-left" class="p-button-secondary p-mr-2"
+              (click)="back()"></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class="card p-shadow-4">
+      <p-card styleClass="p-shadow-0">
+        <p-table responsiveLayout="stack" #dt [columns]="displayedColumnsBranchTransfers" [value]="listProducts" dataKey="destinationBranch.id"
+          [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width: 50px;"></th>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </div>
+                </th>
+              </ng-container>
+              <th style="width: 100px;"></th>
+              <th style="width: 100px;"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-branchTransfer let-expanded="expanded">
+            <tr>
+              <td>
+                <button type="button" pButton pRipple [pRowToggler]="branchTransfer"
+                  class="p-button-text p-button-rounded p-button-plain"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+              </td>
+              <td style="overflow-wrap: break-word"><b>{{branchTransfer.transfersNumber}}</b></td>
+              <td style="overflow-wrap: break-word">{{branchTransfer.destinationBranch.branchOfficeName}}</td>
+              <td style="overflow-wrap: break-word">{{branchTransfer.status.name}}</td>
+              <td style="overflow-wrap: break-word">{{branchTransfer.totalUnitsShipped | number: ".2"}}</td>
+              <td style="overflow-wrap: break-word">{{branchTransfer.totalUnitsReceived | number: ".2"}}</td>
+              <td style="overflow-wrap: break-word">
+                <button pButton pRipple icon="pi pi-ban" class="p-button-rounded p-button-danger p-mr-2"
+                (click)="cancelMerchandiseBranchTransfer(branchTransfer.idBranchTransfer)" pTooltip="Anular"
+                tooltipPosition="top"
+                *ngIf="idMerchadiseBranchTransfer == 0 && branchTransfer.idBranchTransfer > 0 && branchTransfer.status.id != statusTransfer.CANCELED && (((branchTransfer.status.id == statusTransfer.ERASER || branchTransfer.status.id == statusTransfer.EXECUTION) && this.userPermissions.allowed(this.permissionsIDs.CANCEL_TRANSFER_ERASER_PERMISSION_ID)) || (branchTransfer.status.id == statusTransfer.SENT && this.userPermissions.allowed(this.permissionsIDs.CANCEL_TRANSFER_SENT_PERMISSION_ID)) || (branchTransfer.status.id == statusTransfer.RECEIVED && this.userPermissions.allowed(this.permissionsIDs.CANCEL_TRANSFER_RECEIVE_PERMISSION_ID)) || (branchTransfer.status.id == statusTransfer.FINALIZED && this.userPermissions.allowed(this.permissionsIDs.CANCEL_TRANSFER_FINALIZE_PERMISSION_ID)))"></button>
+              </td>
+              <td style="overflow-wrap: break-word">
+                <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-info p-mr-2"
+                (click)="printMerchadiseTransfer(branchTransfer.idBranchTransfer)" pTooltip="Imprimir"
+                tooltipPosition="top"
+                *ngIf="branchTransfer.idBranchTransfer > 0 && branchTransfer.status.id != statusTransfer.ERASER && branchTransfer.status.id != statusTransfer.EXECUTION && branchTransfer.status.id != statusTransfer.CANCELED"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-branchTransfer>
+            <tr>
+              <td colspan="7" style="padding: 0;">
+                <div>
+                  <p-table [columns]="displayedColumnsBranchTransfersDetail"
+                    [value]="branchTransfer.branchTransfersDetail" dataKey="idBranchTransferDetail">
+                    <ng-template pTemplate="header" let-columnsp>
+            <tr>
+              <th style="width: 50px;"></th>
+              <th style="width: 150px;"></th>
+              <ng-container *ngFor="let col of columnsp">
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </div>
+                </th>
+              </ng-container>
+              <th style="width: 150px;"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-branchTransferDetail let-columnsp="columns">
+            <tr>
+              <td></td>
+              <td style="width: 150px;">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                  (click)="onEditBranchTransferDetail(branchTransferDetail, branchTransfer)" pTooltip="Editar"
+                  tooltipPosition="top"
+                  *ngIf="branchTransfer.status.id == statusTransfer.ERASER || branchTransfer.status.id == statusTransfer.EXECUTION || (idBranchOfficeLogged == branchTransfer.destinationBranch.id && (merchandiseTransfer.originBranch.id == idBranchOfficeLogged || branchTransfer.indHaveTransport == 1) && (((merchandiseTransfer.transferType.id == transferType.MERCHANDISETRANSFER && idMerchadiseBranchTransfer > 0) || (merchandiseTransfer.transferType.id == transferType.CERTIFIEDMERCHANDISETRANSFER && branchTransfer.status.id == statusTransfer.RECEIVED))|| (merchandiseTransfer.transferType.id != transferType.CERTIFIEDMERCHANDISETRANSFER && branchTransfer.status.id != statusTransfer.SENT)) && branchTransfer.status.id != statusTransfer.FINALIZED && branchTransfer.status.id != statusTransfer.CANCELED)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2"
+                  (click)="onDeleteBranchTransferDetail(branchTransferDetail, branchTransfer.destinationBranch.id)"
+                  pTooltip="Eliminar" tooltipPosition="top"
+                  *ngIf="branchTransfer.status.id == statusTransfer.ERASER || branchTransfer.status.id == statusTransfer.EXECUTION"></button>
+              </td>
+              <ng-container *ngFor="let col of columnsp">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                  <span>{{col.template(branchTransferDetail)}} </span>
+                </td>
+              </ng-container>
+              <td style="width: 150px;" *ngIf="branchTransferDetail.packingProduct.product.lotInd">
+                <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success p-mr-2"
+                  (click)="onAddLotBranchTransferDetail(branchTransferDetail)" pTooltip="Agregar lote"
+                  tooltipPosition="top"
+                  *ngIf="branchTransfer.status.id == statusTransfer.ERASER || branchTransfer.status.id == statusTransfer.EXECUTION"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2"
+                  (click)="onDeleteBranchTransferDetailLots(branchTransferDetail)" pTooltip="Eliminar lote"
+                  tooltipPosition="top"
+                  *ngIf="(branchTransfer.status.id == statusTransfer.ERASER || branchTransfer.status.id == statusTransfer.EXECUTION) && branchTransferDetail.branchTransferDetailLot != null && branchTransferDetail.branchTransferDetailLot.length > 0"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="footer" let-columns>
+            <ng-container
+              *ngIf="branchTransfer.branchTransfersDetail == null || branchTransfer.branchTransfersDetail.length == 0">
+              <tr>
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="10">
+                  <span>No hay productos</span>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+    </p-card>
+  </div>
+</div>
+<div class="p-md-3 p-lg-3" *ngIf="showPanelDetail">
+
+  <app-merchandise-transfer-product *ngIf="showNewProduct" [merchandiseTransfer]="merchandiseTransfer"
+    [(listProducts)]="listProducts" [(productMerchandiseTransfer)]="productMerchandiseTransfer"
+    [branchOfficeDestinationSelected]="branchOfficeDestinationSelected" (refreshTransfer)="refreshTransfer()">
+  </app-merchandise-transfer-product>
+
+  <app-merchandise-transfer-product-receive *ngIf="showReceivedProduct" [(showReceivedProduct)]="showReceivedProduct"
+    [merchandiseTransfer]="merchandiseTransfer" [(productMerchandiseTransfer)]="productMerchandiseTransfer"
+    [merchandiseBranchTransfer]="merchandiseBranchTransfer" [(product)]="productSelected" [receivedAmount]="receivedAmount"
+    [validationFactor]="validationFactor" (refreshTransfer)="refreshTransfer()"></app-merchandise-transfer-product-receive>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" acceptLabel="Si">
+</p-confirmDialog>
+<app-branch-transfers-list-modal [(showDialog)]="showBranchTransferListModal"
+  [(branchTransferList)]="branchTransferList" [(merchandiseTransfer)]="merchandiseTransfer"
+  (refreshBranchTransfer)="refreshBranchTransfer()" (refreshTransfer)="refreshTransfer()">
+</app-branch-transfers-list-modal>
+<app-detail-add-lot [(showDialog)]="showAddLotModal" [(merchandiseBranchTransferDetail)]="productMerchandiseTransfer"
+  [(merchandiseTransfer)]="merchandiseTransfer"></app-detail-add-lot>
+<app-palletizing-merchandise-receive [(showDialog)]="showReceivePallette" [merchandiseTransfer]="merchandiseTransfer"
+[(idBranchTransfer)]="idMerchadiseBranchTransfer"
+(refreshTransfer)="refreshTransfer()"></app-palletizing-merchandise-receive>
+
+<app-telerik-report-modal ></app-telerik-report-modal>

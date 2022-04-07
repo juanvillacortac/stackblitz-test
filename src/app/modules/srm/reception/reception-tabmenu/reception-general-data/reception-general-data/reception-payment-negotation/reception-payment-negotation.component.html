@@ -1,0 +1,79 @@
+<div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.payment_terms' | translate }}</label>
+        <p-dropdown [options]="paymentTerms" placeholder="{{ 'selection_default' | translate }}" [showClear]="paymentNegotiation.paymentConditionId>0?true:false"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" 
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="idPaymentCondition" (onChange)="getPaymentTermSelected()" [(ngModel)]="paymentNegotiation.paymentConditionId">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>Tipo de descuento</label>
+        <p-dropdown [options]="typeDiscountList" [(ngModel)]="paymentNegotiation.idDiscountType" appendTo="body" (keyup.enter)="save()" placeholder="Seleccione..."
+            emptyMessage="Sin resultados." [filter]="true" emptyFilterMessage="Sin resultados" [disabled]="true">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.percentage' | translate }}</label>
+        <p-inputNumber [(ngModel)]="paymentNegotiation.discount" (keyup.enter)="save()" maxlength='7' placeholder="{{ 'srm.reception.document.negotiation.percentage' | translate }}" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2">
+        </p-inputNumber>   
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.payment_deadline' | translate }}</label>
+        <p-inputNumber [(ngModel)]="paymentNegotiation.paymentDeadlinesDays" (keyup.enter)="save()" suffix=" {{ 'days' | translate }}" placeholder="{{ 'srm.reception.document.negotiation.payment_deadline' | translate }}" [minFractionDigits]="0" mode="decimal" min="0" [maxFractionDigits]="0">
+        </p-inputNumber>   
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.negotiation_type' | translate }}</label>
+        <p-dropdown [options]="negotiationTypes" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}"  
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id" [(ngModel)]="paymentNegotiation.negotiationTypeId">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.currency_type' | translate }}</label>
+        <p-dropdown [options]="currencyTypes" placeholder="{{ 'selection_default' | translate }}" [showClear]="true" (onChange)="getCurrenciesByCurrencyType(true)" [(ngModel)]="paymentNegotiation.currencyTypeId"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" 
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.payment_currency' | translate }}</label>
+        <p-dropdown [options]="negotationCurrencies" placeholder="{{ 'selection_default' | translate }}" [showClear]="true" [(ngModel)]="paymentNegotiation.paymentCurrencyId"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" (onChange)="getPaymentMethod(true)"
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.rate_payment_type' | translate }}</label>
+        <p-dropdown [options]="ratePaymentTypes" placeholder="{{ 'selection_default' | translate }}" [showClear]="true" (onChange)="getRateValues(true)" [(ngModel)]="paymentNegotiation.paymentRateTypeId"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" 
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id" [disabled]="!isPaymentCurrencySelected()">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid" *ngIf="!paymentRateTypeIdIsCustom()">
+        <label>{{ 'srm.reception.document.negotiation.rate' | translate }} </label> 
+        <p-dropdown [options]="rateValues" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="paymentNegotiation.exchangeRateId"
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "conversionFactor" optionValue="idExchangeRate">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="!exchangeRateIsvalid()">{{ 'srm.reception.document.validations.rate_required' | Translate }}</small>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid" *ngIf="paymentRateTypeIdIsCustom()">
+        <label>{{ 'srm.reception.document.negotiation.exchange_rate' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+        <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="{{ 'srm.reception.document.negotiation.exchange_rate' | translate }}"
+                    (keyup.enter)="save()" disabled  [(ngModel)]="paymentNegotiation.paymentExchangeRate"> 
+            <button type="button" pButton pRipple icon="pi pi-search" (click)="showSupplierRateModal()"></button>      
+        </div>
+        <small class="p-invalid" *ngIf="!exchangeRateIsvalid()">{{ 'srm.reception.document.validations.exchange_rate_required' | translate }}</small>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.negotiation.payment_method' | translate }}</label>
+        <p-dropdown [options]="paymentMethods" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}"  [(ngModel)]="paymentNegotiation.paymentMethod"
+        emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id" [disabled]="!isPaymentCurrencySelected()">
+        </p-dropdown>
+    </div>
+</div>
+
+<app-supplier-rate (onToggle)="toggleRate($event)" [RatesupplierFilters]="ratesupplierFilters" [visible]="rateSupplierVisible" (supplierRateChange)="supplierRateChange($event)"></app-supplier-rate>

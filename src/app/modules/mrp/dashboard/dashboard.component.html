@@ -1,0 +1,26 @@
+
+<div class="card" style="align-content: center; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+        <div class="p-grid">
+                <div class="p-col-12 p-md-5 p-lg-6" style="align-content: center; color: #5E81AC;">
+                        <span>
+                                <h2 class="p-field title">MRP - Dashboard </h2>
+                        </span>
+                </div>
+                <div class="p-col-12 p-md-7 p-lg-6" style="text-align: end;">                
+                        <app-select-button-option (setSelection)="setOptionSelection($event)"></app-select-button-option>
+               </div>       
+        </div>
+</div>
+
+<div class="p-grid" *ngIf="!loading">
+
+        <div class="p-col-12 p-lg-4 p-md-12 p-sm-12">
+                <app-dashboard-layaout [(dashboardData)]="leftDashboardData" [(titleout)]="titleLeft" [minHeight]="100" ></app-dashboard-layaout>
+        </div>
+        <div class="p-col-12 p-lg-4 p-md-12 p-sm-12">
+                <app-dashboard-layaout [(dashboardData)]="centerDashboardData" [(titleout)]="titleCenter" [minHeight]="100"></app-dashboard-layaout>    
+        </div>
+        <div class="p-col-12 p-lg-4 p-md-12 p-sm-12">
+                <app-dashboard-layaout [(dashboardData)]="rightDashboardData" [(titleout)]="titleRight" [minHeight]="100"></app-dashboard-layaout>   
+        </div>
+</div>

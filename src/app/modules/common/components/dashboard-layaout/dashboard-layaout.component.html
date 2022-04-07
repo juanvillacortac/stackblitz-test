@@ -1,0 +1,33 @@
+<div class="gridster_panel ">
+  <gridster [options]="options" style=" background: ghostwhite; margin-top: 1rem;" [ngStyle]="{'min-height.vh': minHeight||40}">
+    <h2>{{titleout1}}</h2>
+    <gridster-item [item]="item" *ngFor="let item of dashboard"  class="GridsterItem" >
+      <div class="button-holder p-shadow-4">
+        <div class="widget_panel">
+          <div class="header">
+            <div class="title">{{item.title}}</div>
+            <span class="sub-title">{{item.subTitle}}</span>
+          </div>
+          <div class="widget_panel">
+            <app-widget *ngIf="item.init" [data]="item"></app-widget>
+          </div>
+        </div>
+        <div *ngIf="item.nroModal>0" class="timeline-footer flex align-items-center justify-content-center">
+          <button (click)="show(item.nroModal)" pButton pRipple type="button" label="Ver más..."
+            class="p-button-text p-md-12" style="background-color: white;"></button>
+          <!-- whitesmoke -->
+        </div>
+        <ng-container *ngIf="item.route?.length > 0">
+          <div class="timeline-footer flex align-items-center justify-content-center">
+            <button (click)="navigateToRoute(item.route)" pButton pRipple type="button" label="{{ 'view_more' | translate }}"
+              class="p-button-text p-md-12" style="background-color: white;"></button>
+          </div>
+        </ng-container>
+        
+
+      </div>
+    </gridster-item>
+
+  </gridster>
+</div>
+

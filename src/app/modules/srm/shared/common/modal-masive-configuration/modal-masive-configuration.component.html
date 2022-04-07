@@ -1,0 +1,14 @@
+<p-dialog (onShow)="onShowMasiveConfiguration()" (onHide)="onHideMasiveConfiguration()" header="Configuración masíva"
+  [(visible)]="visible" [style]="{width:'30%'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [modal]="true">
+  <div class="p-grid">
+    <div class="p-col-6 p-md-6 p-lg-6 p-fluid">
+      <label class="font-smaller" for="sellfactor">Factor de venta</label>
+      <p-inputNumber [(ngModel)]="SalesFactor" (onFocus)="clear($event)" [minFractionDigits]="2" mode="decimal" min="0"
+        [maxFractionDigits]="2"></p-inputNumber>
+    </div>
+    <div class="p-field p-col-6 p-md-6 p-mt-4">
+      <button pButton pRipple label="Guardar" (click)="SaveMasive($event)" icon="pi pi-save"
+        class="p-button-info p-mr-2"></button>
+    </div>
+  </div>
+</p-dialog>

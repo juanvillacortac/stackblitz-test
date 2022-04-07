@@ -1,0 +1,21 @@
+:host ::ng-deep {
+
+    .p-sidebar-content{
+        overflow-y: unset;
+    }
+
+    .p-sidebar-content .p-field{
+        margin-bottom: 1rem;
+    }
+
+    @media screen and (max-width: 1024px){
+        .p-grid > .p-col-12{
+            width: 100%;
+        }
+
+        .inside{
+            margin-bottom: 1rem;
+        }
+    }
+    
+}

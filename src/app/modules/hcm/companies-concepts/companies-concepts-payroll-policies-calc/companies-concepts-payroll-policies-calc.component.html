@@ -1,0 +1,164 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-panel header="Declaración de variables" [toggleable]="true" styleClass="col-12 p-md-12">
+            <ng-container *ngIf="politicVars && politicVars.length > 0 && varTable">
+                <div class="p-mb-4" [align]="'right'">
+                    <button pButton pRipple icon="pi pi-plus" class="p-ml-auto p-button-success p-mr-2" (click)="openSidebar()" pTooltip="Crear nuevo" 
+                    tooltipPosition="top" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></button>
+                    <!-- <button pButton pRipple [icon]="varTable ? 'pi pi-window-minimize':'pi pi-window-maximize'" class="p-ml-auto p-button-info" (click)="varTable = !varTable" 
+                        [pTooltip]="varTable? 'Ocultar tabla':'Mostrar tabla'" tooltipPosition="top" *ngIf="politicVars && politicVars.length > 0"></button> -->
+                </div>
+                <div id="var-table" class="p-md-12 p-lg-12 p-mt-2">
+                    <p-table  [resizableColumns]="false" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" 
+                    #dt [columns]="displayedColumns" [value]="politicVars"  [rowHover]="true" >
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }" pResizableColumn [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </ng-container>  
+                                <th></th>    
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-politicVars let-columns="columns" let-index="rowIndex">
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                    <div *ngIf="col.field === 'active'; else textCell" style="text-align: left;"></div>                     
+                                    <ng-template #textCell>
+                                        <span>{{col.template(politicVars)}} </span>
+                                    </ng-template>
+                                    </td>
+                                </ng-container>
+                                <td class="button-right">
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID) && politicVars.typeVarId == 4" pButton pRipple 
+                                    type="button" icon="pi pi-pencil" (click)="onEdit(index)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button>
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID) && politicVars.typeVarId == 4" pButton 
+                                    pRipple type="button" icon="pi pi-trash" (click)="onDelete(index, politicVars)" class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button>
+                                </td>
+                            </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="footer" let-columns>
+                            <ng-container>
+                                <tr *ngIf="politicVars.length == 0" >
+                                    <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">                
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-template>
+                    </p-table>
+                </div> 
+            </ng-container>
+
+            <ng-container *ngIf="!(politicVars  && politicVars.length > 0)">
+                <div class="p-mb-4" [align]="'right'">
+                    <button pButton pRipple icon="pi pi-plus" class="p-ml-auto p-button-success p-mr-2" (click)="openSidebar()" pTooltip="Crear nuevo" 
+                    tooltipPosition="top" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></button>
+                    <!-- <button pButton pRipple [icon]="varTable ? 'pi pi-window-minimize':'pi pi-window-maximize'" class="p-ml-auto p-button-info" (click)="varTable = !varTable" 
+                        [pTooltip]="varTable? 'Ocultar tabla':'Mostrar tabla'" tooltipPosition="top" *ngIf="politicVars && politicVars.length > 0"></button> -->
+                </div>
+                <p-messages severity="info">
+                    <ng-template pTemplate>
+                        <div class="p-ml-2">No existen variables declaradas en este concepto.</div>
+                    </ng-template>
+                </p-messages>
+            </ng-container>
+
+           
+        </p-panel>
+    </div>
+    
+    <div class="p-col-12">
+        <p-panel header="Políticas de Cálculo" [toggleable]="true" styleClass="col-12 p-md-12">
+            <ng-container *ngIf="politicInstruccs && politicInstruccs.length > 0">
+                <div class="p-mb-4" [align]="'right'">
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-secondary p-mr-2" pTooltip="Visualizar código" (click)="viewPolicies()" 
+                        tooltipPosition="top"></button>
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-success p-mr-2"(click)="newPayrollPolicies()" pTooltip="Agregar" 
+                    tooltipPosition="top" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></button>
+                    <!-- <button pButton pRipple [icon]="policieTable ? 'pi pi-window-minimize':'pi pi-window-maximize'" class="p-ml-auto p-button-info" (click)="policieTable = !policieTable" 
+                        [pTooltip]="policieTable? 'Ocultar tabla':'Mostrar tabla'" tooltipPosition="top" *ngIf="politicInstruccs && politicInstruccs.length > 0"></button> -->
+                </div>
+    
+                <div id="politic-table" *ngIf="policieTable" class="p-md-12 p-lg-12 p-mt-2">
+                    <p-table [value]="politicInstruccs" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" [rowHover]="true" >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="celda"></th>
+                                <th class="celda">Secuencia</th>
+                                <th class="p-text-center">Instrucción</th>
+                                <th class="column-buttons"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-politicInstruccs let-rowIndex="rowIndex">
+                            <tr [pReorderableRow]="rowIndex">
+                                <td class="celda">
+                                    <span class="pi pi-sort" pReorderableRowHandle *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID) && politicInstruccs.instruction.type == 4"></span>
+                                </td>
+                                <td class="celda">
+                                    <span >{{rowIndex+1}}</span>
+                                </td>
+                                <td class="p-instruction-line" *ngIf="politicInstruccs.instruction.type != 100 && politicInstruccs.instruction.type != 20">
+                                    <span>{{politicInstruccs.instruction.string}}</span> 
+                                </td>
+                                <td class="p-text-center" *ngIf="politicInstruccs.instruction.type == 100 || politicInstruccs.instruction.type == 20"></td>
+                                <td class="button-right" *ngIf="politicInstruccs.instruction.type == 100">
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success p-mr-2" (click)="newPayrollPoliciesIf(rowIndex)" pTooltip="Agregar instruccion" tooltipPosition="top"></button>
+                                </td>
+                                <td class="button-right" *ngIf="politicInstruccs.instruction.type == 20">
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" (click)="newPayrollPoliciesElse(rowIndex)" pTooltip="Agregar else" tooltipPosition="top"></button>
+                                </td>
+                                 <td class="button-right" *ngIf="politicInstruccs.instruction.type == 2">
+                                     <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="deletePayrollPolicies(rowIndex)" pTooltip="Remover else" tooltipPosition="top"></button>
+                                </td>
+                                <td class="p-text-center" *ngIf="politicInstruccs.instruction.type == 3"></td>
+        
+                                <td class="button-right" *ngIf="politicInstruccs.instruction.type == 4 || politicInstruccs.instruction.type == 1">
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editPayrollPolicies(rowIndex, politicInstruccs)" 
+                                    pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button>
+                                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="deletePayrollPolicies(rowIndex)" 
+                                    pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="p-fliud p-formgrid p-grid p-mt-6">
+                    <div class="p-field p-col-12 p-md-12" align="right">
+                        <button id="saving2" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info saving" 
+                        *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" (click)="savePolitic()"></button>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!(politicInstruccs  && politicInstruccs.length > 0)">
+                <div class="p-mb-4" [align]="'right'">
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-secondary p-mr-2" pTooltip="Visualizar código" (click)="viewPolicies()" 
+                        tooltipPosition="top"></button>
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-success p-mr-2"(click)="newPayrollPolicies()" pTooltip="Agregar" 
+                    tooltipPosition="top" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></button>
+                    <!-- <button pButton pRipple [icon]="policieTable ? 'pi pi-window-minimize':'pi pi-window-maximize'" class="p-ml-auto p-button-info" (click)="policieTable = !policieTable" 
+                        [pTooltip]="policieTable? 'Ocultar tabla':'Mostrar tabla'" tooltipPosition="top" *ngIf="politicInstruccs && politicInstruccs.length > 0"></button> -->
+                </div>
+                <p-messages severity="info" >
+                    <ng-template pTemplate>
+                        <div class="p-ml-2">No existe una politica de calculo asociada a este concepto.</div>
+                    </ng-template>
+                </p-messages>
+            </ng-container>
+        </p-panel>
+    </div>
+</div>
+<app-companies-concepts-payroll-policies-panel *ngIf="showPanel" [(displayModal)]="showPanel" [(policiesEdit)]="policies" [(politicVars)]="politicVars" (backUnchange)="resetValues($event)" (returnJson)="addPayrollPolicies($event)"></app-companies-concepts-payroll-policies-panel>
+<app-companies-policies-calc-variables-panel *ngIf="showSidebar" [(displayModal)]="showSidebar" [index]="index" [(politicVars)]="politicVars" [(newId)]="newId" (backUnchange)="resetValues($event)" (updateVar)="updatePoliciesCalc($event)"></app-companies-policies-calc-variables-panel>
+
+<p-dialog header="Código de política de Cálculo" [(visible)]="showModal" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <textarea name="" pInputTextarea [(ngModel)]="policiesLine" style="width: 45vw; height: auto;" autoResize="autoResize" disabled="true">
+    </textarea>
+        <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="showModal=false" label="Ok" styleClass="p-button-text"></p-button>
+        </ng-template>
+</p-dialog>

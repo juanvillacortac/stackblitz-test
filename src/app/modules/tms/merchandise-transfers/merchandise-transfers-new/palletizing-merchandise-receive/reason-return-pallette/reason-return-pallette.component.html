@@ -1,0 +1,21 @@
+<p-dialog header="Devolver paleta" (onShow)="ngOnShow()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+    <div class="p-grid">
+        <div class="p-fluid  p-col-12 p-md-12 p-lg-12">
+            <label for="name">Motivo <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="reasonList" appendTo="body" [(ngModel)]="reasonReturnPallette.idReason" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && reasonReturnPallette.idReason <= 0">El motivo es requerido</small>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <label for="name">Observación</label>
+            <textarea [(ngModel)]="reasonReturnPallette.observation" rows="3" style="resize: none;" cols="30" pInputTextarea maxlength="100"></textarea>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <small style="color: red;">(*) Campos obligatorios</small>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" (click)="saveReason()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

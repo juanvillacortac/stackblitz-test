@@ -1,0 +1,65 @@
+<p-dialog header="Buscar producto relacionado" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid">
+        <div class="p-fluid p-col-6 p-md-6 p-lg-6">
+            <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input name="name" id="name" (keyup.enter)="SearchProductRelated()" type="text" [(ngModel)]="componentsFilters.name" pInputText>
+        </div>
+        <div class="p-fluid p-col-6 p-md-6 p-lg-6">
+            <label>Barra <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input name="performaceFactor" (keyup.enter)="SearchProductRelated()" id="performaceFactor" [(ngModel)]="componentsFilters.barCode" type="text" pInputText>
+        </div>
+        <div class="p-col-6 p-md-6 p-lg-6">
+            <small class="p-invalid">(*) Seleccione por lo menos un filtro</small>
+        </div>
+        <div class="p-field p-col-6 p-md-6 p-sm-6 p-d-flex p-jc-end">
+            <button pButton pRipple label="Buscar" icon="pi pi-search" (click)="SearchProductRelated()" class="p-button-info p-mr-2"></button>
+            <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        </div> 
+        <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+            <p-table #dtDc [columns]="displayedColumnsRelated" [value]="productAssociationList" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of columns">  
+                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    </ng-container>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-productassociation let-columns="columns">
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="productassociation[col.field]"></app-active-label>
+                            <ng-template #textCell>
+                                <span>{{col.template(productassociation)}} </span>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                    <td>
+                        <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-mr-2" (click)="selectedProduct(productassociation)" pTooltip="Seleccionar"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer" let-columns>
+                <ng-container *ngIf="productAssociationList==null || productAssociationList?.length == 0">
+                <tr>
+                  <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="4">
+                    <span>No existen resultados</span>
+                  </td>
+                </tr>
+                </ng-container>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                    </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-dialog>
+<app-new-association-related [(showDialog)]="showDialogNewAssociationComponent" [(productAssociation)]="_productAssociation" (addproductassociation)="addproductassociation()"></app-new-association-related>

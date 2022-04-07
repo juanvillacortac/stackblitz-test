@@ -1,0 +1,46 @@
+<p-card class="p-m-0 generic-card-padding">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size">{{ 'srm.reception.header.document_number' | translate }}: <b>{{ reception.receptionNumber }}</b></p>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size generic-float-text"> {{ 'srm.reception.header.status' | translate }}: <b>{{ getStatus() | translate }}</b></p>
+        </div>
+    </div>
+    <p class="generic-font-size">{{ 'srm.reception.header.creation_date' | translate }}: <b> {{ reception.createdDate  | date : "dd/MM/yyyy"}}</b></p>
+
+    <div class="center-block" style="text-align: center;">
+        <button pButton pRipple icon="pi pi-refresh" class="p-button-rounded p-button-info p-mr-2"
+            pTooltip="{{ 'srm.reception.header.reassign_task' | translate }}" [disabled]="taskButtonsDisabled()"></button>
+        <button pButton pRipple icon="pi pi-play" *ngIf="showPlayButton()"
+            class="p-button-rounded p-button-success p-mr-2" (click)="PlayTask()" 
+            pTooltip="{{ getPlayButtonTooltip() | translate }}" [disabled]="taskButtonsDisabled()"></button>
+        <button pButton pRipple icon="pi pi-pause" *ngIf="showStopButton()"
+            class="p-button-rounded p-button-success p-mr-2" (click)="PauseTask()"
+             pTooltip="{{ 'srm.reception.header.pause_task' | translate }}" [disabled]="taskButtonsDisabled()"></button>
+        <cd-timer #basicTimer format="hms" style="font-size: x-large;" [autoStart]="false"></cd-timer>
+    </div>
+
+    <div class="p-col-12 p-md-6 p-lg-12 p-sm-3 p-d-flex p-jc-end">
+        <button pButton pRipple label=" {{ 'return' | translate }}" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary p-mr-2"></button>
+        <button pButton pRipple label=" {{ 'save' | translate }}" icon="pi pi-save"
+            class="p-button-info p-mr-2" (click)="save()" [disabled]="saveButtonDisabled()"></button>
+        <button pButton pRipple label=" {{ 'void' | translate }}"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.VOID_RECEPTION_VDR_PERMISSION_ID)" icon="pi pi-times" 
+            class="p-button-danger p-mr-2" (click)="void()" [disabled]="voidButtonDisabled()"></button>
+        <button pButton pRipple label="Crear hijas" [disabled]="btncreateIsDisabled()" pTooltip="Crear recepciones hijas" *ngIf="this.userPermissions.allowed(this.permissionsIDs.START_RECEPTION_VDR_PERMISSION_ID)" icon="pi pi-plus" 
+            class="p-button-secondary p-mr-2" (click)="onShowchildReceptionDetail(reception)"></button>
+       <button pButton pRipple label=" {{ 'start' | translate }}" *ngIf="this.userPermissions.allowed(this.permissionsIDs.START_RECEPTION_VDR_PERMISSION_ID)" icon="pi pi-play" 
+            class="p-button-success p-mr-2" (click)="start()" [disabled]="btnStartIsDisabled()"></button>     
+        <button pButton pRipple label="Finalizar" *ngIf="this.userPermissions.allowed(this.permissionsIDs.FINALIZE_RECEPTION_VDR_PERMISSION_ID)" (click)="finalized()" [disabled]="btnfinalized()" icon="pi pi-check" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Rechazar"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.REJECT_RECEPTION_VDR_PERMISSION_ID)"   (click)="rejectaux()" [disabled]="btnreject()" icon="pi pi-id-card" class="p-button-secondary p-mr-2"></button>
+        <p-button type="button" class="p-mr-2"  [disabled]="btnTimeLineDisabled()" (click)="showDialog=true"  pTooltip="Línea de tiempo"  pTooltipPosition="top" icon="pi pi-clock"></p-button>
+    </div>
+</p-card>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="confirmBack"></p-confirmDialog>
+<app-reception-timeline [(showDialog)]="showDialog" [(reception)]="reception" ></app-reception-timeline>
+<ng-container *ngIf='chieldReceptionModalShow'>
+<app-modal-child-reception [visible]="chieldReceptionModalShow" [receptionId]="receptionIdSelected" (hideDialogForm)="childReceptionCallBack($event)">
+</app-modal-child-reception>
+</ng-container>
+<app-reason-dialog [header]="'srm.reception.void_child_reception'" [showDialog]="showDialogReason" [motiveTypeId]="motiveTypeId" (saveReason)="savereason($event)" (hideDialogEvent)="hideDialogReason()"></app-reason-dialog>

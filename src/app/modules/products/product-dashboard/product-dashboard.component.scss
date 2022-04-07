@@ -1,0 +1,29 @@
+:host ::ng-deep {
+
+    
+      
+    .p-selectbutton .p-button {
+
+      background: #ffffff;
+
+      border: 1px solid #5E81AC;
+
+      color: #5E81AC;
+
+      transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+  }
+
+   
+
+    .p-selectbutton .p-button.p-highlight {
+
+        background: #5E81AC;
+
+        border-color: #5E81AC;
+
+        color: #ffffff;
+
+    }
+
+    }

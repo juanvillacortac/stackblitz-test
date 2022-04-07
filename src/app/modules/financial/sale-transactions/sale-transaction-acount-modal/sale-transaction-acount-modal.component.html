@@ -1,0 +1,114 @@
+<p-dialog header="Seleccionar cuenta contable" (onShow)="onShow()" [(visible)]="showDialog" (onHide)="hideDialog()"
+    [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-m-0 card">
+
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="card">
+                    <div class="p-fluid p-grid p-formgrid">
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="Uso"> Uso de cuenta: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                            <p-dropdown [options]="accountUsagelist" (onChange)="onChangeAccountUsage($event)"
+                                [(ngModel)]="_data.tipoUsoCuentaId"
+                                [class]="submitted && _data.tipoUsoCuentaId <= -1 ? 'ng-dirty ng-invalid' : ''"
+                                placeholder="Seleccione..." emptyFilterMessage="Sin resultados."
+                                emptyMessage="Sin resultados."></p-dropdown>
+                            <small class="p-invalid" *ngIf="submitted && _data.tipoUsoCuentaId<=-1">El uso de cuenta es
+                                requerido</small>
+
+                        </div>
+
+
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="name">Número de cuenta: <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText pKeyFilter="int" placeholder="Cuenta"
+                                    [ngModel]="formatCode(NombreCuenta || '')"
+                                    [class]="submitted && (!NombreCuenta || !NombreCuenta.trim()) ? 'ng-dirty ng-invalid' : ''"
+                                    disabled>
+                                <p-button icon="pi pi-cog" (click)="showModalDialog()"></p-button>
+                            </div>
+                            <small class="p-invalid"
+                                *ngIf="submitted && (!NombreCuenta|| !NombreCuenta.trim())">El
+                                número de cuenta es requerido</small>
+                        </div>
+
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="name">Nombre de la cuenta: </label>
+                            <input #name [(ngModel)]="_data.accountingAccount" type="text" pInputText
+                                (input)="_validations.toCapitalizeSimbology($event)" maxlength="50"
+                                [class]="this.nomString || submitted && (!_data.accountingAccount || !_data.accountingAccount.trim()) ? 'ng-dirty ng-invalid' : ''"
+                                (keyup.enter)="save()" disabled>
+                        </div>
+
+
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="Uso"> Auxiliar: </label>
+                            <p-dropdown [options]="auxiliarylist" [(ngModel)]="AuxiliarID" [showClear]="AuxiliarID > 0"
+                                [autoDisplayFirst]="false" (onChange)="onChangeAuxiliary()"
+                                [disabled]="!_data.indPermiteAuxiliar" placeholder="Seleccione..."
+                                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="chargeCenter">Centro de cobro </label>
+                            <p-dropdown [filter]="true" inputId="chargeCenter" [options]="costCenters" [(ngModel)]="_data.chargeCenterId"
+                                placeholder="Seleccione..." [resetFilterOnHide]="true"
+                               emptyFilterMessage=" Sin resultados." emptyMessage="Sin resultados."
+                                [baseZIndex]="10000000000" appendTo="body" (onChange)="getChargeCenterName()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitted && (!_data.chargeCenterId || _data.chargeCenterId == -1)">El centro de cobro es requerido</small>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="branchOffice">Sucursal</label>
+                            <p-dropdown [filter]="true" inputId="branchOffice" [options]="branchOfficeList" [(ngModel)]="_data.branchOfficeId"
+                                placeholder="Seleccione..." [resetFilterOnHide]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                                [baseZIndex]="10000000000" appendTo="body" (onChange)="getBranchOfficeName()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitted && (!_data.branchOfficeId|| _data.branchOfficeId == -1)">La sucursal es requerida</small>
+                        </div>
+
+
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">
+                            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                        </div>
+
+
+                        <!-- <div class="p-field p-col-12 p-md-12">
+               
+                <button [disabled]="saving" pButton pRipple label="Guardar" (keyup.enter)="save()" (click)="save()" icon="pi pi-save"
+                  class="p-button-info p-mr-2">
+                </button>
+              </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+
+        <div style="text-align:right">
+            <button pButton type="button" [disabled]="saving" class="p-button-info p-mr-2" (click)="save()"
+                icon="pi pi-check" label="Aceptar"></button>
+        </div>
+    </ng-template>
+    <router-outlet>
+
+
+    </router-outlet>
+
+</p-dialog>
+<app-select-accounting-account-modal [idBusiness]="idBusiness" [(displayModal)]="displayModal" [viewMode]="viewMode"
+    [(NombreCuenta)]="_data.accountingAccount" [(Ncuenta)]="NombreCuenta" [(idCuentaContable)]="_data.idAssociate"
+    [planCuentaContableDetalleId]="_data.idPlanCuentaContableDetalle"
+    (planCuentaContableDetalleIdChange)="_data.idPlanCuentaContableDetalle = $event; foo()"
+    [(indAuxiliar)]="_data.indPermiteAuxiliar" [(filtrarCuenta)]="filtrarCuenta"
+    [(indClasificacionArticulo)]="displayModal">
+</app-select-accounting-account-modal>

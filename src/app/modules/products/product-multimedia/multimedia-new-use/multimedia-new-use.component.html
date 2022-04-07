@@ -1,0 +1,21 @@
+<p-dialog [(visible)]="showDialog" header="Añadir usos multimedia" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="true" [draggable]="false" [closable]="true" [maximizable]="false" [modal]="true" [style]="{'overflow': 'auto', 'width': '40vw'}"
+[breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-grid p-formgrid">
+            <div class="p-field p-col-12 p-fluid">
+              <label>Usos Multimedia</label>
+              <p-multiSelect emptyMessage="Sin resultados."  emptyFilterMessage="Sin resultados." [filter]="true" display="chip" appendTo="body" [options]="multimediaUseSelect" [(ngModel)]="multimediaUsesSelecteds" placeholder="Seleccione...">
+              </p-multiSelect >
+              <!-- <small class="p-invalid" *ngIf="submitted && (multimediaUsesSelecteds.length <= 0 || multimediaUsesSelecteds == undefined)">El uso multimedia es requerido</small> -->
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+                <button pButton pRipple label="Guardar" (click)="saveMultimediaUse()" icon="pi pi-save" class="p-button-info"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+  

@@ -1,0 +1,64 @@
+<div class="p-m-0 card">
+
+      <div class="p-formgrid p-grid">
+        <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+       
+          <div class=" p-field p-grid">
+            <div class="p-field p-col-12 p-md-4  p-lg-4 p-mt-4">
+                <label for="active">Nombre del plan de cuentas: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <input [(ngModel)]="planName" type="text" maxlength="255" [pKeyFilter]="noneSpecialCharacters"
+                pInputText [disabled]="showPlan" (keyup.enter)="send()" (blur)="onBlurEvent($event)">
+                <small class="p-invalid" *ngIf="this.nomString || submitted && (!planName|| !planName.trim())">El nombre del plan de cuentas es requerido</small>
+            </div>
+            <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-4">
+                <label for="active"> Separador de cuentas: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-dropdown [options]="separatorlist" [(ngModel)]="separator" placeholder="Seleccione..." 
+                  [disabled]="showPlan"  ></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && separator==null"> El separador de cuentas es requerido</small>
+            </div>
+         
+            <div class="p-field p-col-12 p-md-4  p-lg-4 p-mt-4">
+                <label for="active">Longitud de la cuenta: </label>
+                <input type="text" maxlength="150" pInputText disabled [value]="getLength(selectedNodes)">
+            </div>
+           
+          
+          </div>
+        </div>
+        <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+        </div>
+      </div>
+   
+
+    <div class="card">
+        <p-toast></p-toast>
+        <p-steps [model]="elementos" [readonly]="true" [activeIndex]="activeIndex"></p-steps>
+    </div>
+
+    <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <router-outlet>
+        <app-items-details [showItems]="showItems" class="p-mt-3" [(selectedNodes)]="selectedNodes"
+            [separator]="separator?.separatorContent || ''" [(selectedTree)]="itemsNodes" *ngIf="didMount" #child>
+        </app-items-details>
+        <app-accounting-plans-details [showPlan]="showPlan" [(_nodeListTemp)]="itemsNodes"
+            [selectedNodes]="selectedNodes" [separator]="separator?.separatorContent || ''" class="p-mt-3"
+            *ngIf="showPlan"></app-accounting-plans-details>
+
+        <div style="text-align:right">
+            <button pButton type="button" [disabled]="saving" style="margin-right: .50rem" class=" p-ml-4 p-button-secondary" icon=" pi pi-arrow-left"  label="Regresar"
+                *ngIf="!showItems" (click)="back()"></button>
+            <button pButton pRipple label="Limpiar" [disabled]="saving" icon="pi pi-ban" style="margin-right: .50rem"
+                class="p-button-secondary" *ngIf="showItems" (click)="cancel()"></button>
+            <!-- <button pButton type="button" [disabled]="saving" style="margin-right: .50rem" class="p-button-danger p-ml-4" label="Limpiar" *ngIf="showItems" (click)="cancel()"></button> -->
+            <button class="p-button-secondary" icon=" pi pi-arrow-right" iconPos="right" pButton type="button" [disabled]="saving" (click)="next()" label="Siguiente"
+                *ngIf="!showPlan"></button>
+            <button pButton type="button" [disabled]="saving"  class="p-button-info p-mr-2" (click)="send()"  icon="pi pi-save" label="Guardar"
+                *ngIf="showPlan"></button>
+
+               
+        </div>
+
+    </router-outlet>
+
+</div>

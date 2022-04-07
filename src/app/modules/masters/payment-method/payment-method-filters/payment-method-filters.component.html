@@ -1,0 +1,37 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <input [(ngModel)]="filters.name" #name lettersOnly type="text" maxlength="150" pInputText>
+            <label for="input">Nombre</label>
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">  
+        <span class="p-float-label">
+            <label for="dropdown">Grupo</label> 
+            <p-dropdown [(ngModel)]="selectedPaymentMethodGroup" [options]="paymentMethodGroups.value" optionLabel="name" placeholder="Seleccionar Grupo" [showClear]="true">
+            </p-dropdown> 
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">  
+        <span class="p-float-label">
+            <label for="dropdown">Monedas</label> 
+            <p-dropdown [(ngModel)]="selectedCurrency" [options]="currencies.value" optionLabel="name" placeholder="Seleccionar Monedas" [showClear]="true">
+            </p-dropdown> 
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span class="p-float-label">
+            <label for="dropdown">Estatus</label>
+            <p-dropdown [(ngModel)]="active" [options]="status" placeholder="Seleccionar Estatus" [showClear]="true">
+            </p-dropdown>
+        </span>
+    </div>
+    
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

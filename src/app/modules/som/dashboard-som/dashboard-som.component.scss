@@ -1,0 +1,81 @@
+
+:host ::ng-deep {
+
+    h2 {
+        font-size: 2rem;
+        margin-top: 5px;
+        margin-left: 5px;
+        color: #5e81ac;
+    }
+    
+    .custom-layout{
+        background: ghostwhite;
+        padding: 10px;
+    }
+    
+    .p-selectbutton .p-button {
+        background: #ffffff;
+        border: 1px solid #5E81AC;
+        color: #5E81AC;
+        transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    
+    .p-selectbutton .p-button.p-highlight {
+        background: #5E81AC;
+        border-color: #5E81AC;
+        color: #ffffff;
+    }
+
+  .color { 
+    color: #4c566a;
+    font-weight: bold;
+    }
+
+    .info .value {
+        font-size: 3.3rem !important;
+        font-weight: normal!important;
+    }
+
+    [_nghost-ng-cli-universal-c329] .ancho {
+         width: 50px; 
+        /* text-align: center; */
+        display: inline-table;
+    }
+    .p-col-8 {
+        width: 22.6667% !important;
+    }
+    
+    .p-col-4 {
+        width: 76.3333% !important;
+    }  
+
+
+     .subtext {
+        font-weight: normal;
+         font-size: 1.4rem !important;
+ }  
+
+   
+    
+ .object-list-item .object-price {
+
+    font-size: 2.25rem!important;
+
+}
+
+.object-list-item img {
+  
+    box-shadow: none!important;
+    border-radius: -29%;
+}
+
+.iconOp{
+    width: 55px!important;
+}
+
+    .object-list-item {
+        padding: 1rem!important;
+        height: 61px;
+    }
+}
+

@@ -1,0 +1,5 @@
+export class PriorityFilter {
+    id:number = -1;
+    name:string = "";
+    active:number = -1;
+}

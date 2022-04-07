@@ -1,0 +1,197 @@
+:host ::ng-deep {
+    .p-dropdown {
+        width: 14rem;
+        font-weight: normal;
+    }
+    
+    .product-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .product-description {
+        margin: 0 0 1rem 0;
+    }
+    
+    .product-category-icon {
+        vertical-align: middle;
+        margin-right: .5rem;
+    }
+    
+    .product-category {
+        font-weight: 600;
+        vertical-align: middle;
+    }
+    
+    .product-list-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+    
+        img {
+            width: 150px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            margin-right: 2rem;
+        }
+    
+        .product-list-detail {
+            flex: 1 1 0;
+        }
+    
+        .p-rating {
+            margin: 0 0 .5rem 0;
+        }
+    
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: .5rem;
+            align-self: flex-end;
+        }
+    
+        .product-list-action {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .p-button {
+            margin-bottom: .5rem;
+        }
+    }
+    
+    .product-grid-item {
+        margin: .5em;
+        border: 1px solid #dee2e6;
+    
+        .product-grid-item-top,
+        .product-grid-item-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    
+        img {
+            width: 75%;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            margin: 2rem 0;
+        }
+    
+        .product-grid-item-content {
+            text-align: center;
+        }
+    
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    }
+}
+
+.cardTable {
+    padding: 1rem;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 576px) {
+	:host ::ng-deep .product-list-item {
+		flex-direction: column;
+		align-items: center;
+
+		img {
+			width: 75%;
+			margin: 2rem 0;
+		}
+
+		.product-list-detail {
+			text-align: center;
+		}
+
+		.product-price {
+			align-self: center;
+		}
+
+		.product-list-action {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.product-list-action {
+			margin-top: 2rem;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+	}
+}
+
+.recipePriceBox{
+    background: transparent !important;
+    border: 0px !important;
+    border-bottom: 0px solid #ddd !important;
+    margin-bottom: 0.5em;
+    :hover {
+        cursor: pointer;
+    }
+}
+.recipe-price-box-tittle{
+    color:#9199a9;
+    font-size: 12px;
+    font-weight: 600;
+}
+.recipe-price-box-value{
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+.timeline-time{
+    text-align: end !important;
+}
+
+:host ::ng-deep .costs{
+    border-left: 1px solid 		rgb(116, 51, 255) !important;
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+    border-left-color: 		rgb(116, 51, 255);
+    margin-bottom: 34px;
+}
+:host ::ng-deep .pvp-box{
+    border-left: 1px solid 	rgb(127, 82, 224) !important;
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+    border-left-color: 	rgb(127, 82, 224);
+    margin-bottom: 34px;
+}
+:host ::ng-deep .movements-box{
+    border-left: 1px solid 	rgb(138, 112, 194)!important;
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+    border-left-color:	rgb(138, 112, 194);
+    margin-bottom: 34px;
+}
+:host ::ng-deep .package-box{
+    border-left: 1px solid 	rgb(178, 153, 231)!important;
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+    border-left-color: 	rgb(178, 153, 231);
+    margin-bottom: 34px;
+}
+:host ::ng-deep .date-box{
+    border-left: 1px solid 	rgb(153, 140, 182)!important;
+    border-left-width: 3px !important;
+    border-left-style: solid !important;
+    border-left-color: 	rgb(153, 140, 182);
+    margin-bottom: 34px;
+}
+
+
+  .material-icons.avatar{ 
+    color: #868e96; 
+    font-size: 25;
+    display: inline-flex !important;
+    vertical-align: middle;
+    font-weight: 400;
+}

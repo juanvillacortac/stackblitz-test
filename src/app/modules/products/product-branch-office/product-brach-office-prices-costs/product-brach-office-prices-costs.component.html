@@ -1,0 +1,170 @@
+<div class="p-grid">
+    <div class="p-col-12 p-lg-12">
+        <button pButton pRipple label="Guardar en lote" *ngIf="saveLot" (click)="showAddLotPricesCosts()" class="p-button-info p-mr-2"></button>
+    </div>
+    <div class="p-col-12 p-lg-12">
+        <p-accordion>
+            <p-accordionTab *ngFor="let branchOffice of productBranchOfficeList" (click)="searchPricesCostsbyBranchOffice(branchOffice.idBranchOffice)" [selected]="branchOffice.idBranchOffice == branchexpanded ? true : false">
+                <ng-template pTemplate="header">
+                    <div class="p-grid" style="width: 100%; align-items: center; margin-right: 0px; margin-left: 0px; margin-top: 0px;">
+        
+                        <div class="p-md-5">
+                            <label class="p-mr-2"><i [class]="branchOffice.pricesCosts.length > 0 ? 'pi pi-check' : ''"></i></label>
+                            <label>{{branchOffice.branchOffice}}</label>
+                        </div>
+                        <div class="p-md-6">
+                            <!-- <div class="p-grid" *ngFor="let branchOffice1 of branchOffice.pricesCosts">
+                                <div class="p-md-6" *ngIf="branchOffice1.packingType.id == 2">
+                                    Costo base: <label>{{branchOffice1.baseCost | number: '.4'}} {{basesymbolcoin}}</label>
+                                </div>
+                                <div class="p-md-6" *ngIf="branchOffice1.packingType.id == 2">
+                                    Costo conversión: <label>{{branchOffice1.conversionCost | number: '.4'}} {{conversionsymbolcoin}}</label>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="p-md-1">
+                            <button pButton pRipple icon="pi pi-plus" *ngIf="branchOffice.editCosts || branchOffice.editPrices" class="p-button-rounded p-button-success" (click)="showAddPanelPricesCosts($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="p-grid">
+                    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+                            <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                                <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                    <p-table #dtDc [columns]="displayedColumnspackingBranchOffice" [value]="packingBranchOfficeList" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true" scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [selectionMode]="'none'" [(selection)]="selectedPackingBranchOffice" (onRowSelect)="onRowSelect($event)">      
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col style="width:100px" *ngIf="branchOffice.editCosts || branchOffice.editPrices">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkCosts || branchOffice.editCosts">
+                                            <col style="width:150px" *ngIf="branchOffice.checkPrices || branchOffice.editPrices">
+                                            <col style="width:150px" *ngIf="branchOffice.checkPrices || branchOffice.editPrices">
+                                            <col style="width:150px" *ngIf="branchOffice.checkPrices || branchOffice.editPrices">
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngIf="branchOffice.editCosts || branchOffice.editPrices"></th>
+                                            <ng-container *ngFor="let col of columns"> 
+                                                <th *ngIf="col.field == 'packingPresentation.name' || col.field == 'units' || col.field == 'packingTyp.name'" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th> 
+                                                <th *ngIf="col.field == 'baseCost' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'conversionCost' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'netFactor' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'baseNetCost' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'conversionNetCost' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'netSalesFactor' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'netSellingCostBase' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'netSellingCostConversion' && (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'sellingFactor' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'basePVP' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th *ngIf="col.field == 'conversionPVP' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-packingbranchoffice let-columns="columns">
+                                        <tr [pSelectableRow]="packingbranchoffice">
+                                            <td *ngIf="branchOffice.editCosts || branchOffice.editPrices">
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="showEditPanelPricesCosts(packingbranchoffice,branchOffice.idBranchOffice)" pTooltip="Editar"></button>
+                                            </td>
+                                            <ng-container *ngFor="let col of columns">
+                                                <td *ngIf="col.field == 'packingPresentation.name' || col.field == 'units' || col.field == 'packingTyp.name'" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'baseCost' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'conversionCost' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'netFactor' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'baseNetCost' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'conversionNetCost' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'netSalesFactor' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'netSellingCostBase' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'netSellingCostConversion' &&  (branchOffice.checkCosts || branchOffice.editCosts)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'sellingFactor' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'basePVP' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                                <td *ngIf="col.field == 'conversionPVP' &&  (branchOffice.checkPrices || branchOffice.editPrices)" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span>{{col.template(packingbranchoffice)}} </span>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="paginatorleft">
+                                            </ng-template>
+                                            <ng-template pTemplate="paginatorright">
+                                            </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+<app-new-prices-costs [(showDialog)]="ShowDialog" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(availableCompaniesBranchOfficeApp)]="availableCompaniesBranchOfficeApp" [(packingBranchOffice)]="packingBranchOffice" [(packingBranchOfficeListDB)]="packingBranchOfficeListDB" (refreshPackingBranchOffice)="refreshLotPackingBranchOffice()"></app-new-prices-costs>
+<app-new-lot-prices-costs [(showDialog)]="showDialogLot" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(availableCompaniesBranchOfficeApp)]="availableCompaniesBranchOfficeApp" [(packingBranchOfficeListDB)]="packingBranchOfficeListDB" (refreshLotPackingBranchOffice)="refreshLotPackingBranchOffice()"></app-new-lot-prices-costs>

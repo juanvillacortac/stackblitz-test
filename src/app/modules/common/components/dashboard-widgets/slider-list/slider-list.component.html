@@ -1,0 +1,20 @@
+<div class="card widget_panel " style="padding: 10px;">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <ng-template ngFor let-item [ngForOf]="dataPerPage" let-i="index">
+                <div class="p-col-12 timeline-content">
+                    <div> 
+                        <span class="title" > {{item.title}}</span>
+                        
+                    </div>     
+                    <p-slider styleClass="itemSlider" [(ngModel)]="item.currentValue" disabled [min]="0" [max]="item.maxValue"></p-slider>                                
+                </div>
+            </ng-template>
+            <p-paginator *ngIf="data.length  > maxRow" [rows]="maxRow" [totalRecords]="data.length" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+    </div>
+</div>
+
+
+
+

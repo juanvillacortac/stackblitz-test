@@ -1,0 +1,68 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Atributo</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" (keyup.enter)="saveAttribute()" [class]="submitted && (!_attribute.name || !_attribute.name.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText id="name" [(ngModel)]="_attribute.name" (input)="_validations.toCapitalizeString($event)" (keypress)="_validations.keyPressOnlyLettersAndNumbers($event);" (paste)="_validations.noPaste($event)" maxlength="100" autofocus />
+                    <small class="p-invalid" *ngIf="submitted && (!_attribute.name || !_attribute.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="description">Descripción</label>
+                    <input (keyup.enter)="saveAttribute()" id="description" oninput="this.value = this.value.length == 1 ? this.value.charAt(0).toUpperCase().trim() : this.value.charAt(0).toUpperCase().trim() + this.value.substr(1).toLowerCase()" type="text" pInputText [(ngModel)]="_attribute.description" (paste)="_validations.noPaste($event)" maxlength="80" (keypress)="_validations.keyPressOnlyLetters($event);" />
+                  </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="abbreviation">Abreviatura </label>
+                    <input type="text" (keyup.enter)="saveAttribute()" [class]="(submitted && (_attribute.name && _attribute.name.trim().toLocaleUpperCase() == _attribute.abbreviation.trim().toLocaleUpperCase())) || (_attribute.name && _attribute.name.trim().toLocaleUpperCase() == _attribute.abbreviation.trim().toLocaleUpperCase()) ? 'ng-dirty ng-invalid' : ''" pInputText id="abbreviation" oninput="this.value = this.value.toUpperCase().trim()" (keypress)="_validations.keyPressAbbreviation($event);" (paste)="_validations.noPaste($event)" [(ngModel)]="_attribute.abbreviation" maxlength="3" autofocus />
+                    <small class="p-invalid" *ngIf="(submitted && (_attribute.name && _attribute.name.trim().toLocaleUpperCase() == _attribute.abbreviation.trim().toLocaleUpperCase())) || (_attribute.name && _attribute.name.trim().toLocaleUpperCase() == _attribute.abbreviation.trim().toLocaleUpperCase())">La abreviatura debe ser diferente al nombre</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tipo de atributo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_attributetype" (keyup.enter)="saveAttribute()" appendTo="body" [(ngModel)]="_attribute.attributeType.id" (onChange)="evalVisileOption()" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_attribute.attributeType.id == -1 || _attribute.attributeType.id == undefined)">El tipo de atributo es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Agrupación de atributo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_attributeagrupation" (onChange)="listatributeoptions()" (keyup.enter)="saveAttribute()" appendTo="body" [(ngModel)]="_attribute.attributeAgrupation.id" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_attribute.attributeAgrupation.id == -1 || _attribute.attributeAgrupation.id == undefined)">La agrupación de atributo es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Agrupación de unidad de medida <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_groupingunitmeasure" (keyup.enter)="saveAttribute()" appendTo="body" [(ngModel)]="_idgroupingunitmeasure" (onChange)="listmeasurementunits()"  placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_idgroupingunitmeasure == -1 || _idgroupingunitmeasure == undefined)">La agrupación de unidad de medida es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Unidad de medida <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_measurementunit" (onChange)="listatributeoptions()" (keyup.enter)="saveAttribute()" appendTo="body" [(ngModel)]="_attribute.measurementUnit.id" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_attribute.measurementUnit.id == -1 || _attribute.measurementUnit.id == undefined)">La unidad de medida es requerida</small>
+                </div>
+                <div *ngIf="_visibleOption || _attribute.attributeType.id == 1" class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Opciones del atributo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-multiSelect emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" display="chip" [options]="_attributeoption" (onChange)="changeoption()" (keyup.enter)="saveAttribute()" appendTo="body" [(ngModel)]="_attributeoptionSelected" placeholder="Seleccione...">
+                    </p-multiSelect>
+                    <small class="p-invalid" *ngIf="submitted && _attributeoptionSelected.length == 0 && _attribute.attributeType.id == 1">Los atributos de tipo opción deben tener al menos una opción seleccionada</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="status" [disabled]="_attribute.id <= 0" appendTo="body" [(ngModel)]="_attribute.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="saveAttribute()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

@@ -1,0 +1,34 @@
+ <div class="card widget_panel">
+<!--     <div class="header-buttons">
+        <a (click)="show()">
+                <i class="pi pi-plus"> </i> Ver más           
+        </a>
+    </div> -->
+     <div  class="p-grid">
+  
+            <div *ngFor="let Typeindicator of ListTypeindicators"  class="p-col-3 p-md-4 p-offset-1" style="border-left: #b2b2b3;border-left-width:3px;border-left-style: solid;margin-block: 3px;">
+                <h1 class="fontlegendNumber"> {{Typeindicator.value}}</h1>
+                <!-- <div class="p-field"> -->
+                    <span class="fontlegendD">{{Typeindicator.value2}}</span>
+                    <!-- </div> -->
+                <!-- <div class="p-field"> -->
+                <span class="fontlegend">{{Typeindicator.indicator}}</span>
+                <!-- </div> -->
+            </div>
+<!--             <div class="p-col-12 p-md-12" style="margin: 0px;padding: 0px;">
+        
+               <div class="p-field">
+                    <button (click)="show()" pButton pRipple type="button" label="Ver más..." class="p-button-text  p-md-12" style="background-color: whitesmoke;">
+                    
+                    </button> 
+                </div>  -->
+                     
+         
+        </div>
+          
+      
+    </div>
+   
+   
+ 
+    

@@ -1,0 +1,19 @@
+:host ::ng-deep { 
+    .ui-panel-title{
+        vertical-align: middle !important;
+        background-color: lightgoldenrodyellow;
+    }
+
+    .panelheader{
+        width: 100%; 
+        text-align: center; 
+        font-weight: bold;
+        
+    }
+
+    .fieldseth fieldset{
+        height: 25rem;
+        overflow: scroll;
+        background-color: lightgoldenrodyellow;
+    }
+}

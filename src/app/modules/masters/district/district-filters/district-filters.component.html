@@ -1,0 +1,50 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" name="name" sentenceType (keyup.enter)="search()" id="name" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="100" pInputText>
+                <label for="float-input">Municipio</label>
+            </span>
+        </div>        
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="status" id="status" appendTo="body" [(ngModel)]="filters.status" [showClear]="false" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="status">Estatus</label>
+            </span>
+        </div>  
+    </div>  
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="countries.value" id="countries" appendTo="body" optionLabel="name"  (keyup.enter)="search()"
+                [(ngModel)]="idCountry" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onCountrySelected($event.value)"
+                ></p-dropdown>
+                <label for="countries">País</label>
+
+            </span>
+        </div>   
+    </div> 
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="states.value" id="states" appendTo="body" optionLabel="name"  (keyup.enter)="search()"
+                [(ngModel)]="idStates" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onStateSelected($event.value)" [disabled]="!countrySelected"
+                ></p-dropdown>
+                <label for="rateType">Estado</label>
+
+            </span>
+        </div>   
+    </div> 
+
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+:host ::ng-deep {
+    .status-badge {
+        border-radius: 3px;
+        padding: 0.1em .5rem;
+        font-size: 1rem;
+        letter-spacing: .3px;
+        display: inline-flex;
+        margin: 2px;
+    }
+    .status-delayed {
+        background: #218838;
+        color: #ffffff;
+    }
+    .status-finalize {
+        background: #5a6268;
+        color: #ffffff;
+    }
+}

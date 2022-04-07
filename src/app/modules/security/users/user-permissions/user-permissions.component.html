@@ -1,0 +1,76 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <div [formGroup]="permissionsForm">
+                <div class="p-fluid p-grid p-col-12 p-md-12">
+                    <div class="p-field p-col-12 p-md-4">
+                        <label for="system">{{'security_module.user.system' | translate}}</label>
+                        <p-dropdown [options]="systems" formControlName="idSystem" id="system"
+                                    placeholder="{{'security_module.user.select_system' | translate}}"
+                                    [showClear]="true"
+                                    (onChange)="onSystemSelected($event.value)"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <label for="app">{{'security_module.user.application' | translate}}</label>
+                        <p-dropdown [options]="apps" id="app" formControlName="idApp"
+                                    placeholder="{{'security_module.user.select_application' | translate}}"
+                                    [showClear]="true"
+                                    (onChange)="onAppSelected($event.value)"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <label for="office">{{'security_module.user.office' | translate}}</label>
+                        <p-dropdown formControlName="idOffice" id="office" [options]="offices"
+                                    placeholder="{{'security_module.user.select_office' | translate}}"
+                                    [showClear]="true"
+                                    (onChange)="onOfficeSelected($event.value)"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-fluid p-grid p-col-12 p-md-12" *ngIf="showModules">
+                <div class="p-fluid p-col-12 p-md-12">
+                    <table class="p-fluid p-grid">
+                        <td class="p-col-12 p-md-6">
+                            <h5>{{'security_module.modules' | translate}}</h5>
+
+                            <div class="p-field">
+                                <p-tree [value]="modules" selectionMode="single"
+                                        (onNodeSelect)="onModuleSelected($event.node)" [virtualScroll]="false"
+                                        [virtualNodeHeight]="33" scrollHeight="300px"
+                                        [styleClass]="'custom-ui-tree'">
+                                </p-tree>
+                            </div>
+                        </td>
+                        <td class="p-col-12 p-md-6">
+                            <h5>{{'security_module.actions' | translate}}</h5>
+
+                            <div class="p-fluid p-col-12 p-md-12">
+                                <div style="height: 300px; overflow: auto"
+                                     *ngIf="containPermissions; else divNoContainPermission">
+                                    <h5>{{selectedSubModule}}</h5>
+                                    <div class="p-field-checkbox" *ngFor="let permission of permissionShowing">
+                                        <p-checkbox name="group1" (onChange)="onPermissionSelected()"
+                                                    [(ngModel)]="permission.selected" binary="true"
+                                                    [value]="permission.id" [label]="permission.name"></p-checkbox>
+                                    </div>
+                                </div>
+                                <ng-template #divNoContainPermission>
+                                    <label>No posee acciones</label>
+                                </ng-template>
+                            </div>
+                        </td>
+                    </table>
+                </div>
+                <div class="p-fluid p-col-12">
+                    <div class="p-fluid p-grid p-formgrid p-jc-end">
+                        <div class="p-field p-mr-2">
+                            <button pButton type="button" pRipple class="p-button-info" icon="pi pi-save"
+                                    [disabled]="!permissionsForm.valid" (click)="onSave()"
+                                    label="{{'save' | translate}}" pTooltip="{{'save' | translate }}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-toast position="top-right" key="user-permissions"></p-toast>
+</div>

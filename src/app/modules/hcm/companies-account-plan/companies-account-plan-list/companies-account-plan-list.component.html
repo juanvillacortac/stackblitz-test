@@ -1,0 +1,92 @@
+<div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search" *ngIf="_segments && _segments.length > 0"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." *ngIf="_segments && _segments.length > 0"/>
+    </span>
+    <div class="p-pr-4">
+      <button pButton pRipple icon="pi pi-plus" class="p-button-success boton-crear"  pTooltip="Crear nuevo" tooltipPosition="top" [disabled]="true" *ngIf="(numberSegments === 0 || numberSegments <= sizeSegments)"></button>
+      <button pButton pRipple icon="pi pi-plus" class="p-button-success boton-crear"  pTooltip="Crear nuevo" tooltipPosition="top" (click)="createNew()" 
+      *ngIf="(numberSegments > 0 && numberSegments > sizeSegments) && this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPANY_HCM_PERMISSION_ID)" id="add"></button>
+    </div>
+</div>
+
+<p-panel header="Segmentación" class="readOnlyCard">
+
+    <div class="card p-m-0 p-pb-0 p-p-0">
+
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-col-12 p-lg-4 p-md-4 inside">
+            <label for="" class="p-col-12 p-mt-md-2 p-mb-2">Separador de cuentas<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12 p-pl-0 p-pr-0"> 
+              <p-dropdown [class]="isCallback && separator == 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." [options]="_separatorTypeList" [(ngModel)]="separator"></p-dropdown>
+              <small [class]="isCallback && separator == 0? 'p-invalid' : 'p-valid'"> El separador de cuentas es requerido</small>
+            </div>
+          </div> 
+
+          <div class="p-col-12 p-lg-4 p-md-4">
+            <label for="" class="p-col-12 p-mt-md-2 p-mb-2">Número de segmentos<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12 p-pl-0 p-pr-0">
+              <p-dropdown [class]="isCallback && numberSegments == 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." [options]="_SegmentTypeCountList" [(ngModel)]="numberSegments"></p-dropdown>
+              <small [class]="isCallback && numberSegments == 0 ? 'p-invalid' : 'p-valid'"> El número de segmentos es requerido</small>
+            </div>
+          </div>  
+        </div>
+
+        <div class="card p-mt-0 p-ml-0 p-mr-0 p-mb-2">
+            <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_segments" [paginator]="true" [rows]="10" 
+            [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" 
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" *ngIf="_segments && _segments.length > 0">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                  </ng-container>
+                  <th style="width: 3em;"></th>
+                  <th style="width: 8em;"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-columns="columns" let-accountingitemsegment>
+                <tr>
+                  <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                      <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="[col.field]"></app-active-label>
+                      <ng-template #textCell>
+                        <span>{{col.template(accountingitemsegment)}} </span>
+                      </ng-template>
+                    </td>
+                  </ng-container>
+                  <td>
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_COMPANIES_PERMISSION_ID)" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top" (click)="onEdit(accountingitemsegment)"></button>
+                  </td>
+                  <td>
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_COMPANIES_PERMISSION_ID)" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar" tooltipPosition="top" (click)="modalDeleted(accountingitemsegment)"></button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="paginatorleft"></ng-template>
+              <ng-template pTemplate="paginatorright"></ng-template>
+            </p-table>
+            <div *ngIf="_segments == null || _segments.length == 0">
+              <div class="p-grid">
+                <div class="p-col-12 p-fluid">
+                  <p-messages severity="info">
+                    <ng-template pTemplate>
+                      <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                      <div class="p-ml-2">No existen segmentos de cuenta asociados a esta empresa.</div>
+                    </ng-template>
+                  </p-messages>
+                </div>
+              </div>
+            </div>
+            
+        </div>
+
+        <div class="p-col-12" align="right">
+            <button id="save" pButton pRipple icon="pi pi-save" class="p-button-info" label="Guardar" (click)="saveData()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPANY_HCM_PERMISSION_ID)"></button>
+        </div>
+      <app-companies-account-plan-panel *ngIf="showSidebar" [showDialog]="showSidebar" [_dataSegment]="accountingItemSegmentViewModel" [listSegmentType]="_segmentTypeList" [segmentList]="_segments" [maxOrdinal]="numberSegments" (changeDataSegment)="update($event)" (backUnChanged)="resetValues($event)"></app-companies-account-plan-panel>
+    </div>
+</p-panel>

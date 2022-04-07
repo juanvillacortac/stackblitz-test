@@ -1,0 +1,46 @@
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText [(ngModel)]="paymentMethod.name" #name maxlength="150" lettersOnly required [disabled]="paymentMethod.initialConfiguration"/>       
+                    <small class="p-invalid" *ngIf="submitted && (!paymentMethod.name || !paymentMethod.name.trim())">El campo nombre es requerido</small>               
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Grupo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [(ngModel)]="selectedPaymentMethodGroupId" [options]="paymentMethodGroups.value" [disabled]="paymentMethod.initialConfiguration" optionLabel="name" placeholder="Seleccionar Grupo" [showClear]="true"  appendTo="body" [autoDisplayFirst]="false">
+                    </p-dropdown> 
+                    <small class="p-invalid" *ngIf="submitted && !selectedPaymentMethodGroupId">El campo grupo es requerido</small>               
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Monedas</label>
+                    <p-multiSelect [options]="currencies" [(ngModel)]="selectedCurrencies" [disabled]="paymentMethod.initialConfiguration"  optionLabel="name" placeholder="Seleccionar Monedas" ></p-multiSelect>
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="active" [options]="status"  placeholder="Seleccionar Estatus" [showClear]="false" [disabled]="!isEdit">
+                    </p-dropdown>
+                </div>   
+            </div>
+        </div>
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="paymentMethod.initialConfiguration">
+                <span [ngStyle]="{'color':'red'}">Registro no editable</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton type="button" icon="pi pi-save" pRipple   class="p-button-info p-mr-2" [disabled]="loading" (click)="onSave()" label="Guardar"></button>
+            </div> 
+        </div>
+        <p-toast position="top-right" key="paymentMethod"></p-toast>
+    </div>
+</div>

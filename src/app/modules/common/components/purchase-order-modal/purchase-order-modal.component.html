@@ -1,0 +1,235 @@
+<p-dialog (onShow)="onShow()" class="purchase-dialog" (onHide)="onHide()" header="Órdenes de compra"
+  [(visible)]="visible" [style]="{width:this.width}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [modal]="true"
+  [draggable]="false" [resizable]="false">
+  <div class="card p-m-0">
+  <div class="p-grid">
+    <div class="p-col-12 p-md-4 p-lg-3  p-fluid">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input [(ngModel)]="purchaseFilters.numberOC" name="numOC" id="numberOC" type="text" pInputText pInputText
+            maxlength="130" (keyup.enter)="search()"
+            (keypress)="_validations.keyPressFroLettersNumbersPointanddash($event);" maxlength="130">
+          <label *ngIf="!this.isreception">Número de orden de compra</label>
+          <label *ngIf="this.isreception">Número de OC</label>
+        </span>
+      </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <p-dropdown [options]="typeOClist" appendTo="body" [(ngModel)]="purchaseFilters.idTypeOC" (keyup.enter)="search()"
+        placeholder="Tipo OC" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados."
+        emptyMessage="Sin resultados.">
+      </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="!isResultFilteredByStatus">
+      <p-dropdown [options]="statusOCList" [(ngModel)]="purchaseFilters.idStatus" placeholder="Estatus"
+        (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+      </p-dropdown>
+      <!-- <p-dropdown [options]="brandslist" appendTo="body" [(ngModel)]="filters.classificationId" placeholder="Marca">
+      </p-dropdown> -->
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="!isPurchaseOrderSelectionMode">
+      <p-dropdown [options]="coinsList" appendTo="body" [(ngModel)]="purchaseFilters.idCoin" (keyup.enter)="search()"
+        placeholder="Monedas" emptyFilterMessage="Sin resultados." [filter]="true">
+      </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input type="text" pInputText placeholder="Proveedor" [(ngModel)]="this.suppliermodal.socialReason"
+            (keyup.enter)="search()" class="responsible" disabled>
+          <p-button icon="pi pi-search" (click)="SupplierDialogVisible=true" class="btresponsible"></p-button>
+        </span>
+      </div>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4 p-lg-3">
+      <div class="p-inputgroup">
+        <input type="text" pInputText placeholder="Responsable" [(ngModel)]="purchaseFilters.createdByUser" disabled
+          class="responsible">
+        <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=true)" class="btresponsible"></p-button>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <p-dropdown [options]="typedates" appendTo="body" [(ngModel)]="purchaseFilters.idTypeDate"
+        (keyup.enter)="search()" placeholder="Tipos de fechas">
+      </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+      <p-calendar id="ToD" [(ngModel)]="iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()" readonlyInput="true"
+        [showIcon]="true">
+      </p-calendar>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+      <p-calendar id="ToF" [minDate]="iDate" [(ngModel)]="fDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+        readonlyInput="true" [showIcon]="true">
+      </p-calendar>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="!isPurchaseOrderSelectionMode">
+      <p-dropdown [options]="branchOfficeList" appendTo="body" [(ngModel)]="purchaseFilters.idOriginBranch"
+        (keyup.enter)="search()" placeholder="Sucursal origen" [filter]="true" emptyFilterMessage="Sin resultados."
+        emptyMessage="Sin resultados.">
+      </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <p-dropdown [options]="branchOfficeList" appendTo="body" [(ngModel)]="purchaseFilters.idDestBranch"
+        (keyup.enter)="search()" placeholder="Sucursal destino" [filter]="true" emptyFilterMessage="Sin resultados."
+        emptyMessage="Sin resultados.">
+      </p-dropdown>
+    </div>
+  </div>
+    <div class="p-field p-grid">
+        <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+          <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+          <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+        </div>
+
+
+      <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end" style="margin-top: 1rem;">
+        
+        <span class="p-input-icon-left">
+          
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dtsp.filterGlobal($event.target.value, 'contains')"
+            placeholder="Buscar..." />
+        </span>
+      </div>
+  </div>
+
+  
+
+<div class="p-grid">
+  
+    <small class="p-invalid" *ngIf="submitted && selectedorder.length <=0">Debe seleccionar al menos un registro</small>
+    <p-table #dtsp [columns]="displayedColumns" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+      dataKey="idOrderPurchase" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo"
+      [value]="this._Service._PurchaseOrderDetailList" [(selection)]="selectedorder">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width:5rem">
+          </th>
+          <th *ngIf="isPurchaseOrderSelectionMode" style="width:5rem">
+          </th>
+          <ng-container *ngFor="let col of columns">
+
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th [ngStyle]="{'overflow-wrap': 'break-word'}" pSortableColumn="purchaseOrderproduct">Nro ítems <p-sortIcon
+              field="purchaseOrderproduct"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order let-columns="columns" let-expanded="expanded">
+        <tr>
+          <td style="width:5rem">
+            <button type="button" pButton pRipple [pRowToggler]="order"
+              class="p-button-text p-button-rounded p-button-plain"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td>
+          <td *ngIf="isPurchaseOrderSelectionMode">
+            <p-tableRadioButton [value]="order"></p-tableRadioButton>
+          </td>
+          <!-- <td>
+              <img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" [alt]="order.name" width="75" class="p-shadow-4 imgcatalog" />
+          </td> -->
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <span class="p-column-title">{{col.header}}</span>
+              <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+              </app-active-label>
+              <ng-template #textCell>
+                <span>{{col.template(order)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>{{order.purchaseOrderproduct.length}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-order>
+        <tr>
+          <td colspan="8">
+            <div class="p-p-3">
+              <p-table #dtspd [columns]="displayedColumnsDetail" [(selection)]="selectedorder"
+                [showCurrentPageReport]="true" [scrollable]="true" [rows]="5"
+                styleClass="p-datatable-sm p-datatable-responsive-demo" dataKey="id"
+                [value]="order.purchaseOrderproduct">
+                <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width:5rem" *ngIf="!isPurchaseOrderSelectionMode">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '150px' }"
+              [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+          <td style="width:5rem" *ngIf="!isPurchaseOrderSelectionMode">
+            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' , 'width': '150px'}">
+              <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="product[col.field]">
+              </app-active-label>
+              <ng-template #textCell>
+                <span>{{col.template(product)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="8">No existen resultados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  </td>
+  </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="8">No existen resultados.</td>
+    </tr>
+  </ng-template>
+  </p-table>
+
+
+ 
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+      <span class="p-input-icon-left">
+      <button pButton pRipple label="Aceptar" (click)="submitSelection()" icon="pi pi-check"
+        class="p-button-info p-mr-2"></button>
+      <button  pButton pRipple icon="pi pi-ban" (click)="visible=false" label="Cancelar" class="p-button-secondary">
+      </button>
+    </span>
+    </div>
+  </div>
+</div>
+
+
+</p-dialog>
+
+<!-- <app-suppliermodal (onToggle)="onToggleSupplier($event)" [(supplierinput)]="this.supplierstring"  [filters]="purchaseFilters" [visible]="SupplierDialogVisible"></app-suppliermodal> -->
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)"
+  (onToggle)="onHideOperator($event)" [multiples]="multiples"></operator-modal-list>
+<app-supplier-common-modal (onToggle)="onToggleSupplier($event)" [suppliermodal]="suppliermodal"
+  (onSubmit)="onSubmitSupplier($event)" [visible]="SupplierDialogVisible" [multiple]="false">
+</app-supplier-common-modal>

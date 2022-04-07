@@ -1,0 +1,47 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Moneda</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input id="float-input"  [(ngModel)]="_coin.name" [class]="submitted && (!_coin.name || !_coin.name.trim()) ? 'ng-dirty ng-invalid' : ''"  lettersOnly type="text" pInputText (input)="_validations.toCapitalizeString($event)" maxlength="50" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" required >                   
+                    <small class="p-invalid" *ngIf="submitted && (!_coin.name || !_coin.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tipo de moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown  [options]="coinType" [(ngModel)]="_coin.idType" placeholder="Seleccione..." appendTo="body" [class]="submitted && _coin.idType <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" required ></p-dropdown>
+                  <small class="p-invalid" *ngIf="submitted && _coin.idType <= 0">El tipo de moneda es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <!--  -->
+                    <label for="active">Símbolo <span [ngStyle]="{'color':'red'}">*</span> </label>               
+                    <input id="sb-input" [(ngModel)]="_coin.symbology" [class]="submitted && (!_coin.symbology || !_coin.symbology.trim()) ? 'ng-dirty ng-invalid' : ''"   type="text" pInputText (input)="_validations.toCapitalizeSimbology($event)" maxlength="5" (paste)="_validations.noPaste($event)" (keyup.enter)="submit()"  [pKeyFilter]="noSpecial" required> 
+                    <small class="p-invalid" *ngIf="submitted && (!_coin.symbology || !_coin.symbology.trim())">El símbolo es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="abbreviation">Abreviatura <span [ngStyle]="{'color':'red'}">*</span> </label>               
+                    <input id="ab-input" [(ngModel)]="_coin.abbreviation" type="text" lettersOnly pInputText (input)="_validations.toUppercaseString($event)" maxlength="3" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" required>
+                    <small class="p-invalid" *ngIf="submitted && (!_coin.abbreviation || !_coin.abbreviation.trim())">La abreviatura es requerida</small>
+                    <small class="p-invalid" *ngIf="(submitted && (_coin.name.trim() && _coin.name.trim().toLocaleUpperCase() == _coin.abbreviation.trim().toLocaleUpperCase()))||(_coin.name.trim() && _coin.name.trim().toLocaleUpperCase() == _coin.abbreviation.trim().toLocaleUpperCase())">La abreviatura debe ser diferente al nombre</small>
+                </div>
+     
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <!-- <p-checkbox  name="active" [(ngModel)]="_coin.active" [binary]="true" [disabled]="_coin.id<=0"></p-checkbox> -->
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_coin.active" placeholder="Estatus" [disabled]="_coin.id<=0" (keyup.enter)="submit()" required ></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar"  (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

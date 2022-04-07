@@ -1,0 +1,31 @@
+
+:host ::ng-deep {
+    .p-panel-header span {
+        color: #5E81AC;
+        font-size: 1.5rem;
+        font-weight: 700 !important;
+    }
+
+    .p-panel .p-panel-header {
+        border: unset;
+        background: unset;
+    }
+
+    div.p-panel-content {
+        border: unset;
+    }
+
+    .p-panel .p-panel-content {
+        padding: 0 !important;
+    }
+
+    .p-panel-header.ng-star-inserted {
+        padding: 0rem 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .p-datatable-scrollable-view {
+        height: 275px;
+    }
+
+}

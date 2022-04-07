@@ -1,0 +1,87 @@
+
+:host ::ng-deep {
+    .p-tabview .p-tabview-panels,
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav {
+        background-color: unset;
+        border: unset;
+    }
+
+    @media screen and (min-width: 769px){
+
+        #primaryInfo {
+            position: fixed;  
+            width: 20%;
+          }
+       
+    }
+
+    @media screen and (max-width: 768px){
+
+        #primaryInfo {
+            position: unset;  
+            max-width: 100%;
+            //height: 40rem;
+          }
+       
+    }
+
+}
+
+:host ::ng-deep {
+    #cuentasBancarias .p-fluid .p-inputtext {
+        padding: 6px 0px 0px 0px;
+        border: unset;
+    }
+
+    .p-col-12.p-md-2.p-lg-2.p-mt-2.p-fluid,
+    .p-col-12.p-md-10.p-lg-10.p-fluid {
+        padding: 0.1rem 0.5rem;
+    }
+    
+    p-card {
+        padding: 0;
+    }
+
+    .readOnlyCard .p-card-title {
+        color: #5E81AC;
+    }
+
+    .p-tabview .p-tabview-panels {
+        padding: 1.25rem 0;
+    }
+    
+    #cuentasBancarias .p-col-12.p-md-3.p-lg-3.p-mt-2,
+    #cuentasBancarias .p-col-12.p-md-9.p-lg-9.p-fluid {
+        padding: 0.1rem 0.5rem;
+    }
+    
+    .p-tabview .p-tabview-nav li:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {
+        background-color: unset;
+        background-color: rgba(94, 129, 172, 0.04);
+    }
+
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link,
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link:hover {
+        font-weight: unset;
+        color: #5E81AC;
+    }
+
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
+        box-shadow: unset !important;
+        border-bottom: 3px solid #bfcdde !important;
+        font-weight: 600 !important;
+    }
+
+    .styleActive {
+        border-bottom: 2px solid #5E81AC;
+        border-radius: 0px;
+        font-weight: bold;
+        //padding: 10px;
+      }
+
+}
+
+
+

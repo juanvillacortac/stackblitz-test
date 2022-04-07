@@ -1,0 +1,68 @@
+<div class="card">
+    <div class="p-grid">
+      <div class="p-xs-12 p-sm-12 p-md-12 p-lg-12">
+        <div *ngIf="paginator">
+          <p-dataView [value]="dataViewModel.dataviewlist" layout="list" [paginator]="true" [rows]=5>
+            <ng-template let-dataviewmodel pTemplate="listItem">
+              <div class="object-list-item">
+                <p-button id="btnImage" styleClass="p-button-img" (onClick)="imgClick(dataViewModel.codModalImg,dataviewmodel)">
+                  <img *ngIf="dataviewmodel.image"
+                    src="https://ui-avatars.com/api/?name={{dataviewmodel.name + ' ' + dataviewmodel.mainDescription}}&background=17a2b8&color=fff&rounded=true&bold=true&size=200"
+                    alt="image-default" />
+                </p-button>
+                <div class="object-list-detail">
+                  <div class="object-name">
+                    <p-button *ngIf="linkview" styleClass="p-button-link">{{dataviewmodel.name}}</p-button>
+                    <h5 *ngIf="!linkview">{{dataviewmodel.name}}</h5>
+                  </div>
+                  <div class="object-description">{{dataviewmodel.mainDescription}}</div>
+                  <div class="object-description">{{dataviewmodel.secundaryDescription}}</div>
+                </div>
+                <div class="object-list-action">
+                  <span class="object-price">${{dataviewmodel.mainDescriptionSide}}</span>
+                  <span class="object-description">${{dataviewmodel.secundaryDescriptionSide}}</span>
+                </div>
+              </div>
+            </ng-template>
+          </p-dataView>
+        </div>
+        <div *ngIf="!paginator">
+          <p-dataView [value]="dataViewModel.dataviewlist" layout="list">
+            <ng-template let-dataviewmodel pTemplate="listItem">
+              <div class="object-list-item">
+                <!-- <button *ngIf="dataviewmodel.image" id="btnImage" (onClick)="imgClick(dataViewModel.codModalImg,dataviewmodel)" pButton pRipple type="button"
+                  class="p-buttonimg">
+                  <img *ngIf="dataviewmodel.image" src={{dataviewmodel.imagePath}} alt="image-default" />
+                </button> -->
+                <p-button *ngIf="dataviewmodel.image" (click)="op.toggle($event)" styleClass="p-button-img">
+                  <img *ngIf="dataviewmodel.image"  width="-webkit-fill-available" src={{dataviewmodel.imagePath}} alt="image-default" />
+                </p-button>
+              
+                <div class="object-list-detail">
+                  <div class="object-name">
+                    <!-- <p *ngIf="linkview" onclick="">{{dataviewmodel.name}}</p> p-button-rounded p-button-secondary p-button-text-->
+                    <p-button *ngIf="linkview" (onClick)="nameLink(dataViewModel.codModal,dataviewmodel)" [label]="dataviewmodel.name" styleClass="p-button-link"></p-button>
+                    <h5 *ngIf="!linkview">{{dataviewmodel.name}}</h5>
+                  </div>
+                  <div class="object-description">{{dataviewmodel.mainDescription}}</div>
+                  <div class="object-description">{{dataviewmodel.secundaryDescription}}</div>
+                </div>
+                <div class="object-list-action">
+                 
+                  <!-- <span class="object-price">{{dataviewmodel.mainDescriptionSide}}</span>
+                  <span class="object-description">{{dataviewmodel.secundaryDescriptionSide}}</span> -->
+                 
+                  <p-button icon="pi pi-eye" pTooltip="Ver" (onClick)="btnClick(dataViewModel.codModal,dataviewmodel)"></p-button>
+                 
+                 
+                  <span>{{dataviewmodel.secundaryDescriptionSide}}</span>
+                </div>
+              </div>
+            </ng-template>
+          </p-dataView>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

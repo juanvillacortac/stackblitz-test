@@ -1,0 +1,24 @@
+@media screen and (min-width: 768px){
+
+    .container-date{
+        padding-top: 20px;
+    }
+
+    .container-button{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 767px){
+
+    .container-button{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .container-button > .p-mr-2{
+        margin-bottom: 0.5rem;
+    }
+}

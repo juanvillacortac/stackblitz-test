@@ -1,0 +1,423 @@
+<p-card class="p-m-0 generic-card-padding">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size">{{ 'srm.purchase_order.header.document_number' | translate }}: <b>{{
+                    purchaseOrder.purchase.numOC }}</b></p>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <p class="generic-font-size generic-float-text"> {{ 'srm.purchase_order.header.status' | translate }}: <b>{{
+                    purchaseOrder.purchase.status }}</b></p>
+        </div>
+    </div>
+    <p class="generic-font-size">{{ 'srm.purchase_order.header.date_sent' | translate }}:<b> {{
+            purchaseOrder.purchase.dispatchDate | date : "dd/MM/yyyy"}}</b></p>
+    <p class="generic-font-size">{{ 'srm.purchase_order.header.responsible_user' | translate }}:</p>
+    <!-- <app-user-image [userId]="purchaseOrder.purchase.responsibleId" [userName]="purchaseOrder.purchase.responsible">
+    </app-user-image> -->
+    <div class="p-inputgroup">
+        <img  *ngIf="purchaseOrder.purchase.imageResponsible =='X'" src="https://ui-avatars.com/api/?name={{purchaseOrder.purchase.responsible}}&background=17a2b8&color=fff&rounded=true&bold=true&size=200" width="32" style="vertical-align: middle" />
+        <img  *ngIf="purchaseOrder.purchase.imageResponsible!='X'" src="{{purchaseOrder.purchase.imageResponsible}}"  class="container-imgtable" width="32" style="vertical-align: middle" />
+        <span class="p-ml-1">{{purchaseOrder.purchase.responsible}}</span>
+    </div>
+    <p class="generic-font-size">{{ 'srm.purchase_order.header.validate_user' | translate }}:</p>
+    <div class="p-inputgroup">
+        <img  *ngIf="purchaseOrder.purchase.imageApprovedby =='X'" src="https://ui-avatars.com/api/?name={{purchaseOrder.purchase.operatorChecks}}&background=17a2b8&color=fff&rounded=true&bold=true&size=200" width="32" style="vertical-align: middle" />
+        <img  *ngIf="purchaseOrder.purchase.imageApprovedby!='X'" src="{{purchaseOrder.purchase.imageApprovedby}}"  class="container-imgtable" width="32" style="vertical-align: middle" />
+        <span class="p-ml-1">{{purchaseOrder.purchase.operatorChecks}}</span>
+    </div>
+    
+    <!-- <app-user-image [userId]="purchaseOrder.purchase.approvedbyId" [userName]="purchaseOrder.purchase.approvedby">
+    </app-user-image> -->
+   
+
+    <div class="p-col-12 p-md-6 p-lg-12 p-sm-3 p-d-flex p-jc-end">
+        <button pButton pRipple label=" {{ 'return' | translate }}" (click)="back()" icon="pi pi-arrow-left"
+            class="p-button-secondary p-mr-2" ></button>
+        <!--<button pButton pRipple label=" {{ 'print' | translate }}" icon="pi pi-print"
+            class="p-button-info p-mr-2" (click)="print()"></button>-->
+
+        <button pButton pRipple label=" {{ 'start' | translate }}" icon="pi pi-caret-right" 
+            class="p-button-secondary p-mr-2" [disabled]="!orderIsPendingForReview()" (click)="startPurchaseOrder()" *ngIf="userPermissions.allowed(this.permissionsIDs.START_PURCHASE_ORDER_REVIEW_ID)"></button>
+
+        <button pButton pRipple label=" {{ 'reject' | translate }}" icon="pi pi-times" 
+            class="p-button-danger p-mr-2" [disabled]="rejectDisabled()" (click)="rejectPurchaseOrder()" *ngIf="userPermissions.allowed(this.permissionsIDs.REJECT_PURCHASE_ORDER_REVIEW_ID)"></button>
+
+      <button pButton pRipple label=" {{ 'save' | translate }}" icon="pi pi-check"  class="p-button-success p-mr-2"
+      [disabled]="!orderIsInReview()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ODC_PROVIDER)" (click)="savePurchaseOrder()"></button>
+
+      <button pButton pRipple label="Finalizar" icon="pi pi-check"  class="p-button-secondary p-mr-2"
+      [disabled]="!orderIsInReview()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.PROVIDER_FINISH_REVIEW)" (click)="finalizedPurchaseOrder()"></button>
+        <!-- <p-splitButton label=" {{ 'save' | translate }}" icon="pi pi-check" [disabled]="!orderIsInReview()"
+            styleClass="p-button-success p-mr-2"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ODC_PROVIDER)" (onClick)="savePurchaseOrder()" [model]="itemsButton"></p-splitButton> -->
+    </div>
+</p-card>
+<br />
+<div class="p-grid">
+    <div class="p-col-12 p-md-4 p-lg-4">
+        <p-card header="{{ 'srm.purchase_order.supplier.supplier' | translate }}" class="readOnlyCard">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <div class="demo-container p-mb-2">
+
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.name' | translate
+                            }}</div>
+                        <div class="p-text-light generic-font-size"><b>{{ purchaseOrder.suppliers.socialReason }}</b>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6" style="border-left:1px solid;">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.document' |
+                            translate }}
+                        </div>
+                        <div class="p-text-light generic-font-size"><b>{{ purchaseOrder.suppliers.document }}</b></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="demo-container p-mb-2">
+
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.name' | translate }}</div> 
+                <div class="p-text-light generic-font-size" ><b>{{ purchaseOrder.suppliers.socialReason }}</b></div>
+            </div>
+            <p-divider layout="vertical" class="p-element"></p-divider>
+            <div class="demo-container p-mb-2">
+                < <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.document' | translate }}
+                </div> 
+                <div class="p-text-light generic-font-size">{{ purchaseOrder.suppliers.document }}</div>
+            </div> -->
+
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.contact' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getSupplierContact() | translate }}</div>
+            </div>
+
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.phone' | translate }}</div>
+                <div class="p-text-light generic-font-size">{{ getSupplierContactPhone() | translate }}</div>
+            </div>
+
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.supplier.address' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ purchaseOrder.suppliers.direction | translate }}</div>
+            </div>
+        </p-card>
+    </div>
+    <diV class="p-col-12 p-md-4 p-lg-4">
+        <p-card header="{{ 'srm.purchase_order.bill.bill' | translate }}" class="readOnlyCard">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.bill.name' | translate }}
+                        </div>
+                        <div class="p-text-light generic-font-size"><b>{{company.socialName}}</b></div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6" style="border-left:1px solid;">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.bill.document' | translate
+                            }}
+                        </div>
+                        <div class="p-text-light generic-font-size"><b>{{ getCompanyDocument() }}</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.bill.contact' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getCompanyContact() | translate }}</div>
+            </div>
+
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.bill.phone' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getCompanyContactNumer() | translate }}</div>
+            </div>
+
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.bill.address' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getCompanyAddress() | translate }}</div>
+            </div>
+        </p-card>
+    </diV>
+    <div class="p-col-12 p-md-4 p-lg-4">
+        <p-card header="{{ 'srm.purchase_order.delivery.delivery_address' | translate }}"
+            subheader="{{ branchOffice.companyName }}" class="readOnlyCard">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.delivery.branch_office' |
+                            translate
+                            }}</div>
+                        <div class="p-text-light demo-container" style="overflow-wrap: 'break-word'">{{
+                            purchaseOrder.purchase.branchRequest }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.delivery.phone' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getBranchOfficeContactNumer() | translate }}</div>
+            </div>
+
+            <div class="demo-container">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.delivery.address' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ getBranchOfficeAddress() | translate }}</div>
+            </div>
+        </p-card>
+    </div>
+    <div class="p-col-12">
+        <p-card header="{{ 'srm.purchase_order.negotiation.negotiation' | translate }}" class="readOnlyCard">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.negotiation.payment_terms' |
+                            translate }}</div>
+                        <div class="p-text-light generic-font-size">{{ purchaseOrder.purchase.paymentsConditions.name }}</div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.negotiation.discount' |
+                            translate }}</div>
+                        <div class="p-text-light generic-font-size">{{
+                            purchaseOrder.purchase.paymentsConditions.discount |number:'1.4-4' }}</div>
+                    </div>
+                </div>
+
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{
+                            'srm.purchase_order.negotiation.payment_deadline' | translate }}</div>
+                        <div class="p-text-light generic-font-size">{{
+                            purchaseOrder.purchase.paymentsConditions.amounterm }} {{ getIdTerm() | translate }}</div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{
+                            'srm.purchase_order.negotiation.negotiation_type' | translate }}</div>
+                        <div class="p-text-light generic-font-size">{{ negotiationType.name }}</div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.negotiation.payment_method'
+                            | translate }}</div>
+                        <div class="p-text-light generic-font-size">{{ purchaseOrder.purchase.paymentMethod }}</div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.negotiation.exchange_rate' |
+                            translate }}</div>
+                        <div class="p-text-light generic-font-size">{{ purchaseOrder.purchase.exchangeRateSupplier
+                            |number:'1.4-4' }}</div>
+                    </div>
+                </div>
+
+                <!-- <div class="p-col-6"> -->
+                <!-- <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.negotiation.discount' |
+                            translate }}</div>
+                        <div class="p-text-light generic-font-size">{{
+                            purchaseOrder.purchase.paymentsConditions.discount |number:'1.4-4' }}</div>
+                    </div>
+                </div> -->
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <div class="demo-container p-mb-2">
+                        <div class="p-text-normal generic-font-size">{{
+                            'srm.purchase_order.negotiation.payment_currency' | translate }}</div>
+                        <div class="p-text-light generic-font-size">{{ purchaseOrder.purchase.currencySupplier }}
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid">
+                    <label class="p-mr-4 generic-font-size">{{
+                        'srm.purchase_order.negotiation.suppleir_approved' |
+                        translate }}</label>
+                    <p-inputSwitch [disabled]="true" class="p-mr-4" [(ngModel)]="purchaseOrder.purchase.indAproved">
+                    </p-inputSwitch>
+                </div>
+                <!-- </div> -->
+            </div>
+        </p-card>
+    </div>
+
+</div>
+<div class="p-col-12">
+    <p-card header="{{ 'srm.purchase_order.supplier_observation' | translate }}" class="readOnlyCard">
+        <textarea [disabled]="!orderIsInReview()" pInputTextarea rows="1" style="resize: none;" cols="30"
+            style="min-height: 70px; width: 100%;" pInputTextarea maxlength="100"
+            [(ngModel)]="purchaseOrder.purchase.supplierObservation"></textarea>
+    </p-card>
+</div>
+<div class="p-col-12">
+    <p-card header="{{ 'srm.purchase_order.products' | translate }}" class="p-card-shadow box innerCard readOnlyCard">
+        <p-table [columns]="cols" [rowHover]="true" [value]="products" [scrollable]="true" [paginator]="true"
+            [rows]="10" [showCurrentPageReport]="true" [columns]="selectedColumns" dataKey="productId"
+            currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" [rowsPerPageOptions]="[10,25,50]"
+            styleClass="p-datatable-responsive-demo p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+            <ng-template pTemplate="caption">
+                <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                    selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px', width:'120px'}"
+                    placeholder="Elija las columnas"></p-multiSelect>
+                Total de ítems: {{products ? products.length : 0 }}.
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field =='indHeavy' || col.field =='status') ? '60px' : '120px','font-size':'small'}"
+                            [pSortableColumn]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr (click)="setIndex(rowIndex)" [pSelectableRow]="product">
+                    <ng-container *ngFor="let col of columns">
+                        <td
+                            [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field == 'indHeavy') ? '60px' : '120px' }">
+                            <span class="p-column-title">{{col.header}}</span>
+                            <div class="p-inputgroup" *ngIf="col.field =='sellingFactor'; else textheavy">
+                                <span class="p-mr-1">{{product.individualPrices.indAdded ==
+                                    1?product.individualPrices.salesFactor.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2, maximumFractionDigits: 2
+                                    }):product.masterPrices.salesFactor.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2, maximumFractionDigits: 2 })}}</span>
+                                <i *ngIf="product.status==0" class="pi pi-exclamation-triangle p-mr-1"
+                                    pTooltip="Sin rango de validación configurado" style="color: #eec408;"></i>
+                                <i *ngIf="product.indconsigment==0 && purchaseOrder.purchase.idTypeNegotiation==this.typenegotiationIDs.consignment_ID"
+                                    pTooltip="No posee el indicador de consignación" class="pi pi-times-circle"
+                                    style="color: #C63737;"></i>
+                            </div>
+                            <app-indheavy-label *ngIf="col.field =='indHeavy'; else textCell"
+                                [indHeavy]="product[col.field]" #textheavy>
+                            </app-indheavy-label>
+                            <ng-template #textCell>
+                                <span
+                                    *ngIf="col.field!='sellingFactor' && col.field!='indHeavy'">{{col.template(product)}}
+                                </span>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">No
+                        existen
+                        resultados</td>
+                    <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}"
+                        [attr.colspan]="columns.length ">No
+                        existen resultados</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+<div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+    <p-card header="{{ 'srm.purchase_order.totals.total_order' | translate }}" class="readOnlyCard">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-3 p-sm-12 p-mt-3">
+                <div class="p-grid p-nogutter widget-overview-box overview-box-1 p-shadow-3">
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ 'srm.purchase_order.totals.taxable' | translate }}</span>
+                        <span class="p-ml-2"></span>
+                    </div>
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ taxable |number:'1.4-4' }}</span>
+                        <span class="overview-box-status p-ml-1">$</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-3 p-sm-3 p-mt-3">
+                <div class="p-grid p-nogutter widget-overview-box overview-box-3 p-shadow-3">
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ 'srm.purchase_order.totals.discount' | translate
+                            }}</span>
+                        <span class="p-ml-2"></span>
+                    </div>
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ discount |number:'1.4-4' }}</span>
+                        <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-3 p-sm-3 p-mt-3">
+                <div class="p-grid p-nogutter widget-overview-box overview-box-1 p-shadow-3">
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ 'srm.purchase_order.totals.sub_total' | translate }}</span>
+                        <span class="p-ml-2"></span>
+                    </div>
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ subtotal |number:'1.4-4' }}</span>
+                        <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-3 p-sm-3 p-mt-3">
+                <div class="p-grid p-nogutter widget-overview-box overview-box-3 p-shadow-3">
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ 'srm.purchase_order.totals.total' | translate }}</span>
+                        <span class="p-ml-2"></span>
+                    </div>
+                    <div class="overview-box-text p-inputgroup" style="align-items: center !important;">
+                        <span style="color:black">{{ getTotalOrder() |
+                            number:'1.4-4' }}</span>
+                        <span class="overview-box-status p-ml-1">{{this.basesymbolcoin}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- <div class="p-grid"> -->
+
+        <!-- </div> -->
+    </p-card>
+</div>
+
+
+<div class="p-grid">
+
+    <!-- <div class="p-col-6">
+        <p-card header="{{ 'srm.purchase_order.totals.total_order' | translate }}">
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.totals.sub_total' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ subtotal |number:'1.4-4' }}</div>
+            </div>
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.totals.discount' | translate }}
+                </div>
+                <div class="p-text-light generic-font-size">{{ discount |number:'1.4-4' }}</div>
+            </div>
+            <div class="demo-container p-mb-2">
+                <div class="p-text-normal generic-font-size">{{ 'srm.purchase_order.totals.taxable' | translate }}</div>
+                <div class="p-text-light generic-font-size">{{ taxable |number:'1.4-4' }}</div>
+            </div>
+
+            <p class="generic-font-size">{{ 'srm.purchase_order.totals.total' | translate }}: <b>{{ getTotalOrder() |
+                    number:'1.4-4' }} {{ purchaseOrder.purchase.currency}}</b></p>
+        </p-card>
+    </div> -->
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="confirm">
+</p-confirmDialog>
+<app-reason-dialog [header]="'srm.purchase_order.reject_purchase_order'" [showDialog]="showDialogReason"
+    [motiveTypeId]="23" (saveReason)="saveReason($event)" (hideDialogEvent)="hideDialogReason()">
+</app-reason-dialog>

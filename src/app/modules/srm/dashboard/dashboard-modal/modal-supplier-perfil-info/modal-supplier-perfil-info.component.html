@@ -1,0 +1,30 @@
+
+<p-card [header]="_supplier.socialReason" [subheader]="_supplier.document" [style]="{width: 'auto'}" styleClass="p-card-shadow">
+    <ng-template pTemplate="header">
+        <img src="assets/layout/images/imagenproveedor3.jpg" height="95px" width="auto">
+    </ng-template>
+    
+    <div class="p-field p-grid">
+        <label for="firstname3" class="p-col-fixed" style="width:100px">Nombre contacto:</label>
+        <div class="p-col">
+            {{_supplier.contact}}
+        </div>
+    </div>
+    <div class="p-field p-grid">
+        <label for="lastname3" class="p-col-fixed" style="width:100px">Teléfono:</label>
+        <div class="p-col">
+            {{_supplier.phone}}
+        </div>
+    </div>
+    <div class="p-field p-grid">
+        <label  class="p-col-fixed" style="width:100px">Dirección:</label>
+        <div class="p-col">
+            {{_supplier.direction}}
+        </div>
+    </div>
+   
+    <ng-template pTemplate="footer">
+        <h5 *ngIf="config.data.id.indPerson==1" class="value">No presenta devoluciones pendientes</h5>
+    </ng-template>
+</p-card>
+

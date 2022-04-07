@@ -1,0 +1,27 @@
+<p-dialog header="Mermas" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-fluid p-grid p-formgrid">
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <label for="name">Tipo de merma <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [(ngModel)]="_wastage.wastageTypeId" [options]="wastagelist" appendTo="body" [filter]="true" emptyFilterMessage="Sin resultados." placeholder="Seleccione..." (keyup.enter)="AddWastage()">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _wastage.wastageTypeId <=0">El tipo de merma es requerido</small>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+            <label>Factor de rendimiento</label>
+            <input [(ngModel)]="_wastage.performaceFactor" (keyup.enter)="AddWastage()" oninput="this.value = this.value.length == 1 ? this.value.charAt(0) == 0 ? '' : this.value.charAt(0) : this.value" (paste)="validations.noPaste($event)" (keypress)="validations.keyPressForDecimal($event)" name="performaceFactor" id="performaceFactor" type="text" pInputText>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6 p-mt-3">
+            <label>Porcentaje(%) <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input [(ngModel)]="_wastage.percent" (keyup.enter)="AddWastage()" (paste)="validations.noPaste($event)" (keypress)="validations.keyPressForDecimal($event)" name="percent" id="percent" type="text" pInputText>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && (_wastage.percent <= 0 || _wastage.percent == undefined)">El porcetaje tiene que ser mayor a 0</small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _wastage.percent > 100">El porcetaje tiene que ser menor o igual a 100</small>
+        </div>
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+        </div> 
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" (click)="AddWastage()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

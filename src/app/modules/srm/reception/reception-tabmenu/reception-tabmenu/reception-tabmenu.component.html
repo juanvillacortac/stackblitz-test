@@ -1,0 +1,20 @@
+    <div class="p-grid">
+        <p-tabView styleClass="tabview-custom" id="tabview" (onChange)="handleChange($event)">
+            <p-tabPanel header="{{ 'srm.reception.general_data' | translate }}">
+                <app-reception-general-data [reception]="reception" [submitted]="submitted" [receptionProperties]="receptionProperties"></app-reception-general-data>
+            </p-tabPanel>
+            <p-tabPanel header="{{ 'srm.reception.reception' | translate }}" [disabled]="reception.estatus ==statusreception.pending">
+                <app-reception [(reception)]="reception" (haveChange)="haveproduct($event)"></app-reception>
+            </p-tabPanel>
+           <!-- <p-tabPanel header="{{ 'srm.reception.validation' | translate }}" *ngIf="this.userPermissions.allowed(this.permissionsIDs.VIEW_VALIDATION_PERMISSION_ID)">
+                <app-reception-validation [reception]="reception" *ngIf="validationIsSelected"></app-reception-validation>
+            </p-tabPanel> -->
+             <!--
+            <p-tabPanel header="{{ 'srm.reception.received' | translate }}">
+            </p-tabPanel>
+            <p-tabPanel header="{{ 'srm.reception.tasks' | translate }}">
+            </p-tabPanel>
+            <p-tabPanel header="{{ 'srm.reception.summary' | translate }}">
+            </p-tabPanel> -->
+        </p-tabView>
+    </div>

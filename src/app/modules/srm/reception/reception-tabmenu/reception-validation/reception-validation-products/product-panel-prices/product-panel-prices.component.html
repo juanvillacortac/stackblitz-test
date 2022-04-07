@@ -1,0 +1,573 @@
+<div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+  <div *ngIf="_ProductDetail.master.idDetailReception!=0" class="p-grid p-jc-end">
+     
+    <p-button *ngIf="showTabPrice"
+    (click)="ShowIndividualOrMasterPrice(false,_ProductDetail.master.idPackingType)"
+    [styleClass]="isIndividual == false? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Master">
+  </p-button>
+  <p-button *ngIf="showTabPrice"
+    (click)="ShowIndividualOrMasterPrice(true,_ProductDetail.individual.idPackingType)"
+    [styleClass]="isIndividual == true ? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'"
+    label="Individual"></p-button>
+    </div>
+  </div>
+  
+  
+  <!-- INDIVIDUAL -->
+  <div *ngIf="isIndividual && showTabPrice" class="p-grid">
+    <div class="p-grid p-col-12">
+      <div class="p-col-6 p-fluid p-grid p-formgrid">
+        <h2>Individual</h2>
+      </div>
+      <div class="p-col-6 p-md-6 p-sm-6 p-lg-6 p-mt-2 p-ml-1">
+        <div class="p-grid p-jc-end">
+            <!-- *ngIf="PucharseOrderHeader.purchase.idStatus==statuspurchase.Eraser && iduserlogin==PucharseOrderHeader.purchase.responsibleId" 
+             (click)="clearPrices(_PurchaseOrderProduct.individualPrices.idPackingType)"
+            -->
+          <button #btn type="button" pButton icon="pi pi-ban" class="p-button-rounded p-button-secondary p-mr-2"
+            pTooltip="Limpiar" ></button>
+        
+        </div>
+      </div>
+    </div>
+   
+  
+    <div class="p-d-flex">
+      <div class=p-grid>
+        <div class="p-col-12 p-fluid p-grid p-formgrid p-mt-3">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Costos y precios:</b></div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Costo
+              base:</b>{{_ProductDetail.individual.costBaseInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Costo
+              conversión:</b>{{_ProductDetail.individual.costConvertionInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{conversionsymbolcoin}}
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class=" font-small p-mr-1">PVP
+              base:</b>{{_ProductDetail.individual.pvpBasenInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}
+  
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">PVP
+              conversión:</b>{{_ProductDetail.individual.pvpConvertionInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{conversionsymbolcoin}}
+          </div>
+  
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Factor
+              venta:</b>{{_ProductDetail.individual.factorSoldInformation.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- <p-divider class="p-divider p-component p-divider-vertical p-divider-solid p-divider-center" layout="vertical"></p-divider> -->
+      <div class="p-grid">
+        <div class="p-col-12 p-fluid p-grid p-formgrid p-mt-3">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Tasas:</b></div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-inputgroup">
+            <b class="font-small p-mr-1">Sistema:</b>
+            {{exchangeRate.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}} {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12  p-inputgroup">
+            <b
+              class="font-small p-mr-1">Proveedor:</b>
+              {{_ProductDetail.supplierExchangeRate.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}} {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12  p-inputgroup">
+            <b
+              class="font-small p-mr-1">Interna:</b>
+              {{_ProductDetail.internalExchangeRate.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}} {{basesymbolcoin}}
+          </div>
+       
+        </div>
+      </div>
+  
+    </div>
+  
+    <div class="p-col-12 p-fluid p-grid p-formgrid p-mt-3">
+      <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Factores de validación:</b>
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12  p-mt-3">
+        <b
+          class="font-small p-mr-1">Minimo:</b>
+          {{_ProductDetail.individual.minimunFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3">
+        <b
+          class="font-small p-mr-1">Medio:</b>
+          {{_ProductDetail.individual.mediumFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3">
+        <b
+          class="font-small p-mr-1">Maximo:</b>
+          {{_ProductDetail.individual.maximunFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <!-- <small class="p-invalid" *ngIf="_PurchaseOrderProduct.individualPrices.minimunFactor <= 0 || _PurchaseOrderProduct.individualPrices.mediumFactor  <= 0 
+                                     || _PurchaseOrderProduct.individualPrices.maximunFactor <= 0">No posee factores de
+          validación configurados.</small> -->
+      </div>
+    </div>
+  
+  
+    <!-- </p-card> -->
+  
+    <!-- <p-card styleClass="p-card-shadow" class="p-col-12 p-fluid"> -->
+    <div class="p-mt-2">
+      <div class="p-fluid p-grid p-formgrid p-mt-3">
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Configuración de precio:</b>
+        </div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor neto</label>
+          <p-inputNumber #in1 [(ngModel)]="_ProductDetail.individual.netFactor" (onFocus)="clear($event)"
+            (keyup.enter)="next(in2,_ProductDetail.individual.idPackingType)"
+            (focusout)="activate($event,$event.target.value,2,false,_ProductDetail.individual.idPackingType)"
+            [disabled]="true" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2">
+          </p-inputNumber>
+        </div>
+  
+        <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor neto venta</label>
+          <p-inputNumber   #in2 [(ngModel)]="_ProductDetail.individual.netSalesFactor"
+          (onFocus)="clear($event)" (keyup.enter)="next(in3,_ProductDetail.individual.idPackingType)"
+          (focusout)="activate($event,$event.target.value,4,false,_ProductDetail.individual.idPackingType)"
+            [disabled]="true" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2">
+          </p-inputNumber>
+        </div>
+  
+        <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor de venta</label>
+
+          <p-inputNumber #in3 [(ngModel)]="_ProductDetail.individual.salesFactor"
+          (onFocus)="clear($event)"
+          (keyup.enter)="ValidateFactor($event,$event.target.value,6,false,_ProductDetail.individual.idPackingType)"
+          (focusout)="ValidateFactor($event,$event.target.value,6,false,_ProductDetail.individual.idPackingType)"
+          [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"
+          [class]="_ProductDetail.individual.minimunFactor <=0 ? 'ng-dirty ng-invalid' : ''">
+<!-- 
+          [disabled]="PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+          || iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+        </p-inputNumber>
+        </div>
+      </div>
+  
+      <div class="p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costbase">Costo base</label>
+          <div class="p-inputgroup">
+
+            <p-inputNumber #in4 [(ngModel)]="_ProductDetail.individual.baseCost" (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,1,false,_ProductDetail.individual.idPackingType)"
+              (focusout)="activate($event,$event.target.value,1,false,_ProductDetail.individual.idPackingType)"
+              [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4">
+<!-- 
+              [disabled]="PucharseOrderHeader.purchase.calculationBase == false ? true : false
+              || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+              || iduserlogin!=PucharseOrderHeader.purchase.responsibleId"  -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+         <!--(keyup.enter)="next(in7,_PurchaseOrderProduct.individualPrices.idPackingType)"--> 
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costconversion">Costo conversión</label>
+      
+             <div class="p-inputgroup">
+                <p-inputNumber #inC4 [(ngModel)]="_ProductDetail.individual.convertionCost"
+                            (onFocus)="clear($event)" 
+                            (keyup.enter)="activate($event,$event.target.value,1,true,_ProductDetail.individual.idPackingType)"
+                            (focusout)="activate($event,$event.target.value,1,true,_ProductDetail.individual.idPackingType)"
+                            [minFractionDigits]="4"
+                            mode="decimal" min="0" [maxFractionDigits]="4">
+                            <!-- [disabled]="PucharseOrderHeader.purchase.calculationBase
+                            || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+                            || iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+                 </p-inputNumber>
+                          <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+              </div>
+          <!--(keyup.enter)="next(inC7,_PurchaseOrderProduct.individualPrices.idPackingType)"-->
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costbase">Costo neto base</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #in5 [(ngModel)]="_ProductDetail.individual.netCost"
+              (keyup.enter)="next(in6,_ProductDetail.individual.idPackingType)" (onFocus)="clear($event)"
+              (focusout)="activate($event,$event.target.value,3,false,_ProductDetail.individual.idPackingType)"
+              [disabled]="true" [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4">
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costconversion">Costo neto conversión</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #inC5 [(ngModel)]="_ProductDetail.individual.netCostConversion"
+            (onFocus)="clear($event)" (keyup.enter)="next(inC6,_ProductDetail.individual.idPackingType)"
+            (focusout)="activate($event,$event.target.value,3,true,_ProductDetail.individual.idPackingType)"
+            [disabled]="true"
+            [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+          <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costbase">Costo neto venta base</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #in6 [(ngModel)]="_ProductDetail.individual.salesNetCost"
+              (onFocus)="clear($event)" (keyup.enter)="next(in7,_ProductDetail.individual.idPackingType)"
+              (focusout)="activate($event,$event.target.value,5,false,_ProductDetail.individual.idPackingType)"
+              [disabled]="true"
+              [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costconversion">Costo neto venta conversión</label>
+          <div class="p-inputgroup">
+
+            <p-inputNumber #inC6 [(ngModel)]="_ProductDetail.individual.salesNetCostConvertion"
+              (onFocus)="clear($event)" (keyup.enter)="next(inC7,_ProductDetail.individual.idPackingType)"
+              (focusout)="activate($event,$event.target.value,5,true,_ProductDetail.individual.idPackingType)"
+              [disabled]="true"
+              [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costbase">PVP base</label>
+          <div class="p-inputgroup">
+
+            <p-inputNumber #in7 [(ngModel)]="_ProductDetail.individual.pvpBase" (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,7,false,_ProductDetail.individual.idPackingType)"
+              (focusout)="activate($event,$event.target.value,7,false,_ProductDetail.individual.idPackingType)"
+               [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4">
+            </p-inputNumber>
+            <!-- [disabled]="PucharseOrderHeader.purchase.calculationBase == false ? true :
+                          PucharseOrderHeader.purchase.calculationBase == true && 
+                          _PurchaseOrderProduct.individualPrices.salesNetCost <= 0 ? true : false
+                          || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+                          || _PurchaseOrderProduct.individualPrices.salesFactorNew <= 0 
+                          || iduserlogin!=PucharseOrderHeader.purchase.responsibleId  " -->
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1">
+          <label class="font-smaller" for="Costconversion">PVP conversion</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #inC7 [(ngModel)]="_ProductDetail.individual.pvpConversion"
+              (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,7,true,_ProductDetail.individual.idPackingType)"
+              (focusout)="activate($event,$event.target.value,7,true,_ProductDetail.individual.idPackingType)"
+              [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+<!-- 
+              [disabled]="PucharseOrderHeader.purchase.calculationBase == true ? true :
+              PucharseOrderHeader.purchase.calculationBase == false && _PurchaseOrderProduct.individualPrices.salesNetCostConvertion <= 0 ? true : false
+                || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+                || iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- MASTER
+  *ngIf="_PurchaseOrderProduct.masterPrices.idPurchaseOrderDetail!=0 && isIndividual==false && showTabPrice -->
+  <div *ngIf="_ProductDetail.master.idDetailReception!=0 && isIndividual==false && showTabPrice" class="p-grid">
+    <div class="p-grid p-col-12">
+      <div class="p-col-6 p-fluid p-grid p-formgrid">
+        <h2>Master</h2>
+      </div>
+      <div class="p-col-6 p-md-6 p-sm-6 p-lg-6 p-mt-2 p-ml-1">
+        <div class="p-grid p-jc-end">
+            <!-- *ngIf="PucharseOrderHeader.purchase.idStatus==statuspurchase.Eraser" (click)="clearPrices(_PurchaseOrderProduct.masterPrices.idPackingType)" -->
+            <button #btn type="button" pButton icon="pi pi-ban" class="p-button-rounded p-button-secondary p-mr-2"
+            pTooltip="Limpiar"  (click)="clearPrices(_ProductDetail.master.idPackingType)"></button>
+        
+        </div>
+      </div>
+    </div>
+    <div class="p-d-flex">
+      <div class="p-grid">
+        <div class="p-col-12 p-fluid p-grid p-formgrid p-mt-3">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Costos y precios:</b></div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Costo
+              base:</b>{{_ProductDetail.master.costBaseInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Costo
+              conversión:</b>{{_ProductDetail.master.costConvertionInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{conversionsymbolcoin}}
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class=" font-small p-mr-1">PVP
+              base:</b>{{_ProductDetail.master.pvpBasenInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{basesymbolcoin}}  
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">PVP
+              conversión:</b>{{_ProductDetail.master.pvpConvertionInformation.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}}
+            {{conversionsymbolcoin}}
+          </div>
+  
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+            <b class="font-small p-mr-1">Factor
+              venta:</b>{{_ProductDetail.master.factorSoldInformation.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+          </div>
+        </div>
+      </div>
+  
+  
+  
+      <div class="p-grid">
+        <div class="p-col-12 p-fluid p-grid p-formgrid p-mt-3">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Tasas:</b></div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-inputgroup">
+            <b class="font-small p-mr-1">Sistema:</b>
+            {{exchangeRate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}} {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12  p-inputgroup">
+            <b
+              class="font-small p-mr-1">Proveedor:</b>
+              {{_ProductDetail.supplierExchangeRate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}} {{basesymbolcoin}}
+          </div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12  p-inputgroup">
+            <b
+              class="font-small p-mr-1">Interna:</b>
+              {{_ProductDetail.internalExchangeRate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}} {{basesymbolcoin}}
+          </div>
+    
+        </div>
+      </div>
+  
+    </div>
+    <div class="p-grid p-col-12 p-mt-3">
+      
+      <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Factores de validación:</b>
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12  p-mt-3">
+        <b
+          class="font-small p-mr-1">Minimo:</b>
+          {{_ProductDetail.master.minimunFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3">
+        <b
+          class="font-small p-mr-1">Medio:</b>
+          {{_ProductDetail.master.mediumFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+      <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3">
+        <b
+          class="font-small p-mr-1">Maximo:</b>
+          {{_ProductDetail.master.maximunFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+      </div>
+
+      <div *ngIf="_ProductDetail.master.minimunFactor <= 0 || _ProductDetail.master.mediumFactor  <= 0 
+      || _ProductDetail.master.maximunFactor <= 0" class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <small class="p-invalid" >
+          No posee factores de validación configurados.</small>
+      </div>
+    </div>
+  
+    <div class="p-mt-1">
+      <div class="p-fluid p-grid p-formgrid p-mt-3">
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12"><b class="font-title-larger p-mr-1">Configuración de precio:</b>
+        </div>
+      </div>
+      <div class="p-grid">
+  
+        <div  class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor neto</label>
+          <p-inputNumber 
+          #ma1 [(ngModel)]="_ProductDetail.master.netFactor" (onFocus)="clear($event)"
+          (keyup.enter)="next(ma2,_ProductDetail.master.idPackingType)"
+          (focusout)="activate($event,$event.target.value,2,false,_PurchaseOrderProduct.master.idPackingType)"
+            [disabled]="true" [minFractionDigits]="2"
+            mode="decimal" min="0" [maxFractionDigits]="2">
+          </p-inputNumber>
+        </div>
+  
+        <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor neto venta</label>
+          <p-inputNumber #ma2 [(ngModel)]="_ProductDetail.master.netSalesFactor" (onFocus)="clear($event)"
+            (keyup.enter)="next(ma3,_ProductDetail.master.idPackingType)"
+            (focusout)="activate($event,$event.target.value,4,false,_ProductDetail.master.idPackingType)"
+            [disabled]="true" [minFractionDigits]="2"
+            mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+        </div>
+  
+        <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+          <label class="font-smaller" for="sellfactor">Factor de venta</label>
+        <p-inputNumber #ma3 [(ngModel)]="_ProductDetail.master.salesFactor"
+          (keyup.enter)="ValidateFactor($event,$event.target.value,6,false,_ProductDetail.master.idPackingType)" 
+          (onFocus)="clear($event)"
+          (focusout)="ValidateFactor($event,$event.target.value,6,false,_ProductDetail.master.idPackingType)"
+          [minFractionDigits]="2"
+          mode="decimal" min="0" [maxFractionDigits]="2"
+          [class]="_ProductDetail.master.minimunFactor <=0 ? 'ng-dirty ng-invalid' : ''">
+          <!-- [disabled]=" PucharseOrderHeader.purchase.idStatus>=statuspurchase.Elaborated
+          ||iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+        </p-inputNumber>
+        </div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costbase">Costo base</label>
+          <div class="p-inputgroup">
+
+            <p-inputNumber #ma4 [(ngModel)]="_ProductDetail.master.baseCost" (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,1,false,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,1,false,_ProductDetail.master.idPackingType)"
+              [minFractionDigits]="4" mode="decimal"
+              min="0" [maxFractionDigits]="4">
+              <!-- [disabled]="!PucharseOrderHeader.purchase.calculationBase 
+              || PucharseOrderHeader.purchase.idStatus==statuspurchase.Authorized 
+              || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Reception
+              || iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>    
+          <!--(keyup.enter)="next(ma7,_PurchaseOrderProduct.masterPrices.idPackingType)"-->
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costconversion">Costo conversión</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #maC4 [(ngModel)]="_ProductDetail.master.convertionCost"
+              (keyup.enter)="activate($event,$event.target.value,1,true,_ProductDetail.master.idPackingType)" 
+              (onFocus)="clear($event)"
+              (focusout)="activate($event,$event.target.value,1,true,_ProductDetail.master.idPackingType)"
+              [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4">
+<!-- 
+              [disabled]="PucharseOrderHeader.purchase.calculationBase 
+              || PucharseOrderHeader.purchase.idStatus==statuspurchase.Authorized 
+              || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Reception 
+              || iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span> 
+          </div>
+          <!--(keyup.enter)="next(maC7,_PurchaseOrderProduct.masterPrices.idPackingType)" -->
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costbase">Costo neto base</label>
+          <div class="p-inputgroup">
+
+            <p-inputNumber #ma5 [(ngModel)]="_ProductDetail.master.netCost" (onFocus)="clear($event)"
+              (keyup.enter)="next(ma6,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,3,false,_ProductDetail.master.idPackingType)"
+              [disabled]="true" [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4">
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costconversion">Costo neto conversión</label>
+         
+          <div class="p-inputgroup">
+            <p-inputNumber #maC5 [(ngModel)]="_ProductDetail.master.netCostConversion"
+              (keyup.enter)="next(maC6,_ProductDetail.master.idPackingType)" (onFocus)="clear($event)"
+              (focusout)="activate($event,$event.target.value,3,true,_ProductDetail.master.idPackingType)"
+              [disabled]="true" [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costbase">Costo neto venta base</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #ma6 [(ngModel)]="_ProductDetail.master.salesNetCost" (onFocus)="clear($event)"
+              (keyup.enter)="next(ma7,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,5,false,_ProductDetail.master.idPackingType)"
+              [disabled]="true" [minFractionDigits]="4"
+              mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costconversion">Costo neto venta conversión</label>
+
+          <div class="p-inputgroup">
+            <p-inputNumber #maC6 [(ngModel)]="_ProductDetail.master.salesNetCostConvertion"
+              (onFocus)="clear($event)" (keyup.enter)="next(maC7,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,5,true,_ProductDetail.master.idPackingType)"
+              [disabled]="true" [minFractionDigits]="4" mode="decimal"
+              min="0" [maxFractionDigits]="4"></p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costbase">PVP base</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #ma7 [(ngModel)]="_ProductDetail.master.pvpBase" (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,7,false,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,7,false,_ProductDetail.master.idPackingType)"
+               [minFractionDigits]="4" mode="decimal"
+              min="0" [maxFractionDigits]="4">
+              <!-- [disabled]="PucharseOrderHeader.purchase.calculationBase == false ? true 
+              :PucharseOrderHeader.purchase.calculationBase == true && _ProductDetail.master.salesNetCost <= 0 ? true : false
+              ||PucharseOrderHeader.purchase.idStatus==statuspurchase.Authorized 
+              || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Reception 
+              ||iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{basesymbolcoin}}</span>
+          </div>
+        </div>
+  
+        <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-1 p-fluid">
+          <label class="font-smaller" for="Costconversion">PVP conversion</label>
+          <div class="p-inputgroup">
+            <p-inputNumber #maC7 [(ngModel)]="_ProductDetail.master.pvpConversion"
+              (onFocus)="clear($event)"
+              (keyup.enter)="activate($event,$event.target.value,7,true,_ProductDetail.master.idPackingType)"
+              (focusout)="activate($event,$event.target.value,7,true,_ProductDetail.master.idPackingType)"
+              [minFractionDigits]="4" mode="decimal"
+              min="0" [maxFractionDigits]="4">
+<!--             
+              [disabled]="PucharseOrderHeader.purchase.calculationBase == true ? true 
+              : PucharseOrderHeader.purchase.calculationBase == false && _ProductDetail.master.salesNetCostConvertion <= 0 ? true : false
+              || PucharseOrderHeader.purchase.idStatus==statuspurchase.Authorized 
+              || PucharseOrderHeader.purchase.idStatus>=statuspurchase.Reception 
+              ||iduserlogin!=PucharseOrderHeader.purchase.responsibleId" -->
+            </p-inputNumber>
+            <span class="p-inputgroup-addon">{{conversionsymbolcoin}}</span>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  
+  
+  </div>
+  

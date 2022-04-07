@@ -1,0 +1,30 @@
+.position-icon-right .ui-button-text {
+    padding: 0.4em 2.1em 0.4em 1em;
+}
+
+.position-icon-right .ui-button-icon-primary {
+    left: auto;
+    right: 0.5em;
+}
+
+.align-center {
+    margin-top: 1rem;
+}
+
+.align-right {
+    float: right;
+}
+
+.view-center {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+h3:first-child {
+    margin-top: 1rem;
+}
+
+h2:first-letter {
+    text-transform:capitalize;
+}

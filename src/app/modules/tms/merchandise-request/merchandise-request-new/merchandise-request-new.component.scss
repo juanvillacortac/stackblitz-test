@@ -1,0 +1,12 @@
+:host ::ng-deep {  
+    .p-card{
+        box-shadow: none!important;
+    }
+
+    .p-card .p-card-content{
+        padding: 0%!important;
+    }
+    .imgcatalog{
+        border-radius: 50px;
+    }
+}

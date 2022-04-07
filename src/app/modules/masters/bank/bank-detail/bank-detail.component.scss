@@ -1,0 +1,15 @@
+
+
+:host ::ng-deep {
+
+    .cost-input p-inputnumber {
+      width: 100%;
+    }
+  
+    .p-inputgroup-addon:first-child, .p-inputgroup button:first-child {
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+    
+    }
+    
+  }

@@ -1,0 +1,87 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Agregar Sucursales" [(visible)]="visible" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'50%'}" [modal]="true" class="address-dialog">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar" />
+          </span>
+    </div>
+    <!-- <app-supplier-filter (onSearchprov)="searchprove()" [(filters)]="supplierFilters" [load]="loading" class="p-mt-3"></app-supplier-filter> -->
+  <!-- FILTRO DE PROVEEDORES -->
+  <!-- <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+        <p-dropdown [options]="countryList" appendTo="body" [(ngModel)]="supplierFilters.idCountry" (keyup.enter)="loadSuppliers()" placeholder="País" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+    <p-dropdown [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" (keyup.enter)="loadSuppliers()" placeholder="Clasificación" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+    </p-dropdown>
+</div>
+<div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input [(ngModel)]="supplierFilters.socialReason" name="socialReason" id="socialReason" type="text" pInputText (keyup.enter)="loadSuppliers()" maxlength="100">
+            <label>Razón social</label>
+        </span>
+    </div>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input [(ngModel)]="supplierFilters.document" name="supplierRef" id="supplierRef" type="text" pInputText (keyup.enter)="loadSuppliers()" maxlength="25">
+            <label>Documento</label>
+        </span>
+    </div>
+</div>
+<div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="loadSuppliers()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+</div>
+</div> -->
+
+
+    <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="_branchofficeService._branchOfficeList" [(selection)]="selectedBranchOffices" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <ng-container *ngFor="let col of columns">  
+               
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-branchOffice let-columns="columns">
+          <tr>
+            <td>
+                <p-tableCheckbox [disabled]="branchOffice.id == _idBranchOrigin" [value]="branchOffice"></p-tableCheckbox>
+            </td>
+            <ng-container *ngFor="let col of columns">
+                <td  [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="branchOffice[col.field]"></app-active-label>                  
+                    <ng-template #textCell>
+                        <span>{{col.template(branchOffice)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+    <div class="p-field p-col-12 p-md-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Agregar" (click)="submitBranchOffices()"  icon="pi pi-save"
+          class="p-button-info p-mr-2"></button>
+      </div>
+</div>
+</p-dialog>
+

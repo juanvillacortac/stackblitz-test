@@ -1,0 +1,152 @@
+<div class="card">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!--titulo con icono filtar-->
+    <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+      <i class="p-text-bold pi pi-book"></i> Descuentos
+    </div>
+
+    <div class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3">
+      <button
+        pButton
+        pRipple
+        icon="pi pi-plus"
+        class="p-button-success"
+        pTooltip="Agregar"
+        tooltipPosition="top"
+        (click)="showModalDialog()"
+      ></button>
+    </div>
+  </div>
+
+  <p-table
+    [resizableColumns]="false"
+    styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows"
+    #dt
+    [columns]="cols"
+    [rowHover]="true"
+    [paginator]="true"
+    [rows]="9"
+    [value]="transactions()"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th
+          *ngFor="let col of columns; let i = index"
+          [ngStyle]="{
+            display: col.display,
+            'overflow-wrap': 'break-word',
+            'text-align': 'left'
+          }"
+          pResizableColumn
+          [pSortableColumn]="col.field"
+        >
+          {{ col.header }}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+        <th [ngStyle]="{ 'text-align': 'center' }"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transact let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td
+            [ngStyle]="{ display: col.display, 'overflow-wrap': 'break-word' }"
+            class="ui-resizable-column"
+          >
+            <span>{{ col.template(transact) }} </span>
+            <ng-container *ngIf="col.field === 'total'">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                "
+              >
+                <span style="font-weight: bold">{{
+                  getPrice(transact).conversion
+                }}</span>
+                <span>{{ getPrice(transact).base }}</span>
+              </div>
+            </ng-container>
+          </td>
+        </ng-container>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="edit(transact)"
+            pTooltip="Editar"
+          ></button>
+
+          <button
+            pButton
+            pRipple
+            icon="pi pi-times"
+            class="p-button-rounded p-button-danger p-mr-2"
+            pTooltip="Quitar"
+            (click)="delete(transact)"
+          ></button>
+        </td>
+        <!--  <tr>
+        <tr>
+         <ng-container *ngFor="let col of columns">
+        <td  [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','text-align': i == 0 ? 'left' : 'center'}" class="ui-resizable-column">
+          <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="transact.active">
+          </app-active-label>
+          <div
+            [ngStyle]="{'color': col.field === 'amount' ? (transact.bankAdjustmentTypeId == 2 ? 'green' : 'red') : 'inherit', 'font-weight': col.field === 'amount' ? 'bold' : 'normal'}"
+            [class]="col.field === 'transactionStatusType' ? (transact.transactionStatusType==3 || transact.transactionStatusType==4  ? 'status-cancelado status-badge' :  transact.transactionStatusType==1 ?'status-borrador status-badge':'status-contabilizado status-badge'):''">
+            <span style="overflow-wrap: break-word;">{{transact[col.field]}}</span>
+          </div>
+        </td>
+      </ng-container>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+              (click)="tax.edit = true" pTooltip="Editar"
+              *ngIf="!tax.edit && tax.origin == -1 && getRateOptions(tax.id).length > 1"></button>
+        </td>
+        <td>
+            <button *ngIf="tax.origin == -1" pButton pRipple icon="pi pi-times"
+                class="p-button-rounded p-button-danger p-mr-2" pTooltip="Quitar"
+                (click)="delTaxFromTable(tax.id)"></button>
+        </td>
+      </tr> -->
+      </tr></ng-template
+    >
+
+    <ng-template pTemplate="emptymessage" let-columns>
+      <ng-container>
+        <tr>
+          <td
+            [ngStyle]="{ 'text-align': 'center' }"
+            [attr.colspan]="columns.length + 1"
+          >
+            <p-message
+              severity="info"
+              [text]="
+                isFiltered
+                  ? 'No existen resultados que coincidan con la búsqueda.'
+                  : 'No existen registros.'
+              "
+              styleClass="p-col-12 p-mr-2"
+            ></p-message>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-sale-transactions-discount-modal
+  [(displayModal)]="displayModal"
+  [discount]="editObject"
+  (onCreate)="create($event)"
+  (onUpdate)="update($event)"
+  [isUpdating]="isUpdating"
+>
+</app-sale-transactions-discount-modal>

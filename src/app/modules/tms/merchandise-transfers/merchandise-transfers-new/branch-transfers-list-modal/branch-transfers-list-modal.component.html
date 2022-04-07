@@ -1,0 +1,94 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Sucursales" [(visible)]="showDialog" [style]="{width:'50%'}"
+  [modal]="true" class="address-dialog" [draggable]="false" [resizable]="false">
+  <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="branchTransferList"
+    dataKey="destinationBranch.id" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 50px;"></th>
+        <ng-container *ngFor="let col of columns">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+        <th style="width: 120px;"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-branchTransfer let-expanded="expanded">
+      <tr>
+        <td>
+          <button type="button" pButton pRipple [pRowToggler]="branchTransfer"
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            *ngIf="merchandiseTransfer.originBranch.id != branchTransfer.destinationBranch.id"></button>
+        </td>
+        <td style="overflow-wrap: break-word"><b>{{branchTransfer.transfersNumber}}</b></td>
+        <td style="overflow-wrap: break-word">{{branchTransfer.destinationBranch.branchOfficeName}}</td>
+        <td style="overflow-wrap: break-word">{{branchTransfer.controlNumber}}</td>
+        <td style="overflow-wrap: break-word">{{branchTransfer.transportGuideNumber}}</td>
+        <td style="width: 120px;">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2"
+            (click)="onEditAdditionalData(branchTransfer)" pTooltip="Editar" tooltipPosition="top"
+            *ngIf="idBranchOfficeLogged == merchandiseTransfer.originBranch.id && branchTransfer.status.id == statusTrasfer.SENT"></button>
+          <button *ngIf="merchandiseTransfer.originBranch.id != branchTransfer.destinationBranch.id && idBranchOfficeLogged == merchandiseTransfer.originBranch.id && branchTransfer.status.id == statusTrasfer.SENT" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success p-mr-2"
+            (click)="onAddAdditionalData(branchTransfer)" pTooltip="Agregar" tooltipPosition="top"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-branchTransfer>
+      <tr>
+        <td colspan="6" style="padding: 0;">
+          <div>
+            <p-table [columns]="displayedColumnsAdditionalData" [value]="branchTransfer.additionalData"
+              dataKey="idBranchTransferTransport">
+              <ng-template pTemplate="header" let-columnsp>
+      <tr>
+        <th style="width: 80px;"></th>
+        <ng-container *ngFor="let col of columnsp">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+        <th style="width: 150px;"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-additionalData let-columnsp="columns">
+      <tr>
+        <td></td>
+        <ng-container *ngFor="let col of columnsp">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+            <span>{{col.template(additionalData)}} </span>
+          </td>
+        </ng-container>
+        <td style="width: 50px;">
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2"
+            (click)="onDeleteAdditionalData(additionalData, branchTransfer)" pTooltip="Eliminar" tooltipPosition="top"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" let-columns>
+      <ng-container
+        *ngIf="branchTransfer.additionalData == null || branchTransfer.additionalData.length == 0">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+            <span>No hay datos de transporte</span>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-template>
+  </p-table>
+  </div>
+  </td>
+  </tr>
+  </ng-template>
+  </p-table>
+</p-dialog>
+<app-additional-data [(showDialog)]="showDialogAdditionalData" [(merchandiseBranchTransfer)]="merchandiseBranchTransfer" [(merchandiseTransfer)]="merchandiseTransfer" (refreshBranchTransferList)="refreshBranchTransferList()"
+[(edit)]="edit"></app-additional-data>

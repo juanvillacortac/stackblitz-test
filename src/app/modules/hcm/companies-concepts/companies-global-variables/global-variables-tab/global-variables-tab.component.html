@@ -1,0 +1,70 @@
+<div class="card ">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4 p-mb-3 p-mb-lg-0">
+            <h4 *ngIf="!showFilters" id="filterTitle">Variables</h4>
+        </div>
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3"
+            [class]="showFilters ? 'p-mb-3' : 'p-mb-md-0 p-mb-lg-0'">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Buscar..." (input)="dt.filterGlobal($event.target.value, 'contains')"/>
+        </span>
+        <div [class]="showFilters ? 'p-mb-3' : ''">
+            <button pButton pRipple icon="pi pi-plus" class="p-button-success boton-crear p-ml-3"  
+            pTooltip="Crear nuevo" tooltipPosition="top" (click)="createNew()" id="add"
+            *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_VAR_HCM_PERMISSION_ID)"></button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+            (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+        
+    </div>
+
+    <app-global-variables-filter *ngIf="showFilters" [(filters)]="globalVarFilters" [expanded]="showFilters"
+        [loading]="loading" (onSearch)="onLoadGlobalVariables()" class="p-mt-3">
+    </app-global-variables-filter>
+</div>
+
+<div class="card">
+    <p-table #dt [value]="globalVar" sortField="idTypeVarying" sortMode="single" dataKey="idTypeVarying" [globalFilterFields]="['description','varying','varyingType','value']"
+    [showCurrentPageReport]="true" [paginator]="false" [rowHover]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [responsive]="true" autoLayout="true" editMode="row">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th class="p-text-center" pSortableColumn="varying">Variable <p-sortIcon field="varying"></p-sortIcon></th>
+                <th class="p-text-center" pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
+                <th class="p-text-center" pSortableColumn="varyingType">Tipo <p-sortIcon field="varyingType"></p-sortIcon></th>
+                <th class="p-text-center" pSortableColumn="value">Valor <p-sortIcon field="value"></p-sortIcon></th>
+                <th style="width: 130px;"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-globalVar let-rowIndex="rowIndex">
+            <!-- Solucionar problema de ordenado con cabecera de lista -->
+            <tr>
+                <td class="p-text-center">
+                    <span>{{globalVar.varying}}</span>
+                </td>
+                <td class="p-text-center">
+                    <span>{{globalVar.description}}</span>
+                </td>
+                <td class="p-text-center">
+                    <span>{{globalVar.varyingType}}</span>
+                </td>
+                <td class="p-text-center">
+                    <span>{{globalVar.value}}</span>
+                </td>                
+                <td class="p-text-center">
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_VAR_HCM_PERMISSION_ID) && globalVar.idTypeVarying == 3" pButton pRipple 
+                    type="button" icon="pi pi-pencil" (click)="onEdit(globalVar)"  pTooltip="Editar" tooltipPosition="top" placeholder="Top" class="p-button-rounded p-button-success p-mr-2"></button>
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_VAR_HCM_PERMISSION_ID) && globalVar.idTypeVarying == 3"  
+                    pButton pRipple icon="pi pi-trash"  (click)="deleted(globalVar)" class="p-button-rounded p-button-danger" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-messages severity="info" *ngIf="!(globalVar  && globalVar.length > 0)" >
+        <ng-template pTemplate>
+            <div class="p-ml-2">{{messageSearch}}</div>
+        </ng-template>
+    </p-messages>
+</div>
+
+<app-global-variables-panel *ngIf="showPanel" [record]="globalVaryingObject" [showSidebar]="showPanel" (returnUnChange)="resetValues($event)" (saveData)="saveGlobalVar($event)"></app-global-variables-panel>
+

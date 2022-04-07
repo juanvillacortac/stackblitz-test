@@ -1,0 +1,75 @@
+<app-reception-child-header [childReception]="childReception" (startEvent)="start()" (saveEvent)="save()"
+  (finishEvent)="finish()" (voidEvent)="void($event)"></app-reception-child-header>
+
+<br />
+<div class="p-grid">
+  <p-card class="p-col-12 p-sm-12 p-md-3 p-lg-3" header="Recepción">
+    <p class="generic-font-size">Cantidad de empaques master:<b> {{childReception.packingQty}}</b></p>
+    <p class="generic-font-size">Total unidades en empaque master:<b> {{ childReception.totalUnits}}</b></p>
+    <p class="generic-font-size">Cantidad de empaques individuales:<b> {{childReception.packingIndividualQty}}</b></p>
+    <p class="generic-font-size">Total unidades en empaque indivual:<b> {{ childReception.totalUnitsIndividual}}</b></p>
+    <p class="generic-font-size">Cubicaje:<b> {{ childReception.cubing }} cm3</b></p>
+  </p-card>
+  <p-card class="p-col-12 p-sm-12 p-md-3 p-lg-3" header="{{ 'srm.reception.child.general' | translate }}">
+    <p class="generic-font-size">{{ 'srm.reception.child.responsible_operator' | translate }}:<b>
+        {{ childReception.responsibleParent }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.child.receptor' | translate }}:<b>
+        {{ childReception.responsible }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.document.general_data.starting_date' | translate }}:<b>
+        {{ childReception.startTime  | date : "dd/MM/yyyy hh:mm"}}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.document.general_data.finalized_date' | translate }}:<b>
+        {{ childReception.finishTime  | date : "dd/MM/yyyy hh:mm"}}</b></p>
+    <div class="p-fluid">
+      <span class="p-float-label">
+        <p-dropdown id="area" name="area" #area="ngModel" [options]="areaList" optionLabel="name" optionValue="id"
+          [showClear]="false" [(ngModel)]="childReception.areaId" [filter]="false" display="chip"
+          [disabled]="childReception.statusId>this.statusreception.pending"
+          emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+          emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+          placeholder="{{ 'srm.merchandise_receptions.filters.receptionAreas' | translate}}" [ngClass]="{'ng-dirty':(childReception.areaId<=0),
+                          'ng-invalid':(childReception.areaId<=0)}">
+        </p-dropdown>
+        <div *ngIf="childReception.areaId<=0" class="p-invalid">
+          Debe seleccionar un área de recepción
+        </div>
+      </span>
+    </div>
+  </p-card>
+
+  <p-card class="p-col-12 p-sm-12 p-md-3 p-lg-3" header="{{ 'srm.reception.child.associated' | translate }}">
+    <p class="generic-font-size">{{ 'srm.reception.child.document' | translate }}:<b>
+        {{ childReception.documentNumber }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.child.document_type' | translate }}:<b>
+        {{ childReception.documentType }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.child.invoice_number' | translate }}:<b>
+        {{ childReception.invoiceNumber }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.child.reception_parent' | translate }}:<b>
+        {{ childReception.receptionNumber }}</b></p>
+    <p class="generic-font-size">{{ 'srm.reception.child.supplier' | translate }}:<b> {{ childReception.supplier }}</b>
+    </p>
+    <p class="generic-font-size">{{ 'srm.reception.child.supplier_document' | translate }}:<b>
+        {{ childReception.rif }}</b></p>
+  </p-card>
+
+  <p-card class="p-col-12 p-sm-12 p-md-3 p-lg-3" header="{{ 'srm.reception.child.times' | translate }}">
+    <div class="p-col-12 p-md-6 p-lg-6 p-mb-2 p-fluid">
+      <app-timer-viewer [title]="'srm.reception.document.general_data.waiting_time'"
+        [startDate]="childReception.arrivalTime" [finalizedDate]="childReception.startTime"></app-timer-viewer>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-6 p-mb-2 p-fluid">
+      <app-timer-viewer [title]="'srm.reception.document.general_data.reception_time'"
+        [startDate]="childReception.startTime" [finalizedDate]="childReception.updateDate"></app-timer-viewer>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-6 p-mb-2 p-fluid">
+      <app-timer-viewer [title]="'srm.reception.document.general_data.duration'"
+        [startDate]="childReception.arrivalTime" [finalizedDate]="childReception.updateDate"></app-timer-viewer>
+    </div>
+
+  </p-card>
+
+
+</div>
+
+
+<app-reception-child-products *ngIf="receptionIsLoaded" [childReception]="childReception"
+  (haveChange)="haveproduct($event)"></app-reception-child-products>

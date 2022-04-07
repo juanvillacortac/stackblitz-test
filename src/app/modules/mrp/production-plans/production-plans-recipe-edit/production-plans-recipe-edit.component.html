@@ -1,0 +1,62 @@
+
+<p-sidebar styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}"
+    [(visible)]="showEditing" 
+    (onShow)="ngOnInit()" 
+    (onHide)="hideDialog()" 
+    [blockScroll]="false" 
+    [showCloseIcon]="true"  
+    [dismissible]="false" 
+    position="right">
+    <h3 class="p-m-0">{{'mrp.production_plan.plan_recipe' | translate}}</h3>
+    <hr/>
+    <div class="p-grid">
+        <div class="p-col-12"> 
+            <div class="card">       
+                <div class="p-fluid p-grid p-formgrid" [formGroup]="recipeForm">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12  p-mt-4">                
+                        <span class="p-float-label">
+                            <input id="name" pInputText #name formControlName="name" >                      
+                            <label for="name">Nombre</label>
+                        </span>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12  p-mt-4">
+                        <span class="p-float-label">
+                            <input id="currentInventory" pInputText #currentInventory  formControlName="currentInventory">
+                            <label for="currentInventory">Se puede elaborar </label>
+                        </span>
+                    </div>     
+                
+                    <div class="p-field p-col  p-mt-4">
+                        <span class="p-float-label">      
+                            <p-inputNumber #preparingAmount 
+                                firstLetterUpperCase 
+                                formControlName="name"
+                                mode="decimal" 
+                                suffix=" gr / ml" 
+                                maxlength="18 + 8" 
+                                [minFractionDigits]="2" 
+                                [maxFractionDigits]="2" 
+                                [showButtons]="true"  
+                                [step]="0.1"
+                                :min="0"
+                                formControlName="quantity"></p-inputNumber>
+                            <label for="preparingAmount">{{ 'mrp.production_plan.preparation_amount' | translate}} <span [ngStyle]="{'color':'red'}">*</span></label>
+                        </span>
+                        <div class="p-invalid" *ngIf="isInvalidQty">
+                           {{ 'mrp.production_plan.invalid_preparation_amount' | translate }}
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <span class="p-invalid">(*) Campos obligatorios</span>
+                    </div> 
+                    <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2"(click)="onRecipeEdited()"label="Guardar"></button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <p-toast position="top-right" key="tax"></p-toast>
+    </div>
+</p-sidebar>

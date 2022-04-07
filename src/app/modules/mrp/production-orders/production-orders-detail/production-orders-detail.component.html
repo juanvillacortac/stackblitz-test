@@ -1,0 +1,215 @@
+<h2 class="p-m-0">{{ 'mrp.production_order.order_detail' | translate}}</h2>
+<hr/>
+
+
+<div class="card">
+
+    <!-- Timeline -->
+    <ng-container *ngIf="!isOrderInStatus(orderStatus.CANCELLED)">
+		<p-timeline [value]="statusTimeLine" layout="horizontal" align="bottom">	
+			<ng-template pTemplate="marker" let-event>
+				<span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+					<i [ngClass]="event.icon"></i>
+				</span>
+			</ng-template>
+	
+			<ng-template pTemplate="content" let-event>
+				<span style="font-size: 12px; font-weight:bold">{{ 'statuses.' + event.status.toLowerCase() | translate }}</span>
+			</ng-template>
+	
+			<ng-template pTemplate="opposite" let-event>
+				<span style="font-size: 10px">{{event.date}}</span>
+			</ng-template>
+		</p-timeline>
+	</ng-container>
+
+    <!-- Form -->
+	<div class="p-fluid p-grid p-formgrid" >
+		 <div class="p-field p-col-12 p-md-12 p-sm-12">                
+			<label for="input">{{ 'order' | translate }}</label>
+				<input pInputText 
+						disabled 
+						#name 
+                        id="name" 
+						sentenceType maxlength="30"     
+						[(ngModel)]="productionOrder.id">  
+		</div> 
+
+		<div class="p-field p-col-12 p-md-12 p-sm-12">                
+			<label for="input">{{ 'mrp.recipe.recipe' | translate }}</label>
+				<input pInputText 
+						disabled 
+						#recipe 
+						id="recipe" 
+						sentenceType maxlength="30" 
+						[(ngModel)]="productionOrder.recipe">  
+		</div> 
+
+		<div class="p-field p-col-12 p-md-12 p-sm-12">          
+            <label for="input">{{ 'mrp.production_order.production_room' | translate }}</label>      
+			<input pInputText 
+						disabled 
+						#room 
+						id="room" 
+						sentenceType
+						[(ngModel)]="processingRoom.name">  
+		</div> 
+        <ng-container *ngIf="roomTeam?.length > 0">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">          
+                <label for="input">{{ 'mrp.production_order.room_teams' | translate }}</label>     
+                <app-avatar-group #roomTeamId 
+                                  id="roomTeamId" 
+                                  [avatarList]="roomTeam"
+                                  [maxDisplayed]="10">
+                </app-avatar-group> 
+    
+            </div> 
+        </ng-container>
+       
+       
+	</div>
+	<br>
+    <!-- ProgressBar -->
+	<div *ngIf="isOrderInStatus(orderStatus.STARTED)">
+		<label *ngIf='!isDelayed'>{{ 'mrp.production_order.remaining_time' | translate }}: {{ remainingTime }}</label>
+        <label *ngIf='isDelayed' style="color: red">{{ 'mrp.production_order.delayed_time' | translate }}: -<b>{{ remainingTime }}</b></label>
+		<p-progressBar class="p-md-12" [showValue]="false" [value]="remainingProgress" [style]="{'height': '6px'}"></p-progressBar>
+	</div>
+	<br>
+
+
+    <!-- TableView -->
+<div *ngIf="isOrderInStatus(orderStatus.PENDING, orderStatus.FINISHED)" class="p-m-0">
+    <p-table #dt 
+        [columns]="cols"
+        [value]="productionOrder.details" 
+        [rowHover]="true" 
+        [paginator]="true" 
+        [showCurrentPageReport]="true" 
+        [rows]="10" 
+        [rowsPerPageOptions]="[10,25,50]"
+        currentPageReportTemplate="{{ 'primeng.footerShortDescription' | translate }}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <ng-container *ngFor="let col of cols">
+                        <th [ngStyle]="{'display': col.display}" pSortableColumn={{col.field}}>
+                            {{ col.header | translate }}
+                            <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-detail >
+                <tr>
+                    <ng-container *ngFor="let col of cols">
+                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'padding': col.field === 'usedQty' ? '0rem 0rem' : '1rem 1rem' }">
+                            
+                            <app-active-label *ngIf="col.field == 'Active'; else fieldCell" [active]="detail[col.field]" [isYesOrNoMode]="true"></app-active-label>
+
+                            <ng-template #fieldCell >
+                                <div *ngIf="col.field === 'usedQty' && !isOrderInStatus(orderStatus.FINISHED); else numberCell">
+                                    <div class="p-field" style="margin-top: 1rem;">                
+                                        <p-inputNumber #qty 
+                                                id="qty-{{detail.id}}" 
+                                                mode="decimal"
+                                                suffix=" gr/ml"
+                                                locale="es-VE"
+                                                [showButtons]="true"
+                                                [minFractionDigits]="2" 
+                                                [maxFractionDigits]="2"
+                                                :min="0.01"
+                                                :max="9999999"
+                                                maxlength="21"
+                                                [ngStyle]="{'padding-right': '0px'}"
+                                                [ngClass]="{'p-invalid': false}" 
+                                                [(ngModel)]="detail.usedQty"></p-inputNumber>
+                                    </div> 
+                                </div>
+                            </ng-template>
+
+                            <ng-template #numberCell>
+                                <div *ngIf="col.field === 'requiredQty' || col.field === 'usedQty'; else textCell">
+                                    {{detail[col.field] | number:'1.1-2'}} gr/ml
+                                </div>
+                            </ng-template>
+                            
+                            <ng-template #textCell >
+                                {{detail[col.field]}}
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+    </p-table>
+    <br>
+</div>
+<div class="p-fluid p-grid p-formgrid" >
+    <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="isOrderInStatus(orderStatus.STARTED)">
+        <label>{{ 'mrp.production_order.produced_quantity' | translate }}</label>
+        <p-inputNumber 
+            [(ngModel)]="productionOrder.producedQty" 
+            mode="decimal" 
+            [minFractionDigits]="2" 
+            [maxFractionDigits]="2" 
+            [showButtons]="true" 
+            suffix=" gr" 
+            :min="0">
+        </p-inputNumber>
+    </div>
+    <div class="p-d-flex p-col" *ngIf="isOrderInStatus(orderStatus.PENDING, orderStatus.STARTED)">
+        <ng-container *ngIf="userPermissions.allowed(this.permissionsIDs.CANCEL_PRODUCTION_ORDER_PERMISSION_ID)">
+            <button
+                pButton 
+                pRipple 
+                type="button" 
+                label="Cancelar"
+                icon="pi pi-times" 
+                iconPos="right"
+                class="p-button-warning btn-right position-icon-right p-mr-2"
+                [disabled]="loading"
+                (click)="displayDialog = true">
+            </button>
+        </ng-container>
+
+        <ng-container *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCTION_ORDER_PERMISSION_ID)">
+            <button *ngIf="isOrderInStatus(orderStatus.PENDING)"
+                pButton 
+                pRipple 
+                type="button" 
+                label="Iniciar"
+                icon="pi pi-chevron-right" 
+                iconPos="right"
+                class="p-button-info btn-right position-icon-right"
+                [disabled]="!canStartOrder || loading"
+                (click)="startProductionOrder()">
+            </button>
+        </ng-container> 
+        <ng-container *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCTION_ORDER_PERMISSION_ID)">
+            <button *ngIf="isOrderInStatus(orderStatus.STARTED)"
+                pButton 
+                pRipple 
+                type="button" 
+                label="Finalizar"
+                icon="pi pi-chevron-right" 
+                iconPos="right"
+                class="p-button-info btn-right position-icon-right p-ml-2"
+                [disabled]="loading || productionOrder.producedQty <= 0"
+                (click)="finishProductionOrder()">
+            </button>
+        </ng-container>
+    </div>
+</div>
+</div>
+<p-dialog header="Cancelación de orden" [(visible)]="displayDialog" [style]="{width: '30vw'}">
+    <div class="p-field" >
+        <b>Para cancelar la orden, indique motivo de cancelación</b>
+        <br><br>
+        <div class="p-fluid p-formgrid p-grid p-col">
+            <input id="float-input" type="text" placeholder="Motivo de cancelación" [(ngModel)]="cancellationReason" maxlength="100" sentenceType pInputText> 
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-ban" (click)="displayDialog = false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+        <p-button icon="pi pi-check" (click)="cancelProductionOrder()" [disabled]="cancellationReason.length < 16" label="Aceptar" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>        
+    </ng-template>
+</p-dialog>

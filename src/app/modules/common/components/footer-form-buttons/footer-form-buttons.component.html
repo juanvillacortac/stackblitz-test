@@ -1,0 +1,10 @@
+<div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+    <div class="p-field p-mr-2">
+        <button pButton type="button" pRipple  class="p-button-danger" icon="pi pi-times" (click)="onCancelPressed()" label="{{ 'primeng.cancel' | translate}}"  pTooltip="{{'cancel' | translate }}"></button>
+    </div> 
+    <ng-container *ngIf="showSave">
+        <div class="p-field">
+            <button pButton type="button" pRipple  class="p-button-info" icon="pi pi-save" [disabled]="disableSave" (click)="onSavePressed()" label="{{ 'save' | translate}}" pTooltip="{{ saveBtnToolTip | translate }}"></button>
+        </div> 
+    </ng-container>
+</div>

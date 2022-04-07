@@ -1,0 +1,59 @@
+:host ::ng-deep {    
+
+    .p-autocomplete-token {
+      background-color: #6c757d !important;
+      border-radius: 16px !important;
+      padding: 0.25rem 0.5rem;
+      white-space: nowrap!important;
+      display: inline-flex!important;
+      float: none !important;     
+      height: 27px !important;
+    }
+
+    .p-autocomplete-multiple-container {
+      width: 100%;
+      white-space: nowrap;
+      overflow-x: hidden;
+      display: inline-block  !important;
+      float: none !important;     
+    }
+    .p-autocomplete-input-token{
+      width: 100%;
+      white-space: nowrap;
+      overflow-x: hidden;
+      display: inline-block  !important;
+      float: none !important;     
+    }
+    .p-autocomplete-multiple-container:hover {
+      overflow-x: auto;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: #F5F5F5;
+      cursor: all-scroll !important;
+      position: relative;
+
+   
+  }
+  
+  ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      background-color: #F5F5F5;
+      cursor: all-scroll !important;
+  }
+   
+  ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+      background-color: #727272;
+      cursor: hand !important;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background-color: #696969;
+      cursor: all-scroll !important;
+    }
+
+    
+}

@@ -1,0 +1,34 @@
+<div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+    </span>
+    <button [disabled]="showList" pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" class="p-button-success p-mr-2" (click)="newAccount()"></button>
+</div>
+<p-table #dt [value]="accountList" dataKey="id">
+    <ng-template pTemplate="header" *ngIf="accountList && accountList.length > 0">
+        <tr>
+            <th></th>
+            <th pSortableColumn="movementType">Débito/Crédito <p-sortIcon field="movementType"></p-sortIcon></th>
+            <th pSortableColumn="stringCount">Cuenta <p-sortIcon field="stringCount"></p-sortIcon></th>
+            <th pSortableColumn="implementationRate">% Aplicación <p-sortIcon field="implementationRate"></p-sortIcon></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-payrollTemplates="accountList" *ngIf="accountList && accountList.length > 0">
+        <tr>
+            <td></td>
+            <td>{{payrollTemplates.movementType}}</td>
+            <td>{{payrollTemplates.stringCount}}</td>
+            <td>{{payrollTemplates.implementationRate}}</td>
+            <td>
+                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="editAccount(payrollTemplates)" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" *ngIf="!(accountList && accountList.length > 0)">
+        <tr>
+            <td colspan="6">No existen aplicaciones contables asociadas a esta empresa.</td>
+        </tr>
+    </ng-template>
+</p-table>

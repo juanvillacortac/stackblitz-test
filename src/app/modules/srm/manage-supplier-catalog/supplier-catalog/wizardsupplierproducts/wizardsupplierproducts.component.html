@@ -1,0 +1,190 @@
+<hr>
+<!-- <h6>3 Paso. Seleccionar los productos a proveedores</h6> -->
+<p-accordion (onClose)="onTabClose($event)" (onOpen)="onTabOpen($event)">
+    <p-accordionTab *ngFor="let suppliers of selectedSuppliersList">
+        <ng-template pTemplate="header">
+            <div class="p-grid" style="width: 100%;">
+
+                <div class="p-md-5">
+                    <label>{{suppliers.socialReason}}</label>
+                </div>
+
+                <div class="p-md-5">
+                    <label> Total de productos seleccionados: {{suppliers.totalselected}}</label>
+                </div>
+            </div>
+        </ng-template>
+        <div class="card p-m-0">
+
+            <p-table #dt [rowHover]="true" [value]="this.productsxsuppliers" dataKey="packingxproduct"
+                [(selection)]="selectedProductsSuppliers" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" editMode="row">
+                <colgroup>
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+
+                </colgroup>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox (click)="CheckProdsuppliers(suppliers.id)" ></p-tableHeaderCheckbox>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="products.name">Nombre
+                            <p-sortIcon field="products.name"></p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="packing.bar">Barra <p-sortIcon field="packing.bar"></p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="supplierRef">Referencia
+                            proveedor <p-sortIcon field="supplierRef"></p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }"  pSortableColumn="category">Categoría<p-sortIcon field="category"></p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="packing.typePacking">Tipo de empaque<p-sortIcon field="packing.typePacking">
+                            </p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="packing.presentacionPackaging">Presentación de empaque<p-sortIcon
+                                field="packing.presentacionPackaging"></p-sortIcon>
+                        </th>
+                        <th  [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="packing.numberUnist">Unidades<p-sortIcon field="packing.numberUnist">
+                            </p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="baseCost">Costo base<p-sortIcon field="baseCost"></p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="conversionCost">Costo conversión<p-sortIcon field="conversionCost">
+                            </p-sortIcon>
+                        </th>
+                        <th [ngStyle]="{'overflow-wrap': 'break-word' }" pSortableColumn="available">Disponible<p-sortIcon field="available"></p-sortIcon>
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-produc let-editing="editing" let-ri="rowIndex">
+
+                    <tr [pEditableRow]="produc">
+
+                        <td>
+                            <p-tableCheckbox [value]="produc" (click)="CheckProdsuppliers(suppliers.id)">
+                            </p-tableCheckbox>
+                            <!-- <p-tableCheckbox *ngIf="!editing" [value]="produc" pInitEditableRow (click)="CheckProdsuppliers(suppliers.id, produc)"></p-tableCheckbox>
+                         <p-tableCheckbox *ngIf="editing"  [value]="produc" pCancelEditableRow (click)="CheckProdsuppliers(suppliers.id, produc)"></p-tableCheckbox> -->
+                        </td>
+                        <td [ngStyle]="{'display': produc.name, 'overflow-wrap': 'break-word' }">
+                            {{produc.products.name}}</td>
+                        <td [ngStyle]="{'display': produc.packing.bar, 'overflow-wrap': 'break-word' }">
+                            {{produc.packing.bar}}</td>
+                        <td [ngStyle]="{'display': produc.supplierRef, 'overflow-wrap': 'break-word' }">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input style="width:90px" pInputText type="text" [(ngModel)]="produc.supplierRef"
+                                        maxlength="100">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{produc.supplierRef}}
+                                </ng-template>
+                            </p-cellEditor>
+
+                        </td>
+                        <td [ngStyle]="{'display': produc.category, 'overflow-wrap': 'break-word' }">{{produc.category}}
+                        </td>
+                        <td [ngStyle]="{'display': produc.packing.typePacking, 'overflow-wrap': 'break-word' }">
+                            {{produc.packing.typePacking}}</td>
+                        <td
+                            [ngStyle]="{'display': produc.packing.presentacionPackaging, 'overflow-wrap': 'break-word' }">
+                            {{produc.packing.presentacionPackaging}}</td>
+                        <td [ngStyle]="{'display': produc.packing.numberUnist, 'overflow-wrap': 'break-word' }">
+                            {{produc.packing.numberUnist}}</td>
+                     
+                        <td [ngStyle]="{'display': produc.baseCost, 'overflow-wrap': 'break-word' }">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <!-- <input pInputText type="text" [(ngModel)]="produc.baseCost" > -->
+                                    <p-inputNumber [inputStyle]="{'width':'90px'}" (onFocus)="clear($event)" [(ngModel)]="produc.baseCost"
+                                         mode="decimal" min="0" [minFractionDigits]="4"
+                                         [maxFractionDigits]="4" maxlength="23" 
+                                        (keyup.backspace)="calculateconv($event.target.value, produc)"
+                                        (keypress)="calculateconv($event.target.value, produc)"></p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{produc.baseCost | number: '.4'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td [ngStyle]="{'display': produc.conversionCost, 'overflow-wrap': 'break-word' }">
+                            <!-- <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="produc.conversionCost">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{produc.conversionCost | number: '.4'}}
+                            </ng-template>
+                        </p-cellEditor> -->
+                            {{produc.conversionCost | number: '.4'}}
+                        </td>
+                        <td [ngStyle]="{'display': produc.available, 'overflow-wrap': 'break-word' }">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <!-- <input pInputText type="text" [(ngModel)]="produc.available"> -->
+                                    {{produc.heavy }}
+                                    <p-inputNumber [inputStyle]="{'width':'90px'}" *ngIf="produc.products.heavy==true" [inputStyle]="{'width':'90px'}" (onFocus)="clear($event)" [(ngModel)]="produc.available"
+                                        [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+                                    </p-inputNumber>
+                                    <p-inputNumber *ngIf="produc.products.heavy==false"  [inputStyle]="{'width':'90px'}"  [(ngModel)]="produc.available" min="0" (onFocus)="clear($event)" ></p-inputNumber>
+                                </ng-template>
+                                <ng-template *ngIf="produc.products.heavy==true" pTemplate="output">
+                                    {{produc.available | number: '.4'}}
+                                </ng-template>
+                                <ng-template *ngIf="produc.products.heavy==false" pTemplate="output">
+                                    {{produc.available}}
+                                </ng-template>
+                            </p-cellEditor>
+
+                        </td>
+                        <td style="text-align:center">
+                            <button *ngIf="!editing" pButton pRipple icon="pi pi-pencil"
+                                class="p-button-rounded p-button-success p-mr-2" pInitEditableRow
+                                (click)="onRowEditInit(produc)"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                                (click)="onRowEditSave(produc)"
+                                class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                                (click)="onRowEditCancel(produc, ri)"
+                                class="p-button-rounded p-button-text p-button-danger"></button>
+                        </td>
+                        <!-- <td><app-active-label [active]="regulation.active"></app-active-label></td> -->
+                        <!-- <td><i [class]="regulation.active == true ? 'pi   pi-check' : 'pi pi-times'"></i></td> -->
+                        <!-- <td>
+                      
+                        <button *ngIf="regulation.idProductRegulation > 0" pButton pRipple [icon]="regulation.active == true ? 'pi pi-times' : 'pi pi-check'" class="p-button-rounded p-button-success p-mr-2" (click)="onActiveRegulation(regulation.idProductRegulation, regulation.active, regulation)" [pTooltip]="regulation.active == true ? 'Inactivar' : 'Activar'"></button>
+                       
+                    </td> -->
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer" let-columns>
+                    <ng-container *ngIf="productsxsuppliers==null || productsxsuppliers?.length == 0">
+                        <tr>
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="12">
+                                <span>Los productos seleccionados se encuentran asociados.</span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        </div>
+    </p-accordionTab>
+</p-accordion>

@@ -1,0 +1,2 @@
+<app-labor-relationship-grouping-list [(recordList)]="groupingListViewModel" (returnData)="callPanelGrouping($event)"></app-labor-relationship-grouping-list>
+<app-labor-relationship-grouping-panel *ngIf="showSidebar4" [(showSidebar)]="showSidebar4" [(record)]="newGroupingModel" (backUnChanged)="resetValues($event)" (recordSave)="saveChange($event)"></app-labor-relationship-grouping-panel>

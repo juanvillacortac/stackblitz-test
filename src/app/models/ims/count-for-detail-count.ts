@@ -1,0 +1,20 @@
+export class CountForCountdetail
+{
+    id:number=-1;
+    idDetailPhysicalCount:number=-1;
+    sequence:number=-1;
+    count:number=0;
+    idOperator:number=-1;
+    operator:string="";
+    operatorsString:string="";
+    product:string="";
+    area:string="";
+    existences:number=0
+    indDefinitive:boolean=false;
+    active:boolean=false;
+    dateCreate:Date;
+    dateUpdate:Date;
+    countDate:Date;
+    countsMade:number=0;
+    indHeavy:boolean=false;
+}

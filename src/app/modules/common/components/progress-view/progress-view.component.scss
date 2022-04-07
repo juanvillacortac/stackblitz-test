@@ -1,0 +1,29 @@
+.progress-view {
+	overflow: hidden;
+	position: relative;
+	height: 1.5rem;
+	background: #6e6e6e;
+	border-radius: 10px;
+  }
+
+.progress-view-value {
+	display: none;
+	height: 100%;
+	position: absolute;
+	width: 0;
+	border: 0 none;
+	margin: 0;
+  }
+  
+  .progress-view-text {
+	font-weight: 500;
+	height: 100%;
+	position: absolute;
+	text-align: left;
+	width: 100%;
+	display: block;
+	color: rgb(255, 255, 255);
+	line-height: 1.5rem;
+	margin-left: 4%;
+  }
+  

@@ -1,0 +1,34 @@
+:host ::ng-deep {
+
+    .p-sidebar-content .p-field{
+        margin-bottom: 1rem;
+    }
+
+    @media screen and (max-width: 992px){
+
+        .p-sidebar-content{
+            overflow-x: hidden;
+        }
+
+        #header{
+            width: 83.3333%;
+        }
+    }
+
+    @media screen and (max-width: 1024px){
+        .p-grid > .p-col-12{
+            width: 100%;
+        }
+
+        .inside{
+            margin-bottom: 1rem;
+        }
+    }
+
+    @media screen and (min-width: 992px){
+        .p-sidebar-content{
+            overflow-y: unset;
+        }
+    }
+    
+  }

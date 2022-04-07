@@ -1,0 +1,108 @@
+<!--<ng-container *ngIf="loaded">-->
+<ng-container>
+    <div class="menorMargen card">
+        <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+                                                                     
+            <div class="p-field p-grid p-mt-4">
+           
+                <!--Dropdown de clientes-->
+                <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3" >
+                    <label>Cliente <span [ngStyle]="{'color':'red'}">*</span> </label>
+                    <div class="p-inputgroup">
+                        <input type="text" pInputText pKeyFilter="int" [value]="data.client?.socialReason ? data.client.socialReason : 'Seleccione...' "
+                            [class]="false && !data.client.idclientsupplier ? 'ng-dirty ng-invalid' : ''"  (change)="getCollectionsTransactions()" disabled>
+                        <button pButton icon="pi pi-times" style="border-radius: 0;" (click)="data.client = null;"></button>
+                        <button pButton icon="pi pi-search"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                            (click)="clientModal = true"></button>
+                    </div>
+                    <small class="p-invalid" *ngIf="(submitted) && !clients">El cliente es requerido</small>                  
+                </div>
+
+                <!--Modal de seleccion de clientes-->
+                <sale-transactions-client-modal [(displayModal)]="clientModal" [clients]="clients"
+                    [classifications]="clientClassifications" (onSelect)="updateClient($event)"></sale-transactions-client-modal>
+                    
+                <!--Dropdown de tipo de documento-->
+                <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3" >
+                    <label for="CurrencyShowed">Tipo de documento <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown inputId="CurrencyShowed" [options]="documentTypes"
+                        [(ngModel)]="data.documentTypeId" placeholder="Seleccione..." (onChange)="getCollectionsTransactions()"
+                        [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown>                    
+                </div> 
+                
+                <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+                    <label for="applicationDate">Fecha de aplicación <span [ngStyle]="{'color':'red'}">*</span> </label>
+                    <p-calendar [showIcon]="true" inputId="applicationDate" [(ngModel)]="data.applicationDate"
+                        [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+                        yearRange="1970:2030" dateFormat="dd/mm/yy" >
+                    </p-calendar>                    
+                </div>
+            </div> 
+
+            <div class="p-field p-grid p-mt-4">
+           
+                <!--Dropdown de Documento a aplicar-->
+                <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3" >
+                    <label for="CurrencyShowed">Documento a aplicar <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [filter]="true" inputId="CurrencyShowed" [options]="documentToApply"
+                        [(ngModel)]="data.document" placeholder="Seleccione... " [resetFilterOnHide]="true" [disabled]="!data.client"
+                        [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown>                    
+                </div>
+                
+            
+                <!--Dropdown de clientes-->
+                <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3" >
+                    <label for="CurrencyShowed">Moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input id="disabled-input" type="text" pInputText [disabled]="true" [value]='data.document?.currency ' disabled/>               
+                </div>  
+
+                <ng-container *ngIf="data.document">
+                    <div class="p-field p-col-fixed p-md-2 p-lg-2 p-mt-3" >
+                        <label >Monto Total</label>
+                        <br>
+                        <strong style="font-size:x-large;">${{data.document.amount}}</strong>
+                    </div> 
+    
+                    <div class="p-field p-col-fixed p-md-2 p-lg-2 p-mt-3" >
+                        <label >Monto aplicado</label>
+                        <br>
+                        <strong style="font-size:x-large;">${{data.document.remainingAmount}}</strong>
+                    </div>
+                    <div class="p-field p-col-fixed p-md-2 p-lg-2 p-mt-3" >
+                        <label >Monto por aplicar</label>
+                        <br>
+                        <strong style="font-size:x-large;">${{countAppliedTotal}}</strong>
+                    </div>
+
+                </ng-container>
+                
+                
+            </div>
+
+        </div> 
+
+        <app-receivable-accounts-documents-application-list [charge]="data.document"  [(data)]="data.documents" [client]="data.client" ></app-receivable-accounts-documents-application-list>
+
+        <div style="justify-content: end; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem" class="p-mt-4 ">
+            <strong style="font-size:large;">Total a aplicar:</strong>
+        </div>
+        <div style="justify-content: end; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem" class="p-mt-4">
+            <strong>$ {{countAppliedTotal}}</strong>
+        </div>
+
+        <div style="justify-content: end; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem" class="p-mt-4">
+            <strong>Bs. 20.000.000,00</strong>
+
+        </div>
+
+        <div style="justify-content: end; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem" class="p-mt-4">
+            <button pButton type="button" class="p-button-success" (click)="send()"  icon="pi pi-check" label="Aplicar"></button>
+        </div>
+        
+        
+    </div>
+</ng-container> 
+

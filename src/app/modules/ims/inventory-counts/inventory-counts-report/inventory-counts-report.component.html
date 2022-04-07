@@ -1,0 +1,80 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INVENTORY_COUNT_REPORT_ID)" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"></button>
+        </div>
+    </div>
+    <app-inventory-counts-report-filters *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INVENTORY_COUNT_REPORT_ID)" (search)="search($event)"  (exportExcel)="exportExcel()" [(filters)]="filters" [expanded]="showFilters" [loading]="loading"  [dataUnavailable]="dataUnavailable" class="p-mt-3"></app-inventory-counts-report-filters>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="_selectedColumns" [rowHover]="true" [value]="inventoryCountReportResult" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    [scrollable]="true"  currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" [rowsPerPageOptions]="[10,25,50]" >      
+        <ng-template pTemplate="caption">
+            <p-multiSelect [options]="hiddenColumns" [(ngModel)]="selectedColumns" optionLabel="{{ 'header' | translate }}" [maxSelectedLabels]="0"
+            [disabled]="dataUnavailable" selectedItemsLabel="{{'primeng.multiSelectColumns' | translate}} " [style]="{minWidth: '200px'}" placeholder="{{'primeng.chooseColumns' | translate}}">
+                <ng-template pTemplate="item" let-item>
+                    {{item.header | translate}}
+                </ng-template>
+            </p-multiSelect>
+        </ng-template> 
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:192px">
+            </colgroup>
+        </ng-template>
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <ng-container *ngFor="let col of columns" >
+                    <th [ngStyle]="{'display': col.display}" [pSortableColumn]="col.field" >
+                        {{ col.header | translate }}
+                    <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+                </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-inventoryCountReport let-columns="columns">
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" >
+
+                        <div *ngIf="col.field === 'status'; else numberCell" >
+                            <span  [class]="'status-badge status-active'">{{(inventoryCountReport[col.field])}}</span>
+                        </div>
+                
+                        <ng-template #numberCell >
+                            <span *ngIf="col.dataType === 'number'; else dateCell">{{(inventoryCountReport[col.field]) | number:'1.2-2'}} </span>
+                        </ng-template>
+                                        
+                        <ng-template #dateCell >
+                            <span *ngIf="col.dataType === 'date'; else textCell">{{(inventoryCountReport[col.field]) | date: 'dd/MM/yyyy'}} </span>
+                        </ng-template>
+
+                        <ng-template #textCell >
+                            <span>{{(inventoryCountReport[col.field])}}</span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <ng-container *ngIf="inventoryCountReportResult === null || inventoryCountReportResult?.length == 0">
+                <tr>
+                  <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="_selectedColumns.length-1">
+                    <span>No existen resultados</span>
+                  </td>
+                </tr>
+              </ng-container>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+</p-table>
+</div>

@@ -1,0 +1,27 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Número de teléfono" [(visible)]="visible"  [style]="{width:'40%'}" [modal]="true">
+    <div class="p-grid">
+        <div class="p-col-12">      
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-lg-4 p-md-12">            
+                    <label for="active">Código de área <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [filter]="true" eemptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" [options]="countryCodeList" [(ngModel)]="contactNumber.idCountry" [class]="submitted && contactNumber.idCountry <= 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." appendTo="body"></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="submitted && contactNumber.idCountry <= 0">El Código área del país es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-lg-4 p-md-12">
+                    <label for="active">Número de teléfono <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [(ngModel)]="contactNumber.number" minlength="7" maxlength="15"  (input)="validatenumber(contactNumber.number)" [class]="submitted && isnumbervalid ? 'ng-dirty ng-invalid' : ''" numbersOnly placeholder="0000000" pInputText >
+                    <small class="p-invalid" *ngIf="isnumbervalid">El número de teléfono debe tener al menos 7 caracteres</small>
+                </div>
+                <div class="p-field p-col-12 p-lg-4 p-md-12">
+                    <label for="active">Tipo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"  [options]="contactNumberType" [(ngModel)]="contactNumber.idType" [class]="submitted && contactNumber.idType <= 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." appendTo="body"></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="submitted && contactNumber.idType <= 0">El tipo es requerido</small>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>        
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </ng-template>
+</p-dialog>

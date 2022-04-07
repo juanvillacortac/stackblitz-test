@@ -1,0 +1,39 @@
+:host ::ng-deep {
+  .p-datatable {
+    .p-datatable-thead {
+      > tr {
+        > th {
+          background: #f8f9fa !important;
+        }
+      }
+    }
+  }
+}
+
+.status-ind-open,
+.status-ind-closed,
+.status-ind-partial {
+    border-radius: 2px;
+    padding: 0.25em 0.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  .status-ind-open {
+    background: #c8e6c9;
+    color: #256029;
+  }
+
+  .status-ind-partial {
+    background: #b8d3f5;
+    color: #5E81AC;
+  }
+
+  .status-ind-closed {
+    background: #ffcdd2;
+    color: #c63737;
+  }
+
+  

@@ -1,0 +1,62 @@
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card p-mb-0">
+            <div class="p-fluid p-grid" [formGroup]="roleForm">
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="name">Nombre</label>
+                    <input pInputText #name placeholder="Nombre" maxlength="250" formControlName="name" required/>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="roleType">Tipo de rol</label>
+                    <p-dropdown [options]="rolTypes" id="roleType" [disabled]="isEdit" formControlName="idType"
+                                placeholder="Selecciona un tipo de rol" [showClear]="true"></p-dropdown>
+                </div>
+                <div class="p-d-flex p-ai-lg-center p-col-4 p-md-4">
+                    <label class="p-mr-2" for="name">Activo</label>
+                    <p-inputSwitch class="p-mr-2" formControlName="isActive" [disabled]="!isEdit"></p-inputSwitch>
+                </div>
+            </div>
+            <div class="p-fluid p-grid" *ngIf="modules.length != 0">
+                <div class="p-fluid p-col-12 p-md-12">
+                    <table class="p-fluid p-grid">
+                        <td class="p-col-12 p-md-6">
+                            <h5>Módulos</h5>
+
+                            <div class="p-field">
+                                <p-tree [value]="modules" selectionMode="single"
+                                        (onNodeSelect)="onModuleSelected($event.node)" [virtualScroll]="false"
+                                        [virtualNodeHeight]="33" scrollHeight="240px"
+                                        [styleClass]="'custom-ui-tree'">
+                                </p-tree>
+                            </div>
+                        </td>
+                        <td class="p-col-12 p-md-6">
+                            <h5>Acciones</h5>
+                            <div class="p-fluid p-col-12 p-md-12">
+                                <div class="actions"
+                                     *ngIf="containPermissions; else divNoContainPermission">
+                                    <h5>{{selectedSubModule}}</h5>
+                                    <div class="p-field-checkbox" *ngFor="let permission of permissionShowing">
+                                        <p-checkbox name="group1" (onChange)="onPermissionSelected()"
+                                                    [(ngModel)]="permission.selected" binary="true"
+                                                    [value]="permission.id" [label]="permission.name"></p-checkbox>
+                                    </div>
+                                </div>
+                                <ng-template #divNoContainPermission>
+                                    <label>No posee acciones</label>
+                                </ng-template>
+                            </div>
+                        </td>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="p-fluid p-col-12">
+            <app-footer-form-buttons [disableSave]="!roleForm.valid" (acceptPressed)="onSave()" (cancelPressed)="resetForm()">
+            </app-footer-form-buttons>
+        </div>
+    </div>
+    <p-toast position="top-right" key="role-detail"></p-toast>
+</div>

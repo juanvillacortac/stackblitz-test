@@ -1,0 +1,58 @@
+<h5 class="p-m-0">Condición de pago</h5>
+<hr/>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText [(ngModel)]="paymentCondition.name" #name maxlength="100" (input)="_validations.toCapitalizeSimbology($event)" required />       
+                    <small class="p-invalid" *ngIf="submitted && (!paymentCondition.name || !paymentCondition.name.trim())">El campo nombre es requerido</small>               
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Tipo de descuento <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [(ngModel)]="paymentCondition.idDiscountType" (onChange)="changeDiscountType()" [options]="cboDiscountRates"  placeholder="Seleccione..."  appendTo="body" [autoDisplayFirst]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown> 
+                    <small class="p-invalid" *ngIf="submitted && paymentCondition.idDiscountType <= 0">Seleccione un tipo de descuento</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="paymentCondition.idDiscountType != 1 && paymentCondition.idDiscountType != 0">                
+                    <label for="input">Moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [(ngModel)]="paymentCondition.idCoin" [options]="cboCoins"  placeholder="Seleccione..."  appendTo="body" [autoDisplayFirst]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown> 
+                    <small class="p-invalid" *ngIf="submitted && paymentCondition.idCoin <= 0">Seleccione una moneda</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Descuento <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber *ngIf="paymentCondition.idDiscountType!=1" [disabled]="disabled"  id="VALOR"  [(ngModel)]="paymentCondition.discount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" :min="0" maxlength="21" (paste)="_validations.noPaste($event)"></p-inputNumber>
+                    <p-inputNumber *ngIf="paymentCondition.idDiscountType==1"  [disabled]="disabled" id="VALOR2" suffix=" %"  [(ngModel)]="paymentCondition.discount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" :min="0" max=100  maxlength="8" (paste)="_validations.noPaste($event)"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submitted && (!paymentCondition.discount)">El campo descuento tiene que ser mayor a 0</small>
+                </div>
+                           
+                  <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Días de plazo<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber id="dias"  [(ngModel)]="paymentCondition.amounterm"   :min="0" :max="999" maxlength=3></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submitted && paymentCondition.amounterm <= 0">Los días de plazo son requeridos</small>               
+            
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="paymentCondition.active" placeholder="Estatus" [disabled]="paymentCondition.idPaymentCondition<=0 || disabled" (keyup.enter)="onSave()" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton pRipple label="Guardar" (click)="onSave()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+        </div>
+           
+        </div>
+        <p-toast position="top-right" key="paymentCondition"></p-toast>
+    </div>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

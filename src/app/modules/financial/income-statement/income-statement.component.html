@@ -1,0 +1,27 @@
+<div class="flex space-x-4 m-1 shadow card items-center print:border print:shadow-none">
+  <i class="p-text-bold pi pi-book"></i>
+  <span class="font-bold text-lg">Estado de resultados</span>
+</div>
+
+<app-income-statement-filters></app-income-statement-filters>
+
+<ng-container *ngIf="!loadingService.loading && (data$ | async) as data">
+  <app-income-statement-table
+    name="Ingresos"
+    [accounts]="data.incomeRoot"
+  ></app-income-statement-table>
+
+  <app-income-statement-table
+    name="Egresos"
+    [accounts]="data.expenseRoot"
+  ></app-income-statement-table>
+
+  <div
+    class="flex space-x-4 m-1 shadow mt-4 text-right card items-center justify-end print:border print:shadow-none"
+  >
+    <span class="font-bold text-lg"
+      >Total ingresos y egresos:
+      <span class="rounded bg-green-100 ml-4 py-1 px-2">{{ total }}</span></span
+    >
+  </div>
+</ng-container>

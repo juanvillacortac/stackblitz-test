@@ -1,0 +1,37 @@
+:host ::ng-deep {
+  .lot-1 {
+    background: #FFCDD2;
+    color: #C63737;
+    border-radius: 2px;
+    padding: 0.25em 0.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    box-sizing: border-box;
+  }
+
+
+  .lot-2 {
+    background: #C8E6C9;
+    color: #256029;
+    border-radius: 2px;
+    padding: 0.25em 0.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    box-sizing: border-box;
+  }
+
+  .p-datatable {
+    .p-datatable-thead {
+      > tr {
+        > th {
+          background: #f8f9fa !important;
+        }
+      }
+    }
+  }
+
+}

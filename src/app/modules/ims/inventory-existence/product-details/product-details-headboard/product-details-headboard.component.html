@@ -1,0 +1,98 @@
+<p-card [style]="{'width': '100%', 'margin-bottom': '0.5em', 'padding-bottom': '0'}" styleClass="p-shadow-0 ">
+    <div class="p-grid nested-grid"  [style]="{'margin-top': '-2em','margin-bottom': '-3em'}">
+        <div class="p-col-12 p-xl-2 p-lg-2 p-md-4 p-sm-6 box-stretched product-img"><img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" alt="no image" class="p-shadow-4" /></div>
+        <div class="p-col-12 p-xl-10 p-lg-10 p-md-12 ">
+            <div class="p-col-12 title">
+                <h4>{{productSelected.productname}}</h4>
+                <hr/>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-lg-8">
+                    <div class="p-grid">
+                        <div class="p-col-12 p-lg-6 p-md-12 p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <div class="p-col-12 p-md-8 timeline-content">  
+                                <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.bar_code' | translate}}" tooltipPosition="left">qr_code_scanner</span>
+                                <span class="recipe-price-box-value" > {{productSelected.bar}}</span>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <div class="product-grid-item-top" >
+                                <div class="p-col-12 p-md-8 timeline-content">  
+                                    <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.category' | translate}}" tooltipPosition="left">category</span>    
+                                    <span class="recipe-price-box-value"> {{productSelected.category}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <div class="product-grid-item-top">
+                                <div class="p-col-12 p-md-8 timeline-content">  
+                                    <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.brand' | translate}}" tooltipPosition="left">sell</span>     
+                                    <span class="recipe-price-box-value"> {{productSelected.brand}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <div class="product-grid-item-top">
+                                <div class="p-col-12 p-md-8 timeline-content">  
+                                    <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.supplier' | translate}}" tooltipPosition="left">local_shipping</span>       
+                                    <span class="recipe-price-box-value"> {{productSelected.supplier}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-lg-6 p-md-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <div class="product-grid-item-top">
+                                <div class="p-col-12 p-md-8 timeline-content">  
+                                    <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.inventoryarea' | translate}}" tooltipPosition="left">location_on</span>  
+                                    <span class="recipe-price-box-value"> {{productSelected.inventoryarea}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-lg-6 p-md-12  p-fluid" [style]="{'margin-top': '-0.5em'}">
+                            <div class="product-grid-item-top">
+                                <div class="p-col-12 p-md-8 timeline-content">  
+                                    <span class="material-icons avatar"  pTooltip="{{ 'ims.product_existence.existence' | translate}}" tooltipPosition="left">format_list_numbered</span>     
+                                    <span class="recipe-price-box-value"> {{productSelected.existence}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                   
+                <div class="p-col-12 p-lg-4">
+                    <div class="p-grid">
+                        <div class="p-col-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <span pTooltip="{{ 'ims.product_existence.start_date' | translate}}" tooltipPosition="top" class="p-float-label">
+                                <p-calendar  [(ngModel)]="startDate" [maxDate]="finalDate"   readonlyInput="true" [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+                            </span>
+                        </div>
+                        
+                        <div class="p-col-12  p-fluid"[style]="{'margin-top': '-0.5em'}">
+                            <span pTooltip="{{ 'ims.product_existence.end_date' | translate}}" tooltipPosition="top" class="p-float-label">
+                                <p-calendar  [(ngModel)]="finalDate" [maxDate]="maxDate" [minDate]="startDate"   readonlyInput="true" [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+                            </span>
+                        </div> 
+                       
+                        <div class="p-col-12 p-fluid" [style]="{'margin-top': '-0.5em', 'margin-left': 'inherit'}">       
+                            <div class="p-fluid p-grid p-formgrid p-jc-end ">
+                                <div class="p-field p-mr-2">
+                                    <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INVENTORY_EXISTENCE_PRODUCT_DETAILS_ID)"
+                                    label="{{ 'search' | translate}}" (click)="onSearch()" pTooltip="{{ 'search' | translate}}" icon="pi pi-search"
+                                    class="p-button-info p-mr-3"></button>
+                                </div> 
+                                <div class="p-field">
+                                    <button pButton pRipple label="{{ 'return' | translate}}" (click)="returnToMain()" pTooltip="{{ 'return' | translate}}" icon="pi pi-arrow-left"
+                                    class="p-button-secondary p-mr-3"></button>                
+                                </div> 
+                            </div>
+                        </div>  
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+</p-card>
+
+

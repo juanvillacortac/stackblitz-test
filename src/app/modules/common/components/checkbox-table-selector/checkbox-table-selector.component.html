@@ -1,0 +1,39 @@
+<div class="p-grid layout-dashboard ">
+    <div class="p-col-12 ">
+        <div class="card widget-tasks">
+            <div class="card-header">
+                <div class="title">
+                    <h5>{{title}}</h5>
+                </div>
+                <div class=" task-info">
+                    <span>{{title}} seleccionadas</span><span class="highlighted"> {{itemsSelected}}</span><span> </span>
+                </div>
+            </div>
+            <ul class="checkboxes scrolleable">
+                <ng-template ngIf [ngIf]="optionsCount">
+                    <li class="checkbox-row">
+                        <div class="p-grid">
+                            <div class="p-col-12 checkbox">
+                                <a [hidden]=true>{{selectAll}}</a>
+                                <p-checkbox name="group2"  [(ngModel)]="selectedAll" binary="true" (onChange)="onSelectAll($event)" ></p-checkbox>
+                                <p>Todos</p>
+                            </div>
+
+                        </div>
+                    </li>
+                </ng-template>
+                <ng-template ngFor let-item [ngForOf]="options" let-i="index">
+                    <li class="checkbox-row">
+                        <div class="p-grid">
+                            <div class="p-col-12 checkbox">
+                                <p-checkbox name="group1" binary="true" [(ngModel)]="item.selected" [value]="item.id" (onChange)="onOptionsChange()"></p-checkbox>
+                                <p>{{item.name}}</p>
+                            </div>
+
+                        </div>
+                    </li>
+                </ng-template>
+            </ul>
+        </div>
+    </div>
+</div>

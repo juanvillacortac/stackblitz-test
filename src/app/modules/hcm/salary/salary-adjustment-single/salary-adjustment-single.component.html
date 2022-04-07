@@ -1,0 +1,104 @@
+<div class="card ">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4 p-mb-3 p-mb-lg-0">
+            <h4 *ngIf="!showFilters" id="filterTitle">Ajustes individuales</h4>
+        </div>
+        <!-- <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3"
+            [class]="showFilters ? 'p-mb-3' : 'p-mb-md-0 p-mb-lg-0'">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Buscar..." (input)="dt.filterGlobal($event.target.value, 'contains')"/>
+        </span> -->
+        <div [class]="showFilters ? 'p-mb-3' : ''">
+            <button pButton pRipple *ngIf="access && salaryTypesDropdown.length > 0 && individualSalary.idLaborRelationship > 0" icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="createNew()" id="add"></button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+            (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>       
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid p-pl-0 p-pr-0" *ngIf="showFilters">
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <label>Código</label>
+            <input [(ngModel)]="salaryAdjustmentSingleFilter.employmentCode" id="varying" name="varying" type="text" maxlength="15"
+            pInputText (keyup.enter)="searchSalaryAdjustment()" [class]="code ? 'ng-dirty ng-invalid' : ''">
+            <small class="p-invalid" *ngIf="code">Debe completar el campo código</small>
+        </div>
+
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <label for="">Tipo de documento</label>
+            <p-dropdown [(ngModel)]="salaryAdjustmentSingleFilter.idDocumentType" [options]="documentTypeDropdown" id="TypesVarying"
+                placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados"
+                emptyMessage="Sin resultados" (keyup.enter)="searchSalaryAdjustment()" [class]="typeDoc ? 'ng-dirty ng-invalid' : ''">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="typeDoc">Debe completar el campo tipo de documento</small>    
+        </div>
+    
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <label for="float-input">Número de documento</label>
+            <input [(ngModel)]="salaryAdjustmentSingleFilter.documentNumber" id="description" name="description" type="text" maxlength="30"
+                        pInputText (keyup.enter)="searchSalaryAdjustment()" [class]="numDoc ? 'ng-dirty ng-invalid' : ''">
+            <small class="p-invalid" *ngIf="numDoc">Debe completar el campo número de documento</small>
+        </div>
+
+        <div class="p-field p-col-12 p-md-6 p-lg-3">
+            <label for="float-input">Moneda</label>
+            <p-dropdown [(ngModel)]="coinOption" [options]="coinDropdown" id="TypesVarying"
+                placeholder="Seleccione..." emptyFilterMessage="Sin resultados"
+                emptyMessage="Sin resultados" (keyup.enter)="searchSalaryAdjustment()">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="p-col-12 p-d-flex p-jc-end p-pr-0" *ngIf="showFilters">
+        <button pButton pRipple label="Buscar" (click)="searchSalaryAdjustment()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>
+<div id="miniCardDatos" class="card " *ngIf="showTable">
+    <div class="p-col-12 p-md-6 p-lg-4" *ngIf="individualSalary && individualSalary.idLaborRelationship != 0">
+        <h6>Información del trabajador</h6>
+    </div>
+    <div *ngIf="individualSalary && individualSalary.idLaborRelationship != 0" class="p-fluid p-grid p-mt-1">
+        <div id="personalFont" class="p-col-12 p-md-9 p-mb-1 ">
+            <span>{{individualSalary.employeeFirstName}} {{individualSalary.employeeSecondName}} {{individualSalary.employeeLastName}} {{individualSalary.employeeSecondLastName}}</span>
+        </div>
+        <div id="personalFontSub" class="p-col-12 p-md-9 p-mb-1">
+            <span>{{individualSalary.jobPosition}}</span>
+        </div>
+        <div id="personalFontID" class="p-col-12 p-md-9 p-mb-1">
+            <span>Código:  {{individualSalary.employmentCode}} | </span>
+            <span>Identidad:   {{individualSalary.identifier}} - {{individualSalary.documentNumber}}</span>
+        </div>
+<!--         <div class="p-col-12 p-md-6 p-lg-4 p-pl-3 p-pr-3 p-mb-2">
+            <label for="" class="p-mr-2">Documento: </label>
+            <span>{{individualSalary.identifier}} - {{individualSalary.documentNumber}}</span>
+        </div> -->
+<!--         <div class="p-col-12 p-md-6 p-lg-4 p-pl-3 p-pr-3 p-mb-2">
+            <label for="" class="p-mr-2">Nombres: </label>
+            <span>{{individualSalary.employeeFirstName}} {{individualSalary.employeeSecondName}}</span>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-4 p-pl-3 p-pr-3 p-mb-2">
+            <label for="" class="p-mr-2">Apellidos: </label>
+            <span>{{individualSalary.employeeLastName}} {{individualSalary.employeeSecondLastName}}</span>
+        </div> -->
+<!--         <div class="p-col-12 p-md-6 p-lg-4 p-pl-3 p-pr-3">
+            <label for="" class="p-mr-2">Código: </label>
+            <span>{{individualSalary.employmentCode}}</span>
+        </div> -->
+        <div id="personalFontID" class="p-col-12 p-md-9 p-mb-1">
+            <span>Sucursal: {{individualSalary.branchOffice}}</span>
+        </div>
+<!--         <div class="p-col-12 p-md-6 p-lg-4 p-pl-3 p-pr-3">
+            <label for="" class="p-mr-2">Empresa: </label>
+            <span>{{individualSalary.company}}</span>
+        </div> -->
+    </div>
+    <p-messages severity="info" *ngIf="individualSalary && individualSalary.idLaborRelationship == 0" >
+        <ng-template pTemplate>
+            <div class="p-ml-2">No existen resultados que coincidan con la búsqueda.</div>
+        </ng-template>
+    </p-messages>
+</div>
+
+<app-salary-adjustment-table *ngIf="showTable && individualSalary && individualSalary.idLaborRelationship != 0" [salaryAdjustmentList]="listTable" [salaryAdjustmentType]="1" [companyId]="idCompany" [access]="access" (recordSave)="sendPanel($event)" (saveAdjustmentList)="saveListAdjustment($event)"></app-salary-adjustment-table>
+<app-salary-adjustment-single-panel *ngIf="showSidebar" [title]="panelTitle" [idJobPosition]="individualSalary.idJobPosition" [companyId]="idCompany" [record]="newAdjustment" [showDialog]="showSidebar" [salaryTypesDropdown]="salaryTypesDropdown" (backUnChanges)="resetValues($event)" (recordSave)="saveAdjustment($event)"></app-salary-adjustment-single-panel>

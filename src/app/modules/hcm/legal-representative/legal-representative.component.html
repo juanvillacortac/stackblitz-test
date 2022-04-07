@@ -1,0 +1,46 @@
+<div class="p-col-12 p-mt-3 p-mb-5">
+    <p-panel header="Representante legal">
+        <div class="p-fluid">
+            <div class="p-field p-grid">
+                <label for="" class="p-col-12 p-lg-2">Nombre</label>
+                <div class="p-col-12 p-lg-8 p-lg-offset-2">
+                    <input id="" type="text" pInputText disabled value="{{_company.firstNameLR}} {{_company.lastNameLR}}">
+                    <!-- {{_company.FirstNameLR}} {{_company.LastNameLR}} -->
+                    <!-- {{_company}} -->
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="" class="p-col-12 p-lg-4">Doc. Identificación</label>
+                <div class="p-col-12 p-lg-8">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">{{_company.lrIdentifier}}</span>
+                        <input id="" type="text" pInputText disabled value="{{_company.documentLR}}">      
+                    </div>
+                </div>
+                <!-- <div class="p-col-4 p-lg-2 p-lg">
+                    <input id="" type="text" pInputText disabled value="{{_company.lrIdentifier}}">
+                </div>
+                <div class="p-col-8 p-lg-6 p-lg">
+                    <input id="" type="text" pInputText disabled value="{{_company.documentLR}}">
+                </div> -->
+            </div>
+            
+            <div class="p-field p-grid">
+                <label for="" class="p-col-12 p-lg-4">Teléfono</label>
+                <!-- <div class="p-col-4 p-lg-3 p-lg">
+                    <input [(ngModel)]="_company.firstNameLR" id="" type="text" pInputText disabled value="">
+                </div> -->
+                <div class="p-col-12 p-lg-8 p-lg">
+                    <input id="" type="text" pInputText disabled value="{{_company.phoneLR}}">
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="" class="p-col-12 p-lg-2">Email</label>
+                <div class="p-col-12 p-lg-8 p-lg-offset-2">
+                    <input id="" type="text" pInputText disabled value="{{_company.emailLR}}">
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div>
+

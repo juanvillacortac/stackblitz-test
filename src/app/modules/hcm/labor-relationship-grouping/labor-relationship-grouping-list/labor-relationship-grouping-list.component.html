@@ -1,0 +1,60 @@
+<div class="p-text-right p-mb-3">
+  <span class="p-input-icon-left p-mr-2">
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+  </span>
+  <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus p-button-success" tooltipPosition="top" pTooltip="Agregar" class="p-button-success p-mr-2" (click)="add()" [disabled]="disabledSave > 0"></button>
+  <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-save p-button-success" tooltipPosition="top" pTooltip="Guardar" class="p-button-info p-mr-2" (click)="save()" [disabled]="disabledSave > 0"></button>
+</div>
+
+<p-table [value]="recordList" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10"
+  [rowHover]="true" dataKey="idGrouping" [scrollable]="true" scrollHeight="500px" [globalFilterFields]="['abbreviation','groups','assignedValue']"
+  currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true" #dt2 editMode="row">
+  <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="abbreviation" class="p-text-center">Nomenclatura <p-sortIcon field="abbreviation"></p-sortIcon></th>
+          <th pSortableColumn="groups" class="p-text-center">Agrupación <p-sortIcon field="groups"></p-sortIcon></th>
+          <th pSortableColumn="assignedValue" class="p-text-center">Valor <p-sortIcon field="assignedValue"></p-sortIcon></th>
+          <th class="p-text-center">Asociado</th>
+          <th style="width:8rem"></th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-recordList let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="recordList">
+          <td class="p-text-center">
+            {{recordList.abbreviation}}
+          </td>
+          <td class="p-text-center">
+            {{recordList.groups}}
+          </td>
+          <td class="p-text-center" style="overflow-wrap: break-word">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input type="text" [(ngModel)]="recordList.assignedValue" pInputText maxlength="15"  (keypress)="validateAssignedValue($event,ri)"/> 
+              </ng-template>
+              <ng-template pTemplate="output" >
+                <span *ngIf="recordList.assignedValue != ''">{{recordList.assignedValue}}</span>
+                <span *ngIf="recordList.assignedValue == ''">No aplica</span>
+              </ng-template>
+          </p-cellEditor>
+          </td>
+          <td class="p-text-center">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <p-checkbox [binary]="true" [(ngModel)]="recordList.active"></p-checkbox>
+              </ng-template>
+              <ng-template pTemplate="output">
+                <p-checkbox [binary]="true" readonly="true" [(ngModel)]="recordList.active"></p-checkbox>
+              </ng-template>
+          </p-cellEditor>
+          </td>
+          <td style="text-align:center" style="width:8rem">
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && !editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(recordList, ri)" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(recordList, ri)" pTooltip="Guardar" class="p-button-rounded p-button-success p-button-text p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(recordList, ri)" pTooltip="Cancelar" class="p-button-rounded p-button-danger p-button-text" tooltipPosition="top" placeholder="Top"></button>
+            <!-- <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(recordList)" pTooltip="Guardar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button> -->
+            <!-- <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(recordList, ri)" pTooltip="Regresar" class="p-button-rounded p-button-danger" tooltipPosition="top" placeholder="Top"></button> -->
+          </td>
+      </tr>
+  </ng-template>
+</p-table>

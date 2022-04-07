@@ -1,0 +1,30 @@
+// .p-field{
+//     margin-bottom: 25px;
+// }
+
+:host ::ng-deep {
+
+    .readOnlyCard .p-card-title {
+      color: #5E81AC;
+    }
+
+    .readOnlyInfo{
+      color: #6c757d;
+    }
+
+    .p-panel-title {
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+    }
+
+    .p-fluid .p-inputtext {
+        padding: 6px 0px 0px 0px;
+        border: unset;
+    }
+
+    .p-col-12.p-lg-5,
+    .p-col-12.p-lg-7 {
+        padding: 0.1rem 0.5rem;
+    }
+}
+

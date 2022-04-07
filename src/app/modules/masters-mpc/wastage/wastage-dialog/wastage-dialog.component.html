@@ -1,0 +1,31 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  header="Clasificación de producto" [dismissible]="false" position="right"   styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <!-- <app-role-detail [(roleSelected)]="roleSelected"  (onHideEditForm)="childCallBack($event)" ></app-role-detail> -->
+    <h5 class="p-m-0">Tipo de merma</h5>
+    <hr/>
+   <div class="p-fluid p-grid p-formgrid">
+     <div class="p-field p-col-12 ">
+       <label for="name">Nombre</label>&nbsp;<span [ngStyle]="{'color':'red'}">*</span>
+       <input type="text" pInputText id="name" (keyup.enter)="saveWastage()" [(ngModel)]="_wastage.name" (keypress)="_validations.keyPressOnlyLetters($event);" maxlength="100" (paste)="_validations.noPaste($event)" (input)="_validations.toCapitalizeSimbology($event)" [class]="submitted && (!_wastage.name || !_wastage.name.trim()) ? 'ng-dirty ng-invalid' : ''"/>
+       <small class="p-invalid" *ngIf="submitted && !_wastage.name"> El nombre es requerido</small>
+     </div>
+    
+     <div class="p-field p-col-12 ">
+       <label for="active">Estatus</label>
+       <p-dropdown [options]="status" [disabled]="_wastage.id<=0" appendTo="body" [(ngModel)]="_wastage.active" placeholder="Estatus" >
+ 
+       </p-dropdown>
+     </div>
+     <div class="p-field p-col-12 ">
+       <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+   </div>
+   <div class="p-field p-col-12 p-md-12">   
+     <button pButton pRipple label="Guardar" (click)="saveWastage()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+  </div>
+ </div>
+ 
+     <!-- <button pButton pRipple label="Cancelar" (click)="hideDialog()" icon="pi pi-times" class="p-button-secondary"></button> -->
+    
+  
+ </p-sidebar>
+ <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+ 

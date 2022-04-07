@@ -1,0 +1,27 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Asignar nueva categoría padre</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Categoría padre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown (keyup.enter)="levelDown()" [options]="_categorybrothers" appendTo="body" [(ngModel)]="_category.idParentCategory" placeholder="Seleccione...">
+
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _category.idParentCategory <= 0">La categoría padre es requerida</small>
+                </div>
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="levelDown()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+

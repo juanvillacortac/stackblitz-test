@@ -1,0 +1,25 @@
+<div class="p-grid p-ai-center vertical-container " [ngClass]="{'component-width': staticWidth}">
+
+    <div class=" p-col-5 p-md-5 p-sm-5"> 
+        <span>             
+            <h5 class="p-field title">{{title}}</h5>  
+        </span>  
+    </div>
+    <div class=" p-col-7 p-md-7 p-sm-7">                
+        <p-dropdown 
+                class="p-field" 
+                [options]="getGroupedOffices" 
+                [(ngModel)]="selection" 
+                optionValue="value" 
+                (onChange)="onOfficeSelected($event)" 
+                placeholder=" {{ (grouped ? 'select_office' : 'select_company') | translate }} " 
+                [group]="grouped"
+                [disabled]="getGroupedOffices.length == 0">
+                    <ng-template let-group pTemplate="group">
+                        <div class="p-d-flex p-ai-center">
+                            <span>{{group.label}}</span>
+                        </div>
+                    </ng-template>
+        </p-dropdown>
+    </div>
+</div>

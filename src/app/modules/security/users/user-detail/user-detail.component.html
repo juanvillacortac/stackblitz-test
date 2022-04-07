@@ -1,0 +1,14 @@
+<p-tabView>
+  <p-tabPanel header="Información">
+    <p-toast position="top-right"></p-toast>
+    <app-register-user></app-register-user>
+  </p-tabPanel>
+  <p-tabPanel header="Roles"[selected]="false">
+    <p-toast position="top-right"></p-toast>
+    <app-user-roles-list></app-user-roles-list>
+  </p-tabPanel>
+  <p-tabPanel header="Permisos" *ngIf="isInternalUser()">
+    <p-toast position="top-right"></p-toast>
+    <app-user-permissions></app-user-permissions> 
+  </p-tabPanel>
+</p-tabView>

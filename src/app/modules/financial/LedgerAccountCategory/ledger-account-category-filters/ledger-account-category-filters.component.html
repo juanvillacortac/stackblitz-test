@@ -1,0 +1,27 @@
+<div class="p-grid p-align-center p-mt-4 p-p-3 vertical-container" *ngIf="expanded">
+  <div class="p-fluid p-col-12 p-md-4 p-mt-3 p-lg-4">
+    <span class="p-float-label">
+      <input [(ngModel)]="filters.IdAccountCategory" pInputText numbersOnly  maxlength="9" (keyup.enter)="search()">
+      <label for="input">Código</label>
+    </span>
+  </div>
+  <div class="p-fluid p-col-12 p-md-4 p-mt-3 p-lg-4">
+    <span class="p-float-label">
+      <input [(ngModel)]="filters.accountingAccountCategory" #name [pKeyFilter]="noneSpecialCharacters" maxlength="35" pInputText (keyup.enter)="search()">
+      <label for="input">Categoría de cuentas contables</label>
+    </span>
+  </div>
+  <div class="p-fluid p-col-12 p-md-4 p-mt-3 p-lg-4">
+    <span class="p-float-label">
+      <label for="dropdown">Estatus</label>
+      <p-dropdown [(ngModel)]="ledgerAccountCategoriesActive" [options]="status" placeholder="Estatus" [showClear]="true" (keyup.enter)="search()">
+      </p-dropdown>
+    </span>
+  </div>
+
+
+  <div class="p-d-flex p-jc-end p-col-12 p-md-3 p-lg-12" style="width: 100%">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+  </div>
+</div>

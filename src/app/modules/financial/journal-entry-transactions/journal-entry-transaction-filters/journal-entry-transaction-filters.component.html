@@ -1,0 +1,60 @@
+<div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+  <div class="p-field p-grid">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+        <label for="active">Número de comprobante</label>
+        <input type="text" inputId="documentNumber" [(ngModel)]="filters.documentNumber" maxlength="255" pInputText>
+      </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+      <label for="active">Periodo fiscal</label>
+      <p-dropdown [filter]="true" [options]="fiscalYear" [(ngModel)]="filters.idFiscalYear" (keyup.enter)="search()" emptyMessage="Sin resultados."
+        placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+        emptyMessage="Sin resultados.">
+      </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+      <label for="Categoría">Fecha a filtrar</label>
+      <p-dropdown [filter]="true" [options]="date" [(ngModel)]="filters.idTypeDate" (keyup.enter)="search()" placeholder="Seleccione..."
+        [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+      </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-3">
+        <label for="transactionDate">Fecha de inicio</label>
+        <p-calendar [showIcon]="true" inputId="transactionDate" [disabled]="filters.idTypeDate <= 0" [(ngModel)]="filters.initDate"
+            [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+            yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+        </p-calendar>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-3">
+      <label for="transactionDate">Fecha fin</label>
+      <p-calendar [showIcon]="true" inputId="transactionDate"  [disabled]="filters.idTypeDate <= 0" [(ngModel)]="filters.endDate"
+          [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+          yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+      </p-calendar>
+  </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-mt-3">
+      <label for="transactionDate">Estatus</label>
+      <p-multiSelect [options]="status" appendTo="body" [(ngModel)]="filters.idStatus" placeholder="Seleccione" emptyMessage="Sin resultados."
+        emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+    </div>
+  </div>
+</div>
+<div class="p-grid p-align-center vertical-container">
+  <div class="p-d-flex p-jc-end p-col-12 p-lg-12" style="width: 100%">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+      class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+      class="p-button-secondary"></button>
+  </div>
+</div>
+
+<!-- <sale-transactions-client-modal [(displayModal)]="clientModal" [clients]="filterData.clients"
+[classifications]="clientClassifications" (onSelect)="client = $event"></sale-transactions-client-modal>
+
+<app-sale-transactions-lot-modal [(displayModal)]="lotModal" [lots]="filterData.lots"
+(onSelect)="lot = $event"></app-sale-transactions-lot-modal> -->

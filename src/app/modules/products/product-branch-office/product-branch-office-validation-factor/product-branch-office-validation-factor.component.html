@@ -1,0 +1,83 @@
+<div class="p-grid">
+    <div class="p-col-12 p-lg-12">
+        <button pButton pRipple label="Guardar en lote" (click)="showAddLotValidationFactor()" *ngIf="saveLot" class="p-button-info p-mr-2"></button>
+    </div>
+    <div class="p-col-12 p-lg-12">
+        <p-accordion>
+            <p-accordionTab *ngFor="let branchOffice of productBranchOfficeList" (click)="searchValidationFactorbyBranchOffice(branchOffice.idBranchOffice)" [selected]="branchOffice.idBranchOffice == branchexpanded ? true : false">
+                <ng-template pTemplate="header">
+                    <div class="p-grid" style="width: 100%; align-items: center; margin-right: 0px; margin-left: 0px; margin-top: 0px;">
+        
+                        <div class="p-md-5">
+                            <label class="p-mr-2"><i [class]="branchOffice.validationsFactor.length > 0 ? 'pi pi-check' : ''"></i></label>
+                            <!-- <p-checkbox [(ngModel)]="selectedBranchOffices" [value]="branchOffice" [inputId]="branchOffice.idBranchOffice" class="p-mr-2" (click)="check()"></p-checkbox> -->
+                            <label>{{branchOffice.branchOffice}}</label>
+                            <!-- <span>{{branchOffice.branchOffice}}</span> -->
+                        </div>
+                        <div class="p-md-6">
+                            <div class="p-grid" *ngFor="let branchOffice1 of branchOffice.validationsFactor">
+                                <div class="p-md-4" *ngIf="branchOffice1.packingType.id == 2">
+                                    Mín: <label>{{branchOffice1.minFactor}}</label>
+                                </div>
+                                <div class="p-md-4" *ngIf="branchOffice1.packingType.id == 2">
+                                    Med: <label>{{branchOffice1.midFactor}}</label>
+                                </div>
+                                <div class="p-md-4" *ngIf="branchOffice1.packingType.id == 2">
+                                    Máx: <label>{{branchOffice1.maxFactor}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-md-1">
+                            <button pButton pRipple icon="pi pi-plus" *ngIf="branchOffice.manageValidationFactor" class="p-button-rounded p-button-success" (click)="showAddPanelValidationFactor($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="p-grid">
+                    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+                            <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                                <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                    <p-table #dtDc [columns]="displayedColumnsValidationFactor" [value]="validationFactorList" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [selectionMode]="'none'" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [(selection)]="selectedValidationFactor" (onRowSelect)="onRowSelect($event)">      
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngIf="branchOffice.manageValidationFactor"></th>
+                                            <ng-container *ngFor="let col of columns">  
+                                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-validationFactor let-columns="columns">
+                                        <tr [pSelectableRow]="validationFactor">
+                                            <td *ngIf="branchOffice.manageValidationFactor">
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="showEditPanelValidationFactor(validationFactor,branchOffice.idBranchOffice)" pTooltip="Editar"></button>
+                                            </td>
+                                            <ng-container *ngFor="let col of columns">
+                                                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="validationFactor[col.field]"></app-active-label>
+                                                    <ng-template #textCell>
+                                                        <span>{{col.template(validationFactor)}} </span>
+                                                    </ng-template>
+                                                </td>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="paginatorleft">
+                                            </ng-template>
+                                            <ng-template pTemplate="paginatorright">
+                                            </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+<app-new-validation-factor [(showDialog)]="ShowDialog" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(validationFactor)]="validationFactor" [(validationFactorListDB)]="validationFactorListDB" (refreshValidationFactor)="refreshLotValidationFactor()"></app-new-validation-factor>
+<app-new-lot-validation-factor [(showDialog)]="showDialogLot" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(availableCompaniesBranchOfficeApp)]="availableCompaniesBranchOfficeApp" [(validationFactorListDB)]="validationFactorListDB" (refreshLotValidationFactor)="refreshLotValidationFactor()"></app-new-lot-validation-factor>

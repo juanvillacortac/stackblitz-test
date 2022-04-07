@@ -1,0 +1,36 @@
+<p-dialog [header]="titleHeader" (onShow)="onShow()" (onHide)="hideDialog()" [(visible)]="showDialog"  [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '20vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+            <label for="active" [hidden]="!_imponible.indDeductible">Tipo de deducible </label>
+            <label for="active"  [hidden]="_imponible.indDeductible">Tipo de imponible </label>
+            <!-- <p-dropdown  [options]="reasonList"  <span [ngStyle]="{'color':'red'}">*</span>[filter]="true" appendTo="body" emptyFilterMessage="Sin resultados."  emptyMessage="Sin resultados." placeholder="Seleccione..." [(ngModel)]="_supplierxprod.idReasons" [class]="submitted && (!_supplierxprod.idReasons || _supplierxprod.idReasons<0) ? 'ng-dirty ng-invalid' : ''" >
+            </p-dropdown> -->
+            <input type="text" pInputText id="tipoimponible" (keyup.enter)="save()" [(ngModel)]="_imponible.taxableType"  disabled/>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+            <label for="active">Descripción</label>
+            <input type="text" pInputText id="imponible" (keyup.enter)="save()" [(ngModel)]="_imponible.taxableDeductibleBase"  disabled/>
+        </div>
+
+        <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="visibleRate">
+            <label>Valor de tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+            <!-- [options]="classificationlist" prefix="%" (onFocus)="clearinput($event)"appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+            <p-inputNumber (focusout)="reset($event)" mode="decimal" [minFractionDigits]="2" [max]="100" maxlength="6" (keyup.enter)="save()" [(ngModel)]="_imponible.rate"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted && (this._imponible.rate==0)">La tasa
+                es requerida.</small>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="visibleAmount">
+            <label>Valor de monto <span [ngStyle]="{'color':'red'}">*</span></label>
+            <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+            <p-inputNumber mode="decimal" (focusout)="reset($event)" [minFractionDigits]="4" [(ngModel)]="_imponible.amount" (keyup.enter)="save()"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted && (this._imponible.amount==0)">Monto requerido.</small>
+        </div>
+
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton (click)="save()" pRipple label="Guardar" [disabled]="loading" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+        <!-- <button pButton (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times" class="p-button-secondary p-mr-2"></button> -->
+    </ng-template>
+</p-dialog>
+

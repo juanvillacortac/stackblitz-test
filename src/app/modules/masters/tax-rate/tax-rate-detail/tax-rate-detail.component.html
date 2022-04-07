@@ -1,0 +1,117 @@
+
+<h5 class="p-m-0">{{formTitle}}</h5>
+<hr/>
+
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid" [formGroup]="taxRateForm">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input pInputText #name maxlength="30" sentenceType (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)"
+                     formControlName="name" required
+                     [ngClass]="{'p-invalid':(taxRateForm.controls.name.invalid && (taxRateForm.controls.name.dirty || taxRateForm.controls.name.touched || submitted))}" />
+              <div *ngIf="taxRateForm.controls.name.invalid && (taxRateForm.controls.name.dirty || taxRateForm.controls.name.touched || submitted)"
+                   class="p-invalid">
+                <div *ngIf="taxRateForm.controls.name.errors?.required">
+                  El nombre es requerido.
+                </div>
+              </div>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="input">Abreviatura</label>
+              <input pInputText #name maxlength="3" onlyUpperCase
+                     (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)"
+                     formControlName="abbreviation" />
+
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="input">Valor <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input pInputText #name appDecimalAmount (paste)="_validations.PasteOnlyNumbers($event)"
+                     formControlName="value" required
+                     [ngClass]="{'p-invalid':(taxRateForm.controls.value.invalid && (taxRateForm.controls.value.dirty || taxRateForm.controls.value.touched || submitted))}" />
+              <div *ngIf="taxRateForm.controls.value.invalid && (taxRateForm.controls.value.dirty || taxRateForm.controls.value.touched || submitted)"
+                   class="p-invalid">
+                <div *ngIf="taxRateForm.controls.value.errors?.required">
+                  El valor es requerido.
+                </div>
+                <div *ngIf="taxRateForm.controls.value.errors?.ValueValidatorRateType">
+                  El valor debe ser mayor o igual a 0.
+                </div>
+              </div>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [options]="status" appendTo="body" [autoDisplayFirst]="false" [disabled]="!isEdit" formControlName="statusValue"
+                          [class]="{'ng-dirty':(taxRateForm.controls.statusValue.invalid && (taxRateForm.controls.statusValue.dirty || taxRateForm.controls.statusValue.touched || submitted))}" required>
+              </p-dropdown>
+              <div *ngIf="taxRateForm.controls.statusValue.invalid && (taxRateForm.controls.statusValue.dirty || taxRateForm.controls.statusValue.touched || submitted)"
+                   class="p-invalid">
+                <div *ngIf="taxRateForm.controls.statusValue.errors?.required">
+                  El estatus es requerido.
+                </div>
+              </div>
+            </div>
+
+
+            <div  class="p-field p-col-12 p-md-12 p-sm-12">
+
+              <label for="dropdown">Impuesto <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [options]="tax.value" appendTo="body" [showClear]="true" optionLabel="name" placeholder="Seleccione..."   emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"
+                          [autoDisplayFirst]="false" formControlName="selectedTax" (onChange)="onTaxSelected($event.value)"
+                          [class]="{'ng-dirty':(taxRateForm.controls.selectedTax.invalid && (taxRateForm.controls.selectedTax.dirty || taxRateForm.controls.selectedTax.touched || submitted))}" required>
+              </p-dropdown>
+              <div *ngIf="taxRateForm.controls.selectedTax.invalid && (taxRateForm.controls.selectedTax.dirty || taxRateForm.controls.selectedTax.touched || submitted)"
+                   class="p-invalid">
+                <div *ngIf="taxRateForm.controls.selectedTax.errors?.required">
+                  El impuesto es requerido.
+                </div>
+              </div>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="dropdown">Tipo de tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [options]="rateType.value" appendTo="body" [showClear]="true" optionLabel="name"
+                          [autoDisplayFirst]="false" formControlName="selectedRateType" (onChange)="onRateTypeSelected($event.value)"
+                          [class]="{'ng-dirty':(taxRateForm.controls.selectedRateType.invalid && (taxRateForm.controls.selectedRateType.dirty || taxRateForm.controls.selectedRateType.touched || submitted))}" required>
+              </p-dropdown>
+              <div *ngIf="taxRateForm.controls.selectedRateType.invalid && (taxRateForm.controls.selectedRateType.dirty || taxRateForm.controls.selectedRateType.touched || submitted)"
+                   class="p-invalid">
+                <div *ngIf="taxRateForm.controls.selectedRateType.errors?.required">
+                  El tipo de tasa es requerido.
+                </div>
+              </div>
+            </div>
+            <div *ngIf="baseId!=0" class="p-field p-col-12 p-md-12 p-sm-12">
+             <label for="nameBase">Impuesto base <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" maxlength="30" pInputText formControlName="taxBase" disabled />
+            </div>
+
+          </div>
+          <div *ngIf="baseId!=0 && conRate" class="p-fluid p-grid p-formgrid" >
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="dropdown">Tasas a las que aplica <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-multiSelect  id="taxeTypeApplications" name="taxeTypeApplications" #taxeTypeApplications="ngModel" (onChange)="onTaxeSelected($event.value)" [options]="Rates" placeholder="Seleccione..." appendTo="body"  optionLabel="name"
+                         [(ngModel)]="selectedtaxesRatesApplication" [class]="{'ng-dirty':(taxeTypeApplications.invalid && (taxeTypeApplications.dirty || taxeTypeApplications.touched || submitted))}" required>
+          </p-multiSelect>
+          <div *ngIf="taxeTypeApplications.invalid && (taxeTypeApplications.dirty || taxeTypeApplications.touched || submitted)"
+          class="p-invalid">
+           <div *ngIf="taxeTypeApplications.errors?.required">
+             La tasa de aplicación es requerida.
+           </div>
+            </div>
+            </div>
+          </div>
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" (click)="onSave()" label="Guardar"></button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <p-toast position="top-right" key="tax-rate"></p-toast>
+</div>

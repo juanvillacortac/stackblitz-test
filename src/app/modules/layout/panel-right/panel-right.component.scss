@@ -1,0 +1,9 @@
+h1:first-of-type {
+  text-transform:capitalize;
+}
+
+@media print {
+  .layout-rightpanel {
+    display: none !important;
+  }
+}

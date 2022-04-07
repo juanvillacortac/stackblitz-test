@@ -1,0 +1,23 @@
+:host ::ng-deep { 
+  
+ 
+    .p-dialog-content {
+        overflow-y: visible;
+    }
+
+    .p-dialog {
+        min-width: 300px;
+    }
+
+    .card {
+        padding: 0px;
+    }
+
+    .p-inputgroup-addon:first-child, .p-inputgroup button:first-child {
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+  
+    }
+}
+
+

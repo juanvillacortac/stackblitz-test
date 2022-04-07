@@ -1,0 +1,20 @@
+<div [class]="'item-container ' + event.status">
+    <div id="header" class="p-grid p-jc-between p-m-0 p-pl-2 p-pr-2"  style="width: 100%;">
+        <div class="p-col-10 p-p-0">
+            <p style="font-weight: bold;" class="p-m-0 p-p-0">{{ event.title }}</p>
+        </div>
+        <div class="p-col-2 p-p-0">
+            <div class="p-d-flex">
+                <label [class]="'p-ml-auto total-counts-'+ event.status">{{ event.quantity }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="p-grid p-m-0 p-pl-2 p-pr-2 p-pt-0 p-pd-0">
+        <div class="p-col-12 p-m-0 p-p-0">
+            <label class="p-text-italic p-m-0 p-p-0">{{ event.responsibleUser }}</label>
+        </div>
+
+        <label class="p-text-italic p-m-0 p-p-0">{{ event.description }}</label>
+    </div>
+
+</div>

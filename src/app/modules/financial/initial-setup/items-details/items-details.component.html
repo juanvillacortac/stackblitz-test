@@ -1,0 +1,52 @@
+<div *ngIf="showItems">
+    <div style="margin: 1rem 0; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <button pButton type="button" label="Expandir todos" (click)="toggleExpanded(true)"
+                style="margin-right: .5rem"></button>
+            <button pButton type="button" label="Contraer todos" (click)="toggleExpanded(false)"></button>
+        </div>
+        <div>
+            <button pButton type="button" label="Seleccionar todos" (click)="selectAll()" class="p-ml-6"></button>
+        </div>
+
+    </div>
+    <p-treeTable [value]="nodes" [columns]="cols" styleClass="p-treetable-sm" [autoLayout]="true">
+        <ng-template pTemplate="caption">
+            Seleccione los elementos del plan de cuenta.
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [ngStyle]="{'text-align': col.field === 'haveAuxiliary' ? 'center' : 'left'}">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns; let i = index">
+                    <div style="display: flex; align-items: center;">
+                        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                        <p-checkbox [(ngModel)]="selectedNodes[rowData.id].selected" [binary]="true" inputId="selected"
+                            *ngIf="i == 0" (click)="selectNode(rowData.id, rowNode.node.data, rowNode.node)"
+                           >
+                        </p-checkbox>
+                        <!-- <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0" (click)="adds()"></p-treeTableCheckbox> -->
+        
+                        <div class="" *ngIf="col.field === 'haveAuxiliary'; else textCell" style="margin: auto;">
+                        <p-checkbox [(ngModel)]="selectedNodes[rowData.id].applyAux" [binary]="true" inputId="applyAux"
+                            [disabled]="!selectedNodes[rowData.id].selected"
+                            (click)="selectAux(rowData.id, rowNode.node.data, rowNode.node)">
+                        </p-checkbox>
+                        </div>
+                        <!-- <app-active-label *ngIf="col.field === 'haveAuxiliary'; else textCell" [active]="rowData.haveAuxiliary"></app-active-label> -->
+                        <p>
+                            {{ col.field === 'level' ? rowData.level+' ('+formatCode(rowData.codeAccountingAccount,
+                            separator)+')' : rowData[col.field]}}
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        </p-treeTable>
+        </div>

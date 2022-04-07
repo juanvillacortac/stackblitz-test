@@ -1,0 +1,49 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false"
+  [showCloseIcon]="true" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}">
+  <h5 class="p-m-0">Motivo de inventario</h5>
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input id="float-input" [(ngModel)]="_dataInventoryReason.name" [pKeyFilter]="valid" type="text" pInputText
+              (input)="_validations.toCapitalizeString($event)"
+              maxlength="64" [class]="submitted && (!_dataInventoryReason.name || !_dataInventoryReason.name.trim()) ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="saveInventoryReason()" (paste)="_validations.noPaste($event)">
+            <small class="p-invalid" *ngIf="submitted && (!_dataInventoryReason.name || !_dataInventoryReason.name.trim())">El motivo es
+              requerido</small>
+          </div>
+
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Agrupación de motivo <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="GroupingInventoryReasonList" [(ngModel)]="_dataInventoryReason.idGroupingInventoryReason" placeholder="Seleccione..."
+              appendTo="body" (keyup.enter)="saveInventoryReason()" [class]="submitted && _dataInventoryReason.idGroupingInventoryReason <= 0 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted &&  _dataInventoryReason.idGroupingInventoryReason <= 0"> La agrupación es requerida</small>
+          </div>
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Configuración <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="InventoryReasonConfigList" [(ngModel)]="_dataInventoryReason.idConfiguration" placeholder="Seleccione..."
+              appendTo="body" (keyup.enter)="saveInventoryReason()" [class]="submitted && _dataInventoryReason.idConfiguration <= 0 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _dataInventoryReason.idConfiguration <= 0">La configuración es requerida</small>
+          </div>
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown name="cboactive" [options]="statuslist" appendTo="body" [(ngModel)]="_dataInventoryReason.active" placeholder="Estatus" [disabled]="_dataInventoryReason.id<=0" (keyup.enter)="saveInventoryReason()" ></p-dropdown>
+          </div>
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button pButton pRipple label="Guardar" (click)="saveInventoryReason()" icon="pi pi-save"
+              class="p-button-info p-mr-2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

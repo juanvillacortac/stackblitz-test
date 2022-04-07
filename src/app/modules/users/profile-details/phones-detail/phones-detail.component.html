@@ -1,0 +1,36 @@
+<h2 class="p-m-0">{{formTittle}}</h2>
+<hr/>
+<div class="card p-mb-0">
+    <div class="p-fluid p-grid" [formGroup]="phoneForm">
+        <div class="p-field p-col-12 p-md-12 p-mt-2 ">
+                <span class="p-float-label">
+                    <p-dropdown inputId="phoneType" [autoDisplayFirst]="false" [options]="phoneTypes.value"
+                                formControlName="idPhoneType" optionLabel="name"></p-dropdown>
+                    <label for="dropdown">Tipo de Teléfono</label>
+                </span>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-mt-2">
+                <span class="p-float-label">
+                    <p-dropdown inputId="prefix" [autoDisplayFirst]="false" [options]="phonePrefixes.value"
+                                formControlName="prefix" optionLabel="codePrefix"></p-dropdown>
+                    <label for="dropdown">Prefijo</label>
+                </span>
+        </div>
+        <div class="p-field p-col-12 p-md-8 p-mt-2 p-mt-2">
+                <span class="p-float-label">
+                    <input pInputText numbersOnly id="phoneNumber" formControlName="phoneNumber" maxlength="11"/>
+                    <label for="name">Número de teléfono</label>
+                </span>
+        </div>
+    </div>
+</div>
+<div class="p-fluid">
+    <app-footer-form-buttons [disableSave]="!phoneForm.valid" 
+                             (acceptPressed)="onSubmitProfile()"
+                             (cancelPressed)="onCloseDialog()">
+    </app-footer-form-buttons>
+</div>
+
+
+
+

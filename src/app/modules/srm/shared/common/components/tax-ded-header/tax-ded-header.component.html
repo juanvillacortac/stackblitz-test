@@ -1,0 +1,140 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Imponibles y deducibles" [draggable]="false"
+  [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'60vw'}" [modal]="true">
+  <!-- <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+     
+    </div> -->
+  <!-- <div class="p-grid">
+        <div class="p-col-12 p-mt-3 p-md-12 p-lg-12"> (_sendTaxables)="sendList($event)"  (_sendDeductibles)="sendList($event)" [selected]="indactive==false? true: [(ProductOrder)]="ProductOrder"  [(ProductOrder)]="ProductOrder" false" [selected]="indactive==true? true : false" -->
+
+  <p-tabView id="ChildTab" [(activeIndex)]="activeIndex">
+    <p-tabPanel header="Impuestos" [disabled]="indTabdeductible">
+      <!-- <app-taxable-header (onhide)="onHide()" [(PurchaseOrder)]="PurchaseOrder"></app-taxable-header> -->
+      <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-auto p-mr-2">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar" />
+          </span>
+
+        </div>
+      </div>
+      <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true"
+          [value]="this.purchaseService._taxdedpurcharseHeader.taxables" [paginator]="true" [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+              <th [ngStyle]="{'width': '130px'}"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-taxable let-columns="columns">
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="taxable[col.field]">
+                  </app-active-label>
+                  <ng-template #textCell>
+                    <span>{{col.template(taxable)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+              <td>
+                <!-- (click)="onRemoveSpecification(specification.id)"  (click)="editTaxableDeductible(order)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                <button pButton pRipple icon="pi pi-trash" (click)="onRemove(taxable)"
+                  class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"
+                  *ngIf="(PurchaseOrder.purchase.idStatus <statuspurchase.Elaborated) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==PurchaseOrder.purchase.responsibleId"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mt-2"
+                  pTooltip="Editar" (click)="onEdit(taxable)"
+                  *ngIf="(PurchaseOrder.purchase.idStatus <statuspurchase.Elaborated) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==PurchaseOrder.purchase.responsibleId"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+        </p-table>
+
+      </div>
+
+    </p-tabPanel>
+    <p-tabPanel header="Deducibles" [disabled]="!indTabdeductible">
+      <!-- <app-deductible-header (onhide)="onHide()"  [(PurchaseOrder)]="PurchaseOrder"> </app-deductible-header> -->
+      <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-auto p-mr-2">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar" />
+          </span>
+
+        </div>
+      </div>
+      <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns1" [rowHover]="true"
+          [value]="this.purchaseService._taxdedpurcharseHeader.deductibles" [paginator]="true" [rows]="10"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+              <th [ngStyle]="{'width': '130px'}"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-deductible let-columns="columns">
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="deductible[col.field]">
+                  </app-active-label>
+                  <ng-template #textCell>
+                    <span>{{col.template(deductible)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+              <td>
+                <!-- (click)="onRemoveSpecification(specification.id)"  (click)="editTaxableDeductible(order)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                <button pButton pRipple icon="pi pi-trash" (click)="onRemoveded(deductible)"
+                  class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"
+                  *ngIf="(PurchaseOrder.purchase.idStatus < statuspurchase.Elaborated) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==PurchaseOrder.purchase.responsibleId"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mt-2"
+                  pTooltip="Editar" (click)="onEdit(deductible)"
+                  *ngIf="(PurchaseOrder.purchase.idStatus < statuspurchase.Elaborated) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==PurchaseOrder.purchase.responsibleId"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+        </p-table>
+
+      </div>
+
+    </p-tabPanel>
+  </p-tabView>
+  <!-- </div>
+    </div> -->
+
+</p-dialog>
+<app-tax-ded-header-edit [(showDialogEdit)]="showDialogEdit" [(_imponible)]="imponible"
+  (_sendList)="sendListTaxableHeaderEdit($event)"></app-tax-ded-header-edit>

@@ -1,0 +1,38 @@
+
+<p-card header="Representante legal" class="p-card-shadow p-col-12 p-md-6 readOnlyCard">
+    <div class="p-fluid">
+
+        <div class="p-grid">
+            <label class="p-col-12 p-lg-4">Doc. identificación:</label>
+            <div class="p-col-12 p-lg-8">
+                <div class="p-inputgroup">
+                    <!-- <span class="p-inputgroup-addon">{{_company.lrIdentifier}}</span> -->
+                    <input type="text" pInputText disabled value="{{_company.lrIdentifier}} - {{_company.documentLR}}" style="padding: 2px 2px;">      
+                </div>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <label class="p-col-12 p-lg-4">Nombre:</label>
+            <div class="p-col-12 p-lg-8">
+                <input type="text" pInputText disabled value="{{_company.firstNameLR}} {{_company.lastNameLR}}">
+            </div>
+        </div>
+        
+        <div class="p-grid">
+            <label class="p-col-12 p-lg-4">Teléfono:</label>
+            <div class="p-col-12 p-lg-8 p-lg">
+                <input type="text" pInputText disabled value="{{_company.phoneLR}}">
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <label class="p-col-12 p-lg-4">Email:</label>
+            <div class="p-col-12 p-lg-8">
+                <input type="text" pInputText disabled value="{{_company.emailLR}}">
+            </div>
+        </div>
+
+    </div>
+</p-card>
+

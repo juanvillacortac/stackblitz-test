@@ -1,0 +1,15 @@
+<p-tabView (onChange)="handleChange($event)" styleClass="tabview-custom" id="tabview" >
+    <!-- styleClass="tabview-custom" id="tabview" -->
+        <p-tabPanel header="{{ 'srm.reception.reception_products.products.product' | translate }}">
+             <app-product-list [(reception)]="reception" (selection)="asignproduct($event)" [isChieldReception]="true" [childReception]="childReception" [index]="0" (haveChange)="haveproduct($event)" ></app-product-list>         
+        </p-tabPanel>
+        <p-tabPanel header="{{ 'srm.reception.reception_products.weight_details.weight_detail' | translate }}" [disabled]="product.indHeavy==false || product.detail.detailReceptionId<=0">
+            <app-product-detail [(_product)]="product" [(reception)]="reception"></app-product-detail>
+        </p-tabPanel>
+        <p-tabPanel header="{{ 'srm.reception.reception_products.batches.batch' | translate }}" [selected]="false" [disabled]="product.indLote==false|| product.detail.detailReceptionId<=0">
+            <app-product-detail-lote [(_product)]="product" [(reception)]="reception" [isChieldReception]="true" [childReception]="childReception"></app-product-detail-lote>
+        </p-tabPanel>
+</p-tabView>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

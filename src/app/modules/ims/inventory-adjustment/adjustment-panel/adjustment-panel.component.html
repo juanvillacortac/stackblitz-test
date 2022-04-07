@@ -1,0 +1,119 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <span class="panelheader">Datos generales</span>
+  </ng-template>
+  <div class="p-grid p-mt-2 p-align-center vertical-container p-p-3">
+    <div class="p-field p-col-12 p-md-12 p-lg-12 p-grid">
+      <div class="p-col-12 p-md-12 p-lg-6 p-sm-12">
+        <h6 style="margin-bottom: 0%;">Número de ajuste:
+          <app-status-adjustment-label *ngIf="_dataAdjustment.id <= 0" [idstatus]="this.statusesIDs.NO_ASIGNED_STATUS">
+          </app-status-adjustment-label>
+          {{_dataAdjustment.id <= 0 ? ""  : _dataAdjustment.documentnumber }}
+        </h6>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-6 p-sm-12">
+        <h6 style="margin-bottom: 0%;">Estatus:
+          <!-- {{_dataAdjustment.id == -1 ? "No asignado"  : _dataAdjustment.estatus }} -->
+          <!-- <app-status-adjustment-label *ngIf="_dataAdjustment.id <= 0 else OtherD" [idstatus]="this.statusesIDs.NO_ASIGNED_STATUS">
+          </app-status-adjustment-label> -->
+          <app-status-adjustment-label  [idstatus]="_dataAdjustment.idEstatus">
+          </app-status-adjustment-label>
+        </h6>
+
+      </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label for="active">Tipo de ajuste <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown [options]="AdjustmentTypeList" [filter]="true" [(ngModel)]="_dataAdjustment.idadjustmenttype"
+        placeholder="Seleccione..." emptyFilterMessage="Sin resultados" appendTo="body"
+        (onClick)="onchangeAdjustmentType($event)" (onChange)="showmodalInventoryCount()" [disabled]="_dataAdjustment.id!=-1 && _dataAdjustment.id!=0"
+        [class]="submitted && _dataAdjustment.idadjustmenttype <= 0 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+      <small class="p-invalid" *ngIf="submitted &&  _dataAdjustment.idadjustmenttype <= 0"> El tipo de ajuste es
+        requerido</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label for="active">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+      <input id="float-input" [(ngModel)]="_dataAdjustment.description" [pKeyFilter]="acceptGuion" type="text" pInputText
+        (input)="_validations.toCapitalizeSimbology($event)" maxlength="50" [disabled]="_dataAdjustment.id!=-1 && _dataAdjustment.id!=0"
+        [class]="submitted && (!_dataAdjustment.description || !_dataAdjustment.description.trim()) ? 'ng-dirty ng-invalid' : ''"
+        (paste)="_validations.noPaste($event)" (keypress)="isFormEdit=true" >
+      <small class="p-invalid"
+        *ngIf="submitted && (!_dataAdjustment.description || !_dataAdjustment.description.trim())">La descripción es
+        requerida</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label for="active">Área <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown [options]="AreaList" [filter]="true" [(ngModel)]="_dataAdjustment.idarea" placeholder="Seleccione..."
+        (onChange)="AsignAreaValue(_dataAdjustment.idarea)" appendTo="body" emptyFilterMessage="Sin resultados"
+        [disabled]="_dataAdjustment.id!=-1 && _dataAdjustment.id!=0" (onClick)="onchangeArea($event)"
+        [class]="submitted && _dataAdjustment.idarea <= 0 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+      <small class="p-invalid" *ngIf="submitted &&  _dataAdjustment.idarea <= 0"> El área es requerida</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label for="active">Responsable <span [ngStyle]="{'color':'red'}">*</span></label>
+      <div class="p-inputgroup">
+
+        <input type="text" pInputText placeholder="Operador" [(ngModel)]="_dataAdjustment.operator" pInputText
+          readonly="true" [disabled]="_dataAdjustment.idEstatus != this.statusesIDs.IN_PROGRESS_STATUS_ID">
+        <button icon="pi pi-search" pButton pRipple  *ngIf="_dataAdjustment.idEstatus <= this.statusesIDs.IN_PROGRESS_STATUS_ID"
+          (readonly)="_dataAdjustment.idEstatus != this.statusesIDs.IN_PROGRESS_STATUS_ID" [disabled]="isDisabled"
+          (click)="showmodal(multiples=false,model=false)"></button>
+
+      </div>
+      <small class="p-invalid" *ngIf="submitted &&  _dataAdjustment.idresponsableuser <= -1"> El operador es
+        requerido</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label for="active">Categoría <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown [options]="CategoriesList" [filter]="true" [(ngModel)]="_dataAdjustment.idcategory"
+        emptyFilterMessage="Sin resultados" placeholder="Seleccione..." appendTo="body"
+        [disabled]="_dataAdjustment.id!=-1 && _dataAdjustment.id!=0" (onClick)="onchangeCategory($event)">
+      </p-dropdown>
+      <small class="p-invalid" *ngIf="submitted &&  _dataAdjustment.idcategory == -2"> La categoría es requerida</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <label>Observación</label>
+      <textarea id="Observation" [(ngModel)]="_dataAdjustment.observation" type="text" pInputTextarea maxlength="400"
+        [pKeyFilter]="acceptGuion" (paste)="_validations.noPaste($event)"
+        [disabled]="_dataAdjustment.idEstatus != this.statusesIDs.IN_PROGRESS_STATUS_ID && _dataAdjustment.idEstatus != -1 "
+        (input)="_validations.toCapitalizeString($event)" (keypress)="isFormEdit=true"></textarea>
+    </div>
+
+
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Guardar" (click)="Save(_dataAdjustment,false)" [disabled]="loading"
+        icon="pi pi-save" class=" btn p-button-info p-mr-2"
+        *ngIf="this.permissionsIDs.UPDATE_INVENTORY_ADJUSTMENT_PERMISSION_ID && _dataAdjustment.idEstatus == this.statusesIDs.IN_PROGRESS_STATUS_ID || _dataAdjustment.idEstatus == -1"></button>
+
+      <button pButton pRipple label="Finalizar"
+        (click)="ChangeStatusAdjustment(_dataAdjustment,this.statusesIDs.FINALIZED_STATUS_ID)"
+        *ngIf="_dataAdjustment.id!=-1 && this.userPermissions.allowed(this.permissionsIDs.FINISH_INVENTORY_ADJUSTMENT_PERMISSION_ID) && _dataAdjustment.idEstatus == this.statusesIDs.IN_PROGRESS_STATUS_ID && _DetailProductListTemp.length>0"
+        [disabled]="loading" icon="pi pi-check" class=" btn p-button-save p-mr-2"></button>
+
+      <button pButton pRipple label="Anular" (click)="ChangeStatusAdjustment(_dataAdjustment,this.statusesIDs.CANCELED_STATUS_ID)"
+        *ngIf="this.userPermissions.allowed(this.permissionsIDs.CANCEL_INVENTORY_ADJUSTMENT_PERMISSION_ID) &&  _dataAdjustment.idEstatus == this.statusesIDs.IN_PROGRESS_STATUS_ID || _dataAdjustment.idEstatus == this.statusesIDs.FINALIZED_STATUS_ID"
+        [disabled]="loading" icon="pi pi-ban" class=" btn p-button-danger p-mr-2"></button>
+
+      <button pButton pRipple label="Regresar" (click)="BackToList()" [disabled]="loading" icon="pi pi-arrow-left"
+        class="btn p-button-secondary"></button>
+    </div>
+  </div>
+</p-panel>
+<br>
+<app-detail-adjustment-list (SaveAdjustmentDetailEdit)="SaveAdjustmentDetailEdit($event)"
+  (DeleteAdjustmentDetail)="DeleteAdjustmentDetail($event)" [(_dataAdjustmentvalid)]="_dataAdjustment"
+  [(_IdArea)]="_dataAdjustment.idarea" [(_IdAdjustment)]="_dataAdjustment.id"
+  [(_DetailProductListTemp)]="_DetailProductListTemp" [(_selectedInventoryLocked)]="_selectedInventoryLocked">
+</app-detail-adjustment-list>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)"
+  (onToggle)="onHideOperator($event)" [multiples]="multiples"></operator-modal-list>
+<app-inventory-count-modal [showDialogCount]="_showdialogCount" (onSubmitCount)="onSubmitCount($event)"
+  (onToggle)="onHideCount($event)"></app-inventory-count-modal>

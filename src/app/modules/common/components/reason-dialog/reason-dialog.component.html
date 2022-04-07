@@ -1,0 +1,23 @@
+<p-dialog header="{{ header | translate }}" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog"  [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">{{ 'reason' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown  [options]="reasonList" [filter]="true" appendTo="body" emptyFilterMessage="{{ 'not_found' | translate }}"  
+            emptyMessage="{{ 'not_found' | translate }}" placeholder="{{ 'selection_default' | translate }}" 
+            optionLabel="name" optionValue="id"
+            [(ngModel)]="reason.motiveId" 
+            [class]="submitted && (!reason.motiveId || reason.motiveId < 0) ? 'ng-dirty ng-invalid' : ''" >
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && reason.motiveId <= 0">{{ 'validations.reason_required' | translate }}</small>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-1">
+            <label for="active">{{ 'observation' | translate }}</label>
+            <textarea pInputTextarea [(ngModel)]="reason.observation" rows="3" style="resize: none;" cols="30"  pInputTextarea maxlength="100"></textarea>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton (click)="save()" pRipple label="{{ 'save' | translate }}" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+        <button pButton (click)="hideDialog()" pRipple label="{{ 'close' | translate }}" icon="pi pi-times" class="p-button-danger p-mr-2"></button>
+    </ng-template>
+</p-dialog>

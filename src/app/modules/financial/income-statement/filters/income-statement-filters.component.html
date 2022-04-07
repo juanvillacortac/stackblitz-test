@@ -1,0 +1,119 @@
+<div
+  class="flex flex-col space-y-4 m-1 shadow mt-4 card print:hidden"
+  *ngIf="filtersService.loaded"
+>
+  <div class="w-full grid gap-4 grid-cols-1 xl:grid-cols-5">
+    <div class="flex flex-col h-full gap-2 justify-between">
+      <div class="font-bold text-xs">Ejercicio fiscal</div>
+      <p-dropdown
+        [filter]="true"
+        [options]="filtersService.years$ | async"
+        [ngModel]="fiscalYear"
+        (ngModelChange)="fiscalYear = $event; initDate = toDate(year?.initDate); endDate = toDate(year?.endDate);"
+        optionLabel="year"
+        optionValue="id"
+        placeholder="Seleccione..."
+        [showClear]="true"
+        [resetFilterOnHide]="true"
+        emptyFilterMessage="Sin resultados."
+        [style]="{ minWidth: '100%' }"
+        emptyMessage="Sin resultados."
+      >
+      </p-dropdown>
+    </div>
+    <div class="flex flex-col h-full gap-2 justify-between">
+      <div class="font-bold text-xs">Fecha de inicio</div>
+      <p-calendar
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [(ngModel)]="initDate"
+        yearRange="1970:2030"
+        [minDate]="toDate(year?.initDate)"
+        [maxDate]="toDate(year?.endDate)"
+        dateFormat="dd/mm/yy"
+        [readonlyInput]="true"
+        appendTo="body"
+        [baseZIndex]="10000000000"
+        dateFormat="dd/mm/yy"
+        [style]="{ minWidth: '100%' }"
+        [showIcon]="true"
+      >
+      </p-calendar>
+    </div>
+    <div class="flex flex-col h-full gap-2 justify-between">
+      <div class="font-bold text-xs">Fecha fin</div>
+      <p-calendar
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [(ngModel)]="endDate"
+        yearRange="1970:2030"
+        [minDate]="toDate(year?.initDate)"
+        [maxDate]="toDate(year?.endDate)"
+        dateFormat="dd/mm/yy"
+        [readonlyInput]="true"
+        appendTo="body"
+        [baseZIndex]="10000000000"
+        [style]="{ minWidth: '100%' }"
+        [showIcon]="true"
+      >
+      </p-calendar>
+    </div>
+    <div class="flex flex-col h-full gap-2 justify-between">
+      <div class="font-bold text-xs">Cuenta contable de inicio</div>
+      <p-dropdown
+        [filter]="true"
+        [options]="accounts$ | async"
+        [(ngModel)]="initAccount"
+        placeholder="Seleccione..."
+        [resetFilterOnHide]="true"
+        [showClear]="true"
+        emptyFilterMessage="Sin resultados."
+        [style]="{ minWidth: '100%' }"
+        emptyMessage="Sin resultados."
+      >
+      </p-dropdown>
+    </div>
+    <div class="flex flex-col h-full gap-2 justify-between">
+      <div class="font-bold text-xs">Cuenta contable fin</div>
+      <p-dropdown
+        [filter]="true"
+        [options]="accounts$ | async"
+        [(ngModel)]="endAccount"
+        placeholder="Seleccione..."
+        [resetFilterOnHide]="true"
+        [showClear]="true"
+        emptyFilterMessage="Sin resultados."
+        [style]="{ minWidth: '100%' }"
+        emptyMessage="Sin resultados."
+      >
+      </p-dropdown>
+    </div>
+  </div>
+  <div class="flex space-x-2 w-full justify-end">
+    <button
+      pButton
+      pRipple
+      label="Imprimir"
+      (click)="print()"
+      icon="pi pi-print"
+      class="p-button-secondary"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Limpiar"
+      (click)="clear()"
+      icon="pi pi-ban"
+      class="p-button-secondary"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Buscar"
+      [disabled]="loading"
+      (click)="search()"
+      icon="pi pi-search"
+      class="p-button-info"
+    ></button>
+  </div>
+</div>

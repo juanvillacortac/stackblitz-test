@@ -1,0 +1,146 @@
+<!-- Start Form Incedents Importation -->
+<div class="card">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+          <h4 id="filterTitle">Incidencias por importación</h4>
+        </div>
+        <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row">
+            <div>
+              <!-- <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+              (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button> -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Start Input Group -->
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-md-3">
+            <label>Tipo de nómina<span class="p-invalid">*</span></label>
+            <p-dropdown [(ngModel)]="selectPayrollType" [options]="payrollTypelist" (onChange)="loadPayDates()"  placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+            [class]="submitted && selectPayrollType == 0 ? 'ng-dirty ng-invalid' : ''" > 
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && selectPayrollType == 0 " >Tipo nómina es requerido</small>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label for="">Calendario<span class="p-invalid">*</span></label>
+            <p-dropdown [(ngModel)]="paymentDate" [options]="payDateList"  placeholder="Seleccionar..." optionLabel="name" [filter]="true" emptyFilterMessage="Sin resultados" 
+            emptyMessage="Sin resultados" [class]="submitted && paymentDate == null ? 'ng-dirty ng-invalid' : ''" life="500" >
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && paymentDate == null " >Calendario es requerido</small>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label for="dropdown">Archivo<span class="p-invalid">*</span></label>
+            <div class="p-fluid p-formgrid p-grid p-pl-0 p-pr-0">
+                <div class="p-field p-col-6">
+                    <button pButton pRipple label="Importar" (click)="importation()" icon="pi pi-paperclip"  class="p-button p-ml-2"></button>
+                </div>
+                <div class="p-field p-col-6">
+                    <button pButton pRipple label="Exportar" (click)="exportExcel()"  icon="pi pi-file-o"  class="p-button p-ml-2"></button>
+                </div>
+            </div>
+            <!-- <small class="p-invalid" *ngIf="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ">Debe completar el campo cargo</small> -->
+        </div>
+        <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+        </div>  
+    </div>
+    <!-- End Input Group -->
+    <div class="p-col-12 p-pl-0 p-pr-0" align="right">
+        <!-- <button pButton pRipple label="Guardar" icon="pi pi-plus" class="p-button-success"></button>
+        <button pButton pRipple label="Elimnar"  icon="pi pi-trash"  class="p-button-danger p-ml-2"></button> -->
+    </div>
+</div>
+<!-- End Form Incedents Importation -->
+
+<!-- Start List Incedents Importation -->
+<div class="card" *ngIf="showList">
+    <div class="p-text-right p-mb-3">
+        <div class="status-badge status-delayed"> Registros válidos: {{valid}}</div>
+        <div class="status-badge status-finalize"> Registros inválidos: {{invalid}}</div>
+    </div>
+    <p-table [value]="previewList" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10"
+    [rowHover]="true" dataKey="idEmploymentRelationship" [scrollable]="true" scrollHeight="500px" [globalFilterFields]="['idEmploymentRelationship','concepts','dateIncident','valueIncident','idUnit','payrollType']"
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true" [paginator]="true" [rows]="10" #dt2 editMode="row">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idEmploymentRelationship" class="p-text-center">Trabajador<p-sortIcon field="idEmploymentRelationship"></p-sortIcon></th>
+                <th pSortableColumn="concepts" class="p-text-center">Concepto <p-sortIcon field="concepts"></p-sortIcon></th>
+                <th pSortableColumn="dateIncident" class="p-text-center">Fecha <p-sortIcon field="dateIncident"></p-sortIcon></th>
+                <th pSortableColumn="valueIncident" class="p-text-center">Valor <p-sortIcon field="valueIncident"></p-sortIcon></th>
+                <th pSortableColumn="payrollType" class="p-text-center">Nómina <p-sortIcon field="payrollType"></p-sortIcon></th>
+                <th style="width:8rem"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-previewList let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="previewList">
+                <td class="p-text-center">
+                    {{previewList.numEmployees}} - {{previewList.employeeFirstName}}
+                </td>
+                <td class="p-text-center">
+                    {{previewList.codConcepts}} - {{previewList.concepts}}
+                </td>
+                <td class="p-text-center">
+                    {{previewList.dateIncident == null ? '' : previewList.dateIncident.split('-').reverse().join('/')}}
+                </td>
+                <td class="p-text-center" style="overflow-wrap: break-word">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber id="valueIncidents" [(ngModel)]="previewList.valueIncident" [min]="0" [max]="1000" [minFractionDigits]="1" [maxFractionDigits]="1" 
+                            mode="decimal" maxlength="6" locale="en-US">
+                            </p-inputNumber>
+                        </ng-template>
+                        <ng-template pTemplate="output" >
+                           {{previewList.valueIncident}}({{previewList.unit}})
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                
+                <td class="p-text-center">
+                    {{previewList.abbreviation}}-{{previewList.idCalendar}}
+                </td>
+                <td *ngIf="previewList.selected" style="text-align:center" style="width:8rem">
+                    <button *ngIf="!editing && previewList.idStatus == 100" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" (click)="onRowEditInit(previewList)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" pTooltip="Guardar" class="p-button-rounded p-button-success p-button-text p-mr-2" (click)="onRowEditSave(previewList,ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" pTooltip="Cancelar" class="p-button-rounded p-button-danger p-button-text" (click)="onRowEditCancel(previewList, ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="!editing && previewList.idStatus == 100" pButton pRipple type="button" icon="pi pi-trash" pTooltip="Eliminar" class="p-button-rounded p-button-danger" (click)="deleteIncidents(ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <!-- <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(recordList)" pTooltip="Guardar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button> -->
+                    <!-- <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(recordList, ri)" pTooltip="Regresar" class="p-button-rounded p-button-danger" tooltipPosition="top" placeholder="Top"></button> -->
+                </td>
+                <td *ngIf="!previewList.selected">
+                    <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer" let-columns>
+            <ng-container>
+              <tr *ngIf="previewList && previewList.length == 0 && showMenssage" >
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+                  <p-message severity="info"  text="No existen incidencias registradas para este el empleado" styleClass="p-col-12 p-mr-2"></p-message>
+                </td>
+              </tr>
+            </ng-container>
+        </ng-template>
+    </p-table>
+    <!-- End Table -->
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(X) Los registros marcados con "X" no serán guardados</span>
+        </div>
+    </div>
+    <div class=" p-col-12 p-pl-0 p-pr-0 p-field" align="right">
+        <button  pButton pRipple label="Guardar" (click)="save()" icon="pi pi-save" class="p-button-success"></button>
+    </div>
+</div>
+<!-- End List Incedents Importation -->
+
+<p-dialog header="Importación" (onHide)="showDialog=false" [(visible)]="showDialog" [modal]="true" [style]="{width: '70vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <p-fileUpload styleClass="p-button-success p-ml-2 p-fileupload-choose" chooseIcon="pi pi-paperclip" name="myfile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+           id="fileUpload" chooseLabel="Seleccionar archivo" (onBeforeUpload)="UploaderFile($event)" (onSelect)="UploaderFile($event)" (onClear)="resetFile($event)" (onRemove)="resetFile($event)"></p-fileUpload>
+        </div>  
+      </div>
+    </div>
+  </p-dialog>

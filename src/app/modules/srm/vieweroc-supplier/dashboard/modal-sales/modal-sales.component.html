@@ -1,0 +1,90 @@
+
+
+<div class="p-grid text-align-center">
+
+  
+    <div class="p-col-12">
+        <p-table #dt1 [value]="productssales" responsiveLayout="scroll" dataKey="idProduct"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-gridlines" 
+        [paginator]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true" [globalFilterFields]="['name','branch','category','unitSales','inventory','salesconvertion']">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex">
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Buscar" />
+                    </span>
+                </div>
+            </ng-template>
+
+
+            <ng-template pTemplate="header">
+                <tr>
+                    
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Name
+                            <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Sucursal
+                            <p-columnFilter type="text" field="branch" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Categoría
+                            <p-columnFilter type="text" field="category" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Unidades vendidas
+                            <p-columnFilter type="numeric" field="unitSales" display="menu" ></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Existencia
+                            <p-columnFilter type="numeric" field="inventory" display="menu" ></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            PVP
+                            <p-columnFilter type="numeric" field="salesconvertion" display="menu" currency="USD"></p-columnFilter>
+                        </div>
+                    </th>
+                   
+                  
+                </tr>
+            </ng-template>
+           <!--  <ng-template pTemplate="header">
+                <tr>
+                    <th>Producto</th>
+                    <th>Sucursal</th>
+                    <th>Categoria</th>
+                    <th>Unidades vendidas</th>
+                    <th>Existencia</th>
+                    <th>PVP $</th>
+                </tr>
+            </ng-template> -->
+            <ng-template pTemplate="body" let-SalesSuppliersProducts>
+                <tr>
+                    <td>{{SalesSuppliersProducts.name}}</td>
+                    <td>{{SalesSuppliersProducts.branch}}</td>
+                    <td>{{SalesSuppliersProducts.category}}</td>
+                    <td>{{SalesSuppliersProducts.unitSales}}</td>
+                    <td>{{SalesSuppliersProducts.inventory}}</td>
+                    <td>{{SalesSuppliersProducts.salesconvertion}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">No se encontraron resultados.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+  </div>

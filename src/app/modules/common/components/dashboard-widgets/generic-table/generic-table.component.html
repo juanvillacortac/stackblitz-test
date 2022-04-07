@@ -1,0 +1,110 @@
+<div class="card p-m-0 ">
+    <div class="widget_panel">
+        <p-table #dt 
+            [columns]="displayedColumns" 
+            [rowHover]="rowHover" 
+            [value]="data" 
+            [paginator]="paginator" 
+            [rows]="rowsToShow" 
+            [showCurrentPageReport]="showCurrentPageReport" 
+            [scrollable]="scrollable" 
+            scrollHeight="400px" scrollDirection="both" 
+            currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" 
+            [rowsPerPageOptions]="[10,25,50]" 
+            styleClass="p-datatable-responsive-demo">  
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <ng-container *ngFor="let col of columns" >
+                                <th [ngStyle]="{'display': col.display}" [pSortableColumn]="col.field" >
+                                    {{ col.header | translate }}
+                                     <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon> 
+                                </th>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-columns="columns">
+                        <tr>
+                            <ng-container *ngFor="let col of columns">
+                                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" >
+
+                                    <div *ngIf="col.dataType === ''; else booleanCell" >
+                                        <span>{{(item[col.field])}}</span>
+                                    </div>
+
+                                    <ng-template #booleanCell >
+                                        <span *ngIf="col.dataType === 'boolean'; else numberCell" [class]="'status-badge status-active'">
+                                            {{(item[col.field])}}
+                                        </span>
+                                    </ng-template>
+                            
+                                    <ng-template #numberCell >
+                                        <span *ngIf="col.dataType === 'number'; else numberPercentCell">
+                                            {{(item[col.field]) |number:'1.2-2'}} 
+                                        </span>
+                                    </ng-template>
+                                                                
+                                    <ng-template #numberPercentCell >
+                                        
+                                         <span *ngIf="col.dataType === 'numberPercent'; else stringImageCell">
+                                            <div *ngIf="col.numberIncreaseClass; then numberIncrease else onlyPercent"></div>
+                                            <ng-template #numberIncrease>                                     
+                                                <div class="timeline-content ">
+                                                    <div>                                                
+                                                         <span class="material-icons avatar costIncrease" 
+                                                         [ngClass]="{'costDecrease': item[col.field] < 0, 'costIncrease': item[col.field] > 0,'costEqual': item[col.field] === 0}" >
+                                                         {{item[col.field] < 0 ?'arrow_drop_down':item[col.field] === 0 ?'remove':'arrow_drop_up'}}</span>
+                                                         <span class="subtotal-left" > {{(item[col.field]) | number: '1.0-0'}} % </span>
+                                                    </div>  
+                                                </div>
+                                            </ng-template>
+                                            <ng-template #onlyPercent > 
+                                                {{(item[col.field]) | number: '1.0-0'}} %
+                                            </ng-template>
+                        
+                                           
+                                        </span> 
+                                    </ng-template>
+                                            
+                                    <ng-template #stringImageCell >
+                                        <span *ngIf="col.dataType === 'string-image'; else avatarGroupCell">
+                                            <app-user-image [userName]="item[col.field]" ></app-user-image>
+                                        </span>
+                                    </ng-template>
+
+                                    <ng-template #avatarGroupCell >
+                                        <span *ngIf="col.dataType === 'avatar-group'; else dateCell">
+                                            <app-avatar-group [avatarList]="item[col.field]"></app-avatar-group>
+                                        </span>
+                                    </ng-template>
+
+                                    <ng-template #dateCell >
+                                        <span *ngIf="col.dataType === 'date'; else textCell">     
+                                                {{(item[col.field])| date: 'dd/MM/yyyy'}}
+                                        </span>
+                                    </ng-template>
+
+
+                                    <ng-template #textCell >
+                                        <span *ngIf="col.dataType === 'string'">
+                                            {{(item[col.field])}}
+                                        </span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                        <td [ngStyle]="{'text-align': 'center', 'font-weight': '600'}" [attr.colspan]="columns.length"> No existen resultados</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="paginatorleft">
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                    </ng-template>
+        </p-table>
+    </div>
+</div>

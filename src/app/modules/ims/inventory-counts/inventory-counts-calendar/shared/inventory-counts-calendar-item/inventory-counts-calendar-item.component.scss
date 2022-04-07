@@ -1,0 +1,68 @@
+.item-container {
+    border-width: thin;
+    border-radius: 5px;
+    font-size: 12px;
+    width: 100%;
+}
+.item-container label{
+    font-size: 11px;
+}
+
+.item-container p{
+    font-size: 11px;
+}
+
+
+.planned {
+    border: solid #8a427a;
+    background-color: #e1cfe7;
+}
+
+.processing {
+    border: solid #0891cf;
+    background-color: #B3E5FC;
+}
+
+.pending {
+    border: solid #d9a300;
+    background-color: #FFECB3;
+}
+
+.finalized {
+    border: solid #439446;
+    background-color: #C8E6C9;
+}
+
+.cancelled {
+    border: solid #e60017;
+    background-color: #FFCDD2;
+}
+
+.delayed {
+    border: solid #d96900;
+    background-color: #ffdeb3;
+}
+
+.total-counts-planned {
+    color: #8a427a;
+}
+
+.total-counts-processing {
+    color: #0891cf;
+}
+
+.total-counts-pending {
+    color: #d9a300;
+}
+
+.total-counts-finalized {
+    color: #439446;
+}
+
+.total-counts-cancelled {
+    color: #e60017;
+}
+
+.total-counts-delayed {
+    color: #d96900;
+}

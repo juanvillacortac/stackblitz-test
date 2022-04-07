@@ -1,0 +1,18 @@
+
+        <p-overlayPanel #op [showCloseIcon]="false" [dismissable]="true"  appendTo="body">
+            <ng-template pTemplate>
+                <div>
+                    <div class="p-field">
+                        <p-tree [value]="treeData" [selectionMode]="isMultiSelect ? 'checkbox':'single'" scrollHeight="200px" [(selection)]="data" 
+                        (onNodeSelect)="nodeSelect($event,op)" (onNodeUnselect)="nodeSelect($event,op)" [filter]="true"  [filterMode]="isMultiSelect ? 'lenient ':'strict'" 
+                        [filterBy]="isMultiSelect ? 'key':'label'"
+                         [styleClass]="'custom-ui-tree'" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"> 
+                         <ng-template let-node pTemplate="default">
+                            <span>{{isMultiSelect ? node.data.name: node.label}}</span>
+                        </ng-template>
+                        </p-tree>
+                    </div>
+                </div>
+            </ng-template>
+        </p-overlayPanel>     
+        <button pButton pRipple icon="pi pi-search" styleClass="p-button-warn" (click)="click($event,op)" [disabled]="isDisabled" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"></button>

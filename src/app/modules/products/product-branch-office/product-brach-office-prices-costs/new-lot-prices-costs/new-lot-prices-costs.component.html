@@ -1,0 +1,149 @@
+<p-dialog header="Creación en lote de precios y costos" (onShow)="ngOnShow()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+    <div class="p-grid">
+        <div class="p-fluid  p-col-12 p-md-12 p-lg-12">
+            <label for="name">Empaque  <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="packingList" appendTo="body" (onChange)="changeValidationFactor()" [disabled]="this.packingBranchOffice.idProduct > 0" [(ngModel)]="packingBranchOffice.idPacking" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && packingBranchOffice.idPacking <= 0">El empaque es requerido</small>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <p-fieldset legend="Sucursales" class="fiels">
+                <div *ngIf="branchOfficeList.length > 0" class="p-mb-3">
+                    <p-checkbox name="branchOfficeAll" class="p-mr-2" [inputId]="-1" [binary]="true" (click)="checkAllBranchOffices()" [(ngModel)]="checkAllBranchOffice"></p-checkbox>
+                    <label [for]="-1">Todos</label>
+                </div>
+                <div *ngFor="let branchOffice of branchOfficeList">
+                    <div class="p-field-checkbox" style="word-break: break-all;">
+                        <p-checkbox name="company" [value]="branchOffice" [inputId]="branchOffice.idBranchOffice" ng-checked="company == 1" [(ngModel)]="selectedBranchOffices"></p-checkbox>
+                        <label [for]="branchOffice.idBranchOffice">{{branchOffice.branchOffice}}</label>
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="p-fluid  p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+            <b>Tasa conversión: </b><label for="name">{{exchangeRate | number: '.4'}} {{basesymbolcoin}}</label>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <p-fieldset legend="Moneda base">
+                <div class="p-grid">
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label for="name">Moneda base</label>
+                        <input pInputText [(ngModel)]="baseCoin" [disabled]="true">
+                        <!-- <p-dropdown [options]="coinsList" [disabled]="true" appendTo="body" [(ngModel)]="baseCoin" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                        </p-dropdown> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo</label>
+                        <p-inputNumber [(ngModel)]="packingBranchOffice.baseCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,1,false)" (keyup.enter)="next(in2)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor neto</label>
+                        <p-inputNumber #in2 [(ngModel)]="packingBranchOffice.netFactor" (onFocus)="clear($event)" maxlength="7" (focusout)="activate($event,$event.target.value,2,false)" (keyup.enter)="next(in3)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo neto</label>
+                        <p-inputNumber #in3 [(ngModel)]="packingBranchOffice.baseNetCost" [disabled]="disabledNetCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,3,false)" (keyup.enter)="next(in4)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor neto venta</label>
+                        <p-inputNumber #in4 [(ngModel)]="packingBranchOffice.netSalesFactor" (onFocus)="clear($event)" maxlength="7" (focusout)="activate($event,$event.target.value,4,false)" (keyup.enter)="next(in5)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo neto venta</label>
+                        <p-inputNumber #in5 [(ngModel)]="packingBranchOffice.netSellingCostBase" [disabled]="disabledNetSalesCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,5,false)" (keyup.enter)="next(in6)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor venta</label>
+                        <p-inputNumber #in6 [(ngModel)]="packingBranchOffice.sellingFactor" (onFocus)="clear($event)" maxlength="7" (focusout)="activate($event,$event.target.value,6,false)" (keyup.enter)="next(in7)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>PVP</label>
+                        <p-inputNumber #in7 [(ngModel)]="packingBranchOffice.basePVP" [disabled]="disabledPVP" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,7,false)" (keyup.enter)="next(in8)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+            <p-fieldset legend="Moneda conversión">
+                <div class="p-grid">
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label for="name">Moneda conversión</label>
+                        <input pInputText [(ngModel)]="conversionCoin" [disabled]="true">
+                        <!-- <p-dropdown [options]="coinsList" [disabled]="true" appendTo="body" [(ngModel)]="conversionCoin" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                        </p-dropdown> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo</label>
+                        <p-inputNumber #in8 [(ngModel)]="packingBranchOffice.conversionCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,1,true)" (keyup.enter)="next(in9)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor neto</label>
+                        <p-inputNumber #in9 [(ngModel)]="packingBranchOffice.netFactor" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,2,true)" (keyup.enter)="next(in10)" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo neto</label>
+                        <p-inputNumber #in10 [(ngModel)]="packingBranchOffice.conversionNetCost" [disabled]="disabledNetCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,3,true)" (keyup.enter)="next(in11)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor neto venta</label>
+                        <p-inputNumber #in11 [(ngModel)]="packingBranchOffice.netSalesFactor" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,4,true)" (keyup.enter)="next(in12)" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Costo neto venta</label>
+                        <p-inputNumber #in12 [(ngModel)]="packingBranchOffice.netSellingCostConversion" [disabled]="disabledNetSalesCost" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,5,true)" (keyup.enter)="next(in13)" [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>Factor venta</label>
+                        <p-inputNumber #in13 [(ngModel)]="packingBranchOffice.sellingFactor" (onFocus)="clear($event)" (focusout)="activate($event,$event.target.value,6,true)" (keyup.enter)="next(in14)" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                    <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+                        <label>PVP</label>
+                        <p-inputNumber #in14 [(ngModel)]="packingBranchOffice.conversionPVP" [disabled]="disabledPVP" (onFocus)="clear($event)" (keyup.enter)="savePointOrder();" (keyup.backspace)="activate($event,$event.target.value,7,true)" (keypress)="activate($event,$event.target.value,7,true)" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                        <!-- <small class="p-invalid" *ngIf="submitted && pointOrder.minFactor <= 0">El mínimo tiene que ser mayor a 0</small> -->
+                    </div>
+                </div>
+            </p-fieldset>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <small>Si el Factor de venta no se encuentra dentro del rango de los factores de validación de las sucursales seleccionadas, se asignará 0 al factor de venta y al PVP.</small>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <small style="font-weight: bold!important;">Los costos que tengan una cantidad de digítos mayor a 14 serán colocados en 0.</small>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+                    <b>Nota:</b><label> Esta configuración aplicará a las sucursales que seleccione.</label>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+                    <small style="color: red;">(*) Campos obligatorios</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" [disabled]="saving" (click)="savePointOrder()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

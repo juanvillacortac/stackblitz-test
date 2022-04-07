@@ -1,0 +1,45 @@
+<div class="resume-container">
+    <div class="p-grid">
+        <div class="p-col-10">
+            <p class="p-text-bold p-md-0 p-pd-0">{{ inventoryCount.numberDocument }}</p>
+            <label class="p-text-italic">{{ inventoryCount.description }}</label>
+        </div>
+        <div class="p-col-2 p-d-flex">
+            <button pButton pRipple icon="pi pi-eye" pTooltip="Ver detalle" class="p-button-rounded" (click)="onShowCountDetail(inventoryCount.id)"></button>
+        </div>
+    </div>
+    <p class="p-text-bold p-mt-4">Área:</p>
+    <label>{{ inventoryCount.area }}</label>
+    <p class="p-text-bold p-mt-2">Categoría:</p>
+    <label>{{ inventoryCount.category }}</label>
+    <p class="p-text-bold p-mt-2">Cant. Items:</p>
+    <label>{{ inventoryCount.count }}</label>
+    <p class="p-text-bold p-mt-2">Responsable:</p>
+    <div>
+        <img  (click)="viewDetailUser(inventoryCount.employmentRelationshipId)"
+                  pTooltip="{{inventoryCount.responsibleUser}}"             
+                  style="border-radius:50%; width: 50px; margin-left: 5px;"
+                  src="{{inventoryCount.imageResponsibleUser}}"
+                  />
+    </div>    
+    <!-- <label>{{ inventoryCount.responsibleUser }}</label> -->
+    <div *ngIf="isCountFinalized()">
+    <p class="p-text-bold p-mt-2">Fecha de finalización:</p>
+    <label>{{ inventoryCount.finalDate | date: 'dd/MM/yyyy'}}</label>
+    </div>
+
+    <p class="p-text-bold p-mt-2 p-mb-4">Operadores:</p>
+    <div class="p-d-flex p-ai-center p-chips-multiple-container" style="max-width: 400px !important;">
+        <div *ngFor="let operator of inventoryCount.operators">
+            <img
+                  #userImage
+                  (click)="viewDetailUser(operator.employmentRelationshipId)"
+                  id="userImage"  
+                  pTooltip="{{operator.operator}}"             
+                  style="border-radius:50%; width: 50px; margin-left: 5px;"
+                  src="{{operator.imageOperator}}"
+                  alt="profile"/>            
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<p-dialog header="Actualizar lote" (onShow)="onShow()" (onHide)="hideDialog()" [(visible)]="showDialog" [modal]="true"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-col-6 p-md-6 p-sm-6 ">
+            <label for="active">Número de lote</label>
+
+            <input type="text" pInputText id="namelot" (keyup.enter)="save()"
+                (keypress)="_validations.keyPressForValor($event);" maxlength="64"
+                (paste)="_validations.noPaste($event)" [(ngModel)]="lot.numberLot" />
+            <small class="p-invalid" *ngIf="load && (lot.numberLot=='')">Número de lote es requerido.</small>
+
+        </div>
+        <div class="p-col-6 p-md-6 p-sm-6 ">
+            <label for="active">Número de lote interno</label>
+
+            <input type="text" pInputText id="namelotinternal" maxlength="64" [(ngModel)]="lot.internalNumberLot" disabled />
+        </div>
+
+        <!-- <div class="p-grid p-fluid"> -->
+        <div class="p-col-6 p-md-6 p-sm-6 p-fluid">
+
+            <label for="active">Fecha de vencimiento</label>
+            <p-calendar id="ToDate" dateFormat="dd/mm/yy" [(ngModel)]="lot.expiredDate" 
+                [showIcon]="true" [minDate]="todayDate" pTooltip="Fecha vencimiento" tooltipPosition="right" life="500"
+                (onSelect)="changEditdate($event)">
+            </p-calendar>
+        </div>
+
+        <div class="p-col-6 p-md-6 p-sm-6">
+            <label>Cantidad de días por vencer </label>
+            <p-inputNumber mode="decimal" [minFractionDigits]="0" [(ngModel)]="lot.cantDays">
+
+            </p-inputNumber>
+        </div>
+        <!-- <div class="p-col-6 p-md-6 p-sm-6">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="_supplierxprod.product.referent" name="refInternal" id="refInternal" type="text" pInputText (keyup.enter)="SearchBar()" maxlength="100">
+                    <label>Referencia interna</label>
+                </span>
+            </div>
+         </div>  </div> -->
+    </div>
+    <!-- datos del Lote -->
+    <hr>
+    <div class="p-grid p-fluid">
+        <p-fieldset legend="Empaque">
+            <div class="p-grid">
+                <div class="p-col-6 p-md-6 p-sm-6 p-field">
+                    <!-- [filter]="true" emptyFilterMessage="Sin resultados." -->
+                    <label for="active">Tipo de empaque </label>
+                    <!-- <p-dropdown [options]="packingTypeslist" appendTo="body"
+                    [(ngModel)]="lot.idTypePacking" [disabled]="true" placeholder="Tipo empaque"
+                    emptyFilterMessage="Sin resultados.">
+                </p-dropdown> -->
+                    <input type="text" pInputText [(ngModel)]="this.lot.typePacking" disabled>
+
+                </div>
+                <div class="p-col-6 p-md-6 p-sm-6 p-field">
+                    <label for="active">Empaque </label>
+                    <!-- <p-dropdown [(ngModel)]="_supplierxproduct.packing.idPresentacionPackaging"
+                    [options]="packagingpresentationlist" appendTo="body" [disabled]="true" placeholder="Empaque">
+                </p-dropdown> -->
+                    <input type="text" pInputText [(ngModel)]="this.lot.presentacionPackagin" disabled>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Unidad por empaque</label>
+                    <input [(ngModel)]="lot.unitperPackaging" name="unistnumber" id="unistnumber" type="text" pInputText
+                        [disabled]="true">
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Cantidad</label>
+                    <p-inputNumber [(ngModel)]="lot.cantPackaging" min="0" (onFocus)="clear($event)" (keypress)="calculate($event.target.value)">
+                    </p-inputNumber>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">
+                    <label>Total de unidades disponibles</label>
+                    <p-inputNumber [(ngModel)]="this.lot.totalUnidad" [disabled]="true"></p-inputNumber>
+                </div>
+
+            </div>
+        </p-fieldset>
+
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Guardar" (click)="save()" icon="pi pi-save"
+            class="p-button-info p-mr-2"></button>
+        <button pButton (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times"
+            class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

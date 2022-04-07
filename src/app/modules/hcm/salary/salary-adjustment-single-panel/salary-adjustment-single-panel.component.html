@@ -1,0 +1,131 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>{{title}}</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>    
+      <hr/>
+      <div class="p-col-12">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12" *ngIf="record.salary.idSalaryByLaborRelationship == -1">
+            <div class="p-col-12">
+              <label class="title" for="">Tipo de sueldo</label>
+              <p-dropdown [(ngModel)]="record.salary.idSalaryType" [options]="salaryTypesDropdown" id="TypesVarying" (onChange)="loadSalaryRateExchange()" 
+                  placeholder="Seleccione..." emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" class="typeSalary p-component p-element p-p-0"
+                  [class]="submitted && record.salary.idSalaryType == -1 ? 'ng-dirty ng-invalid' : ''">
+              </p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.salary.idSalaryType == -1">El tipo de sueldo es requerido</small>
+            </div>
+          </div>  
+          <div class="p-col-12">
+              <h6 [class]="min == 0 ? 'p-mb-0':''">Banda salarial según el cargo</h6>
+          </div>
+          <div class="p-field p-grid p-col-12" *ngIf="min > 0">
+              <div class="p-col-12 p-lg-6 inside">
+                  <label for="active">Mínimo</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                      <input type="text" [(ngModel)]="min" pInputText maxlength="70" [disabled]="true"/> 
+                  </div>
+              </div>
+              <div class="p-col-12 p-lg-6">
+                  <label for="active">Máximo</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                      <input type="text" [(ngModel)]="max" pInputText maxlength="70" [disabled]="true"/> 
+                  </div>
+              </div>
+          </div>
+          <div style="width: 100%;" *ngIf="min == 0">
+              <p-messages severity="info">
+                  <ng-template pTemplate>
+                      <div class="p-ml-2">No existen bandas salariales para este tipo de sueldo.</div>
+                  </ng-template>
+              </p-messages>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Monto <span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                    <p-inputNumber id="amount" mode="decimal" maxlength="19" [class]="submitted && (amount <= 0 || amount == undefined) ? 'ng-dirty ng-invalid' : ''"
+                        [minFractionDigits]="2" [maxFractionDigits]="6" life="500" [(ngModel)]="amount" (ngModelChange)="calculateValues()" [min]="0">
+                    </p-inputNumber>
+                    <span class="p-inputgroup-addon">{{percentage | number: '1.0-2'}}%</span>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && (amount <= 0 || amount == undefined) "> El monto es requerido</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12 p-lg-6 inside">
+                <label for="active">Factor</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                      <div class="p-inputgroup">
+                          <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                          <p-inputNumber id="factor" mode="decimal" [(ngModel)]="rateExchange" maxlength="19" 
+                              [minFractionDigits]="2" [maxFractionDigits]="10" life="500" [disabled]="true">
+                          </p-inputNumber>
+                      </div>
+                  </div>
+              </div>
+              <div class="p-col-12 p-lg-6">
+                  <label for="active">Conversión</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                        <p-inputNumber id="conversion" mode="decimal" [(ngModel)]="conversion" maxlength="19" 
+                            [minFractionDigits]="2" [maxFractionDigits]="6" life="500" [disabled]="true">
+                        </p-inputNumber>
+                    </div>
+                </div>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+                <label for="active">Fecha de factor</label>
+                <div class="p-col-12 p-pl-0 p-pr-0">
+                  <p-calendar [(ngModel)]="factorDate" dateFormat="dd/mm/yy" [showTime]="true" [showSeconds]="true" [hourFormat]="12"
+                  [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" [disabled]="true"
+                  [class]="submitted && effectiveDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                  </p-calendar>
+                  <small class="p-invalid" *ngIf="submitted && effectiveDateText != ''"></small>
+                </div>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                  <label for="active">Fecha de vigencia<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <p-calendar [(ngModel)]="effectiveDate" dateFormat="dd/mm/yy" [minDate]="today"
+                    [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" yearRange="1900:2200" 
+                    [class]="submitted && effectiveDate == null ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                    </p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && effectiveDate == null ">La fecha de vigencia es requerida</small>
+                  </div>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <label for="active">Motivo<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown [options]="motives" [(ngModel)]="selectMotive" placeholder="Seleccione..." optionLabel="label" 
+                  [class]="submitted && selectMotive.value == -1 ? 'ng-dirty ng-invalid' : ''" (onChange)="changeMotive()" (keyup.enter)="submit()"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && selectMotive.value == -1"> El motivo es requerido</small>
+              </div>
+          </div>
+
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </p-sidebar>

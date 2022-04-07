@@ -1,0 +1,209 @@
+<div class="card">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+      <i class="p-text-bold pi pi-book"></i> Artículos
+    </div>
+
+    <div class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3">
+      <button
+        pButton
+        pRipple
+        (click)="clientModal = true"
+        icon="pi pi-plus"
+        class="p-button-success"
+        pTooltip="Agregar artículo"
+        tooltipPosition="top"
+      ></button>
+    </div>
+  </div>
+  <p-table
+    [resizableColumns]="false"
+    dataKey="articleId"
+    styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows"
+    #dt
+    [columns]="artCols"
+    [rowHover]="true"
+    [value]="articles"
+    [paginator]="true"
+    [rows]="9"
+    [showCurrentPageReport]="true"
+    [expandedRowKeys]="expanded"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width: 60px"></th>
+        <ng-container *ngFor="let col of columns">
+          <th
+            [ngStyle]="{
+              display: col.display,
+              'overflow-wrap': 'break-word',
+              width: col.field === 'active' ? '110px' : '100%'
+            }"
+            pResizableColumn
+            [pSortableColumn]="col.field"
+          >
+            {{ col.header }}
+          </th>
+        </ng-container>
+        <th style="width: 60px"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-article let-columns="columns">
+      <tr>
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            (click)="
+              expanded[article.articleId] =
+                expanded[article.articleId] !== undefined
+                  ? !expanded[article.articleId]
+                  : true
+            "
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="
+              expanded[article.articleId] || false
+                ? 'pi pi-chevron-down'
+                : 'pi pi-chevron-right'
+            "
+          ></button>
+        </td>
+        <ng-container *ngFor="let col of columns">
+          <td
+            [ngStyle]="{ display: col.display, 'overflow-wrap': 'break-word' }"
+            class="ui-resizable-column"
+          >
+            <span>{{ col.template(article) }} </span>
+            <p-inputNumber
+              *ngIf="col.field === 'quantity'"
+              [inputStyle]="{ width: '100%' }"
+              [ngModel]="article.quantity"
+              (ngModelChange)="article.quantity = $event; updateParent()"
+              [showButtons]="true"
+              [min]="1"
+              [max]="100"
+            >
+            </p-inputNumber>
+            <div
+              style="display: flex; flex-direction: column; align-items: center"
+              *ngIf="col.field === 'unitCost'"
+            >
+              <p-inputNumber
+                mode="decimal"
+                [ngModel]="article.unitCost"
+                (ngModelChange)="article.unitCost = $event; updateParent()"
+                [prefix]="getCurrency(article.monedaIdArt)?.symbology?.trim()"
+                [showButtons]="true"
+                [inputStyle]="{ width: '100%' }"
+                [min]="0.01"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                [maxlength]="24"
+              >
+              </p-inputNumber>
+            </div>
+            <ng-container *ngIf="col.field === 'taxPlan'">
+              <p-dropdown
+                [filter]="true"
+                [options]="taxPlans"
+                [(ngModel)]="article.taxPlan"
+                placeholder="Seleccione..."
+                [resetFilterOnHide]="true"
+                emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados."
+                [showClear]="true"
+              >
+              </p-dropdown>
+            </ng-container>
+            <ng-container *ngIf="col.field === 'cost'">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                "
+              >
+                <span style="font-weight: bold">{{
+                  getPrice(article, "cost").conversion
+                }}</span>
+                <span>{{ getPrice(article, "cost").base }}</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="col.field === 'total'">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                "
+              >
+                <span style="font-weight: bold">{{
+                  getPrice(article, "total").conversion
+                }}</span>
+                <span>{{ getPrice(article, "total").base }}</span>
+              </div>
+            </ng-container>
+          </td>
+        </ng-container>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-times"
+            class="p-button-rounded p-button-danger p-mr-2"
+            pTooltip="Quitar"
+            (click)="delArticle(article.id, false)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="rowexpansion" let-article>
+      <tr>
+        <td [attr.colspan]="10">
+          <app-sale-transactions-taxes-select
+            [plan]="article.taxPlan"
+            [taxes]="article.taxes"
+            (taxesChange)="article.taxes = $event; updateParent()"
+          ></app-sale-transactions-taxes-select>
+          <app-sale-transactions-discount-tree
+            [currency]="currency"
+            [currencyMap]="currencyMap"
+            [currencyRate]="currencyRate"
+            [discountsOutput]="article.discounts"
+            [subTotal]="getPrice(article, 'total').raw"
+            (discountsOutputChange)="article.discounts = $event; updateParent()"
+          ></app-sale-transactions-discount-tree>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" let-columns>
+      <tr *ngIf="!articles.length">
+        <td
+          [ngStyle]="{ 'text-align': 'center' }"
+          [attr.colspan]="columns.length + 3"
+        >
+          <p-message
+            severity="info"
+            text="No existen registros"
+            styleClass="p-col-12 p-mr-2"
+          >
+          </p-message>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-sale-transactions-articles-select-modal
+  [currencyMap]="currencyMap"
+  [articles]="artData"
+  *ngIf="artData"
+  [(displayModal)]="clientModal"
+  (onSelect)="addArticleToTable($event)"
+>
+</app-sale-transactions-articles-select-modal>

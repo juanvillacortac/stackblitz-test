@@ -1,0 +1,20 @@
+<p-fieldset legend="Roles y permisos" [toggleable]="true" >
+    <div class="p-grid ">
+        <div class="p-col-12">
+            <div class="box">
+                <div class="p-d-flex  p-flex-column">
+                    <p-dropdown [options]="roles" id="rol" [(ngModel)]="userRole" (onChange)="onRoleSelected($event.value)"placeholder="Selecciona un rol" [showClear]="true"></p-dropdown>         
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12">
+            <div class="box">
+                <div class="p-d-flex  p-flex-column">
+                    <p-tree [value]="modules" selectable="false" selectionMode="single" [virtualScroll]="true" [virtualNodeHeight]="30" scrollHeight="200px" [styleClass]="'custom-ui-tree'"> 
+                    </p-tree>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-toast position="top-right"></p-toast>
+</p-fieldset>

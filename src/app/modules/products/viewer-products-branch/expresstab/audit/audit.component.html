@@ -1,0 +1,92 @@
+<div class="p-grid">
+    <div class="p-col-12 p-md-12 p-lg-12">
+        <p-fieldset legend="Factores de validación" class="fieldseth1">
+            <p-table [value]="validationfactor" styleClass="p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Tipo de operación</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-validationfactor>
+                    <tr *ngIf="validationfactor.ocurrenceType == 'Creado'">
+                        <td>{{validationfactor.createDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{validationfactor.createByUser}}</td>
+                        <td>{{validationfactor.ocurrenceType}}</td>
+                    </tr>
+                    <tr *ngIf="validationfactor.ocurrenceType == 'Modificado'">
+                        <td>{{validationfactor.udpateDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{validationfactor.updatedByUser}}</td>
+                        <td>{{validationfactor.ocurrenceType}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        </p-fieldset>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12">
+        <p-fieldset legend="Puntos de pedido" class="fieldseth1">
+            <p-table [value]="pointorder" styleClass="p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Tipo de operación</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pointorder>
+                    <tr *ngIf="pointorder.ocurrenceType == 'Creado'">
+                        <td>{{pointorder.createDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{pointorder.createByUser}}</td>
+                        <td>{{pointorder.ocurrenceType}}</td>
+                    </tr>
+                    <tr *ngIf="pointorder.ocurrenceType == 'Modificado'">
+                        <td>{{pointorder.udpateDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{pointorder.updatedByUser}}</td>
+                        <td>{{pointorder.ocurrenceType}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        </p-fieldset>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12">
+        <p-fieldset legend="Precios y costos" class="fieldseth1">
+            <p-table [value]="productbranch" styleClass="p-datatable-sm" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Tipo de operación</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-productbranch>
+                    <tr *ngIf="productbranch.ocurrenceType == 'Creado'">
+                        <td>{{productbranch.createDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{productbranch.createByUser}}</td>
+                        <td>{{productbranch.ocurrenceType}}</td>
+                    </tr>
+                    <tr *ngIf="productbranch.ocurrenceType == 'Modificado'">
+                        <td>{{productbranch.udpateDate | date : "dd/MM/yyyy HH:mm"}}</td>
+                        <td>{{productbranch.updatedByUser}}</td>
+                        <td>{{productbranch.ocurrenceType}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+            </p-table>
+        </p-fieldset>
+    </div>
+</div>

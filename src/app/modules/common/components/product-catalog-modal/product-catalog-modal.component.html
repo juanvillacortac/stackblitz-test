@@ -1,0 +1,167 @@
+
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Catálogo de productos" [(visible)]="visible" [style]="{width:'75%'}" [modal]="true" class="address-dialog">
+    <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input  [(ngModel)]="productcatalogFilters.barcode" name="Barra" id="barcode" type="text" pInputText (keypress)="_validations.keyPressOnlyNumbers($event);" pInputText maxlength="20" (keyup.enter)="searchCatalogProducts()">
+                    <label>Barra</label>
+                </span>
+            </div>
+        </div>
+    
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="productcatalogFilters.name" type="text" maxlength="300" pInputText noneSpecialCharacters (keyup.enter)="searchCatalogProducts()">
+                    <label for="float-input">Nombre del producto</label>
+                </span>
+            </div>
+        </div>
+    
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="productcatalogFilters.internalRef" type="text" maxlength="100" pInputText noneSpecialCharacters (keyup.enter)="searchCatalogProducts()">
+                    <label for="float-input">Referencia</label>
+                </span>
+            </div>
+        </div>
+    
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="searchCatalogProducts()" disabled>
+                <p-button icon="pi pi-search" (click)="op.toggle($event)"></p-button>
+            </div>
+            <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '450px'}" appendTo="body"> 
+                <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex">
+                            <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." 
+                                style="width:350px !important"/>
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header" let-columns>
+                        
+                        <tr>
+                            <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                                {{col.header}}
+                            </th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                        <tr>
+                            <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                                <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)"></p-treeTableCheckbox>
+                                <ng-template #textCell>
+                                    {{rowData[col.field]}}
+                                </ng-template>
+                                <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-treeTable>
+            </p-overlayPanel>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <p-dropdown [options]="heavylist" appendTo="body" [(ngModel)]="productcatalogFilters.indHeavy" placeholder="Pesado" (keyup.enter)="searchCatalogProducts()">
+            </p-dropdown>
+        </div>
+       
+        <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+            <button pButton pRipple label="Buscar" [disabled]="loading" (click)="searchCatalogProducts()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+            <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+        </div>
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0 p-mt-2">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+          </span>
+    </div>
+   
+    <div class="card p-m-0">
+        <div class="p-inputgroup">
+            <p> ítems seleccionados: {{selectedProducts.length}}</p>
+            <small class="p-invalid" *ngIf="submitted && selectedProducts.length <=0">Debe seleccionar al menos un
+                registro</small>
+        </div>
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [(selection)]="selectedProducts" [value]="_productcatalogservice._ProductCatalogList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true" scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup class="hidden-mobile">
+                <col style="width:60px">
+                <col style="width:120px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+            </colgroup>
+        </ng-template>
+        <!-- <ng-template pTemplate="caption">
+            <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+                selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}" placeholder="Elija las columnas"></p-multiSelect>
+        </ng-template> -->
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width: 5rem">
+                    <p-tableHeaderCheckbox ></p-tableHeaderCheckbox> 
+                  </th>
+                  <th></th>
+                <th style="display: none;" pSortableColumn="Id">Id</th>
+                <ng-container *ngFor="let col of columns">  
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                        </div>
+                  </th>
+                </ng-container>
+                
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product let-columns="columns">
+              <tr>
+                <td>
+                    <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                  </td>
+                    <td style="display: none;">{{product.productId}}</td>
+                    <td><div class="container-img">
+                        <img [src]="product.image == null || product.image == ''  ?  defectImage.defectImage
+                        : product.image" [alt]="product.name" class="p-shadow-4 imgcatalog" />
+                    </div></td>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="product[col.field]"></app-active-label>
+                        <ng-template #textCell>
+                            <span>{{col.template(product)}} </span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                 
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+2">No existen resultados</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+        </p-table>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="selectedProducts.length>0 && submit()" label="Aceptar" [disabled]="selectedProducts.length<=0" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>        
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </ng-template>
+</p-dialog>

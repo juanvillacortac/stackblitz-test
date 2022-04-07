@@ -1,0 +1,54 @@
+<ng-container *ngIf="_medicalConditionList && _medicalConditionList.length > 0">
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..."/> 
+    </span>
+    <button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Agregar" tooltipPosition="top" class="p-button-success p-mr-2" (click)="add()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)"></button>
+  </div>
+  <p-table #dt [value]="_medicalConditionList" styleClass="p-datatable-responsive-demo p-datatable-sm" [rowHover]="true" dataKey="id" [scrollable]="true" 
+    scrollHeight="240px" [globalFilterFields]="['patology','patologyType','startDateString']"
+    [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th class="p-text-center" pSortableColumn="patology">Patología <p-sortIcon field="patology"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="patologyType">Observación <p-sortIcon field="patologyType"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="startDate">Fecha <p-sortIcon field="startDate"></p-sortIcon></th>
+        <th class="p-text-center"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-_medicalConditionList>
+      <tr>
+        <td class="p-text-center">{{_medicalConditionList.patology}}</td>
+        <td class="p-text-center">{{_medicalConditionList.patologyType}}</td>
+        <td class="p-text-center">{{_medicalConditionList.startDateString}}</td>
+          <td class="p-text-center">
+          <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(_medicalConditionList)" pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button>
+          <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleted(_medicalConditionList)" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button>
+        </td>
+      </tr>
+    </ng-template>
+  <ng-template pTemplate="summary" *ngIf="_medicalConditionList  && _medicalConditionList.length > 0">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      Total {{_medicalConditionList ? _medicalConditionList.length : 0 }} registros.
+    </div>
+  </ng-template>
+</p-table>
+</ng-container>
+
+<ng-container *ngIf="!(_medicalConditionList  && _medicalConditionList.length > 0)">
+
+  <div class="p-text-right p-mb-3">
+    <button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Agregar" tooltipPosition="top" class="p-button-success p-mr-2" (click)="add()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)"></button>
+  </div>
+  <p-messages severity="info" >
+    <ng-template pTemplate>
+        <div class="p-ml-2">No existen afecciones médicas asociadas a este trabajador.</div>
+    </ng-template>
+  </p-messages>
+</ng-container>
+ 
+
+
+

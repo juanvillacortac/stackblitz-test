@@ -1,0 +1,15 @@
+
+<div class="card p-shadow-4">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row" style="justify-content: center ;">
+      <app-report-viewer #viewer id="viewer"
+                         style="margin-left: 20px;"
+                         [title]="title"
+                         [viewerContainerStyle]="viewerContainerStyle"
+                         [viewMode]="'INTERACTIVE'"
+                         [reportSource]="{
+                          report: 'TransferenciaMercancia.trdp',
+                          parameters: { IdTransferenciaSucursal: idBranchTransfer } }">
+        <button pButton pRipple label="Regresar" icon="pi pi-arrow-left" class="p-button-secondary p-mr-2" (click)="back()"></button>
+      </app-report-viewer>
+    </div>
+</div>

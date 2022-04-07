@@ -1,0 +1,52 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <span class="p-float-label">
+      <input [(ngModel)]="filters.vehicleCode" name="VehicleCode" id="VehicleCode" type="text" pInputText
+     maxlength="50" (keyup.enter)="search()">
+     <label>Código</label>
+    </span>
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <span class="p-float-label">
+      <input [(ngModel)]="filters.vehicleRegistrationPlate" name="VehicleRegistrationPlate" id="VehicleRegistrationPlate" type="text" pInputText
+        noneSpecialCharacters maxlength="50" (keyup.enter)="search()">
+        <label>Placa</label>
+    </span>
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input type="text" pInputText placeholder="Propietario" [(ngModel)]="filters.vehicleOwner" readonly="true" class="responsible">
+        <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=false,true)" class="btresponsible"></p-button>
+      </span>
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+    <p-dropdown [options]="driverList" [(ngModel)]="filters.principalDriverID" placeholder="Conductor principal" (keyup.enter)="search()" [showClear]="true"></p-dropdown>      
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+      <p-dropdown [options]="VehicleTypeList" [(ngModel)]="filters.vehicleTypeID" placeholder="Uso" (keyup.enter)="search()" [showClear]="true"></p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+      <p-dropdown [options]="VehicleModelList" [(ngModel)]="filters.vehicleModelID" placeholder="Marca" (keyup.enter)="search()" [showClear]="true"></p-dropdown>
+  </div>
+    
+  
+  <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+      <p-dropdown [options]="statusList" [(ngModel)]="filters.active" placeholder="Estatus" (keyup.enter)="search()" [showClear]="true"></p-dropdown>
+  </div>
+  
+  <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end" >
+      <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+      <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+  </div>
+
+</div>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [_status]="true" [multiples]="multiples"></operator-modal-list>
+

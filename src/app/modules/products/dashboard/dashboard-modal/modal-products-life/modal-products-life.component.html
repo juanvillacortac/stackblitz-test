@@ -1,0 +1,115 @@
+<div class="p-grid p-text-center">
+    <div class="p-col-12">
+        <p-chart type="doughnut" [data]="data2" [options]="basicOptions" [style]="{'width': '80%'}" ></p-chart>
+    </div>
+   
+  </div>
+  
+  
+  
+  
+  <div class="p-grid text-align-center">
+   <!--  -offset-3 -->
+   <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Marcas <span *ngIf="showFilters">> Filtrar</span></h5> -->
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+    </span>
+    
+</div>
+    <div class="p-col-12">
+        <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="dataProductsLife" styleClass="p-datatable-sm" responsiveLayout="scroll"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="false"
+        scrollHeight="600px" [rowsPerPageOptions]="[10]" styleClass="p-datatable-responsive-demo" [globalFilterFields]="['NombreProducto','Categoria','PorcentajeCrecimiento']">
+       
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col style="width:160px">
+                <col style="width:160px">
+                <col style="width:160px">
+                <col style="width:160px">
+               
+            </colgroup>
+        </ng-template>
+       
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <!-- <th></th> -->
+                <!-- <th style="display: none;" pSortableColumn="Id">Id</th> -->
+                <!-- <th></th> -->
+                <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }"
+                        [pSortableColumn]="col.field">
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                        </div>
+                    </th>
+                </ng-container>
+      
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order let-columns="columns">
+            <tr>
+                
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+                        </app-active-label>
+                        <ng-template #textCell>
+                            <span>{{col.template(order)}} </span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+      
+        <ng-template pTemplate="footer" let-columns>
+            <ng-container
+                *ngIf="dataProductsLife==null || dataProductsLife?.length == 0">
+                <tr>
+                    <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="8">
+                        <span>No existen resultados.</span>
+                    </td>
+                </tr>
+            </ng-container>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+
+
+
+<!-- <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-6 p-md-6">
+
+      
+
+      
+
+    </div>
+
+  
+ <div class="p-field p-col-6 p-md-6">
+        
+    <div class="card">
+
+       
+      
+    </div>
+    </div>
+     
+   
+
+</div> -->
+
+
+  

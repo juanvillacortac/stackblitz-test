@@ -1,0 +1,37 @@
+.status-badge {
+    border-radius: 2px;
+    padding: .25em .5rem; 
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+
+    &.status-pending {
+        background-color: #ffd8b2;
+        color: #805b36;
+    }
+
+    &.status-started {
+        background-color: #b3e5fc;
+        color: #23547b;
+    }
+
+    &.status-finished {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-delivered {
+        background-color: #eccfff;
+        color: #694382;
+    }
+
+    &.status-cancelled {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+}
+
+:host::ng-deep .p-dropdown-wide > div {
+    width: 21rem;
+}

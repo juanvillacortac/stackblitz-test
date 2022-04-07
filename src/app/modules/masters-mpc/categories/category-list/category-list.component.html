@@ -1,0 +1,48 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Categorías</h5> -->
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_CATEGORIES_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="AddCategory()" pTooltip="Crear nuevo"></button>
+       
+    </div>
+
+    <category-panel [costCenters]="costCenters" [(showDialog)]="showDialogCategory" [CategoryParent]="CategoryParent" [(showCategoryP)]="showCategoryPanel" [(_category)]="categoryViewModel" class="p-mt-3"></category-panel>
+</div>
+<div class="card p-m-0">
+    <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word' }">
+                    <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                    <!-- <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox> -->
+                    <ng-template #textCell>
+                        {{rowData[col.field]}}
+                    </ng-template>
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                </td>
+                <td class="p-jc-end">
+                    <button pButton pRipple *ngIf="rowData.validateLimit <= 10 && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_CATEGORIES_PERMISSION_ID)" icon="pi pi-plus" (click)="AddChild(rowData.id, rowData.name)" class="p-button-rounded p-button-primary p-mr-2" [disabled]="rowData.active == false" pTooltip="Agregar nueva subcategoría"></button>
+                    <button pButton pRipple *ngIf="!rowData.initialSetup && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_CATEGORIES_PERMISSION_ID)" icon="pi pi-pencil" (click)="EditChild(rowData.id, rowData.name, rowData.active, rowData.idParentCategory, rowData.idCostCenter, rowData.validateInactivateFather, rowData.validateInactivateChild)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button>
+                    <button pButton pRipple *ngIf="rowData.idParentCategory != 0 && rowData.active && rowData.childAmount == 0 && this.userPermissions.allowed(this.permissionsIDs.CHANGE_LEVEL_CATEGORIES_PERMISSION_ID)" icon="pi pi-arrow-up" (click)="LevelUp(rowData.id, rowData.idParentCategory)" class="p-button-rounded p-button-primary p-mr-2" [disabled]="rowData.active == false" pTooltip="Subir subcategoría de nivel"></button>
+                    <button pButton pRipple *ngIf="(rowData.idParentCategory != 0 || !rowData.initialSetup) && rowData.active && rowData.childAmount == 0 && this.userPermissions.allowed(this.permissionsIDs.CHANGE_LEVEL_CATEGORIES_PERMISSION_ID)" icon="pi pi-arrow-down" (click)="LevelDown(rowData.id, rowData.idParentCategory)" class="p-button-rounded p-button-primary p-mr-2" [disabled]="rowData.active == false" pTooltip="Bajar subcategoría de nivel"></button>
+                    <!---->
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
+<app-categoryleveldown [(showDialog)]="showDialog" [(_category)]="category" [(filters)]="categoryFilters"></app-categoryleveldown>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<!-- <dialog-new [(showDialog)]="attributeagrupationDialog" [(_attributeagrupation)]="attributeagrupationViewModel" [(filters)]="attributeagrupationFilters" [(currentVal)]="StatusEdit"></dialog-new> -->

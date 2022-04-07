@@ -1,0 +1,59 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Información de contacto" [(visible)]="visible"  [style]="{width:'50%'}" [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" >
+    <div class="p-grid">
+        <div class="p-fluid p-col-12 p-md-12 p-lg-12">      
+           
+            <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+                    <label>Nombre de contacto<span [ngStyle]="{'color':'red'}">*</span></label>                        
+                    <input [(ngModel)]="contactNumber.contact" [class]="submitted && (!contactNumber.contact || !contactNumber.contact.trim()) ? 'ng-dirty ng-invalid' : ''" type="text" appendTo="body" pInputText maxlength="100" lettersOnly (paste)="_validations.noPaste($event)" (input)="_validations.toCapitalizeSimbology($event)">
+                    <small class="p-invalid" *ngIf="submitted && (!contactNumber.contact|| !contactNumber.contact.trim())">El nombre del contacto requerido</small>
+                </div>
+
+                <div class="p-col-6 p-md-6 p-lg-6 p-sm-6 ">            
+                    <label for="active">Código de área <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown  [options]="countryCodeList" [(ngModel)]="contactNumber.idCountry" [class]="submitted && contactNumber.idCountry <= 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." appendTo="body" (onChange)="onChange($event)" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="submitted && contactNumber.idCountry <= 0">El código área del país es requerido</small>
+                </div>
+                <div class="p-col-6 p-md-6 p-lg-6 p-sm-6">
+                    <label for="active">Número de teléfono <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [(ngModel)]="contactNumber.number" minlength="7" maxlength="15" (input)="validatenumber(contactNumber.number)" [class]="submitted && isnumbervalid ? 'ng-dirty ng-invalid' : ''" numbersOnly placeholder="0000000" pInputText >
+                    <small class="p-invalid" *ngIf="isnumbervalid">El número de teléfono debe tener al menos 7 caracteres</small>
+                </div>
+                
+                <div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+                    <label for="active">Tipo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [filter]="true" emptyFilterMessage="Sin resultados"  emptyMessage="Sin resultados" [options]="contactNumberType" [(ngModel)]="contactNumber.idType" [class]="submitted && contactNumber.idType <= 0 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..." appendTo="body"></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="submitted && contactNumber.idType <= 0">El tipo es requerido</small>
+                </div>
+              
+            </div>
+        </div>  
+    </div> 
+    <div class="p-grid">
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+            <div class="p-grid">
+                <div  class="p-col-12 p-md-12 p-lg-12">
+                    <p-fieldset [style]="{'height':'19rem'}" legend="Empresas" class="fieldseth">
+                        <div class="p-mb-3">
+                            <p-checkbox name="branchOfficeAll" [binary]="true" (click)="checkAllCompanies()" [(ngModel)]="checkAllCompany"></p-checkbox>
+                            <label style="margin-left: 0.5rem;">Todos</label>
+                        </div>
+                        <div *ngFor="let company of companieslist">
+                            <div class="p-field-checkbox" style="word-break: break-all;">
+                                <p-checkbox name="company"  [value]="company" [inputId]="company.id" ng-checked="company == 1" [(ngModel)]="selectedCompanies" (onChange)="checkedcompany($event)"></p-checkbox>
+                                <label [for]="company.id">{{company.socialName}}</label>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                    <small class="p-invalid" *ngIf="submitted && selectedCompanies.length <=0">Debe asignar al menos una empresa
+                        al proveedor.</small>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>        
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </ng-template>
+</p-dialog>

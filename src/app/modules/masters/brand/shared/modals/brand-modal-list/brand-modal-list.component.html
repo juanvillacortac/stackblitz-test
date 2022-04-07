@@ -1,0 +1,82 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Agregar marca" [(visible)]="visible" [style]="{width:'50%'}"
+  [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [draggable]="false">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dtbm.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+  </div>
+
+  <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+    <div class="p-col-12 p-md-5 p-lg-5">
+        <label for="active">Marca<span [ngStyle]="{'color':'red'}">*</span></label>
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="brandsFilters.name" type="text" pInputText noneSpecialCharacters maxlength="50" (keyup.enter)="search()">
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-5 p-lg-5 p-fluid">
+        <label for="active">Clase de marca <span [ngStyle]="{'color':'red'}">*</span></label>
+        <p-dropdown  [options]="BrandsClass" [(ngModel)]="brandsFilters.idClass" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (keyup.enter)="search()"></p-dropdown>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+        <small class="p-invalid">(*) Seleccione al menos un filtro</small>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+        class="p-button-info p-mr-2"></button>
+      <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+        class="p-button-secondary"></button>
+    </div>
+  </div>
+
+  <div class="card p-m-0">
+    <p-table #dtbm [columns]="displayedColumns" [rowHover]="true" [value]="_brandService._brandsList"
+      [(selection)]="selectedBrands" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox *ngIf="!this.singleSelection"></p-tableHeaderCheckbox>
+          </th>
+          <ng-container *ngFor="let col of columns">
+
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-brand let-columns="columns">
+        <tr>
+          <td>
+            <p-tableCheckbox *ngIf="!this.singleSelection" [value]="brand"></p-tableCheckbox>
+            <p-tableRadioButton *ngIf="this.singleSelection" [value]="brand"></p-tableRadioButton>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="brand[col.field]">
+              </app-active-label>
+              <ng-template #textCell>
+                <span>{{col.template(brand)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+    <div class="p-field p-col-12 p-md-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Agregar" (click)="submitBrands()" icon="pi pi-save"
+        class="p-button-info p-mr-2"></button>
+    </div>
+  </div>
+</p-dialog>

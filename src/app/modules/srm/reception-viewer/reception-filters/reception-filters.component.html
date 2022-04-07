@@ -1,0 +1,152 @@
+<div *ngIf="expanded" >
+    <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+                <span class="p-float-label">
+                <p-chips [(ngModel)]="receptionNumber" [class]="{'p-inputwrapper-filled':validateReceptionNumberLenght}" [max]="6"  [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true"
+                    name="receptionNumber" id="receptionNumber" (keyup.enter)="search()" (keypress)="validations.keyPressFroLettersNumbersPointanddash($event);" maxlength="130">
+                </p-chips>
+                    <label>{{ 'srm.merchandise_receptions.filters.receptionNumber' | translate}}</label>
+                </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span class="p-float-label">
+                <p-chips [(ngModel)]="invoiceNumber"  [class]="{'p-inputwrapper-filled':validateInvoiceNumberLenght}" [max]="6"  (keypress)="validations.keyPressFroLettersNumbersPointanddash($event);" maxlength="130"  [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true"
+                    name="invoiceNumber" id="invoiceNumber"  (keyup.enter)="search()">
+                </p-chips>
+                    <label>{{ 'srm.merchandise_receptions.filters.invoiceNumber' | translate}}</label>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field ">
+            <span class="p-float-label">
+                <p-dropdown  id="ocDocumentType" [options]="documentRelatedTypes.value" optionLabel="documentTypeRelated" [autoDisplayFirst]="false" optionValue="documentTypeRelatedId" [(ngModel)]="filters.ocDocumentType" (keyup.enter)="search()"
+                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                placeholder="{{ 'srm.merchandise_receptions.filters.ocDocumentType' | translate}}"></p-dropdown>
+            </span> 
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span class="p-float-label">
+                <p-chips [(ngModel)]="documentNumberRelated"  [class]="{'p-inputwrapper-filled':validateDocumentNumberRelatedLenght}" [max]="1"  [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true"
+                    name="documentNumberRelated" id="documentNumberRelated"  (keyup.enter)="search()">
+                </p-chips>
+                    <label>{{ 'srm.merchandise_receptions.filters.documentNumberRelated' | translate}}</label>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span class="p-float-label">
+                <p-chips [(ngModel)]="purchasedocumentNumber"  [class]="{'p-inputwrapper-filled':validatpurchasedocumentNumberLenght}" [max]="1"  [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true"
+                    name="documentNumber" id="documentNumber"  (keyup.enter)="search()">
+                </p-chips>
+                    <label>{{ 'srm.merchandise_receptions.filters.purchasedocumentNumber' | translate}}</label>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <div class="p-inputgroup">
+              <span class="p-float-label">
+                <input type="text" pInputText placeholder="{{ 'srm.merchandise_receptions.filters.supliers' | translate}}" 
+                [(ngModel)]="supplierString" (keyup.enter)="search()"  class="ptext"
+                  disabled>
+                <p-button icon="pi pi-search" (click)="supplierDialogVisible=true"  class="button-radius"></p-button>
+              </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-chips [(ngModel)]="documentNumber" [max]="1"  [class]="{'p-inputwrapper-filled':validateDocumentNumberLenght}" [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true"
+                    name="documentNumber" id="documentNumber"  (keyup.enter)="search()">
+                </p-chips>
+                    <label>{{ 'srm.merchandise_receptions.filters.documentNumber' | translate}}</label>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown  id="documentType" [options]="ocDocumentType.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="filters.documentType" (keyup.enter)="search()"
+                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                placeholder="{{ 'srm.merchandise_receptions.filters.documentType' | translate}}"></p-dropdown>
+            </span> 
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown  id="documentStatus" [options]="statuslist.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="filters.documentStatus" (keyup.enter)="search()"
+                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                placeholder="{{ 'srm.merchandise_receptions.filters.documentStatus' | translate}}"></p-dropdown>
+            </span> 
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <div class="p-inputgroup">
+                <span class="p-float-label">              
+                    <input type="text" pInputText placeholder="{{ 'srm.merchandise_receptions.filters.receptionOperator' | translate}}" [(ngModel)]="this.operatormodal.namesoperators" (keyup.enter)="search()" class="ptext" disabled>
+                    <p-button icon="pi pi-search" (click)="operatorDialogVisible=true"  class="button-radius"></p-button>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <div class="p-inputgroup">
+                <span class="p-float-label">              
+                    <input type="text" pInputText placeholder="{{ 'srm.merchandise_receptions.filters.validatorOperator' | translate}}" [(ngModel)]="this.operatorAuthmodal.namesoperators" (keyup.enter)="search()" class="ptext" disabled>
+                    <p-button icon="pi pi-search" (click)="operatorAuthDialogVisible=true"  class="button-radius"></p-button>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown  id="receptionType" [options]="receptionType.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="filters.receptionType" (keyup.enter)="search()"
+                [disabled]="supplierViewer"
+                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                placeholder="{{ 'srm.merchandise_receptions.filters.receptionType' | translate}}"></p-dropdown>
+            </span> 
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                 <p-multiSelect [options]="areaList.value" optionLabel="name" optionValue="id"  
+                  [(ngModel)]="receptionAreaSelected"
+                  [filter]="true" display="chip"
+                 (keyup.enter)="search()"emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                 emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                 placeholder="{{ 'srm.merchandise_receptions.filters.receptionAreas' | translate}}" ></p-multiSelect>
+            </span>     
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown  id="negotiationType" [options]="negotiationType.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="filters.negotiationType" (keyup.enter)="search()"
+                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                placeholder="{{ 'srm.merchandise_receptions.filters.negotiationType' | translate}}"></p-dropdown>
+            </span> 
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown [options]="dateTypes" [autoDisplayFirst]="false" appendTo="body" [(ngModel)]="filters.dateStatus"  emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                (keyup.enter)="search()" placeholder="{{ 'srm.merchandise_receptions.filters.dateStatus' | translate}}">
+                </p-dropdown>
+            </span> 
+        </div>
+
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span pTooltip="{{ 'srm.merchandise_receptions.filters.initialDate' | translate}}" tooltipPosition="right" class="p-float-label">
+                <p-calendar [disabled]="disabledDateFields" inputId="calendar" [(ngModel)]="startDateFilter" [maxDate]="finalDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+            <span pTooltip="{{ 'srm.merchandise_receptions.filters.finalDate' | translate}}" tooltipPosition="right" class="p-float-label ">
+                <p-calendar [disabled]="disabledDateFields" inputId="endCalendar" [(ngModel)]="finalDateFilter"  [minDate]="startDateFilter" readonlyInput="true" [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="onSearch()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <p-splitButton label="Exportar" icon="pi pi-file-o" [model]="exportOptions" class="p-button-info"></p-splitButton>
+    </div>
+</div>
+  <app-modal-suppliergenerico (onToggle)="onToggleSupplier($event)"
+  (suppliers)="getSuppliersId($event)"
+   [visible]="supplierDialogVisible" [(selectedSuppliers)]="selectedSuppliers" [multiple]="true" [getSelected]='true' ></app-modal-suppliergenerico>    
+
+  <operator-modal-list [showDialog]="operatorDialogVisible || operatorAuthDialogVisible" (onSubmit)="onSubmitOperator($event)"
+  (onToggle)="onToggleOperator($event,operatorAuthDialogVisible)" [multiples]="false" [usertype]="this.userType"></operator-modal-list>

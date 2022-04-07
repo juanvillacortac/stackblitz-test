@@ -1,0 +1,133 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-multiSelect [options]="numbersOrdersList" [(ngModel)]="numOCselected" placeholder="Orden compra" (onChange)="ValidateChecksnumberOC()" display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados."></p-multiSelect>
+    
+    </div> -->
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+     <p-chips [(ngModel)]="numOCwritte" [allowDuplicate]="false" [max]="10" placeholder="Órdenes de compra" (onBlur)="CallFocus()" (keyup.enter)="search()"></p-chips> 
+    <input type="text" pInputText placeholder="Número de OC" [(ngModel)]="filters.numberOC" (keyup.enter)="search()">
+  </div> -->
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <span class="p-float-label">
+    <p-chips [(ngModel)]="numOCselected" [allowDuplicate]="false" [max]="10" [addOnBlur]="true"  [addOnTab]="true" (keyup.enter)="search()"></p-chips>
+    <label> Número de OC</label>
+     </span>
+  </div>
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="branchOfficeList" appendTo="body" [(ngModel)]="filters.idDestBranch" (keyup.enter)="search()"
+      placeholder="Sucursal crea" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div> -->
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="branchOfficeList" appendTo="body" [(ngModel)]="filters.idDestBranch" (keyup.enter)="search()"
+      placeholder="Sucursal destino" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Usuario autoriza" [(ngModel)]="this.operatormodal.namesoperators"
+          (keyup.enter)="search()" disabled>
+        <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="OperatorDialogVisible=true"></p-button>
+   
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <!-- <span class="p-float-label">               -->
+      <input type="text" pInputText placeholder="Proveedor" [(ngModel)]="this.supplierstring" (keyup.enter)="search()"
+        disabled>
+      <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"
+        (click)="SupplierDialogVisible=true"></p-button>
+      <!-- </span> -->
+    </div>
+    <!-- <small class="p-invalid" *ngIf="submitted && (!this.supplierstring || !this.supplierstring.trim())">El proveedor es requerido.</small> -->
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Usuario crea" [(ngModel)]="this.filters.userCreated"
+          (keyup.enter)="search()" disabled>
+        <p-button icon="pi pi-search"  class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"(click)="showDialogOperator(true)"></p-button>
+     
+    </div>
+  </div>
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="typeDistributionList" appendTo="body" [(ngModel)]="filters.idTypeDistribution" (keyup.enter)="search()" placeholder="Tipo distribución">
+        </p-dropdown>
+    </div> -->
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-multiSelect [options]="statusOCList" [(ngModel)]="statusselected" placeholder="Estatus"
+      (onChange)="ValidateChecksstatus()" display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true"
+      emptyFilterMessage="Sin resultados."></p-multiSelect>
+    <!-- <p-dropdown [options]="brandslist" appendTo="body" [(ngModel)]="filters.classificationId" placeholder="Marca">
+        </p-dropdown> -->
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="waytopayList" appendTo="body" [(ngModel)]="filters.idWayToPay" (keyup.enter)="search()"
+      placeholder="Formas de pago" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeDeliveryList" appendTo="body" [(ngModel)]="filters.indPartialdelivery"
+      (keyup.enter)="search()" placeholder="Tipos de entrega">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="coinsList" appendTo="body" [(ngModel)]="filters.idCoin" (keyup.enter)="search()"
+      placeholder="Monedas" emptyFilterMessage="Sin resultados." [filter]="true">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typedates" appendTo="body" [(ngModel)]="filters.idTypeDate" (keyup.enter)="search()"
+      placeholder="Tipos de fechas">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+    <p-calendar id="ToD" [(ngModel)]="iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      (onSelect)="onBlurMethod($event)" readonlyInput="true" [showIcon]="true" [disabled]="filters.idTypeDate==-1">
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+    <p-calendar id="ToF" [minDate]="iDate" [(ngModel)]="fDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      readonlyInput="true" [showIcon]="true" [disabled]="filters.idTypeDate==-1">
+    </p-calendar>
+  </div>
+  <!-- <div class="p-field-checkbox">
+    <p-checkbox [(ngModel)]="indPatial" binary="false" inputId="binary" [(filtersvwsup)]="filters"></p-checkbox>
+    <label for="binary">Entrega parcial</label>
+  </div> -->
+
+  <div class="p-col-6 p-md-6 p-lg-6">
+    <small class="p-invalid">(*) Seleccione al menos un proveedor</small>
+  </div>
+
+
+  <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+      class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+      class="p-button-secondary p-mr-2"></button>
+    <p-splitButton label="Exportar" icon="pi pi-file-o" [model]="items" class="p-button-info"></p-splitButton>
+  </div>
+</div>
+
+<app-modal-operator (onToggle)="onToggleOperator($event)" [operatormodal]="operatormodal"
+  [visible]="OperatorDialogVisible" [multiple]="false" [filter]="filters"></app-modal-operator>
+<!-- [(supplierinput)]="this.supplierstring"  -->
+<app-modalsupplier-list (onToggle)="onToggleSupplier($event)" [(supplierinput)]="this.supplierstring"
+  [(filters)]="filters" [visible]="SupplierDialogVisible" [multiple]="true"></app-modalsupplier-list>

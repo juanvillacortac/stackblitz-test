@@ -1,0 +1,132 @@
+<p-sidebar [(visible)]="visible" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Sucursal</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12">
+                  <label for="active">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [(ngModel)]="_branchOffice.branchOfficeName" [class]="submitted && (!_branchOffice.branchOfficeName || !_branchOffice.branchOfficeName.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText  type="text"  maxlength="100" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" autofocus/>
+                    <small class="p-invalid" *ngIf="submitted && (!_branchOffice.branchOfficeName || !_branchOffice.branchOfficeName.trim())">El nombre es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12">
+                    <label for="active">Código <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                    <input [(ngModel)]="_branchOffice.branchOfficeCode" [class]="submitted && (!_branchOffice.branchOfficeCode || !_branchOffice.branchOfficeCode.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText numbersOnly type="text" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" (input)="_validations.toCapitalizeString($event)" maxlength="10">                   
+                    <small class="p-invalid" *ngIf="submitted && (!_branchOffice.branchOfficeCode || !_branchOffice.branchOfficeCode.trim())">El código es requerido</small>
+                </div>
+    
+                <div class="p-field p-col-12">
+                    <label for="active">Gerente<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input [(ngModel)]="_branchOffice.branchOfficeManager" [class]="submitted && (!_branchOffice.branchOfficeManager || !_branchOffice.branchOfficeManager.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText lettersOnly type="text" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" (input)="_validations.toCapitalizeString($event)" maxlength="100">                   
+                    <small class="p-invalid" *ngIf="submitted && (!_branchOffice.branchOfficeManager || !_branchOffice.branchOfficeManager.trim())">El gerente es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12">
+                    <label for="active">Tipo sucursal <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="branchOfficeTypeList" appendTo="body" [(ngModel)]="_branchOffice.idBranchOfficeType" placeholder="Seleccione..."></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _branchOffice.idBranchOfficeType <= 0">El tipo de sucursal es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12">
+                    <label for="active">Empresa<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown  [options]="companyList" [(ngModel)]="_branchOffice.idCompany" placeholder="Seleccione..." appendTo="body"></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="submitted && _branchOffice.idCompany <= 0">La empresa es requerida</small>
+                </div>
+    
+                <div class="p-field p-col-12">
+                    <label for="active">Compras nacionales</label>
+                    <p-dropdown [options]="nationalPurchasesList" [(ngModel)]="_branchOffice.nationalPurchases" placeholder="Seleccione..." appendTo="body"></p-dropdown>
+                </div>
+    
+                <div class="p-field p-col-12">
+                    <label for="active">Compras internacionales</label>
+                    <p-dropdown [options]="internationalPurchasesList" [(ngModel)]="_branchOffice.internationalPurchases" placeholder="Seleccione..." appendTo="body"></p-dropdown>
+                </div>
+    
+                <div class="p-field p-col-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="statusList" (onChange)="changestatus()" [(ngModel)]="_branchOffice.active" appendTo="body" [disabled]="_branchOffice.id <= 0 || !this.userPermissions.allowed(this.permissionsIDs.INACTIVATE_STATUS_BRANCH_OFFICES_PERMISSION_ID)"></p-dropdown>
+                </div>
+    
+                <div class="p-field p-col-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-fluid p-grid p-mt-2">
+                    <!-- Telefonos -->
+                    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+                        <p-table class="simple-footer-table" [value]="_branchOffice.contactNumbers">
+                            <ng-template pTemplate="caption">
+                                Teléfonos <span [ngStyle]="{'color':'red'}">*</span>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-phone let-i="rowIndex">
+                                <tr>
+                                    <td class="p-text-center" width="56%">(+{{phone.areaCode}}){{phone.number}}</td>
+                                    <td class="p-text-center" width="38%"><strong>{{phone.type}}</strong></td>
+                                    <td class="p-text-right" width="6%">
+                                        <button #b1 (click)="showPhoneMenu($event,phoneMenu,i)" pButton pRipple type="button" icon="pi pi-ellipsis-v" class="p-button-text"></button>
+                                        <p-menu #phoneMenu appendTo="body" [popup]="true" [model]="menuItemsPhone"></p-menu>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <button pButton pRipple type="button" (click)="contactNumberDialogVisible=true" label="+ Agregar" class="p-button-text"></button>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <!-- Direcciones -->
+                    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+                        <p-table class="simple-footer-table" [value]="_branchOffice.addresses">
+                            <ng-template pTemplate="caption">
+                                Direcciones <span [ngStyle]="{'color':'red'}">*</span>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-address let-i="rowIndex">
+                                <tr>
+                                    <td [ngStyle]="{'overflow-wrap':'break-word'}">
+                                        <strong class="p-mt-2">{{address.addressType}}</strong>
+                                        <div class="p-mt-1">
+                                            {{address.street}}, {{address.city}}, {{address.municipality}},
+                                            {{address.state}}, {{address.country}}
+                                        </div>
+                                        <div class="p-mt-1">
+                                            <strong class="p-mt-2" *ngIf="address.postalCode">Código postal:
+                                            </strong>{{address.postalCode}}
+                                        </div>
+                                        <div class="p-mt-1">
+                                            <strong class="p-mt-2" *ngIf="address.edifice">Edificio:
+                                            </strong>{{address.edifice}}
+                                        </div>
+                                        <div class="p-mt-1">
+                                            <strong class="p-mt-2" *ngIf="address.floor">Piso:
+                                            </strong>{{address.floor}}
+                                        </div>
+                                        <div class="p-mt-1">
+                                            <strong class="p-mt-2" *ngIf="address.reference">Referencia:
+                                            </strong>{{address.reference}}
+                                        </div>
+                                    </td> 
+                                    <td class="p-text-right" width="15%">
+                                        <button (click)="showAddressMenu($event,addressMenu,i)" pButton pRipple type="button" icon="pi pi-ellipsis-v" class="p-button-text"></button>
+                                        <p-menu #addressMenu appendTo="body" [popup]="true" [model]="menuItemsAddress"></p-menu>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <button pButton pRipple type="button" (click)="addressDialogVisible=true" label="+ Agregar" class="p-button-text"></button>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <br>
+                    <button [disabled]="_branchOffice.isDisabled" pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+            </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<app-edit-contact-numbers (onSubmit)="onSubmitContactNumber($event)" (onToggle)="onHideContacNumber($event)" [visible]="contactNumberDialogVisible"></app-edit-contact-numbers>
+<app-edit-address (onSubmit)="onSubmitAddress($event)" (onToggle)="onToggleAddress($event)" [visible]="addressDialogVisible"></app-edit-address>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

@@ -1,0 +1,124 @@
+<p-card header="Parámetros" *ngIf="activeIndex == 0 && !checked">
+    <div class="p-col-12">    
+        <div class="p-fluid p-grid">
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle">Días de antigüedad</h5>
+                <h5>{{daysOld}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle"> Máximo por año</h5>
+                <h5 >{{maxYear}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-4  borderDiv">
+                <h5 class="colorTitle">Permite anticipadas</h5>
+                <h5 >{{enableAnticipated == true ? 'Si' : 'No'}}</h5>
+            </div>
+        </div>
+        <h4>Días adicionales por años de servicio</h4>
+        <div class="p-fluid p-grid">
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle">Mínimo</h5>
+                <h5>{{minAdditionalDays}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle">Máximo</h5>
+                <h5>{{maxAdditionalDays}}</h5>
+            </div>
+        </div>
+        <h4></h4>
+        <div class="p-fluid p-grid">
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle">Días de vacaciones mínimos por año</h5>
+                <h5>{{dayMin}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-4 borderDiv">
+                <h5 class="colorTitle">Días de bono vacacional mínimo por año</h5>
+                <h5>{{dayMinBonus}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-2 borderDiv">
+                <h5 class="colorTitle">Sueldo para cálculo</h5>
+                <h5>{{typeSalaryModel}}</h5>
+            </div>
+            <div class="p-field p-col-12 p-md-2 borderDiv">
+                <h5 class="colorTitle">Tipo día a aplicar</h5>
+                <h5>{{typeDayModel}}</h5>
+            </div>
+        </div>
+    </div>
+</p-card>
+<!--################################## Editing area ################################################   -->
+<p-card header="Parámetros" class="p-card-shadow box p-col-12 p-md-12" *ngIf="activeIndex == 0 && checked">  
+    <div class="p-col-12">
+        <div class="p-fluid p-grid">
+            <div class="p-field p-col-12 p-md-4">
+                <label for="">Día de antigüedad<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-inputNumber id="" class="p-col-10 p-mr-0" [(ngModel)]="holidaysConfiguration.daysOld" min="0" (onBlur)="calculateDayOld()" placeholder="Ingrese el valor..." maxlength="3" life="500" >
+                </p-inputNumber> 
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.daysOld <= 0 ">El día de antigüedad es requerido</small> 
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <label for="laterality">Máximo por año<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-inputNumber id="" class="p-col-10 p-mr-0" placeholder="Ingrese el valor..." [(ngModel)]="holidaysConfiguration.maxYear" min="0" maxlength="3" life="500" >
+                </p-inputNumber> 
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.maxYear <= 0 ">El máximo por año es requerido</small>
+            </div>
+            <div class="p-field-checkbox p-col-12 p-md-4 p-mt-5">              
+                <p-checkbox binary="true" inputId="binary"  [(ngModel)]="holidaysConfiguration.enableAnticipated"></p-checkbox>
+                <label for="laterality">Permite anticipadas</label>
+            </div>
+        </div>
+        <h6>Días adicionales por años de servicio <span [ngStyle]="{'color':'red'}">*</span></h6>
+        <div class="p-formgroup-inline">           
+            <div class="p-field p-grid p-col-12 p-md-4">
+                <label for="firstname3" class="p-col-fixed" style="width:100px">Mínimo<span [ngStyle]="{'color':'red'}">*</span></label>
+                <div class="p-col">
+                    <p-inputNumber id="" class="p-col-10 p-mr-0" [(ngModel)]="holidaysConfiguration.minAdditionalDays" (onBlur)="calculateMinDay()" min="0" placeholder="Ingrese el valor..." maxlength="3" life="500" >
+                    </p-inputNumber>
+                </div>
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.minAdditionalDays <= 0 ">El mínimo es requerido</small>
+            </div>
+            <div class="p-field p-grid p-col-12 p-md-4">
+                <label for="lastname3" class="p-col-fixed" style="width:100px">Máximo<span [ngStyle]="{'color':'red'}">*</span></label>
+                <div class="p-col">
+                    <p-inputNumber id="" class="p-col-10 p-mr-0" [(ngModel)]="holidaysConfiguration.maxAdditionalDays" (onBlur)="calculateMaxDay()" min="0" placeholder="Ingrese el valor..." maxlength="3" life="500" >
+                    </p-inputNumber>
+                </div>
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.maxAdditionalDays <= 0 ">El máximo es requerido</small>
+            </div>
+        </div>
+        <div class="p-fluid p-grid">   
+            <div class="p-field p-col-12 p-md-3">
+                <label for="laterality">Días de vacaciones mínimos por año<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-inputNumber id="" class="p-col-10 p-mr-0"  [(ngModel)]="holidaysConfiguration.dayMin" placeholder="Ingrese el valor..." min="0" maxlength="3" life="500" >
+                </p-inputNumber> 
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.dayMin <= 0 ">Días de vacaciones mínimos por año es requerido</small>
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label for="laterality">Días de bono vacacional mínimo por año<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-inputNumber id="" class="p-col-10 p-mr-0" [(ngModel)]="holidaysConfiguration.dayMinBonus" min="0" placeholder="Ingrese el valor..." maxlength="3" life="500" >
+                </p-inputNumber> 
+                <small class="p-invalid" *ngIf="submitError && holidaysConfiguration.dayMinBonus <= 0 ">Días de bono vacacional mínimo por año es requerido</small>
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label for="dropdown">Sueldo para cálculo<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown placeholder="Seleccione..." [filter]="true" [(ngModel)]="salaryTypeItem" [options]="salaryTypeSelect" optionLabel="label"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." life="500">
+                </p-dropdown>
+                 <!-- <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.documentNumber == '' || _laborRelationship.employee.documentNumber === undefined )">El número de documento es requerido</small>  -->
+            </div>       
+            <div class="p-field p-col-12 p-md-3">
+                <label for="dropdown">Tipo día a aplicar<span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown inputId="typeDayOption" placeholder="Seleccione..." [filter]="true" [(ngModel)]="typeDaySelec"  [options]="typeDayOption" optionLabel="name"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." life="500">
+                </p-dropdown>
+                 <!-- <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.documentNumber == '' || _laborRelationship.employee.documentNumber === undefined )">El número de documento es requerido</small>  -->
+            </div>     
+        </div>
+        <div class="p-field p-grid p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+        <div class="p-field p-col-12 p-md-12" align="right">
+            <button id="saving2" pButton pRipple label="Guardar" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)" (click)="saveConfiguration()" icon="pi pi-save" class="p-button-info saving"></button>
+        </div>
+    </div>
+</p-card>

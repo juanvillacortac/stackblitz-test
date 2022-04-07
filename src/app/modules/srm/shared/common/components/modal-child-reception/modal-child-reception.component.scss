@@ -1,0 +1,51 @@
+.generic-font-size
+{
+    font-size: 1.0rem;
+}
+ 
+.generic-float-text
+{
+    float:right;
+}
+@media only screen and (max-width: 540px) {
+     
+    .generic-float-text
+    {
+        float:unset;
+        
+    }
+ }
+
+ :host ::ng-deep .p-chip.custom-chip {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+  }
+
+  :host ::ng-deep .p-chip {
+    background-color: #dee2e6;
+    color: #495057;
+    border-radius: 16px;
+    padding: 0 0.5rem;
+}
+
+:host ::ng-deep .p-chip img {
+    width: 2rem;
+    height: 2rem;
+    margin-left: -0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+}
+
+:host ::ng-deep .p-chip-icon.pi, .p-chip-text {
+    line-height: 1.5;
+}
+:host ::ng-deep .p-chip .p-chip-icon {
+    margin-right: 0.5rem;
+}
+ 
+
+:host ::ng-deep .p-chip .p-chip-text {
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}

@@ -1,0 +1,17 @@
+:host ::ng-deep { 
+  
+ 
+    .p-dialog-content {
+        overflow-y: visible;
+    }
+
+    .p-dialog {
+        min-width: 300px;
+    }
+
+    .card {
+        padding: 0px;
+    }
+
+  
+}

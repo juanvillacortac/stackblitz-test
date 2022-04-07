@@ -1,0 +1,36 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Conductor" [(visible)]="visible"  [style]="{width:'30%'}" [modal]="true">
+    <div class="p-grid">
+        <div class="p-col-12">      
+            <div class="p-fluid p-grid p-formgrid">
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Tipo de conductor <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="typeDriverList" [(ngModel)]="_driversPerVehicle.idTypeDriver" placeholder="Seleccione..." (onChange)="changeLoadTypeDriver(_driversPerVehicle.idTypeDriver)" appendTo="body" ></p-dropdown>
+                    <small class="p-invalid" *ngIf="_submitted && _driversPerVehicle.idTypeDriver <= 0">El tipo de conductor es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Conductor <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="driverList" [(ngModel)]="_driversPerVehicle.idDriver" placeholder="Seleccione..." appendTo="body" (onChange)="changeDriver(_driversPerVehicle.idDriver)" ></p-dropdown>
+                    <small class="p-invalid" *ngIf="_submitted && _driversPerVehicle.idDriver <= 0">El conductor es requerido</small>
+                </div>                
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12" pTooltip="Fecha emision"  tooltipPosition="left" life="500" >
+                    <label for="cci"> Fecha de asignacion <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar inputId="cci" id="cci" appendTo="body" [(ngModel)]="_driversPerVehicle.driverAssignmentDate" [yearNavigator]="true" yearRange="1900:2030" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                    <small class="p-invalid" *ngIf="_submitted &&  _driversPerVehicle.driverAssignmentDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'">La fecha de asigancion es requerida</small>                      
+                </div> 
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Observaciones</label>
+                    <textarea [(ngModel)]="_driversPerVehicle.observations" [rows]="3" [cols]="60" maxlength="500" pInputTextarea></textarea>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2 p-mt-1"></p-button>        
+        <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1"></p-button>
+    </ng-template>
+</p-dialog>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [_status]="false" [multiples]="multiples"></operator-modal-list>

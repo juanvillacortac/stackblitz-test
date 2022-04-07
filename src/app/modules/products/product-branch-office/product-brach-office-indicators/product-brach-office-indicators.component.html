@@ -1,0 +1,81 @@
+<div class="p-grid">
+    <div class="p-col-12 p-lg-12">
+        <button pButton pRipple label="Guardar en lote" (click)="showAddLotPricesCosts()" *ngIf="saveLot" class="p-button-info p-mr-2"></button>
+    </div>
+    <div class="p-col-12 p-lg-12">
+        <p-accordion>
+            <p-accordionTab *ngFor="let branchOffice of productBranchOfficeList" (click)="searchPricesCostsbyBranchOffice(branchOffice.idBranchOffice)" [selected]="branchOffice.idBranchOffice == branchexpanded ? true : false">
+                <ng-template pTemplate="header">
+                    <div class="p-grid" style="width: 100%; align-items: center; margin-right: 0px; margin-left: 0px; margin-top: 0px;">
+        
+                        <div class="p-md-5">
+                            <label class="p-mr-2"><i [class]="branchOffice.pricesCosts.length > 0 ? 'pi pi-check' : ''"></i></label>
+                            <label>{{branchOffice.branchOffice}}</label>
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-2">
+                        </div>
+                        <div class="p-md-1">
+                            <button pButton pRipple icon="pi pi-plus" *ngIf="branchOffice.manageIndicators" class="p-button-rounded p-button-success" (click)="showAddPanelPricesCosts($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="p-grid">
+                    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+                            <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                                <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                    <p-table #dtDc [columns]="displayedColumnspackingBranchOffice" [value]="packingBranchOfficeList" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [selectionMode]="'none'" [(selection)]="selectedIndicators" (onRowSelect)="onRowSelect($event)">      
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngIf="branchOffice.manageIndicators"></th>
+                                            <ng-container *ngFor="let col of columns">  
+                                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-indicators let-columns="columns">
+                                        <tr [pSelectableRow]="indicators">
+                                            <td *ngIf="branchOffice.manageIndicators">
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="showEditPanelPricesCosts(indicators,branchOffice.idBranchOffice)" pTooltip="Editar"></button>
+                                            </td>
+                                            <ng-container *ngFor="let col of columns">
+                                                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <span *ngIf="col.field === 'packingPresentation.name'">{{indicators.packingPresentation.name}}</span>
+                                                    <span *ngIf="col.field === 'packingType.name'">{{indicators.packingType.name}}</span>
+                                                    <span *ngIf="col.field === 'idStatus' && indicators.idStatus == 1" class="status-badge status-active">Activo</span>
+                                                    <span *ngIf="col.field === 'idStatus' && indicators.idStatus == 2" class="status-badge status-inactive">Desincorporado</span> 
+                                                    <span *ngIf="col.field === 'indActiveBuy'"><i [class]="indicators.indActiveBuy == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indActiveSale'"><i [class]="indicators.indActiveSale == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indConsignment'"><i [class]="indicators.indConsignment == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indOnline'"><i [class]="indicators.indOnline == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indIVA'"><i [class]="indicators.indIVA == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indShelf'"><i [class]="indicators.indShelf == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                    <span *ngIf="col.field === 'indTower'"><i [class]="indicators.indTower == true ? 'pi pi-check' : 'pi pi-times'"></i></span>
+                                                </td>
+                                            </ng-container>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="paginatorleft">
+                                            </ng-template>
+                                            <ng-template pTemplate="paginatorright">
+                                            </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+<app-new-indicators [(showDialog)]="ShowDialog" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(packingBranchOffice)]="packingBranchOffice" [(packingBranchOfficeListDB)]="packingBranchOfficeListDB" (refreshPackingBranchOffice)="refreshLotPackingBranchOffice()"></app-new-indicators>
+<app-new-lot-indicators [(showDialog)]="showDialogLot" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice" [(availableCompaniesBranchOfficeApp)]="availableCompaniesBranchOfficeApp" [(packingBranchOfficeListDB)]="packingBranchOfficeListDB" (refreshLotPackingBranchOffice)="refreshLotPackingBranchOffice()"></app-new-lot-indicators>

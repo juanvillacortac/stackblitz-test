@@ -1,0 +1,74 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Puertos <span *ngIf="showFilters">> Filtrar</span></h5> -->
+      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+      </span>
+      <div>
+        <!--  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_SUPPLIERS_PERMISSION_ID)" -->
+        <button   pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="new()" tooltipPosition="top"  pTooltip="Crear nuevo"></button> 
+
+        <button  pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+      </div>
+    </div>
+  
+    <app-supplier-filters-panel (onSearch)="search()" [(filters)]="SupplierFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-supplier-filters-panel>
+  
+  </div>
+  
+  <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_SupplierService._suppliersExtendList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [globalFilterFields]="['country','socialReason','documentnumber','supplierclasification','currency','createdByUser','updatedByUser']"
+             currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+  
+  
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-Supplier let-columns="columns">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+              <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="Supplier[col.field]"></app-active-label>
+              <ng-template #textCell>
+                <span>{{col.template(Supplier)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>
+            <button   pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"  (click)="open(Supplier)" pTooltip="Editar"></button>
+            <!--*ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_SUPPLIERS_PERMISSION_ID)" -->
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-1">No existen resultados</td>
+        </tr>
+    </ng-template>
+      <!-- <ng-template pTemplate="footer" let-columns>
+        <ng-container *ngIf="_SupplierService._suppliersExtendList==null || _SupplierService._suppliersExtendList?.length == 0">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-1">
+            <span>No existen resultados</span>
+          </td>
+        </tr>
+        </ng-container>
+      </ng-template> -->
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+  
+  <!-- coment -->
+  <!-- <app-device-type-panel [(showDialog)]="DeviceTypeshowDialog" [(_dataDeviceType)]="_DeviceTypeViewModel" [(filters)]="deviceTypeFilters"  ></app-device-type-panel> -->

@@ -1,0 +1,40 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Tasa de cambio" [(visible)]="visible" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" 
+  [style]="{width:'40%'}" [modal]="true">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="p-fluid p-grid p-formgrid">
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <b>Proveedor:</b>
+          <label style="margin-left:20px;">{{_supplier.socialReason}}</label>
+        </div>
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+            <b>Documento:</b>
+            <label style="margin-left:20px;">{{_supplier.identifier}}-{{_supplier.documentnumber}}</label>
+          </div>
+          <div class="p-field p-col-12 p-sm-12 p-md-12">
+            <!-- <b>Tasa actual</b>
+            <label style="margin-left:20px;"></label> -->
+          </div>
+
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <label for="active">Moneda:<span [ngStyle]="{'color':'red'}">*</span></label>
+          <p-dropdown name="active" [options]="coinlist" appendTo="body" [(ngModel)]="_exchange.idCurrency"
+            placeholder="Seleccione..." (onChange)="onChange($event)" (keyup.enter)="submit()" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" ></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && (_exchange.idCurrency <=0)">La moneda es requerida</small>
+        </div>
+
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <label for="active">Tasa de cambio:<span [ngStyle]="{'color':'red'}">*</span></label>
+          <p-inputNumber  [(ngModel)]="_exchange.exchangeRate" min="0" mode="decimal"
+            [minFractionDigits]="2"  (keyup.enter)="submit()"></p-inputNumber>
+          <small class="p-invalid" *ngIf="submitted && (_exchange.exchangeRate==undefined || _exchange.exchangeRate==0)">La tasa es requerida</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2"></p-button>
+    <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary">
+    </p-button>
+  </ng-template>
+</p-dialog>

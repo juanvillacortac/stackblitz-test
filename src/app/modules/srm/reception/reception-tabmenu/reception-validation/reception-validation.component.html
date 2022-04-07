@@ -1,0 +1,6 @@
+<!-- <p-card header="{{ 'srm.reception.validation_products.products' | translate }}"> -->
+    <!-- <button pButton pRipple label="Iniciar" icon="pi pi-check" 
+class="p-button-success p-mr-2"></button> -->
+<app-reception-validation-products [purchaseId]="reception.purchaseId" [reception]="reception" [purchaseValidate]="purchaseValidateHeader" [(isSave)]="isSave"></app-reception-validation-products>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

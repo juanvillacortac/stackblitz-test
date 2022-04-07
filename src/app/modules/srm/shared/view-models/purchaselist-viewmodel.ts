@@ -1,0 +1,33 @@
+export class PurchaselistViewmodel {
+    idOrderPurchase: number=-1;
+    numOC: string="";
+    branchRequest: string="";
+    branchOrigin : string="";
+    supReasonCommercial: string="";
+    country: string="";
+    status: string="";
+    idPartialDelivery: number=-1;
+    partialDelivery: string="";
+    typeDistribution: string= "";
+    typeDocumentOC: string="";
+    cantItems: number=-1;
+    totalAmountBase: number=-1;
+    totalAmountConversion: number=-1;
+    reviewedby:string="";
+    createdby:string="";
+    responsible: string="";
+    approvedby:string="";
+    responsibleReception: string="";
+    elaborateby:string="";
+    plannedby: string="";
+    idCompany: number=-1;
+    updatedUserBy: string="";
+    dateCreate: Date;
+    dateUpdate : Date;
+    totalTaxable:number;
+    totalDeductible:number;
+    totalBase:number;
+    supplierId = -1;
+    statusId = -1;
+    indPurchase:number=0;
+}

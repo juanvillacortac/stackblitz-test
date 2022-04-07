@@ -1,0 +1,29 @@
+<p-avatarGroup styleClass="p-mb-3">
+    <ng-container *ngFor="let item of displayedList">
+        <p-avatar [image]="item.image"  [shape]="shape" [size]="size" pTooltip="{{item.name}}" tooltipPosition="top" (click)="showDetails(item)"></p-avatar>
+    </ng-container>
+    <ng-container *ngIf='unDisplayedTotal > 0'>
+        <p-avatar [label]="'+'+ unDisplayedTotal" [shape]="shape" [size]="size" (click)="showMoreAvatar($event,op)" [style]="{'background-color':'#6c757d', 'color': '#ffffff'}"></p-avatar>
+    </ng-container>
+</p-avatarGroup>
+
+<ng-container *ngIf='profileDetailModalShow'>
+    <app-employee-profile-detail 
+        [visible]="profileDetailModalShow" 
+        [id]="id"
+        [name]="name"
+        [image]="image"
+        [viewMoreButton]="false"
+        (hideDialogForm)="childCallBack($event)">
+    </app-employee-profile-detail>
+</ng-container>
+
+<p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" [style]="{width: '380px'}" appendTo="body">
+    <div class="p-grid">
+        <ng-container *ngFor="let item of unDisplayedList"> 
+            <div class="p-col-12">
+                <app-user-image [userName]="item.name" [userId]="item.id" [img]="item.image" ></app-user-image>
+            </div>
+        </ng-container>
+    </div>
+</p-overlayPanel>

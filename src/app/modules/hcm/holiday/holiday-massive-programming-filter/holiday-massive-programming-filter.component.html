@@ -1,0 +1,90 @@
+<p-dialog id="employee-dialog" header="Agregar trabajadores" (onHide)="outForm()" [(visible)]="showPanel" [blockScroll]="true" [style]="{width: '70vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+
+    <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-4">
+                    <label for="active">Clase de nómina</label>
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                        <p-dropdown [options]="payrollClassDropdown" [(ngModel)]="selectClass" placeholder="Seleccione...">
+                        </p-dropdown>
+                        <!-- <small class="p-invalid" *ngIf="submitted && selectClass == -1">La clase de nómina es requerida</small> -->
+                    </div>
+                </div>
+                <div class="p-col-12 p-lg-4">
+                    <label for="laterality">Fecha de ingreso</label>
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                        <p-calendar [(ngModel)]="employmentDate" dateFormat="dd/mm/yy" inputId="employmentDate" placeholder=""
+                            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" yearRange="1900:2200"
+                            showButtonBar="true" [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" >
+                        </p-calendar>
+                        <!-- <small class="p-invalid" *ngIf="submitted && selectClass == -1">La fecha de ingreso es requerida</small> -->
+                    </div>
+                </div>
+                <div class="p-col-12 p-lg-4">
+                    <label for="laterality">Fecha de antigüedad</label>
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                        <p-calendar [(ngModel)]="seniorityDate" dateFormat="dd/mm/yy" inputId="seniorityDate" placeholder=""
+                            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" yearRange="1900:2200"
+                            showButtonBar="true" [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" >
+                        </p-calendar>
+                        <!-- <small class="p-invalid" *ngIf="submitted && selectClass == -1">La fecha de antigüedad es requerida</small> -->
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="p-col-12 p-mb-4" align="right">
+                <div style="display: inline-flex;">
+                    <button pButton pRipple label="Buscar" (click)="searchEmployee()" icon="pi pi-search" class="p-button-info button-search"></button>
+                    <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-ml-2"></button>
+                </div>
+            </div>
+    
+            <div class="p-field p-grid p-col-12" style="min-height: 250px;">
+              <p-table [value]="employeeList" *ngIf="employeeList  && employeeList.length > 0">
+                <ng-template pTemplate="header">
+                  <tr>
+                      <th>Código</th>
+                      <th>Nombre</th>
+                      <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employeeList let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <span>{{employeeList.employmentCode}}</span>
+                        </td>
+                        <td>
+                            <span>{{employeeList.employeeFirstName}} {{employeeList.employeeLastName}}</span>
+                        </td>
+                        <td *ngIf="employeeList.holidayCycle != cycleHoliday">
+                          <button pButton pRipple type="button" icon="pi pi-info" class="p-button-rounded p-button-danger p-button-outlined p-mr-2" 
+                                      pTooltip="Este trabajador no puede ser agregado ya que el ciclo que le coresponde es distinto al de la programación" 
+                                      tooltipPosition="right" placeholder="right"></button>
+                        </td>
+                        <td *ngIf="employeeList.holidayCycle == cycleHoliday">
+                          <p-checkbox [binary]="true" [(ngModel)]="employeeList.selected"></p-checkbox>
+                        </td>
+                    </tr>
+                </ng-template>
+              </p-table>
+              <p-messages class="p-col-12" severity="info" *ngIf="messageSearch != ''" >
+                    <ng-template pTemplate>
+                        <div class="p-ml-2">{{messageSearch}}</div>
+                    </ng-template>
+                </p-messages>
+            </div>
+            <!-- <div class="p-field p-col-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> -->
+            <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <button pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+              </div>
+            </div>
+        </div>
+    </div>
+  </p-dialog>
+
+  

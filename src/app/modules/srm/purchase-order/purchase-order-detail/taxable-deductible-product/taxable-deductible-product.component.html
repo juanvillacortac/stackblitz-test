@@ -1,0 +1,139 @@
+
+  <!-- <p-card header="Imponibles y deducibles" *ngIf="showtaxable" styleClass="p-card-shadow" class="p-col-12"> -->
+   <div *ngIf="showtaxable" class="card p-grid" >
+    <h2>Imponibles y deducibles</h2>
+    <div  class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+      <div  class="p-grid p-jc-end p-mt-3">
+        <p-button (click)="showTaxableDeductible(true)"  [styleClass]="isTaxable == true? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Imponible"></p-button>
+        <p-button (click)="showTaxableDeductible(false)" [styleClass]="isTaxable == false ? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Deducible"></p-button>
+      </div>
+   </div> 
+    <div *ngIf="isTaxable" style="width: 100%;" class="p-grid">
+          <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+            <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+              <span class="p-input-icon-left p-ml-auto p-mr-2">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dtt.filterGlobal($event.target.value, 'contains')"
+                  placeholder="Buscar" />
+              </span>
+              <button #btn type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2"
+              pTooltip="Agregar" (click)="showmodal(true, false)" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated)&& this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+            </div>
+          </div>
+          <div style="width: 98%;" class="card p-m-0">
+            <p-table #dtt [columns]="displayedColumns" [scrollable]="true" [value]="_product.taxables"
+              scrollHeight="500px"  [paginator]="true" [rows]="10"
+              [showCurrentPageReport]="true" 
+              currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+              [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="width:3rem"></th>
+                  <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px'}" [pSortableColumn]="col.field">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                  </ng-container>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-order let-columns="columns">
+                <tr>
+                  <td style="width:3rem">
+                    <button pButton pRipple icon="pi pi-times" (click)="removetaxable(order)" class="p-button-rounded p-button-danger"  pTooltip="Eliminar" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated && !order.indFixedTax)&& this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+                      <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mt-2"
+                      pTooltip="Editar" (click)="editTaxableDeductible(order)" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated && !order.indFixedTax) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+                    </td>
+                  <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px' }">
+                      <span class="p-column-title">{{col.header}}</span>
+                      <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+                      </app-active-label>
+                      <ng-template #textCell>
+                        <span>{{col.template(order)}} </span>
+                      </ng-template>
+                    </td>
+                  </ng-container>
+                </tr>
+              </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+          </p-table>
+          </div>
+    </div>
+     <div  *ngIf="!isTaxable" style="width: 100%;"  class="p-grid">
+      <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-auto p-mr-2">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dts.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar" />
+          </span>
+          <button #btn type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2"
+          pTooltip="Agregar" (click)="showmodal(false, true)" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+        </div>
+      </div>
+       <div style="width: 98%;" class="card p-m-0">
+        <p-table #dts [columns]="displayedColumnsde" [scrollable]="true" [value]="_product.deductibles"
+          scrollHeight="500px" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:3rem">
+              </th>
+              <ng-container *ngFor="let col of columns">
+
+                <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px'}" [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-order let-columns="columns">
+            <tr>
+              <td style="width:3rem">
+                <button pButton pRipple  (click)="removedeductible(order)" icon="pi pi-times" class="p-button-rounded p-button-danger"  pTooltip="Eliminar" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated && !order.indFixedTax) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+                  <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mt-2"
+                  pTooltip="Editar" (click)="editTaxableDeductible(order)" *ngIf="(_purchaseheader.purchase.idStatus <statuspurchase.Elaborated && !order.indFixedTax) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID) && iduserlogin==_purchaseheader.purchase.responsibleId"></button>
+              </td>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '120px' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+                  </app-active-label>
+                  <ng-template #textCell>
+                    <span>{{col.template(order)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+      </p-table>
+      </div>
+     </div>   
+        
+    </div>
+    
+ <!-- </p-card> -->
+
+ <app-taxable-deductible [(showDialog)]="showModalTaxDed"  (_sendTaxablesList)="receive($event,0)" [indTabdeductible]="indDeductible" [(ProductOrder)]="_product" [(PurchaseOrder)]="_purchaseheader" (_sendTaxablesHeaderListProd)="receandSend($event)"></app-taxable-deductible>
+ <app-taxable-deductible-edit [(showDialog)]="showEdit" [(_imponible)]="this._imponible" (_sendList)="receive($event,0)"> </app-taxable-deductible-edit>

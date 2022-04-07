@@ -1,0 +1,68 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.numberDocument" type="text" [pKeyFilter]="valid" pInputText maxlength="20"
+          (keyup.enter)="search()">
+        <label>Número de documento</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.description" type="text" pInputText [pKeyFilter]="valid" maxlength="50"
+          (keyup.enter)="search()">
+        <label>Descripción</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown [options]="statuslist" [(ngModel)]="filters.idStatus" [filter]="true" placeholder="Estatus"
+      emptyFilterMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.idStatus>0? true:false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown [options]="arealist" [(ngModel)]="filters.idArea" [filter]="true" placeholder="Área"
+      emptyFilterMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.idArea>0 ?true:false">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown [options]="categorylist" [(ngModel)]="filters.idCategory" [filter]="true"
+            placeholder="Categoría" emptyFilterMessage="Sin resultados." (keyup.enter)="search()" [showClear]="filters.idCategory>-1 ?true:false">        
+          </p-dropdown>
+  </div>
+  
+  <div class="p-col-12 p-md-4 p-lg-3 p-mt-2">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input type="text" pInputText placeholder="Responsable" [(ngModel)]="filters.operatorsString" readonly="true" class="responsible">
+        <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=false)" class="btresponsible"></p-button>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+    <p-calendar id="ToD" [(ngModel)]="filters.iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      (onSelect)="onBlurMethod($event)" readonlyInput="true" [showIcon]="true">
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+    <p-calendar id="ToF" [minDate]="filters.iDate" [(ngModel)]="filters.fDate" dateFormat="dd/mm/yy"
+      (keyup.enter)="search()" readonlyInput="true" [showIcon]="true">
+    </p-calendar>
+  </div>
+  <div class="p-col-12 p-sm-12  p-md-12  p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+      class="btn p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+      class="btn p-button-secondary p-mr-2"></button>
+    <Button pButton pRipple label="Excel" [disabled]="loading" (click)="exportExcel()" icon="pi pi-file-excel"
+      class="btn p-button-success" pTooltip="Exportar"  tooltipPosition="top"></Button>
+  </div>
+</div>
+
+<!-- <user-modal-list [(showDialog)]="_showdialog"  [(filters)]="filters" [multiples]="multiples"></user-modal-list> -->
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)"
+  (onToggle)="onHideOperator($event)" [multiples]="multiples"></operator-modal-list>

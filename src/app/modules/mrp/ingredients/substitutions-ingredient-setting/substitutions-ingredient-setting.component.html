@@ -1,0 +1,70 @@
+<h5 class="p-m-0">{{ 'mrp.ingredients.sustitutions' | translate }} </h5>
+<hr/>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+            <div class="card">       
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.ingredients.barcode' | translate }}</label>
+                        <input [(ngModel)]="setting.barcode" #barcode pInputText disabled/>                     
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'name' | translate }}</label>
+                        <input [(ngModel)]="setting.productName" #productName pInputText disabled/>                     
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.ingredients.category' | translate }}</label>
+                        <input [(ngModel)]="setting.fullCategory" #fullCategory pInputText disabled/>                     
+                    </div>
+                </div>
+            </div>
+    </div>  
+</div>
+
+<div class="p-field p-col-12">
+<p-table [value]="setting?.sustitutionIngredients" [columns]="cols"  [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+            [(selection)]="selectedIngredients" currentPageReportTemplate="{{ 'primeng.footerShort' | translate }}">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width:3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th style="width:4rem">{{ 'order' | translate }}</th>
+                        <th *ngFor="let col of columns" pReorderableColumn>
+                            {{col.header | translate}}
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ingredient let-columns="columns" let-index="rowIndex">
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="ingredient" (click)="onSelectChanged(ingredient)"></p-tableCheckbox>
+                        </td>
+                        <td style="text-align: center;">
+                            {{index + 1}}
+                        </td>
+                        <td *ngFor="let col of columns">
+                            {{ingredient[col.field]}}
+                        </td>
+                        <td>
+                            <div class="p-grid">
+                                <div class="p-col-4">
+                                    <button pButton pRipple type="button" icon="pi pi-arrow-up" class="p-button-rounded p-button-primary" *ngIf="showChevronUpButton(index)" (click)="getUpIngredient(ingredient)"></button>
+                                </div>
+                                <div class="p-col-4">
+                                    <button pButton pRipple type="button" icon="pi pi-arrow-down" class="p-button-rounded p-button-primary" *ngIf="showChevronDownButton(index)" (click)="getDownIngredient(ingredient)"></button>
+                                </div>
+                            </div>
+                            
+                        </td>
+                    </tr>
+                </ng-template>
+</p-table>
+</div>
+
+
+<div class="p-field p-col-12 p-mt-5">
+    <button pButton pRipple label="{{'save' | translate}}" (click)="save()" icon="pi pi-save" class="p-button-info p-mr-2" style="width: 100%;" *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_SUBSTITUTE_INGREDIENT_PERMISSION_ID)"></button>
+</div> 

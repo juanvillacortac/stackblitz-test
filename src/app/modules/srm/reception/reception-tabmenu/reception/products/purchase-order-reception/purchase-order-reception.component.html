@@ -1,0 +1,68 @@
+<div class="p-grid area-padding">
+  <div class="card-body my-2 p-col-12 p-sm-12 p-md-12 p-lg-12" #product>
+
+    <p-card styleClass="p-card-shadow" id="tableproduct" class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+      <!-- <h4>{{ 'srm.reception.reception_products.reception_product' | translate }}</h4> -->
+      <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12">
+        <span *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PURCHASE_ORDER_PERMISSION_ID)" class=" p-col-12 p-md-12 p-sm-12 p-lg-12"> <b> Número de documento:</b> <a class="linkStyle" [href]="'srm/purchase-order/'+reception.purchaseOrderRelatedId" > {{ numberdocument}} </a></span>
+        <span *ngIf="!this.userPermissions.allowed(this.permissionsIDs.CHECK_PURCHASE_ORDER_PERMISSION_ID )" class=" p-col-12 p-md-12 p-sm-12 p-lg-12"> <b> Número de documento:</b>  {{ numberdocument}}</span>        
+        <span class=" p-col-12 p-md-12 p-sm-12 p-lg-12"> <b> Tipo de documento:</b> {{typedocument}}</span>
+      </div>
+      <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dtsl.filterGlobal($event.target.value, 'contains')"
+              placeholder="Buscar" />
+          </span>
+          <div class="p-grid p-col-12 p-sm-12 p-md-12 p-lg-12  p-mt-0 p-g-end">
+            <button #btn type="button" pButton icon="pi pi-download" class="p-button-success p-mr-2"
+              pTooltip="Recibir según orden" (click)="send($event)" 
+              *ngIf="this.reception.estatus <= statusreception.started &&this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.reception.receivingOperator.id"></button>
+          </div>
+        </div>
+      </div>
+      <p-table #dtsl [columns]="displayedColumns" [value]="_detail" [scrollable]="true" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true" dataKey="productId" [scrollHeight]="innerHeight +'px'"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'120px','font-size':'small'}"
+                [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'120px' }">
+                <span class="p-column-title">{{col.header}}</span>
+                <div class="container-img" *ngIf="col.field =='image'; else text">
+                  <img [src]="order.image == null || order.image == ''  ?  defectImage.defectImage : order.image"
+                    [alt]="order.product" class="p-shadow-4 imgcatalog" />
+                </div>
+                <ng-template #text>
+                  <span>{{col.template(order)}} </span>
+                </ng-template>
+              </td>
+            </ng-container>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados.</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

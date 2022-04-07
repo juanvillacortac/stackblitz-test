@@ -1,0 +1,73 @@
+<div class="card" style="margin-bottom:auto;">
+    <div class="p-grid" style="margin-top: -50px;">
+        <div class="p-col-12 p-mt-6 p-md-6 p-lg-6">
+            <p class="generic-font-size">Número de documento: <b>{{invoice.numberFC!='' ? invoice.numberFC:0 }}</b></p>
+        </div>
+        <div class="p-col-12 p-mt-6 p-md-6 p-lg-6 generic-margin">
+            <p class="generic-font-size generic-float-text"> Estatus: <b>{{invoice.status!='' ?
+                    invoice.status : 'Nueva' }}</b></p>
+        </div>
+    </div>
+    <p class="generic-font-size">Fecha de creación:<b> {{invoice.dateCreate | date: 'dd/MM/yy'}}</b></p>
+    <div class="center-block" style="text-align: center">
+
+        <!-- <button pButton pRipple icon="pi pi-refresh" class="p-button-rounded p-button-info p-mr-2"
+            pTooltip="Reasignar tarea"></button> -->
+        <button pButton pRipple icon="pi pi-play" *ngIf="!this.indInitTime"
+            class="p-button-rounded p-button-success p-mr-2" (click)="PlayTask()" pTooltip="Iniciar tarea"></button>
+        <button pButton pRipple icon="pi pi-play" *ngIf="this.indInitResu"
+            class="p-button-rounded p-button-success p-mr-2" (click)="ResumeTask()" pTooltip="Continuar tarea"></button>
+        <button pButton pRipple icon="pi pi-pause" *ngIf="this.indInitPause"
+            class="p-button-rounded p-button-success p-mr-2" (click)="PauseTask()" pTooltip="Pausar tarea"></button>
+        <cd-timer #basicTimer format="hms" style="font-size: x-large;" [autoStart]="false"></cd-timer>
+        <!-- <span><i class="pi pi-clock" style="font-size: 2rem"></i></span> -->
+    </div>
+
+    <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-d-flex p-jc-end">
+        
+        <button pButton pRipple label="Regresar" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary p-mr-2"></button>
+        <button pButton pRipple label="Guardar" [disabled]="iduserlogin != invoice.idResponsibleOperator ||invoice.idStatus==status.validated || invoice.idStatus == status.finalized || invoice.idStatus==status.reject " (click)="Save()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Anular"   (click)="showReason=true" [disabled]="invoice.idStatus==status.reject|| invoice.idStatus==status.validated || invoice.idStatus==status.finalized|| invoice.idStatus==-1 || iduserlogin!= invoice.idResponsibleOperator"  icon="pi pi-times" class="p-button-danger p-mr-2"></button>
+        <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.CANCELED_PURCHASE_ORDER_PERMISSION_ID)" -->
+        <button pButton pRipple label="Iniciar" [disabled]="iduserlogin != invoice.idResponsibleOperator|| invoice.idStatus==status.validated || invoice.idStatus == status.finalized" (click)="start()" icon="pi pi-play" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Autorizar"  (click)="Authorized()" 
+                                       [disabled]="invoice.idStatus==status.reject 
+                                       || invoice.idStatus==status.pending
+                                       || invoice.idStatus==status.started 
+                                       || invoice.idStatus==-1 
+                                       || !checkAuthorizedBy() " icon="pi pi-check" class="p-button-success p-mr-2"></button> 
+                                       <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.AUTHORIZED_PURCHASE_ORDER_PERMISSION_ID)" -->
+        <button pButton pRipple label="Finalizar"   (click)="elaborated()" 
+                                        [disabled]="invoice.idStatus==status.reject 
+                                        || invoice.idStatus==status.pending
+                                        || invoice.idStatus==status.validated 
+                                        || invoice.idStatus==-1 
+                                        || iduserlogin!= invoice.idResponsibleOperator"    icon="pi pi-id-card" class="p-button-secondary p-mr-2"></button>
+                                        <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.ELABORATED_PURCHASE_ORDER_PERMISSION_ID)" -->
+        <p-button  *ngIf="invoice.idStatus>0" type="button" class="p-mr-2" pTooltip="Línea de tiempo"  tooltipPosition="top"  (click)="showDialog=true" icon="pi pi-clock"></p-button>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+        <p-tabView #PrincipalTab styleClass="tabview-custom" id="background-panel"(onChange)="handleChange($event)">
+            <p-tabPanel header="Datos generales">
+                <app-consignment-invoice-header [(id)]="id" [(invoiceHeader)]="invoice" [(iduserlogin)]="iduserlogin" [(rateold)]="rateold">
+                </app-consignment-invoice-header>
+            </p-tabPanel>
+          
+            <p-tabPanel header="Productos">
+                <!-- <purchase-order-products [(showproduct)]="showproduct" [(_idOrderPurchase)]="PucharseOrderHeader.purchase.idOrderPurchase" [(isSave)]="isSave"  [(PucharseOrderHeader)]="PucharseOrderHeader"
+                    [(_idCompany)]="_idCompany" ></purchase-order-products>  -->
+            </p-tabPanel>
+          
+            <p-tabPanel header="Resumen">
+                <!-- <app-purchase-order-received-list [(PucharseOrderHeader)]="PucharseOrderHeader"></app-purchase-order-received-list> -->
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+<app-invoice-timeline [(showDialog)]="showDialog" [(invoiceHeader)]="invoice" ></app-invoice-timeline>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<app-reason-cancel (onToggle)="onToggleReason($event)" [(visible)]="showReason" [(onReason)]="this.reason"></app-reason-cancel>

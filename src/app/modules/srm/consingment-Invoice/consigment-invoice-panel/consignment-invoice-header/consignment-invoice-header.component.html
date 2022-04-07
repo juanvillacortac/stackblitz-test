@@ -1,0 +1,376 @@
+<div class="p-grid area-padding">
+    <!--Datos generales-->
+    <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+            <div style="height: 100%;" class="p-grid pb-3">
+                <p-card header="Datos generales" styleClass="p-card-shadow" class="p-col-12 p-fluid fullheightcard">
+                    <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                        <div class="p-col-12 p-mb-2 p-md-3 p-lg-3 p-fluid">
+                            <label>Usuario responsable</label>
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText placeholder="Usuario responsable" (keyup.enter)="Save()"
+                                    [(ngModel)]="this.operatormodal.namesoperators" disabled>
+                                <!-- <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="OperatorDialogVisible=true"> -->
+                            </div>
+                        </div>
+
+                        <div class="p-col-12  p-md-3 p-lg-3  p-mb-2">
+                            <label>Usuario autoriza</label>
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText placeholder="Autorizada por"
+                                    [(ngModel)]="this.operator.namesoperators" (keyup.enter)="Save()" disabled>
+                                <!-- (click)="OperatorDialogVisible=true" -->
+                                <!-- <p-button *ngIf="invoiceHeader.idStatus==status.pending" visible icon="pi pi-search" (click)="AuthorizesDialogVisible=true"
+                                    [disabled]="PucharseOrderHeader.purchase.idStatus==statuspurchase.Elaborated || PucharseOrderHeader.purchase.idStatus==statuspurchase.Authorized || PucharseOrderHeader.purchase.idStatus==statuspurchase.Canceled || PucharseOrderHeader.purchase.idStatus==statuspurchase.Overdue "
+                                    class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button> -->
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-mb-2 p-md-3 p-lg-3 p-fluid">
+                            <label>Tipo de factura <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <!-- -->
+                            <p-dropdown [options]="typeFClist" appendTo="body"
+                                [disabled]="invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized || invoiceHeader.idStatus==status.reject"
+                                [(ngModel)]="this.invoiceHeader.idtypeFC" placeholder="Seleccione..."
+                                (keyup.enter)="Save()" (onChange)="changEdit()" [filter]="true" emptyFilterMessage="Sin resultados.">
+                            </p-dropdown>
+                            <small class="p-invalid"
+                                *ngIf="submitted && (this.invoiceHeader.idtypeFC==-1)">El Tipo de factura
+                                es
+                                requerida.</small>
+                        </div>
+                        <!-- [(ngModel)]="iDate" (onSelect)="onBlurMethod($event)"-->
+                        <div class="p-col-12 p-mb-2 p-md-3 p-lg-3  p-fluid" pTooltip="Fecha vencimiento" tooltipPosition="left"
+                            life="500">
+                            <label>Fecha de inicio</label>
+                            <p-calendar id="ToD" dateFormat="dd/mm/yy"
+                                [(ngModel)]="this.invoiceHeader.startDate" (keyup.enter)="Save()"
+                                readonlyInput="true" [showIcon]="true"
+                                [minDate]="this.dateexpired"
+                                [disabled]="true" 
+                                (onSelect)="changEditdate($event)">
+                            </p-calendar>
+                        </div>
+                        <div class="p-col-12 p-mb-2 p-md-3 p-lg-3  p-fluid" pTooltip="Fecha vencimiento" tooltipPosition="left"
+                        life="500">
+                        <label>Fecha de finalización</label>
+                        <p-calendar id="ToD" dateFormat="dd/mm/yy"
+                            [(ngModel)]="this.invoiceHeader.finalizeDate" (keyup.enter)="Save()"
+                            readonlyInput="true" [showIcon]="true"
+                            [minDate]="this.dateexpired"
+                            [disabled]="true" 
+                            (onSelect)="changEditdate($event)">
+                        </p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3 p-mb-2 p-fluid">
+                        <label>Número de factura</label>
+                        <input type="text" pInputText placeholder="Número de factura"
+                        (keyup.enter)="Save()" [(ngModel)]="invoiceHeader.numberInvoice" [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized">                                 
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3 p-mb-2 p-fluid">
+                        <label>Serie</label>
+                        <input type="text" pInputText placeholder="Serie"
+                        (keyup.enter)="Save()" [(ngModel)]="invoiceHeader.serieNumber" [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized">      
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3 p-mb-2 p-fluid">
+                        <label>Número de control</label>
+                        <input type="text" pInputText placeholder="Número de control"
+                        (keyup.enter)="Save()" [(ngModel)]="invoiceHeader.controlNumber" [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized">                           
+                    </div>
+
+                    <div class="p-col-12 p-md-12 p-lg-12 p-mb-2 p-fluid">
+                        <label>Número de validaciones de recepciones asociadas</label>
+                        <input type="text" pInputText placeholder="Número de validaciones"
+                        (keyup.enter)="Save()" [(ngModel)]="invoiceHeader.numberReceptions" [disabled]="true">                           
+                    </div>
+                    </div>
+                </p-card>
+            </div>
+    </div>
+    <!-- Proveedor-->
+    <div class="p-col-12 p-md-6 p-lg-4 p-fluid">
+            <div style="height: 100%;" class="p-grid pb-3">
+                <p-card header="Proveedor" styleClass="p-card-shadow" class="p-col-12 p-fluid fullheightcard">
+                    <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                        <div class="p-col-12 p-fluid p-mb-2">
+                            <label>Documento<span [ngStyle]="{'color':'red'}">*</span></label>
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText placeholder="Proveedor" disabled (keyup.enter)="Save()"
+                                    [(ngModel)]="this.suppliermodal.document">
+                                <p-button *ngIf="invoiceHeader.idStatus==status.pending" icon="pi pi-search" class="button-radius"
+                                    [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [ngStyle]="{'border-radius:': '4px 0px 0px 4px'}"
+                                    (click)="SupplierDialogVisible=true"
+                                    [disabled]="this.operatormodal.namesoperators==''"></p-button>
+                            </div>
+                            <small class="p-invalid"
+                                *ngIf="submitted && (!this.suppliermodal.document || !this.suppliermodal.document.trim())">El
+                                proveedor es
+                                requerido.</small>
+                        </div>
+                        <div class="p-col-12 p-mb-2">
+                            <label>Razón social</label>
+                            <div class="p-inputgroup">
+                                <span class="p-float-label">
+
+                                    <input disabled type="text" pInputText placeholder="Razón social"
+                                        [(ngModel)]="this.suppliermodal.socialReason" (keyup.enter)="Save()">
+                                    <!-- (click)="OperatorDialogVisible=true" -->
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-mb-2">
+                            <label>Contacto</label>
+                            <div class="p-inputgroup">
+                                <input type="text" pInputText placeholder="Contacto" (keyup.enter)="Save()" disabled
+                                    [(ngModel)]="this.contactmodal.contact">
+                                <p-button *ngIf="invoiceHeader.idStatus==status.pending" icon="pi pi-search" class="button-radius"
+                                    [ngStyle]="{'border-radius:': '4px 0px 0px 4px'}"
+                                    [disabled]="this.suppliermodal.socialReason=='' || invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized "
+                                    (click)="ContactDialogVisible=true"></p-button>
+                                <!-- (click)="OperatorDialogVisible=true" [(ngModel)]="this.operatormodal.namesoperators" -->
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-mb-2 p-fluid">
+                            <label for="active">Teléfono de contacto</label>
+
+                            <input type="text" pInputText disabled [(ngModel)]="this.contactmodal.number">
+                            <!-- <button type="button" style="background-color: white;color: black;" pButton pRipple icon="pi pi-times"
+                                  pTooltip="Borrar Teléfono"></button> -->
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12 p-mb-2 p-fluid">
+                            <label for="active">Dirección</label>
+                            <!-- [(ngModel)]="_supplierxprod.description" -->
+                            <textarea pInputTextarea rows="1" style="resize: none;" cols="30" pInputTextarea
+                                maxlength="100" disabled [(ngModel)]="this.suppliermodal.direction"></textarea>
+                        </div>
+                        <!-- [(ngModel)]="iDate" (onSelect)="onBlurMethod($event)"-->
+                    </div>
+                </p-card>
+            </div>
+    </div>
+
+
+    <!--  Negociacion y pago -->
+    <div class="p-col-12 p-md-6 p-lg-8 p-fluid">
+        <div class="card-body my-2">
+            <div class="p-grid pb-3">
+                <p-card header="Negociación de pago" styleClass="p-card-shadow" class="p-col-12 p-fluid fullheightcard">
+                    <div class="p-card-content" style="margin-bottom: -23px;">
+                        <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Condición de pago</label>
+                                <p-dropdown [options]="paymentConditionList"
+                                    [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.paymentConditionId"
+                                    (onChange)="searchPaymentCondition(this.invoiceHeader.paymentNegotiation.paymentConditionId, true)"
+                                    appendTo="body" (keyup.enter)="Save()" placeholder="Seleccione..."
+                                    emptyMessage="Sin resultados." [filter]="true" emptyFilterMessage="Sin resultados">
+                                </p-dropdown>
+                            </div>
+                            
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Tipo de descuento</label>
+                                <p-dropdown [options]="typeDiscountList"
+                                    [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.idDiscountType"
+                                    appendTo="body" (keyup.enter)="Save()" placeholder="Seleccione..."
+                                    emptyMessage="Sin resultados." [filter]="true" emptyFilterMessage="Sin resultados" [disabled]="true">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Descuento</label>
+                                <p-inputNumber
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.discount"
+                                    [disabled]="this.invoiceHeader.paymentNegotiation.paymentConditionId==-1 ||this.invoiceHeader.paymentNegotiation.paymentConditionId>=0 || invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+                                </p-inputNumber>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Plazo de pago(días)</label>
+                                <p-inputNumber
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.paymentDeadlinesDays"
+                                    [disabled]="this.invoiceHeader.paymentNegotiation.paymentConditionId==-1 || this.invoiceHeader.paymentNegotiation.paymentConditionId>=0 || invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [minFractionDigits]="0" mode="decimal" min="0" [maxFractionDigits]="0">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- [(ngModel)]="iDate" (onSelect)="onBlurMethod($event)"-->
+                            <!-- <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Tipo de negociación</label>
+                                <p-dropdown [options]="typeNegotiationList"
+                                    [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.negotiationTypeId"
+                                    emptyMessage="Sin resultados." appendTo="body" (keyup.enter)="Save()"
+                                    placeholder="Seleccione..." (onChange)="onChangeTypeNegotiation()">
+                                </p-dropdown>
+                            </div> -->
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Tipo moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <!-- -->
+                                <p-dropdown [options]="coinsTypesList"
+                                    [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.finalized"
+                                    (onChange)="GetCoins(this.invoiceHeader.paymentNegotiation. currencyTypeId, true)"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.currencyTypeId"
+                                    appendTo="body" emptyMessage="Sin resultados." (keyup.enter)="Save()"
+                                    placeholder="Seleccione...">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Moneda de pago <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <p-dropdown [options]="currencyListmon"
+                                    [disabled]="invoiceHeader.idStatus==status.reject ||invoiceHeader.idStatus==status.finalized || this.suppliermodal.id==-1 || invoiceHeader.idStatus==status.validated"
+                                    (onChange)="GetWayTopay(this.invoiceHeader.paymentNegotiation.paymentCurrencyId, true)"
+                                    appendTo="body" [(ngModel)]="this.invoiceHeader.paymentNegotiation.paymentCurrencyId"
+                                    (keyup.enter)="Save()" placeholder="Seleccione..." [filter]="true"
+                                    emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados.">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Forma de pago <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <p-dropdown [options]="waytopayList" appendTo="body"
+                                    [disabled]="invoiceHeader.idStatus==status.reject  || invoiceHeader.idStatus==status.finalized || this.suppliermodal.id==-1 || invoiceHeader.idStatus==status.validated"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.paymentMethod"
+                                    (keyup.enter)="Save()" placeholder="Seleccione..." emptyMessage="Sin resultados."
+                                    [filter]="true" emptyFilterMessage="Sin resultados"  (onChange)="changEdit()">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Tipo de tasa de pago <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <p-dropdown [options]="exchangetypeList"
+                                    [disabled]="this.invoiceHeader.paymentNegotiation.paymentCurrencyId==-1  || invoiceHeader.idStatus==status.reject|| invoiceHeader.idStatus==status.finalized || invoiceHeader.idStatus==status.validated"
+                                    (onChange)="searchExchangeRates(this.baseC, this.invoiceHeader.paymentNegotiation.paymentCurrencyId, this.invoiceHeader.paymentNegotiation.paymentRateTypeId, true, true)"
+                                    appendTo="body" [(ngModel)]="this.invoiceHeader.paymentNegotiation.paymentRateTypeId"
+                                    (keyup.enter)="Save()" placeholder="Seleccione..." emptyMessage="Sin resultados.">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid"
+                                *ngIf="this.invoiceHeader.paymentNegotiation.paymentRateTypeId==3">
+                                <label>Valor de tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <div class="p-fluid">
+                                    <div class="p-inputgroup">
+                                        <p-inputNumber [disabled]="true" [(ngModel)]="this.supplierRate.exchangeRate" [ngStyle]="{'width': '100%' }" 
+                                            [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+                                        </p-inputNumber>
+                                        <p-button icon="pi pi-plus"
+                                            *ngIf="(this.invoiceHeader.paymentNegotiation.paymentRateTypeId==3 && this.logueado==this.invoiceHeader.idResponsibleOperator && this.invoiceHeader.idStatus==status.pending)"
+                                            [disabled]="this.suppliermodal.id==-1" class="button-radius"
+                                            [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"
+                                            (click)="RateSupplierVisible=true"></p-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid"
+                                *ngIf="this.invoiceHeader.paymentNegotiation.paymentRateTypeId!=3">
+                                <label>Valor de tasa<span [ngStyle]="{'color':'red'}">*</span></label>
+                                <!-- [options]="typeDeliveryList"  -->
+                                <p-dropdown [options]="exchangeRateList"
+                                    [disabled]="invoiceHeader.idStatus==status.finalized|| invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.reject"
+                                    appendTo="body" (onChange)="ChangeTax()"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.exchangeRateId"
+                                    (keyup.enter)="Save()" placeholder="Seleccione..." emptyMessage="Sin resultados.">
+                                </p-dropdown>
+                                <!-- <small class="p-invalid" *ngIf="submitted && (this.PucharseOrderHeader.purchase.idexchangeRateSupplier==-1)">La tasa
+                                es requerida.</small> -->
+                            </div>
+
+                            <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                                <label>Tasa de cambio proveedor <span [ngStyle]="{'color':'red'}">*</span></label>
+                                <!-- <div class="p-inputgroup"> -->
+                                <p-inputNumber [disabled]="true"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.exchangeRateValue"
+                                    [minFractionDigits]="4" mode="decimal" min="0" [maxFractionDigits]="4">
+                                </p-inputNumber>
+                                <small class="p-invalid"
+                                    *ngIf="submitted && (this.invoiceHeader.paymentNegotiation.exchangeRateValue==0)">La
+                                    tasa
+                                    es requerida.</small>
+                            </div>
+                            <!-- p-col-12 p-md-6 p-lg-8 p-fluid -->
+                            <div class="p-col-12 p-md-6 p-lg-6 p-mb-2 p-fluid">
+                                <label for="active">Observación</label>
+                                <!-- [(ngModel)]="_supplierxprod.description" -->
+                                <textarea pInputTextarea rows="4" style="resize: none;"
+                                    [disabled]="invoiceHeader.idStatus==status.finalized || invoiceHeader.idStatus==status.validated || invoiceHeader.idStatus==status.reject"
+                                    [(ngModel)]="this.invoiceHeader.paymentNegotiation.observations" cols="20"
+                                    pInputTextarea maxlength="500"></textarea>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-6 p-mb-2 p-fluid">
+                                <label class="p-mr-4" for="binario">Revisión y aprobación del proveedor</label>
+                                <p-inputSwitch
+                                    [disabled]="invoiceHeader.idStatus!=status.finalized"
+                                    class="p-mr-4" [(ngModel)]="this.invoiceHeader.indAproved" (onChange)="changEdit()">
+                                </p-inputSwitch>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </p-card>
+
+            </div>
+        </div>
+    </div>
+    <!--Uso interno-->
+    <div class="p-col-12 p-fluid">
+        <div class="card-body my-2">
+            <div class="p-grid pb-3">
+                <p-card class="p-col-12 p-lg-12 p-fluid fullheightcard" header="Uso interno (base de cálculo)"
+                    styleClass="p-card-shadow">
+                    <div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+                        <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                            <label>Moneda conversión</label>
+                            <p-dropdown [options]="currencyList"
+                                [(ngModel)]="this.invoiceHeader.calculationBasis.exchangeConvCunrrencyId" appendTo="body"
+                                (keyup.enter)="Save()" placeholder="Moneda conversión" [disabled]="true"
+                                emptyMessage="Sin resultados.">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                            <label>Tipo de tasa de cambio</label>
+                            <p-dropdown [options]="exchangetypeList"
+                                [(ngModel)]="this.invoiceHeader.calculationBasis.exchangeRateTypeId" [disabled]="true"
+                                appendTo="body" (keyup.enter)="Save()" placeholder="Seleccione..."
+                                emptyMessage="Sin resultados.">
+                            </p-dropdown>
+                        </div>
+       
+                        <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                            <label>Tasa de cambio</label>
+                            <!-- <div class="p-inputgroup"> -->
+                            <!-- <p-inputNumber [disabled]="this.invoiceHeader.calculationBasis.exchangeRateTypeId!=3"
+                                [(ngModel)]="this.invoiceHeader.calculationBasis.exchangeRate" [minFractionDigits]="4"
+                                mode="decimal" min="0" [maxFractionDigits]="4">
+                            </p-inputNumber> -->
+                            <p-dropdown [options]="exchangeRateSystemList"
+                            [(ngModel)]="this.invoiceHeader.calculationBasis.exchangeRate" appendTo="body"
+                            (keyup.enter)="Save()" placeholder="Seleccione..." emptyMessage="Sin resultados."
+                            [disabled]="this.invoiceHeader.calculationBasis.exchangeRateTypeId!=3">
+                           </p-dropdown>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+                            <label class="p-mr-4" for="binario">Base de cálculo moneda base</label>
+                            <p-inputSwitch class="p-mr-4"
+                                [disabled]="invoiceHeader.idStatus==status.reject || invoiceHeader.idStatus==status.finalized || invoiceHeader.idStatus==status.validated"
+                                [(ngModel)]="this.basecalculate" (onChange)="changEditcalculation($event)" ></p-inputSwitch>
+                        </div>
+
+                    </div>
+                </p-card>
+            </div>
+        </div>
+    </div>
+</div>
+<app-modal-operator (onToggle)="onToggleOperator($event)" [operatormodal]="operatormodal"
+    [visible]="OperatorDialogVisible" [multiple]="false"></app-modal-operator>
+<app-modal-suppliergenerico (onToggle)="onToggleSupplier($event)" [suppliermodal]="suppliermodal"
+    (onsupplierchange)="changesupplier()" [visible]="SupplierDialogVisible" [multiple]="false">
+</app-modal-suppliergenerico>
+<app-modal-contact (onToggle)="onToggleContact($event)" [contactmodal]="contactmodal" [visible]="ContactDialogVisible"
+    [(ContactsupplierFilters)]="ContactsupplierFilters"></app-modal-contact>
+<app-supplier-rate (onToggle)="onToggleRate($event)" (onAssig)="onAssigRateSupplier()"
+    [RatesupplierFilters]="RatesupplierFilters" [visible]="RateSupplierVisible" [supplierRate]="supplierRate">
+</app-supplier-rate>
+<app-operator (onToggle)="onToggleAuthorizes($event)" [visible]="AuthorizesDialogVisible" [operator]="operator"
+    [multiple]="false"></app-operator>

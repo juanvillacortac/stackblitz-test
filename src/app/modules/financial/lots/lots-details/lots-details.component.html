@@ -1,0 +1,103 @@
+ 
+ 
+ <div class="p-m-0 p-pb-0 card">
+     
+        <h5>Lote</h5>
+      
+        <div class="p-fluid p-grid p-formgrid">
+              
+
+                <!-- <div class=" p-fluid p-col-12 p-md-6 p-lg-6">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input   readonly="true" [(ngModel)]="_data.lotName" name="name" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" id="name" type="text" maxlength="100" pInputText>
+                            <label>Número</label>
+                        </span>
+                    </div>
+                </div> -->
+
+
+                <div class="p-fluid p-col-12 p-md-6 p-lg-6 campos">
+                        <label for="name">Número de lote</label>
+                        <input id="float-input"  readonly="true" [(ngModel)]="_data.lotName" name="name" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" id="name" type="text" maxlength="100" pInputText>
+                 </div>
+
+                      
+
+                <div class=" p-fluid p-col-12 p-md-6 p-lg-6 campos">
+
+                                <label for="name" >Fecha de creación</label>
+                    
+                                <input  readonly="true" [ngModel]="datepipe.transform(_data.creationStartDate,'dd/MM/yyyy')" pInputText>
+                             
+
+                </div>
+
+    
+                            <div class=" p-fluid p-col-12 p-md-6 p-lg-6 campos">
+                                    <label for="active">Estado</label>
+                                      <p-dropdown readonly="true" name="cboactive" [options]="stateList" appendTo="body" [(ngModel)]="_data.indStatusLot" placeholder="Seleccione..."  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+                                          [class]="submitted &&  _data.indStatusLot == -1 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                                         <small class="p-invalid" *ngIf="submitted && _data.indStatusLot == -1">El modulo es requerido</small> 
+                                  </div>
+                      <div class=" p-fluid p-col-12 p-md-6 p-lg-6 campos">
+                         
+                        <label >Módulo</label>
+                          <p-dropdown  readonly="true"name="cboactive" [options]="moduleList" appendTo="body" [(ngModel)]="_data.idModule" placeholder="Seleccione..."  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+                              [class]="submitted &&  _data.idModule == -1 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                             <small class="p-invalid" *ngIf="submitted && _data.idModule == -1">El modulo es requerido</small>
+                 
+                            </div>
+
+
+                      <div class=" p-fluid p-col-12 p-md-6 p-lg-12 campos">
+                        <label for="name">Descripción </label>
+                        <textarea maxlength="255" [(ngModel)]="_data.description" [rows]="2" [cols]="30" (change)="editVal()" pInputTextarea autoResize="autoResize"></textarea>
+                         <!-- <small class="p-invalid" *ngIf="submitted && !isNan(_data.accountingAccountCategory.trim())">El nombre debe tener al menos una letra</small> -->
+                      </div>
+
+                      <div class=" p-fluid p-col-12 p-md-6 p-lg-4 campos">
+
+                        <p-checkbox [binary]="true"  (change)="editVal()"  label="Permite entrada" [(ngModel)]="_data.allowsEntry"></p-checkbox>
+                </div>
+
+
+               
+        </div>
+
+        
+        <div class="p-m-0 card">
+        <div style="text-align:right">
+            <button pButton type="button"  style="margin: .50rem" class=" p-ml-4 p-button-secondary" icon=" pi pi-arrow-left"  label="Regresar"
+            (click)="back()"></button>
+          <!-- <button pButton type="button" [disabled]="saving" style="margin-right: .50rem" class="p-button-danger p-ml-4" label="Limpiar" *ngIf="showItems" (click)="cancel()"></button> -->
+         
+          <button pButton style="margin: .50rem" type="button"  class="p-button-info p-mr-2"  (keyup.enter)="update()"  (click)="update()"  icon="pi pi-save" label="Guardar"></button>
+            
+                   
+            </div>
+        </div>
+ </div>
+ <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+ <!-- <div class="p-m-0 card">
+
+ <h5>Transacciones</h5>
+ <p-table [value]="transaciones">
+         <ng-template pTemplate="header">
+             <tr>
+                 <th>Cod. transacción</th>
+                 <th>Fecha</th>
+                 <th>Creado por</th>
+                 <th>Estado</th>
+             </tr>
+         </ng-template>
+         <ng-template pTemplate="body" let-transaciones>
+             <tr>
+                <td>{{transaciones.code}}</td>
+                 <td>{{transaciones.name}}</td>
+                 <td>{{transaciones.category}}</td>
+                 <td>{{transaciones.quantity}}</td>
+             </tr>
+         </ng-template>
+     </p-table> </div> -->

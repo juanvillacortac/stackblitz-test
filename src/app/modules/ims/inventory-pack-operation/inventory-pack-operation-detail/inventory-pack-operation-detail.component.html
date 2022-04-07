@@ -1,0 +1,224 @@
+<h2 class="p-m-0">{{title | translate}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card"> 
+            <app-product-detail-header 
+                [(productSelected)]="productSelected"  
+                [(currentExistence)]="currentExistence"
+                [(totalUnits)]="totalUnits">
+            </app-product-detail-header>
+            <hr/>
+            <br/>
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">{{'ims.pack_operation.operation_type' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown 
+                            [options]="operationTypeList" 
+                            id="operationTypes" 
+                            name="operationTypes" 
+                            #operationTypes="ngModel" 
+                            [showClear]="true" 
+                            optionLabel="label"
+                            [autoDisplayFirst]="false" 
+                            [(ngModel)]="operationTypeSelected"
+                            [disabled]="true"
+                            [class]="{'ng-dirty':(operationTypes.invalid && 
+                                                 (operationTypes.dirty || operationTypes.touched || submitted))}"  
+                            required >                      
+                        </p-dropdown>
+                </div>                  
+                <br/>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">{{'ims.pack_operation.operation_date' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-calendar 
+                            inputId="calendar"
+                            [(ngModel)]="finalDate"  
+                            readonlyInput="true"  
+                            [showIcon]="true"  
+                            [disabled]="true"
+                            type="text" 
+                            datePattern="dd/mm/yy" 
+                            dateFormat="dd/mm/yy" 
+                            id="calendar" 
+                            name="calendar" 
+                            #calendar="ngModel" 
+                            optionLabel="label"
+                            [class]="{'ng-dirty':(calendar.invalid && 
+                                                 (calendar.dirty || calendar.touched || submitted))}"  
+                            required >                      
+                        </p-calendar>
+                </div>  
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">{{'ims.pack_operation.operator' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <div class="p-inputgroup">
+                        <input 
+                            type="text" 
+                            pInputText 
+                            placeholder="{{ 'ims.inventory_adjustment_report.responsible' | translate }}" 
+                            [(ngModel)]="user" 
+                            readonly="true">
+                        <!-- <button icon="pi pi-search" pButton pRipple (click)="showOperatorModal()"></button>-->
+                    </div>
+                </div>
+                <div class="p-field p-col-12" [class]="{'p-lg-5': true}">
+                    <label for="dropdown">{{'ims.pack_operation.final_package' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown 
+                            [options]="packageTypeList.value" 
+                            id="packagetype" 
+                            name="packagetype" 
+                            #packagetype="ngModel" 
+                            [showClear]="true" 
+                            optionLabel="packagingPresentation.name"
+                            [autoDisplayFirst]="false" 
+                            [(ngModel)]="packageTypeSelected"
+                            (onChange)="onPackageTypeSelected()" 
+                            [disabled]="!isRepack"
+                            [class]="{'ng-dirty':(!isValidatePackageTypeSelected && (packageSaved))}"  required >     
+                                <ng-template let-item pTemplate="item">
+                                    {{item.packagingPresentation.name }} - {{item.units |number:'1.2-2'}}
+                                </ng-template> 
+                                <ng-template let-item pTemplate="selectedItem">
+                                    {{item.packagingPresentation.name }} - {{item.units |number:'1.2-2'}}
+                                </ng-template>            
+                        </p-dropdown>
+                        <div *ngIf="!isValidatePackageTypeSelected && packageSaved"
+                          class="p-invalid">
+                                {{'ims.pack_operation.package_type_validation' | translate }}.
+                        </div>     
+                </div>                  
+                <div class="p-field p-col-12" [class]="{'p-lg-5': true}">                
+                    <label for="input">{{ qtyLabel | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <br/>
+                        <p-inputNumber 
+                            id="qtys" 
+                            name="qtys" 
+                            #qtys="ngModel" 
+                            [(ngModel)]="qty"    
+                            mode="decimal"  
+                            [minFractionDigits]="0" 
+                            [maxFractionDigits]="0"  
+                            [showButtons]="true"  
+                            suffix="" 
+                            [min]="0" 
+                            [max]="qtyMax" 
+                            [step]="1"
+                            [ngClass]="{'ng-dirty':  ((!isValidatedQty || getExistence() <= 0) && (packageSaved)),
+                                        'ng-invalid':((!isValidatedQty || getExistence() <= 0) && (packageSaved))}"
+                                
+                            (keyup.enter)="addPackages()"
+                            required>
+                        </p-inputNumber>   
+                        <div *ngIf="!isValidatedQty && (packageSaved)"
+                        class="p-invalid">
+                        {{'ims.pack_operation.qty_validation' | translate }}.
+                        </div>   
+                        <ng-container  *ngIf="getExistence() <= 0">  
+                            <div class="p-invalid">
+                                <span> {{'ims.pack_operation.non_existence' | translate }}.</span>
+                            </div> 
+                        </ng-container> 
+                </div>
+                <ng-container >
+                    <div class="p-field p-col-2" style="align-self: self-end;">   
+                        <label for="button"></label>
+                        <br/>        
+                        <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success" pTooltip="{{'ims.pack_operation.add_package' | translate }}" (click)="addPackages()"></button>                           
+                        <div *ngIf="((!isValidatePackageTypeSelected || !isValidatedQty) && (packageSaved) ) || getExistence() <= 0"
+                        class="p-invalid">
+                        <!-- <br *ngIf="((!isValidatePackageTypeSelected || !isValidatedQty) && (packageSaved) )"/> -->
+                        <br *ngIf="((!isValidatePackageTypeSelected || !isValidatedQty) && (packageSaved))"/>
+                        <br *ngIf="((!isValidatePackageTypeSelected  && (packageSaved)) || getExistence() <= 0)"/>
+                        </div>   
+                    </div>
+                </ng-container>
+            
+                <ng-container>
+                    <div class="p-fluid p-grid p-formgrid">
+                        <div class="card p-m-0">
+                            <p-table 
+                                [value]="packagesDetailsShowing" 
+                                [rowHover]="true" 
+                                [paginator]="false" 
+                                [scrollable]="true"
+                                scrollHeight="200px"
+                                [showCurrentPageReport]="false" 
+                                [rows]="1" 
+                                currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <ng-container *ngFor="let col of cols">  
+                                            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'width.px': col.field ==='edit' ? 50: 120 }"  
+                                            pTooltip="{{col.tooltip | translate }}"
+                                            [pSortableColumn]="col.field">
+                                                {{col.header | translate }}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-pack>
+                                    <tr>
+                                        <ng-container *ngFor="let col of cols">
+                                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'width.px': col.field ==='edit' ? 50: 120 }" >   
+                                                    <div *ngIf="col.dataType === 'number'; else textCell">
+                                                        {{(pack[col.field])|number:'1.2-2'}}
+                                                    </div>
+                                                <ng-template #textCell>
+                                                    <div *ngIf="col.field !== 'edit'; else editCell">
+                                                        {{pack[col.field]}}
+                                                    </div>
+                                                </ng-template>
+                                                            
+                                                <ng-template #editCell  >
+                                                    <ng-container >
+                                                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="{{'delete' | translate }}" (click)="removePackage(pack)"></button>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </td>
+                                        </ng-container>             
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div class="p-grid">
+                                        <div class="p-col-6"> 
+                                            {{'ims.pack_operation.package_qty' | translate }}:
+                                        <span  class="status-badge">{{ getTotalQty()|number:'1.2-2'}} </span>
+                                        </div>
+                                        <div class="p-col-6">
+                                            {{'ims.pack_operation.units_totals' | translate }}:
+                                            <span  class="status-badge">{{ getTotalUnitsResult()|number:'1.2-2'}} </span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+        
+                    <div *ngIf="(!isProductAdded && submitted)" class="card">   
+                        <div class="p-invalid">
+                            <span>{{'ims.pack_operation.package_validation' | translate }}.</span>
+                        </div> 
+                    </div> 
+                </ng-container>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input"> {{'ims.pack_operation.observation' | translate }} </label>
+                    <textarea rows="5" cols="30" maxlength="220" [(ngModel)]="observation" pInputTextarea ></textarea>
+                </div>  
+            </div>
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span class="p-invalid">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2"(click)="onSave()" label="Guardar"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<operator-modal-list [showDialog]="showOperatorDialog" 
+    (onSubmit)="onSubmitOperator($event)" 
+    (onToggle)="onHideOperator($event)" 
+    [multiples]="false">
+</operator-modal-list>

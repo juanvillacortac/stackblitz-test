@@ -1,0 +1,58 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow-y': 'unset'}" [baseZIndex]="1000">
+  <div class="p-grid" style="height: 30px;">
+    <div class="p-col-11" style="margin-top: 5px;">
+        <h5>Afección médica</h5>
+    </div>
+    <div class="p-col-1">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+    </div>
+  </div>    
+    <hr />
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12" style="display: none;">
+            <input type="number" [(ngModel)]="record.idMedicalCondition">
+            <input type="number" [(ngModel)]="record.idLaborRelationship">
+            <input type="number" [(ngModel)]="record.idEmployee">
+            <input type="text" [(ngModel)]="record.observation">
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12">Tipo de patología<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12">
+              <p-dropdown [options]="_patologyTypeDropdown" [(ngModel)]="record.idPatologyType" placeholder="Seleccione..." (onChange)="updatePatology()" [class]="submitted && record.idPatologyType == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.idPatologyType == -1"> El tipo de patología es requerido</small>
+            </div>
+          </div>
+      
+          <div class="p-field p-grid p-col-12">
+            <label for="active" class="p-col-12">Patología<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-col-12">
+              <p-dropdown [options]="_patologyDropdown" [(ngModel)]="record.idPatology" placeholder="Seleccione..." [class]="submitted && record.idPatology == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" emptyMessage="Sin resultados."></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.idPatology == -1"> La patología es requerida</small>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="icon">Fecha de diagnóstico<span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-calendar id="calendar" yearRange="1970:2030" [(ngModel)]="startDate" dateFormat="dd/mm/yy" readonlyInput="true" 
+                [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" (onSelect)="dateSelected()" 
+                [class]="submitted && startDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" overlay="" [maxDate]="testDate">
+              </p-calendar>
+              <small class="p-invalid" *ngIf="submitted && startDateText != ''">{{startDateText}}</small>
+            </div>
+          </div>
+      
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-sidebar>

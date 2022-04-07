@@ -1,0 +1,36 @@
+:host ::ng-deep {  
+    .p-menu .p-menuitem-link{
+        height: 5rem;
+    }
+
+    .p-menu{
+        width: 100%;
+    }
+
+    body .p-menu .p-menu-list > .p-submenu-header {
+        display: none;
+    }
+    body .p-menu .p-menuitem.p-menuitem-active > .p-menuitem-link {
+        background-color: blue;
+    }
+
+    .p-menu.p-component.p-menu-overlay{
+        left: 130px!important;
+    }
+
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link{
+        border-color: #eceff4 #eceff4 #dee2e6 #eceff4;
+        background: #eceff4;
+    }
+
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link{
+        background: #eceff4cc;
+        border-color: #1c1d1e94  #1c1d1e94  #1c1d1e94  #1c1d1e94  !important;
+        color: #495057 !important;
+        border-style: solid;
+    }
+
+    
+
+
+}

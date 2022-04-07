@@ -1,0 +1,86 @@
+.custom-marker {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.custom-filled-marker {
+  border: 2px solid #076abb;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  background-color: white;
+  align-self: baseline;
+  display: flex;
+}
+
+
+::ng-deep {
+
+  .customized-timeline {
+
+    .p-timeline-event-connector {
+      background-color: #368e2c ;
+    }
+}
+
+  .p-timeline-event-content,
+  .p-timeline-event-opposite {
+    padding: 1rem 0 !important;
+    line-height: 1 !important;
+  }
+  .p-timeline-event-marker {
+    border: 2px solid #2196F3;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    align-self: baseline;
+    display: flex;
+  }
+  .p-timeline-event-separator {
+    align-items: center;
+    display: flex;
+    flex: 0;
+  }
+
+  .p-timeline-vertical {
+    flex-direction: column;
+  }
+
+  .p-timeline-horizontal  {
+    flex-direction: row;
+  }
+
+  .p-timeline.p-timeline-vertical 
+  .p-timeline-event-connector {
+    width: 2px;
+    background-color: #dee2e6;
+  }
+  .p-timeline.p-timeline-horizontal 
+  .p-timeline-event-connector {
+    height: 2px;
+    width: 0% !important;
+    background-color: #dee2e6;
+  }
+}
+
+.btn-right {
+  float: right;
+}
+
+.position-icon-right .ui-button-icon-primary {
+  left: auto;
+  right: 0.5em;
+}
+
+::ng-deep {
+  .p-inputnumber-input {
+    width: 8rem !important;
+  }
+}

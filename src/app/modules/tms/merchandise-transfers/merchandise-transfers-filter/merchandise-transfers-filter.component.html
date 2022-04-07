@@ -1,0 +1,61 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.transferNumber" name="name" id="name" type="text" pInputText  maxlength="50" (keyup.enter)="search()">
+                <label>Número de transferencia</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="transferTypeList" [(ngModel)]="filters.transferTypeId" appendTo="body" (keyup.enter)="search()" placeholder="Tipo de transferencia" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="branchOfficeList" [(ngModel)]="filters.originBranchId" appendTo="body" (keyup.enter)="search()" [filter]="true" placeholder="Sucursal origen" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="branchOfficeList" [(ngModel)]="filters.destinationBranchId" appendTo="body" (keyup.enter)="search()" [filter]="true" placeholder="Sucursal destino" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="useTypeList" [(ngModel)]="filters.useTypeId" appendTo="body" (keyup.enter)="search()" [filter]="true" placeholder="Tipo de uso" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="useTypeList" [(ngModel)]="filters.useTypeId" appendTo="body" [(ngModel)]="filters.originTypeId" placeholder="Tipo de uso" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div> -->
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="statusList" [(ngModel)]="filters.statusId" appendTo="body" placeholder="Estatus" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <span class="p-float-label" style="display: block;">
+                <p-calendar [(ngModel)]="filters.startDate" [monthNavigator]="true" [yearNavigator]="true" (keyup.enter)="search()" dateFormat="dd/mm/yy" yearRange="2000:2030" inputId="navigators"></p-calendar>
+                <label for="navigators">Fecha inicio</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <span class="p-float-label" style="display: block;">
+                <p-calendar [(ngModel)]="filters.endDate" [monthNavigator]="true" [yearNavigator]="true" (keyup.enter)="search()" dateFormat="dd/mm/yy" yearRange="2000:2030" inputId="navigators"></p-calendar>
+                <label for="navigators">Fecha fin</label>
+            </span>
+        </div>
+    </div>
+    
+    
+    <div class="p-col-12 p-md-12 p-lg-12 p-jc-end" style="text-align: right;">
+        <p-splitButton *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_TRANSFER_PERMISSION_ID)" label="Nuevo" icon="pi pi-check" class="p-mr-2" (onClick)="openNew()" [model]="items"></p-splitButton>
+        <button pButton pRipple label="Buscar" [disabled]="loading" icon="pi pi-search" class="p-button-info p-mr-2" (click)="search()"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" icon="pi pi-ban" class="p-button-secondary p-mr-2" (click)="clearFilters()"></button>
+    </div>
+</div>
+
+<app-merchandise-purchases-selection-modal [(showDialog)]="showDialogMerchandisePurchase"></app-merchandise-purchases-selection-modal>
+<app-merchandise-request-selection-modal [(showDialog)]="showDialogMerchandiseRequest"></app-merchandise-request-selection-modal>

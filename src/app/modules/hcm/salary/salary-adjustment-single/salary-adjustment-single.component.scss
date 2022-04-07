@@ -1,0 +1,44 @@
+:host ::ng-deep {
+
+    @media screen and (max-width: 767px){
+       
+        .p-field{
+            margin-bottom: 2rem;
+        }
+    }
+    h6 {
+        font-size: 1.5rem;
+        color: #5e81ac;
+        font-weight: 700;
+        margin-bottom: 0.5rem
+    }
+
+    #personalFont {
+        font-size: 22px;
+        color: #000;
+        font-weight: 700;
+        margin-bottom: -0.75rem !important;
+        margin-left: 0.5rem
+    }
+
+    #personalFontSub {
+        font-size: 20px;
+        color: #6c757d;
+        font-weight: 700;
+        margin-bottom: -0.75rem !important;
+        margin-left: 0.5rem
+    }
+
+    #personalFontID {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: -0.75rem !important;
+        margin-left: 0.5rem
+    }
+
+    #miniCardDatos {
+        border-left: 4px solid;
+        border-left-color: #17a2b8;
+      }
+}

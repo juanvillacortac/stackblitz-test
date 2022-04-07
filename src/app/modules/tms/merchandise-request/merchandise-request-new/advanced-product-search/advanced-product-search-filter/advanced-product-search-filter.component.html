@@ -1,0 +1,84 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+    <div class="p-col-12 p-md-4 p-lg-3">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input [(ngModel)]="filters.barcode" type="text" pInputText numbersOnly maxlength="20" (keyup.enter)="search()">
+          <label>Barra</label>
+        </span>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input [(ngModel)]="filters.name" type="text" pInputText noneSpecialCharacters maxlength="50"
+            (keyup.enter)="search()">
+          <label>Nombre producto</label>
+        </span>
+      </div>
+    </div>
+   
+    <div class="p-col-12 p-md-4 p-lg-3">
+      <div class="p-inputgroup">
+        <span class="p-float-label">
+          <input [(ngModel)]="filters.internalRef" type="text" pInputText maxlength="50" (keyup.enter)="search()"
+            [pKeyFilter]="valid">
+          <label>Referencia interna</label>
+        </span>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <div class="p-inputgroup">
+          <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="search()" disabled [ngStyle]="{'border-radius': '4px 0px 0px 4px;'}">
+          <p-button icon="pi pi-search" class="button-radius" (click)="op.toggle($event)"></p-button>
+      </div>
+      <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '450px'}">
+          <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+              <ng-template pTemplate="caption">
+                  <div class="p-d-flex">
+                      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                          <i class="pi pi-search"></i>
+                          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                      </span>
+                  </div>
+              </ng-template>
+              <ng-template pTemplate="header" let-columns>
+                  
+                  <tr>
+                      <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                          {{col.header}}
+                      </th>
+                      <th></th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                  <tr>
+                      <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                          <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                          <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)"></p-treeTableCheckbox>
+                          <ng-template #textCell>
+                              {{rowData[col.field]}}
+                          </ng-template>
+                          <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-treeTable>
+      </p-overlayPanel>
+  </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="existencelist" appendTo="body" [(ngModel)]="filters.existence" placeholder="Existencia" (keyup.enter)="search()">
+        </p-dropdown>
+    </div>
+    
+    <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+      <p-dropdown [options]="configurationList" appendTo="body" [(ngModel)]="filters.idconfiguration" placeholder="Pesado"
+        (keyup.enter)="search()">
+      </p-dropdown>
+    </div> -->
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-jc-end" style="text-align: right;">
+      <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+        class="btn p-button-info p-mr-2"></button>
+      <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+        class="btn p-button-secondary p-mr-2"></button>
+    </div>
+  </div>

@@ -1,0 +1,90 @@
+  <p-dialog header="Aplicación contable" (onHide)="outForm()" [(visible)]="showPanel" [blockScroll]="true" [style]="{width: '50vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+
+    <div class="card">
+      <div class="p-fluid p-grid p-formgrid">
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-md-6 p-lg-5">Empresa</label>
+          <div class="p-col-12 p-md-6 p-lg-5 p-p-0" >
+            <input type="text" style="font-weight: bolder;" pInputText [(ngModel)]="name" [disabled]="true" />
+          </div>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-md-6 p-lg-5">Secuencia</label>
+          <div class="p-col-12 p-md-6 p-lg-5 p-p-0" >
+            <input type="text" pInputText [(ngModel)]="record.sequence" [disabled]="true" />
+          </div>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-md-6 p-lg-5">Tipo de cuenta<span [ngStyle]="{'color':'red'}">*</span></label>
+          <p-dropdown [options]="accountType" class="p-col-12 p-md-6 p-lg-5 p-p-0" [(ngModel)]="accountTypeOption" placeholder="Seleccione..." optionLabel="name" 
+          (onChange)="accountTypeChange($event)" [class]="submitted && accountTypeOption == null ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && accountTypeOption == null">El tipo de cuenta es requerido</small>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-md-6 p-lg-5" style="font-weight: bolder;">Cuenta</label>
+        </div>
+    
+        <div class="p-field p-grid p-col-12">
+          <p-table [value]="accountingTemplateDetailList">
+            <ng-template pTemplate="header">
+              <tr>
+                  <th>Ordinal</th>
+                  <th>Tipo</th>
+                  <th>Identificador</th>
+                  <th>Aplica</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-accountingTemplateDetailList let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{accountingTemplateDetailList.ordinal}}</td>
+                    <td>{{accountingTemplateDetailList.description}}</td>
+                    <td *ngIf="blockArray[accountingTemplateDetailList.ordinal] == '$$'">
+                      <p-dropdown [options]="accountListDropdown" [(ngModel)]="accountOption" placeholder="Seleccione..." (onChange)="valueAssigned(accountOption)" 
+                      [disabled]="accountingTemplateDetailList.idOmit == false" [class]="submitted && accountOption == -1 &&  accountingTemplateDetailList.idOmit == true? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                      
+                    </td>
+                    <td *ngIf="blockArray[accountingTemplateDetailList.ordinal] == '##'">
+                      <p-dropdown [options]="auxListDropdown" [(ngModel)]="auxOption" placeholder="Seleccione..."  (onChange)="auxAssigned(accountOption, auxOption)" 
+                      [disabled]="accountOption == null || accountOption == -1 || accountingTemplateDetailList.idOmit == false" [class]="submitted && auxOption == -1 &&  accountingTemplateDetailList.idOmit == true? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                    </td>
+                    <td *ngIf="blockArray[accountingTemplateDetailList.ordinal] == ''">
+                      <input pInputText [(ngModel)]="accountingTemplateDetailList.assignedValue" maxlength="30" [disabled]="accountingTemplateDetailList.idOmit == false" (input)="updateSegmentInput(accountingTemplateDetailList)" 
+                      [class]="submitted &&  accountingTemplateDetailList.idOmit == true && (accountingTemplateDetailList.assignedValue == '' || accountingTemplateDetailList.assignedValue == null)? 'ng-dirty ng-invalid' : ''">
+                    </td>
+                    <td *ngIf="blockArray[accountingTemplateDetailList.ordinal] == '**'">
+                      <input pInputText [(ngModel)]="accountingTemplateDetailList.assignedValue" maxlength="3" (keypress)="_validations.keyPressOnlyNumbers($event)" [disabled]="accountingTemplateDetailList.idOmit == false" (input)="updateSegmentInput(accountingTemplateDetailList)"
+                      [class]="submitted &&  accountingTemplateDetailList.idOmit == true && (accountingTemplateDetailList.assignedValue == '' || accountingTemplateDetailList.assignedValue == null)? 'ng-dirty ng-invalid' : ''">
+                    </td>
+                    <td *ngIf="blockArray[accountingTemplateDetailList.ordinal] != '$$' && blockArray[accountingTemplateDetailList.ordinal] != '##' && blockArray[accountingTemplateDetailList.ordinal] != '**' && blockArray[accountingTemplateDetailList.ordinal] != ''">
+                      {{accountingTemplateDetailList.assignedValue}}
+                    </td>
+                    <td><p-checkbox [binary]="true" [(ngModel)]="accountingTemplateDetailList.idOmit" (onChange)="evaluateCheckBox(rowIndex)"></p-checkbox></td>
+                </tr>
+            </ng-template>
+          </p-table>
+          
+        </div>
+        <div class="p-field p-grid p-col-12 stringCount">
+          <h5 style="text-align: center; width: 100%;">{{record.stringCount}}</h5>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <label for="active" class="p-col-12 p-md-6 p-lg-5">Porcentaje de aplicación<span [ngStyle]="{'color':'red'}">*</span></label>
+          <div class="p-col-12 p-md-6 p-lg-5 p-p-0"> 
+            <p-inputNumber mode="decimal" class="p-col-12 p-p-0" [(ngModel)]="record.implementationRate" [minFractionDigits]="2" [maxFractionDigits]="2" 
+            maxlength="6" [min]="0" [max]="100" [class]="submitted && record.implementationRate <= 0 ? 'ng-dirty ng-invalid' : ''"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted && record.implementationRate <= 0">El porcentaje de aplicación es requerido</small>
+          </div>
+        </div>
+        <div class="p-field p-col-12">
+          <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+        </div>
+        <div class="p-field p-grid p-col-12">
+          <div class="p-col-12">
+            <button pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+
+  

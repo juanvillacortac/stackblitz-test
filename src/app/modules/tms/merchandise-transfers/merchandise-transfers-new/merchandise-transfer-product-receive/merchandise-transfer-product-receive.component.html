@@ -1,0 +1,90 @@
+<div class="card p-shadow-4">
+  <p-card [style]="{'width': '100%', 'margin-bottom': '0.5em'}" styleClass="p-shadow-0" header="Producto">
+    <div class="p-grid p-align-center vertical-container p-p-3">
+      <div class="p-col-12 p-md-12 p-lg-12">
+        <div class="p-grid">
+          <div class="p-col-12 p-md-4">
+            <img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" width="75"
+              class="p-shadow-4 imgcatalog" />
+          </div>
+          <div class="p-col-12 p-md-8">
+            <h6 style="margin: 0;">{{product != undefined ? product.product.name : "Producto"}}</h6>
+            <h6 style="margin: 0;">{{product != undefined ? product.product.barcode : ""}}</h6>
+            <h6 style="margin: 0;">{{product != undefined ? product.product.referent : ""}}</h6>
+            <h6 style="margin: 0;">
+              {{product != undefined && product.product.category != null ? product.product.category.name : ""}}</h6>
+          </div>
+          <div class="p-col-12 p-md-12">
+            <div class="p-grid">
+              <div class="p-col-12 p-md-6 p-fluid">
+                <h6 style="margin: 0;">Base </h6>
+                <hr style="margin-top: 0px">
+                <h6 style="margin: 10px 0 0 0;">Costo: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.baseCost" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                <h6 style="margin: 10px 0 0 0;">Costo neto: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.baseNetCost" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                <h6 style="margin: 10px 0 0 0;">Costo neto venta: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.netSellingCostBase" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <div class="p-col-12 p-md-6 p-fluid">
+                <h6 style="margin: 0;">Conversión </h6>
+                <hr style="margin-top: 0px">
+                <h6 style="margin: 10px 0 0 0;">Costo: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.conversionCost" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                <h6 style="margin: 10px 0 0 0;">Costo neto: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.conversionNetCost" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+                <h6 style="margin: 10px 0 0 0;">Costo neto venta: </h6>
+                <p-inputNumber [disabled]="true" [(ngModel)]="product.netSellingCostConversion" maxlength="5" [minFractionDigits]="2" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <div class="p-col-12 p-md-12 p-fluid"
+                *ngIf="merchandiseBranchTransfer.status.id == statusTransfer.RECEIVED">
+                <h6 style="margin: 10px 0 0 0;">Factor venta: </h6>
+                <p-inputNumber [(ngModel)]="product.sellingFactor" maxlength="5" (focusout)="calculate(1)" [minFractionDigits]="2" mode="decimal" [min]="validationFactor.minFactor"  [max]="validationFactor.maxFactor" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <div class="p-col-12 p-md-12 p-fluid"
+                *ngIf="merchandiseBranchTransfer.status.id == statusTransfer.RECEIVED">
+                <h6 style="margin: 10px 0 0 0;">PVP base: </h6>
+                <p-inputNumber [(ngModel)]="product.basePVP" [minFractionDigits]="2" (focusout)="calculate(2)" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <div class="p-col-12 p-md-12 p-fluid"
+                *ngIf="merchandiseBranchTransfer.status.id == statusTransfer.RECEIVED">
+                <h6 style="margin: 10px 0 0 0;">PVP conversión: </h6>
+                <p-inputNumber [(ngModel)]="product.conversionPVP" [minFractionDigits]="2" (focusout)="calculate(3)" mode="decimal" min="0" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <!-- <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                <label>Detalle tipo de uso <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown appendTo="body" [options]="detailUseTypeList"
+                  [(ngModel)]="productMerchandiseTransfer.detailUseType.id" placeholder="Seleccione..."
+                  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                </p-dropdown>
+                <small class="p-invalid"
+                  *ngIf="submittedAdd && (productMerchandiseTransfer == undefined || productMerchandiseTransfer.detailUseType.id == -1)">El
+                  detalle tipo de uso es requerido</small>
+              </div>-->
+              <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2"
+              *ngIf="merchandiseBranchTransfer.status.id == statusTransfer.SENT">
+                <label>Cantidad a recibir <span [ngStyle]="{'color':'red'}">*</span></label>
+                <input name="barCode" id="barCode" type="number" *ngIf="product.product.heavyInd" [(ngModel)]="receivedAmount"
+                  pInputText maxlength="100" min="0">
+                <input name="barCode" id="barCode" type="number" pKeyFilter="int"
+                  [(ngModel)]="receivedAmount" *ngIf="!product.product.heavyInd" pInputText
+                  maxlength="100" min="0">
+               <!--  <small class="p-invalid"
+                  *ngIf="submittedAdd && (productMerchandiseTransfer == undefined || productMerchandiseTransfer.receivedAmount <= 0)">La
+                  cantidad a recibir debe ser mayor a 0</small> -->
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <small [ngStyle]="{'color':'red'}">(*) Campos obligatorios</small>
+              </div>
+              <div class="p-col-12 p-md-12 p-lg-12 p-mt-4" style="text-align: right;">
+
+                <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success p-mr-2"
+                  (click)="saveproduct()"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

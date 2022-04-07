@@ -1,0 +1,59 @@
+
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false"
+[showCloseIcon]="!saving" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Sueldo</h5>
+    <hr />
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+         
+            <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="_data.id >0" >
+              <label for="name">Código </label>
+              <input  [disabled]="true" id="float-input" [ngModel]="_data.id" type="text" pInputText
+                 maxlength="9" [class]="submitted && (_data.id !=-1) ? '' : ''">
+             
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="name">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input id="float-input" [(ngModel)]="_data.name" type="text" pInputText
+               (input)="_validations.toCapitalizeSimbology($event)" [pKeyFilter]="noneSpecialCharacters"  maxlength="35" [class]="this.nomString || submitted && (!_data.name || !_data.name.trim()) ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()">
+               <small class="p-invalid" *ngIf="this.nomString || submitted && (!_data.name|| !_data.name.trim())">La descripción es requerida</small>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <div class="p-col-12">
+                        <p-checkbox [(ngModel)]="_data.salaryCharacter" binary="true" inputId="binary" (keyup.enter)="save()"></p-checkbox>
+                        <label for="active">   Indicador salarial</label>
+                    </div>
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <div class="p-col-12">
+                        <p-checkbox [(ngModel)]="_data.required" binary="true" inputId="binary" (keyup.enter)="save()"></p-checkbox>
+                        <label for="active">   Indicador obligatorio</label>
+                    </div>
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="active">Moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown name="cboCurrencies" [options]="cboCurrencies"  [(ngModel)]="_data.currency" placeholder="Moneda"
+                     (keyup.enter)="save()"></p-dropdown>
+              </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown name="cboactive3" [options]="statuslist"  [(ngModel)]="_data.active" placeholder="Estatus"
+                  [disabled]="_data.id <= 0" (keyup.enter)="save()"></p-dropdown>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+             
+              <button [disabled]="saving" pButton pRipple label="Guardar" (keyup.enter)="save()" (click)="save()" icon="pi pi-save"
+                class="p-button-info p-mr-2">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-sidebar>

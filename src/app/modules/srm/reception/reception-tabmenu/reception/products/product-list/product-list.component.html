@@ -1,0 +1,550 @@
+<div class="p-grid area-padding">
+
+  <div class="card-body my-2 p-col-12 p-sm-8 p-md-8 p-lg-8" #product>
+    <div class="p-grid">
+      <p-card styleClass="p-card-shadow" id="tableproduct" class="p-col-12 p-sm-12 p-md-12 p-lg-12 fullheightcard">
+        <!-- <h4>{{ 'srm.reception.reception_products.reception_product' | translate }}</h4> -->
+        <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+          <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row p-mb-2">
+            <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dtsl.filterGlobal($event.target.value, 'contains')"
+                placeholder="Buscar" />
+            </span>
+            <div class="p-grid p-col-12 p-sm-12 p-md-12 p-lg-12  p-mt-0 p-g-end" *ngIf="allowAddNew()">
+              <button #btn type="button" pButton icon="pi pi-plus"
+                class="p-button-success p-mr-2" pTooltip="Nuevo" (click)="clearmodel()"></button>
+              <!-- <button #btns *ngIf="!this.isChieldReception" type="button" pButton icon="pi pi-refresh"
+                class="p-button-success p-mr-2" pTooltip="Sincronizar"></button> -->
+            </div>
+          </div>
+        </div>
+        <p-table #dtsl [columns]="displayedColumns" [value]="_detailproducts" [scrollable]="true" [paginator]="true"
+          [rows]="10" [showCurrentPageReport]="true" dataKey="productId" [scrollHeight]="innerHeight +'px'"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-responsive-demo">
+          <ng-template pTemplate="caption">
+
+            <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+              id="multiselectstyle" selectedItemsLabel="{0} columnas seleccionadas" class="no-min-width"
+              [style]="{minWidth: '223px', width:'120px'}" placeholder="Elija las columnas"></p-multiSelect>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:5rem"></th>
+              <ng-container *ngFor="let col of columns">
+                <th
+                  [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'120px','font-size':'small'}"
+                  [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+              <th style="width: 5rem;"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-order let-columns="columns" let-expanded="expanded">
+            <tr>
+              <td style="width:5rem">
+                <button type="button" pButton pRipple [pRowToggler]="order"
+                  class="p-button-text p-button-rounded p-button-plain"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <!-- <button (click)="removeselected(order)" pButton pRipple icon="pi pi-times"
+                class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"></button> -->
+              </td>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':'120px' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <div class="container-imgtable" *ngIf="col.field =='image'; else text">
+                    <img [src]="order.image == null || order.image == ''  ?  defectImage.defectImage : order.image"
+                      [alt]="order.product" class="p-shadow-4 imgcatalog" />
+                  </div>
+                  <ng-template #text>
+                    <span>{{col.template(order)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+              <td style="width:5rem">
+                <button #btn type="button"
+                  *ngIf="!isChieldReception && order.productId >0 && order.purchaseReception.diferencesUnits!=0 && (this.reception.estatus <= statusreception.started)&&this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.reception.receivingOperator.id"
+                  pButton icon="pi pi-plus" class="p-button-rounded p-ml-2 p-button-secondary p-mr-2"
+                  pTooltip="agregar diferencia" (click)="showmodalDiferences(order)"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-order>
+            <tr>
+              <td colspan="10">
+                <div class="p-p-3">
+                  <p-table #dtspd [columns]="displayedColumnsDetail" [showCurrentPageReport]="true" [scrollable]="true"
+                    editMode="row" styleClass="p-datatable-sm p-datatable-responsive-demo" [value]="order.packaging"
+                    dataKey="packingId" selectionMode="single" [(selection)]="selecteditem"
+                    (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '180px' }"
+                  [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-orders let-columns="columns" let-rowIndex="rowIndex">
+            <tr [pSelectableRow]="orders">
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': '180px' }">
+                  <span class="p-column-title">{{col.header}}</span>
+                  <div class="p-inputgroup" *ngIf="col.field =='sellingFactor'; else textcell">
+                  </div>
+                  <ng-template #textcell>
+                    <span>{{col.template(orders)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6">No existen resultados.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+    </ng-template>
+    </p-table>
+    </p-card>
+  </div>
+  <div class="p-grid" *ngIf="!isChieldReception">
+
+    <p-card *ngIf="!isChieldReception" styleClass="p-card-shadow" id="graphiccard" class="p-col-12 p-sm-6 p-md-6 p-lg-6 fullheightcard">
+      <div class="p-grid p-col-12 p-text-center">
+        <div class="p-field p-col-12 p-md-12 p-sm-12 p-lg-12">
+          <div class="p-grid p-nogutter widget-overview-box overview-box-2 p-shadow-3 tabcolor">
+            <div class="p-col-2 overview-box-icon">
+              <img [src]="cubingImage.boxed" class="p-shadow-3 imgcatalog" />
+            </div>
+            <div class="p-col-4">
+              <h5 style="color:black">Cubicaje</h5>
+            </div>
+            <div class="p-col-6 overview-box-status cubicaje"> {{this.cubing.cubing}} cm3 </div>
+          </div>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-sm-4 p-lg-4 support-info">
+          <b>Master</b>
+           <p class="highlighted">{{this.packingmaster.totalpackingReceived}} Emp</p>
+           <p-progressBar [value]="this.packingmaster.percentageMaster"></p-progressBar> 
+           <p class="highlighted">Esperado: {{this.packingmaster.totalpackingExpected}} Emp</p>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-sm-4 p-lg-4 support-info">
+          <b>Individual</b>
+          <p class="highlighted">{{this.packingindividual.totalUnitsReceived}} Unds</p>
+          <p-progressBar [value]="this.packingindividual.percentageindividual"></p-progressBar>
+          <p class="highlighted">Esperado: {{this.packingindividual.totalUnitExpected}} Unds</p>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-sm-4 p-lg-4 support-info">
+          <b>Pesado</b>
+          <p class="highlighted">{{this.heavy.totalUnitsReceived}} Unds</p>
+          <p-progressBar [value]="this.heavy.percentage"></p-progressBar>
+          <p class="highlighted">Esperado: {{this.heavy.totalUnitExpected}} Unds</p>
+        </div>
+      </div>
+      <!-- <div class="p-grid p-col-12">
+        <h5>Vertical</h5>
+        <p-chart type="bar" [data]="basicData" [options]="chartOptions"></p-chart>
+      </div> -->
+
+      <div class="p-grid tabcolor p-col-12 p-sm-12 p-md-12 p-lg-12"
+        style="justify-content: center; align-items: center;">
+        <b>Categorías</b>
+      </div>
+      <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+        <p-chart type="pie" [data]="data" [options]="chartOptions" [style]="{'width': '100%'}"></p-chart>
+      </div>
+    </p-card>
+
+
+
+    <p-card *ngIf="!isChieldReception" styleClass="p-card-shadow" id="totalcard" class="p-col-12 p-sm-6 p-md-6 p-lg-6 fullheightcard">
+      <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+        <div class="card widget-team p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+          <h5 style="justify-content: center; align-items: center;">Recepción</h5>
+          <ul>
+            <li *ngIf="!isChieldReception"> 
+              <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+                <h6 class="team-member p-mr-2">Total unidades en factura:</h6>
+                <span>{{this.unitreceived.unitExpected}} </span>
+              </div>
+            </li>
+            <li>
+              <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+                <h6 class="team-member p-mr-2">Total unidades recibidas:</h6>
+                <span> {{this.unitreceived.unitReceived}} </span>
+              </div>
+            </li>
+            <li *ngIf="isChieldReception">
+              <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12" >
+                <h6 class="team-member p-mr-2">Cantidad empaques:</h6>
+                <span> {{this.packingindividual.totalpackingReceived}} </span>
+              </div>
+            </li>
+            <li *ngIf="!isChieldReception">
+              <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12">
+                <h6  *ngIf="this.unitreceived.unitDiferences<0" class="team-member p-mr-2">Total unidades diferencias:</h6>
+                <h6  *ngIf="this.unitreceived.unitDiferences>=0" class="team-member p-mr-2">Total unidades por recibir:</h6>
+                <span> {{this.unitreceived.unitDiferences}} </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="p-grid tabcolor p-col-12 p-sm-12 p-md-12 p-lg-12" *ngIf="!isChieldReception"
+        style="justify-content: center; align-items: center;">
+        <b>Diferencias</b>
+      </div>
+      <div class="p-grid p-col-12 p-col-12 p-sm-12 p-md-12 p-lg-12" *ngIf="!isChieldReception">
+        <p-chart type="pie" [data]="datadiferences" [options]="chartOptions" [style]="{'width': '100%'}"></p-chart>
+      </div>
+      <label *ngIf="!isChieldReception">Total de diferencias: {{this.totaldiferences}} </label>
+    </p-card>
+
+
+  </div>
+</div>
+<div class="card-body my-2 p-col-12 p-sm-4 p-md-4 p-lg-4" #detail>
+  <div class="p-grid">
+    <p-card styleClass="p-card-shadow" id="detailproduct" class="p-col-12 p-sm-12 p-md-12 p-lg-12 fullheightcard">
+      <h5>Recepción</h5>
+      <hr />
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="active">Barra de empaque</label>
+                <div class="p-inputgroup">
+                  <input id="bar" #bar [(ngModel)]="_product.detail.gtinsearch" type="text" pInputText
+                    (input)="_validations.toCapitalizeSimbology($event)" maxlength="20" numbersOnly
+                    [class]="submitted && (!_product.detail.gtin || !_product.detail.gtin.trim()) ? 'ng-dirty ng-invalid' : ''"
+                    (paste)="onPasteBar($event)"
+                    (keyup.enter)="SearchProduct(_product.detail.gtinsearch,_product.referencesearch,in1)">
+                  <button type="button" pButton pRipple [disabled]="!_product.detail.gtinsearch" icon="pi pi-search"
+                    (click)="SearchProduct(_product.detail.gtinsearch,_product.referencesearch,in1)"></button>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && _product.productId<=0">El producto es requerido</small>
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="active">Referencia interna </label>
+                <div class="p-inputgroup">
+                  <input id="ref" [(ngModel)]="_product.referencesearch" type="text" pInputText
+                    (input)="_validations.toCapitalizeSimbology($event)" maxlength="20"
+                    [class]="submitted && (!_product.references || !_product.references.trim()) ? 'ng-dirty ng-invalid' : ''"
+                    (paste)="onPasteBar($event)"
+                    (keyup.enter)="SearchProduct(_product.detail.gtinsearch,_product.referencesearch,in1)">
+                  <button type="button" pButton pRipple [disabled]="!_product.referencesearch" icon="pi pi-search"
+                    (click)="SearchProduct(_product.detail.gtinsearch,_product.referencesearch,in1)"></button>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && _product.productId<=0">El producto es requerido</small>
+              </div>
+              <div *ngIf="_product.productId>0" class="p-field p-col-12 p-md-12 p-sm-12">
+                <div class="card">
+                  <div class="row align-items-center justify-content-center">
+                    <div class="p-grid">
+                      <div class="p-col-12 p-sm-4 p-md-4 p-lg-4 container-img">
+                        <img [src]="_product.image == null || _product.image == ''  ? defectImage.defectImage
+                        : _product.image" [alt]="_product.product" class="imgcatalog" alt="Product" />
+                      </div>
+                      <div class="p-col-12 p-sm-7 p-md-7 p-lg-7">
+                        <div class="p-grid p-mt-4">
+                          <b class="p-col-12 p-sm-12 p-md-12 p-lg-12 cart-item-product-title p-mr-2"
+                            style="font-size:small;">{{_product.product}}</b>
+                          <span class="p-col-12 p-sm-12 p-md-12 p-lg-12"
+                            style="font-size: small;">{{_product.detail.gtin}}</span>
+                          <span class="p-col-12 p-sm-12 p-md-12 p-lg-12"
+                            style="font-size: small;">{{_product.category}}</span>
+                          <span class="p-col-12 p-sm-12 p-md-12 p-lg-12"
+                            style="font-size: small;">{{_product.references}}</span>
+                          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-inputgroup">
+                            <p-checkbox [(ngModel)]="_product.indLote" [binary]="true" inputId="binary"
+                              [disabled]="isdisabled" class="p-mr-2"></p-checkbox>
+                            <span calss="p-ml-2">Ind lote</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="_product.productId>0" class="p-field p-col-12 p-md-12 p-sm-12">
+                <div class="p-grid">
+                  <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                    <label for="active" class="p-mr-2">Tipo de empaque: </label>
+                    <label name="active"> {{_product.detail.typePacking}}</label>
+                  </div>
+                  <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                    <label for="active" class="p-mr-2">Empaque: </label>
+                    <label name="active"> {{_product.detail.presetation}}</label>
+                  </div>
+                  <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                    <label for="active" class="p-mr-2">Unidades por empaque: </label>
+                    <label name="active"> {{_product.detail.unitsPerPackaging}}</label>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="p-mt-2">
+              <div class="p-fluid p-grid p-formgrid p-mt-3">
+                <div class="p-grid tabcolor p-col-12 p-sm-12 p-md-12 p-lg-12 thicker"
+                  style="justify-content: center; align-items: center;">
+                  <b>Factura</b>
+                </div>
+              </div>
+              <div class="p-grid">
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="packingId">Empaque <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown name="active" [options]="packaginglist" appendTo="body"
+                    [(ngModel)]="_product.purchaseReception.packingId" (onChange)="changepackage($event)"
+                    placeholder="Seleccione..." [disabled]="_product.productId <=0" emptyMessage="Sin resultados">
+                  </p-dropdown>
+                  <small class="p-invalid"
+                  *ngIf="submitted && _product.purchaseReception.packingId<=0">El
+                  empaque es requerido.</small>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Unds x empaque</label>
+                  <p-inputNumber min="0" [(ngModel)]="_product.purchaseReception.unitsPerInvoicePackaging"
+                    [disabled]="isdisabled" [maxFractionDigits]="0">
+                  </p-inputNumber>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Costo <span [ngStyle]="{'color':'red'}">*</span> </label>
+                  <p-inputNumber #in1 min="0" mode="decimal" [(ngModel)]="_product.purchaseReception.cost" [minFractionDigits]="4" [maxFractionDigits]="4"
+                    [disabled]="_product.productId <=0" maxlength='18' (onFocus)="clear($event)" (keyup.enter)="next(in2)">
+                  </p-inputNumber>
+                  <small class="p-invalid"
+                  *ngIf="submitted && _product.purchaseReception.cost<=0">El costo debe ser mayor a cero.</small>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Cant. empaque <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-inputNumber #in2 *ngIf="_product.indHeavy == true"
+                    [(ngModel)]="_product.purchaseReception.invoicePackaging" min="0" maxlength='18' mode="decimal"
+                    (onFocus)="clear($event)" (onInput)="Calculatetotal($event)" [minFractionDigits]="3"
+                    [disabled]="_product.productId <=0" (keyup.enter)="next(weigtneto)">
+                  </p-inputNumber>
+
+                  <p-inputNumber #in2 *ngIf="_product.indHeavy == false"
+                    [(ngModel)]="_product.purchaseReception.invoicePackaging" maxlength='14'
+                    [disabled]="_product.productId <=0" min="0" (onInput)="Calculatetotal($event)"
+                    (onFocus)="clear($event)" (keyup.enter)="next(received)">
+                  </p-inputNumber>
+                  <small class="p-invalid"
+                  *ngIf="submitted && _product.purchaseReception.invoicePackaging<=0">La cantidad solicitada debe ser mayor a cero.</small>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Total unidades</label>
+                  <p-inputNumber   *ngIf="_product.indHeavy == true" [(ngModel)]="_product.purchaseReception.totalunits"
+                    min="0" mode="decimal" [disabled]="isdisabled" [minFractionDigits]="3">
+                  </p-inputNumber>
+
+                  <p-inputNumber   *ngIf="_product.indHeavy == false" [(ngModel)]="_product.purchaseReception.totalunits"
+                    [disabled]="isdisabled" min="0">
+                  </p-inputNumber>
+
+                </div>
+
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-12 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Unds ordenadas</label>
+                  <p-inputNumber min="0" *ngIf="_product.indHeavy == true && !this.isChieldReception"
+                    [(ngModel)]="_product.purchaseReception.unitsPurchaseOrder" [minFractionDigits]="3"
+                    [maxFractionDigits]="3" mode="decimal" [disabled]="isdisabled">
+                  </p-inputNumber>
+                  <p-inputNumber *ngIf="_product.indHeavy == false && !this.isChieldReception"
+                    [(ngModel)]="_product.purchaseReception.unitsPurchaseOrder" min="0" [disabled]="isdisabled">
+                  </p-inputNumber>
+                </div>
+
+
+                <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-mt-3 p-fluid" *ngIf="!isChieldReception">
+                  <label class="font-smaller" for="sellfactor">Diferencia unidades</label>
+                  <p-inputNumber min="0" mode="decimal" *ngIf="_product.indHeavy == true && !this.isChieldReception" [disabled]="isdisabled"
+                    [(ngModel)]="_product.purchaseReception.diferencesUnits" [minFractionDigits]="3"
+                    [maxFractionDigits]="3">
+                  </p-inputNumber>
+                  <p-inputNumber *ngIf="_product.indHeavy == false && !this.isChieldReception"
+                    [(ngModel)]="_product.purchaseReception.diferencesUnits" [disabled]="isdisabled" min="0"
+                    [maxFractionDigits]="0">
+                  </p-inputNumber>
+                </div>
+              </div>
+            </div>
+            <div class="p-mt-2">
+              <div class="p-fluid p-grid p-formgrid p-mt-3">
+                <div class=" p-grid tabcolor p-col-12 p-sm-12 p-md-12 p-lg-12"
+                  style="justify-content: center; align-items: center;">
+                  <b>Recepción</b>
+                </div>
+              </div>
+              <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3 p-fluid">
+                  <label *ngIf="_product.indHeavy ==false" class="font-smaller">Empaque <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown *ngIf="_product.indHeavy ==false" name="active" [options]="packaginglist" appendTo="body"
+                    [(ngModel)]="_product.detail.packingId" (onChange)="changepackagreception($event)"
+                    placeholder="Seleccione..." [disabled]="_product.productId <=0" emptyMessage="Sin resultados">
+                  </p-dropdown>
+                  <label *ngIf="_product.indHeavy ==true" class="font-smaller">Peso neto <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-inputgroup">
+                    <p-inputNumber #weigtneto autoFocus *ngIf="_product.indHeavy==true" min="0"
+                      [(ngModel)]="_product.detail.weightNeto" mode="decimal" [minFractionDigits]="3"
+                      [maxFractionDigits]="3" [disabled]="_product.productId <=0"
+                      (onInput)="Calculatetotalreceived($event)" (onFocus)="clear($event)" (keyup.enter)="next(in4)">
+                    </p-inputNumber>
+                    <span *ngIf="_product.indHeavy == true"
+                      class="p-inputgroup-addon">{{_product.detail.abreviationUnitComprany}}</span>
+                  </div>
+                  <small class="p-invalid"
+                    *ngIf="submitted && _product.indHeavy==true &&_product.detail.weightNeto<=0">El
+                    peso es requerido.</small>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-12 p-mt-3 p-fluid">
+                  <label *ngIf="_product.indHeavy==true" class="font-smaller" for="sellfactor">Peso tara</label>
+                  <div class="p-inputgroup">
+                    <p-inputNumber *ngIf="_product.indHeavy==true" min="0" mode="decimal" [minFractionDigits]="3"
+                      [maxFractionDigits]="3" [(ngModel)]="_product.detail.weightTare" [disabled]="isdisabled">
+                    </p-inputNumber>
+                    <span *ngIf="_product.indHeavy==true"
+                      class="p-inputgroup-addon">{{_product.detail.abreviationUnitComprany}}</span>
+                  </div>
+                  <label *ngIf="_product.indHeavy ==false" class="font-smaller">Cant. empaque <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-inputNumber id="received" #received autoFocus *ngIf="_product.indHeavy ==false"
+                    [(ngModel)]="_product.detail.receivedPackaging" maxlength='14' [disabled]="_product.productId <=0"
+                    min="0" (onInput)="Calculatetotalreceived($event)" (onFocus)="clear($event)" (keyup.enter)="next(in4)">
+                  </p-inputNumber>
+                  <small class="p-invalid"
+                    *ngIf="submitted &&_product.indHeavy ==false && _product.detail.receivedPackaging<=0">La cantidad es
+                    requerida.</small>
+                </div>
+                <div class="p-col-12 p-md-8 p-lg-8 p-sm-8 p-mt-3 p-fluid">
+                  <label *ngIf="_product.indHeavy==true" class="font-smaller" for="sellfactor">Peso bruto</label>
+                  <div class="p-inputgroup">
+                    <p-inputNumber *ngIf="_product.indHeavy==true" min="0" mode="decimal" [minFractionDigits]="3"
+                      [maxFractionDigits]="3" [(ngModel)]="_product.detail.weightGross" [disabled]="isdisabled">
+                    </p-inputNumber>
+                    <span *ngIf="_product.indHeavy == true"
+                      class="p-inputgroup-addon">{{_product.detail.abreviationUnitComprany}}</span>
+                    <button #btn type="button" *ngIf="_product.indHeavy == true && _product.detail.weightNeto>0" pButton
+                      icon="pi pi-plus" class="p-button-rounded p-ml-2 p-button-secondary p-mr-2" pTooltip="agregar"
+                      (click)="showmodal()"></button>
+                  </div>
+                  <label *ngIf="_product.indHeavy==false" class="font-smaller">Total unidades</label>
+                  <p-inputNumber *ngIf="_product.indHeavy==false" [(ngModel)]="_product.detail.totalUnits"
+                    [disabled]="isdisabled" min="0">
+                  </p-inputNumber>
+                </div>
+                <!-- <div class="p-col-12 p-md-6 p-lg-6 p-sm-6 p-mt-3 p-fluid">
+                <label class="font-smaller" for="sellfactor">Costo base</label>
+                <p-inputNumber min="0" [disabled]="_product.productId <=0" [(ngModel)]="_product.detail.costbase"
+                  mode="decimal" [minFractionDigits]="4" [maxFractionDigits]="4" (onFocus)="clear($event)">
+                </p-inputNumber>
+              </div> -->
+              </div>
+            </div>
+            <div class="p-mt-2">
+              <div class="p-fluid p-grid p-formgrid p-mt-3">
+                <div class="p-grid tabcolor p-col-12 p-sm-12 p-md-12 p-lg-12"
+                  style="justify-content: center; align-items: center;">
+                  <b>Almacenamiento</b>
+                </div>
+              </div>
+              <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3 p-fluid" *ngIf="_product.indLote">
+                  <label *ngIf="_product.indLote" class="font-smaller">Número lote <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-inputgroup">
+                    <input *ngIf="_product.indLote" [(ngModel)]="_product.detail.numberlots" type="text" pInputText
+                      maxlength="20" [disabled]="isdisabled">
+                    <button *ngIf="_product.indLote && _product.detail.detailReceptionId <=0" type="button" pButton pRipple icon="pi pi-search"
+                      (click)="LotsProductVisible=true"></button>
+                    <button *ngIf="_product.indLote && _product.detail.detailReceptionId <=0" #btnlot type="button" pButton icon="pi pi-plus"
+                      class="p-button-rounded p-button-secondary p-ml-2" pTooltip="Agregar"
+                      (click)="LotDialogVisible=true"></button>
+                  </div>
+                  <small class="p-invalid" *ngIf="submitted && _product.detail.lots.length<=0">Debe ingresar al menos un número de lote</small>
+
+                </div>
+                <!-- <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3 p-fluid">
+                <label class="font-smaller" for="sellfactor">Espacio de almacenamiento</label>
+                <div class="p-inputgroup">
+                  <label >{{_product.detail.space}}</label>
+                </div>
+              </div> -->
+
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-6 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Ambiente</label>
+                  <p-dropdown   #dd3 name="active" autoFocus [options]="enviromentlist" appendTo="body"
+                    [(ngModel)]="_product.detail.enviroment" placeholder="Seleccione..." emptyMessage="Sin resultados"
+                    [disabled]="_product.productId <=0" (keyup.enter)="next(in4)" (onChange)="changeEnviromet(_product.detail.enviroment)">
+                  </p-dropdown>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-6 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Cant dias</label>
+                  <p-inputNumber #in4 min="0" [(ngModel)]="_product.detail.quantitydays" [maxFractionDigits]="0"
+                    [disabled]="_product.productId <=0" (keyup.enter)="next(in6)">
+                  </p-inputNumber>
+
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-6 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Fecha duración aprox</label>
+                  <p-calendar   #in5 id="ToD" [(ngModel)]="_product.detail.slaughterDate" dateFormat="dd/mm/yy"
+                    [disabled]="_product.productId <=0" (keyup.enter)="next(in6)" >
+                  </p-calendar>
+
+                </div>
+
+                <div class="p-col-12 p-md-6 p-lg-6 p-sm-6 p-mt-3 p-fluid">
+                  <label class="font-smaller" for="sellfactor">Temperatura</label>
+                  <p-inputNumber #in6 min="0" [maxFractionDigits]="0" prefix="↑ " [(ngModel)]="_product.detail.temperature"
+                    inputId="temperature" suffix="℃" [disabled]="_product.productId <=0" (keyup.enter)="next(btnsave)">
+                  </p-inputNumber>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-d-flex p-jc-end">
+          <button #btnsave
+            *ngIf="((this.childReception==undefined && this.reception.estatus <= this.statusreception.started &&!this.isChieldReception && this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID)&& this.iduserlogin ==this.reception.receivingOperator.id))"
+            pButton n-submit type="button" pRipple label="Guardar" (click)="addrecept()" icon="pi pi-save"
+            class="p-button-info p-mr-2" [disabled]="loading"></button>
+            <button #btnsave
+            *ngIf="((this.childReception!=undefined &&this.childReception.statusId  == this.statusreception.started && this.isChieldReception && this.userPermissions.allowed(this.permissionsIDs.UPDATE_CHILD_RECEPTIONS_ID) && this.iduserlogin == this.childReception.receivingOperatorId))"
+            pButton n-submit type="button" pRipple label="Guardar" (click)="addrecept()" icon="pi pi-save"
+            class="p-button-info p-mr-2" [disabled]="loading"></button>
+          <button pButton n-submit type="button" pRipple label="Limpiar" (click)="clearmodel()" icon="pi pi-ban"
+            class="p-button-secondary p-mr-2"></button>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+</div>
+<app-modal-weigth-tara [weigth]="_product.detail.weightNeto" [visible]="weigthVisible"
+  (onSubmit)="onSubmitWegthTara($event)" (onToggle)="onHidetWeigthTara($event)"></app-modal-weigth-tara>
+<app-lot (onToggle)="onToggleLot($event)" [showDialog]="LotDialogVisible" [DetailProduct]="_product"
+  (_sendLots)="receivedLotNews($event)"></app-lot>
+<app-lot-list (onToggle)="onToggleLotProduct($event)" [showDialog]="LotsProductVisible" [ProductLot]="_product"
+  (_sendLotsProduct)="receivedLotProduct($event)"> </app-lot-list>
+<app-modal-diferences-reception [visible]="diferencesVisible" [(_product)]="detailselected" [(reception)]="reception"
+  (onToggle)="onHideDiferences($event)"></app-modal-diferences-reception>

@@ -1,0 +1,34 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-pl-0 p-pr-0">
+    <div class="p-fluid p-col-12 p-md-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.varying" id="varying" name="varying" type="text" maxlength="15"
+                    pInputText (keyup.enter)="search()">
+                <label>Variable</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.description" id="description" name="description" type="text" maxlength="30"
+                    pInputText (keyup.enter)="search()">
+                <label for="float-input">Descripción</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-fluid p-col-12 p-md-4">
+        <p-dropdown [(ngModel)]="typeVarying" [options]="TypesVarying" id="TypesVarying" optionLabel="label" (onChange)="changeTypeVarying()"
+            placeholder="Tipo de variable..." (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados"></p-dropdown>
+    </div>
+    
+    <div class="p-col-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>

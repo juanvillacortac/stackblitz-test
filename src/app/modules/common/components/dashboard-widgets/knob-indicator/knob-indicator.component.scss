@@ -1,0 +1,11 @@
+:host ::ng-deep { 
+    .widget_panel{
+      width: 80%;
+      height: calc(80%) !important;
+      padding-top: 10px;
+    }
+    .p-knob svg {
+        height:70% !important;
+        width: 100%;
+    }
+}

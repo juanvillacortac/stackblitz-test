@@ -1,0 +1,60 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+  <h5 class="p-m-0">Rango de validación</h5>
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="name">Nombre<span [ngStyle]="{'color':'red'}">*</span></label>
+            <input (keyup.enter)="saveValidationrange()" [class]="submitted && (!_validationrange.name || !_validationrange.name.trim()) ? 'ng-dirty ng-invalid' : ''" type="text" (input)="_validations.toCapitalizeSimbology($event)" pInputText id="name" [(ngModel)]="_validationrange.name" maxlength="100" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" autofocus />
+            <small class="p-invalid" *ngIf="submitted && (!_validationrange.name || !_validationrange.name.trim())">El nombre es requerido. </small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="minimum">Mínimo<span [ngStyle]="{'color':'red'}">*</span></label>
+            <input (keyup.enter)="saveValidationrange()" [class]="submitted && (_validationrange.minimum == undefined || (_validationrange.minimum > _validationrange.middle && _validationrange.middle != 0) || (_validationrange.minimum > _validationrange.maximum) || _validationrange.minimum < 0) ? 'ng-dirty ng-invalid' : ''" type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="min" [(ngModel)]="_validationrange.minimum" min="0" maxlength=12 max="100000000000" (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.minimum == undefined">El mínimo es requerido</small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.minimum > _validationrange.middle && _validationrange.middle != 0">El valor mínimo no puede ser mayor al valor medio. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.minimum > _validationrange.maximum">El valor mínimo no puede ser mayor al valor máximo. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.minimum < 0 && _validationrange.minimum != undefined">El valor mínimo no puede ser negativo. </small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="middle">Medio</label>
+            <input (keyup.enter)="saveValidationrange()" [class]="submitted && ((_validationrange.middle < _validationrange.minimum && _validationrange.middle != 0) || (_validationrange.middle > _validationrange.maximum && _validationrange.middle != 0) || _validationrange.middle < 0) ? 'ng-dirty ng-invalid' : ''" type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="mid" [(ngModel)]="_validationrange.middle" min="0" maxlength=12 max="100000000000" (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.middle < _validationrange.minimum && _validationrange.middle != 0">El valor medio no puede ser menor al valor mínimo. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.middle > _validationrange.maximum && _validationrange.middle != 0">El valor medio no puede ser mayor al valor máximo. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.middle < 0">El valor medio no puede ser negativo. </small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="maximum">Máximo<span [ngStyle]="{'color':'red'}">*</span></label>
+            <input (keyup.enter)="saveValidationrange()" [class]="submitted && ((!_validationrange.maximum) || (_validationrange.maximum < _validationrange.middle && _validationrange.middle != 0) ||  _validationrange.maximum < _validationrange.minimum || _validationrange.maximum <= 0) ? 'ng-dirty ng-invalid' : ''" type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="max" [(ngModel)]="_validationrange.maximum" min="0" maxlength=12 max="100000000000" (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && !_validationrange.maximum &&_validationrange.maximum!=0">El máximo es requerido</small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.maximum < _validationrange.middle && _validationrange.middle != 0">El valor máximo no puede ser menor al valor medio. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.maximum < _validationrange.minimum">El valor máximo no puede ser menor al valor mínimo. </small>
+            <small class="p-invalid" style="display: block;" *ngIf="submitted && _validationrange.maximum <= 0 && _validationrange.maximum != undefined">El valor máximo no puede ser cero o negativo. </small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="tipo">Tipo de validación<span [ngStyle]="{'color':'red'}">*</span></label>
+
+            <p-dropdown (keyup.enter)="saveValidationrange()" [options]="_validationtype" appendTo="body" [(ngModel)]="_validationrange.typeValidationRange.id" placeholder="Seleccione...">
+
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _validationrange.typeValidationRange.id == 0">El tipo de validacion es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Estatus<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown (keyup.enter)="saveValidationrange()" [options]="status" [disabled]="_validationrange.id <= 0 || _validationrange.id == undefined" appendTo="body" [(ngModel)]="_validationrange.active" placeholder="Seleccione...">
+
+            </p-dropdown>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button pButton pRipple label="Guardar" (click)="saveValidationrange()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

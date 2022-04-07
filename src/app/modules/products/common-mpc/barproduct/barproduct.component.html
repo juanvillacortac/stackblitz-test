@@ -1,0 +1,40 @@
+<p-card [style]="{'width': '100%', 'margin-bottom': '0.5em'}" styleClass="p-shadow-0">
+  <div class="p-grid">
+    <div class="p-md-1 p-lg-1 p-sm-6">
+      <div class="container-img" style="margin: auto">
+        <img [src]="_product.image == null || _product.image == ''  ? defeatImage
+            : _product.image" alt="no image" class="p-shadow-4 imgcatalog" />
+      </div>
+    </div>
+    <div class="p-md-5 p-lg-5 p-sm-6" style="padding-left: 2rem;">
+      <div class="p-grid">
+        <div class="p-col-12">
+          <h5 style="margin-bottom: 0%;">{{idproduct == 0 ? "Nuevo producto" : _product.name}}</h5>
+        </div>
+        <div class="p-col-12">
+          <h5 style="margin-bottom: 0%;">GTIN individual:
+            {{idproduct == 0 ? "N/A" : _product.barcode != "" ? _product.barcode : "N/A"}}</h5>
+        </div>
+        <div class="p-col-12">
+          <h5 style="margin-bottom: 0%;">Fecha creado:
+            {{idproduct == 0 ? "N/A" : _product.dateCreate | date:'dd/MM/yyyy' }}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="p-sm-12 p-md-2 p-lg-2" style="text-align: center;">
+      <h5>Datos completados</h5>
+      <p-progressBar [value]="complete"></p-progressBar>
+    </div>
+    <div class="p-sm-12p-md-4 p-lg-4">
+      <div class="p-grid">
+        <!-- <div class="p-col-12" style="text-align: right;" *ngIf="idproduct!=0">
+                    <p-button label="Solicitudes" badge="0"></p-button>
+                </div> -->
+        <div class="p-col-12" style="text-align: right;">
+          <h5 style="margin-bottom: 0%;">Estatus: {{idproduct == 0 ? "Nuevo" : _product.status.name}}</h5>
+        </div>
+      </div>
+    </div>
+    <div></div>
+  </div>
+</p-card>

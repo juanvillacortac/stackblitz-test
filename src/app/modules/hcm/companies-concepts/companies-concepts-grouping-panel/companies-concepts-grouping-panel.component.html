@@ -1,0 +1,49 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false"
+    [dismissible]="false" position="right" styleClass="p-sidebar-md">
+    <div class="p-grid" style="height: 30px;">
+        <div class="p-col-11" style="margin-top: 5px;">
+            <h5>Agrupación</h5>
+        </div>
+        <div class="p-col-1">
+            <button pButton pRipple type="button" icon="pi pi-times" label="X"
+                class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only"
+                (click)="hideDialog()"></button>
+        </div>
+    </div>
+    <hr>
+    <div class="p-col-12">
+        <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input">Nomenclatura <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" pInputText onlyUpperCase noneSpecialCharacters maxlength="10" (keyup.enter)="saveGrouping()"
+                        id="abbreviation" [(ngModel)]="groupingEdit.abbreviation"
+                        [class]="submitted && (!groupingEdit.abbreviation || !groupingEdit.abbreviation.trim()) ? 'ng-dirty ng-invalid' : ''" />
+                     <small *ngIf="submitted && (!groupingEdit.abbreviation || !groupingEdit.abbreviation.trim())" class="p-invalid">La nomenclatura es requerida</small> 
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="description">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" (keyup.enter)="saveGrouping()" maxlength="80" pInputText id="description"
+                        [(ngModel)]="groupingEdit.pool"
+                        [class]="submitted && (!groupingEdit.pool || !groupingEdit.pool.trim()) ? 'ng-dirty ng-invalid' : ''" />
+                    <small *ngIf="submitted && (!groupingEdit.pool || !groupingEdit.pool.trim())" class="p-invalid">La descripción es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="description" class="p-d-block">Tipo Operación</label>
+                    <div *ngFor="let typeOp of typeOps" class="p-mt-3 p-ml-2 p-field-checkbox p-d-inline">
+                        <p-radioButton [inputId]="typeOp.key" name="typeOp" [value]="typeOp" [(ngModel)]="selectedTypeOp" [disabled]="typeOp.key === '0'"></p-radioButton>
+                        <label [for]="typeOp.key">{{typeOp.name}}</label>
+                    </div>
+                    <!-- <small *ngIf="submitted && (!levelin.description || !levelin.description.trim())" class="p-invalid">La descrípción es requerida</small> -->
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2"
+                        (click)="saveGrouping()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>

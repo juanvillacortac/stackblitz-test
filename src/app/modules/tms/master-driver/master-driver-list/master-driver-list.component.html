@@ -1,0 +1,57 @@
+<div class="card p-shadow-4">  
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">   
+      <div *ngIf="!showFilters" style="margin-top: 5px;"><h4>Conductores</h4></div>
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>          
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DRIVER_PERMISSION_ID)"  pButton pRipple icon="pi pi-plus" class="p-button-success" [ngClass]="{'p-button-danger':showDialog}" (click)="onclick()" pTooltip="Crear nuevo" tooltipPosition="top"></button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters " pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+    </div>
+    <app-master-driver-filter  (onSearch)="search()" [(filters)]="_DriverFilter" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-master-driver-filter>
+</div>
+<div class="card p-shadow-4">
+  <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="_driverService._driverList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+  currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">  
+              <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-driver let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}">                
+                <app-active-label *ngIf="col.field == 'active'; else certificate" [active]="driver[col.field]"></app-active-label>
+                <app-ind-adjustment-label *ngIf="col.field == 'indMedicalCertificate'; else license" [tight]="driver[col.field]" #certificate></app-ind-adjustment-label>
+                <app-ind-adjustment-label *ngIf="col.field == 'indDriverLicense'; else textCell" [tight]="driver[col.field]" #license></app-ind-adjustment-label>
+                <ng-template #textCell>
+                    <span *ngIf="col.field != 'active' && col.field != 'indMedicalCertificate' && col.field != 'indDriverLicense'" >{{col.template(driver)}} </span>
+                </ng-template>
+            </td>
+        </ng-container>
+          <td>                
+              <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DRIVER_PERMISSION_ID)"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editDriver(driver)" pTooltip="Editar"></button>                          
+          </td>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+  </p-table>
+</div>
+ <app-master-driver-panel [(showInput)]="showInput" [(showDialog)]="showDialog" [(_driver)]="_Driver" [(filters)]="_DriverFilter" [(_status)]="_status"></app-master-driver-panel> 

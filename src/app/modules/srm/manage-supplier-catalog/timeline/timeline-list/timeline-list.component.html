@@ -1,0 +1,31 @@
+<p-dialog header="Últimos cambios" (onShow)="ngOnInit()" (onHide)="hideDialogLine()" [(visible)]="showDialogLine" [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}" [draggable]="false" [resizable]="false">
+<div class="card">
+	
+	<!-- <p-timeline [value]="timelineproduct">
+		<ng-template pTemplate="content" let-event>
+			<small class="p-text-secondary">{{event.dateofOcurrence | date: "dd/MM/yyyy h:mm:ss a"}}</small>
+		</ng-template>
+		<ng-template pTemplate="opposite" let-event>
+            
+			<p *ngIf="event.typeOccurrence=='Creado'">{{event.typeOccurrence + ' por ' + event.createdByUser}}</p>
+			<p *ngIf="event.typeOccurrence!='Creado'">{{event.typeOccurrence + ' por ' + event.updatedByUser}}</p>  
+		</ng-template>
+	</p-timeline> -->
+	<p-timeline [value]="timelineproduct" align="alternate" styleClass="customized-timeline">
+		<ng-template pTemplate="marker" let-event>
+			<span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+                <i [ngClass]="event.icon"></i>
+            </span>
+		</ng-template>
+		<ng-template pTemplate="content" let-event>
+			<p-card [header]="event.typeOccurrence" [subheader]="event.dateofOcurrence | date: 'dd/MM/yyyy h:mm:ss a'">
+				<img *ngIf="event.image!=''" [src]="event.image" [alt]="event.typeOccurrence"  width="32" style="vertical-align: middle"/>
+				<!-- width="100px" class="p-shadow-4 imgtimeline" -->
+				<p *ngIf="event.typeOccurrence=='Creado'">{{event.typeOccurrence + ' por ' + event.createdByUser}}</p>
+				<p *ngIf="event.typeOccurrence!='Creado'">{{event.typeOccurrence + ' por ' + event.updatedByUser}}</p>  
+				<!-- <button pButton label="Read more" class="p-button-text"></button> -->
+			</p-card>
+		</ng-template>
+	</p-timeline>
+</div>
+</p-dialog>

@@ -1,0 +1,71 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                   placeholder="{{'searching' | translate}}"/>
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CREATE_ROLE_PERMISSION_ID)" pButton pRipple
+                    icon="pi pi-plus" class="p-button-success" (click)="openNew()" tooltipPosition="top"
+                    pTooltip="Nuevo rol"></button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="roleList" [paginator]="true" [rows]="10"
+             [showCurrentPageReport]="true" currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}"
+             [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'display': col.display}">
+                    {{col.header | translate}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-role let-columns="columns">
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display }">
+                        <span class="p-column-title">{{col.header | translate}}</span>
+                        <span *ngIf="col.field === 'isActive' && role[col.field] === true; else second"
+                              [class]="'status-badge status-active'">ACTIVO</span>
+                        <ng-template #second>
+                            <span *ngIf="col.field === 'isActive' && role[col.field] === false; else third"
+                                  [class]="'status-badge status-inactive'">INACTIVO</span>
+                        </ng-template>
+                        <ng-template #third>
+                            <span *ngIf="col.field === 'softwares'; else fourth" class="p-formgroup-inline">
+                                <div class="p-field p-mr-0" *ngFor="let sofware of role[col.field]">
+                                    <span [class]="'time'">{{sofware.name}}</span>
+                                </div>
+                            </span>
+                        </ng-template>
+                        <ng-template #fourth>
+                            <span>{{role[col.field]}} </span>
+                        </ng-template>
+                        <ng-container
+                                *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ROLE_PERMISSION_ID)">
+                            <button *ngIf="col.field === 'edit'" pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(role)"
+                                    pTooltip="{{'edit' | translate}}" tooltipPosition="top"></button>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+    <p-toast position="top-right"></p-toast>
+
+    <p-sidebar [(visible)]="shownEditRole" [blockScroll]="true" [showCloseIcon]="true" [dismissible]="false"
+               position="right" *ngIf="shownEditRole" styleClass="p-sidebar-md" [style]="{'overflow-y': 'scroll'}">
+        <app-role-detail [(roleSelected)]="roleSelected" (onHideEditForm)="childCallBack($event)"></app-role-detail>
+    </p-sidebar>
+
+</div>

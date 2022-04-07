@@ -1,0 +1,68 @@
+<p-sidebar [(visible)]="displayModal" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>Declarar variable</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>   
+          <hr/>
+          <div class="p-col-12">
+            <div class="card">
+              <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-grid p-col-12">
+                   <div class="p-col-12">
+                      <label for="active">Tipo de variable<span [ngStyle]="{'color':'red'}">*</span></label>
+                      <p-dropdown [(ngModel)]="selectTypeVal" [disabled]="showTypeVal" [options]="typeVarList"  (onChange)="onChange()" placeholder="Seleccione..." optionLabel="label"  
+                      [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" [class]="submitted && selectTypeVal.value == 0 ? 'ng-dirty ng-invalid' : ''"></p-dropdown>
+                      <small class="p-invalid" *ngIf="submitted && selectTypeVal.value == 0">El tipo de variable es requerido</small>
+                  </div>
+
+                </div>
+                <ng-container *ngIf="showListVal">
+                  <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12">
+
+                      <label for="active">Lista de variables {{selectTypeVal.label}}<span [ngStyle]="{'color':'red'}">*</span></label>
+                      <p-dropdown [(ngModel)]="selectValList" [options]="valList" (onChange)="onDetailVal()" placeholder="Seleccione..."  [filter]="true" 
+                      emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" [class]="submitted && selectValList == null ? 'ng-invalid ng-dirty' : '' "></p-dropdown>                     
+                      <small class="p-invalid" *ngIf="submitted && selectValList == null">La variable es requerida</small>
+                    </div>
+                </div>
+              </ng-container>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12 p-lg-6">
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                      <label for="active">Nombre<span [ngStyle]="{'color':'red'}">*</span></label>
+                      <input type="text" [disabled]="selectTypeVal.value != 4" [(ngModel)]="filterGlobalVar.varying" pInputText maxlength="70" [class]="submitted && (filterGlobalVar.varying == null || filterGlobalVar.varying == '') ? 'ng-invalid ng-dirty' : '' "/>                      
+                      <small class="p-invalid" *ngIf="submitted && (filterGlobalVar.varying == null || filterGlobalVar.varying == '')">El nombre es requerido</small> 
+                    </div>
+                  </div>
+                  <div class="p-col-12 p-lg-6 inter-content">
+                    <div class="p-col-12 p-pl-0 p-pr-0">
+                      <label for="active">Valor<span [ngStyle]="{'color':'red'}">*</span></label>
+                      <input type="text" [disabled]="selectTypeVal.value != 4" [(ngModel)]="filterGlobalVar.value" pInputText maxlength="15" [class]="submitted && (filterGlobalVar.value == null || filterGlobalVar.value == '') ? 'ng-invalid ng-dirty' : '' "/>                    
+                      <small class="p-invalid" *ngIf="submitted && (filterGlobalVar.value == null || filterGlobalVar.value == '')">El valor es requerido</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <label for="active">Descripción<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" [disabled]="selectTypeVal.value != 4" [(ngModel)]="filterGlobalVar.description" pInputText maxlength="70" [class]="submitted && (filterGlobalVar.description == null || filterGlobalVar.description == '') ? 'ng-invalid ng-dirty' : '' "/>                    
+                    <small class="p-invalid" *ngIf="submitted && (filterGlobalVar.description == null || filterGlobalVar.description == '')">La descripción es requerida</small>
+                  </div>
+                </div>
+                <div class="p-field p-col-12">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <button id="Agregar" (click)="add()" pButton pRipple label="Agregar"  icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </p-sidebar>

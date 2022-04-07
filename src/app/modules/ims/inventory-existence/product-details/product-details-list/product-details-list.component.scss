@@ -1,0 +1,336 @@
+:host ::ng-deep {
+    .p-dropdown {
+        width: 14rem;
+        font-weight: normal;
+    }
+    
+    .product-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .product-description {
+        margin: 0 0 1rem 0;
+    }
+    
+    .product-category-icon {
+        vertical-align: middle;
+        margin-right: .5rem;
+    }
+    
+    .product-category {
+        font-weight: 600;
+        vertical-align: middle;
+    }
+    
+    .product-list-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+    
+        img {
+            width: 150px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            margin-right: 2rem;
+        }
+    
+        .product-list-detail {
+            flex: 1 1 0;
+        }
+    
+        .p-rating {
+            margin: 0 0 .5rem 0;
+        }
+    
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: .5rem;
+            align-self: flex-end;
+        }
+    
+        .product-list-action {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .p-button {
+            margin-bottom: .5rem;
+        }
+    }
+    
+    .product-grid-item {
+        margin: .5em;
+        border: 1px solid #dee2e6;
+    
+        .product-grid-item-top,
+        .product-grid-item-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    
+        img {
+            width: 75%;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            margin: 2rem 0;
+        }
+    
+        .product-grid-item-content {
+            text-align: center;
+        }
+    
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    }
+}
+
+.cardTable {
+    padding: 1rem;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 576px) {
+	:host ::ng-deep .product-list-item {
+		flex-direction: column;
+		align-items: center;
+
+		img {
+			width: 75%;
+			margin: 2rem 0;
+		}
+
+		.product-list-detail {
+			text-align: center;
+		}
+
+		.product-price {
+			align-self: center;
+		}
+
+		.product-list-action {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.product-list-action {
+			margin-top: 2rem;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+	}
+}
+
+.recipePriceBox{
+    background: transparent !important;
+    border: 0px !important;
+    border-bottom: 0px solid #ddd !important;
+    margin-bottom: 0.5em;
+    :hover {
+        cursor: pointer;
+    }
+}
+.recipe-price-box-tittle{
+    color:#9199a9;
+    font-size: 12px;
+    font-weight: 600;
+}
+.recipe-price-box-value{
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+
+:host ::ng-deep .sales-Avatar{
+    background-color: chocolate !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .salesReturns-Avatar{
+    background-color: blue !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .transfers-Avatar{
+    background-color: yellowgreen !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .adjustments-Avatar{
+    background-color: rgb(1, 92, 92) !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .purchases-Avatar{
+    background-color: rgb(36, 105, 66) !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .purchaseReturns-Avatar{
+    background-color: olive !important;
+    text-align: center !important;;
+    color: white;
+}
+:host ::ng-deep .productions-Avatar{
+    background-color: rgb(121, 22, 22) !important;
+    text-align: center !important;;
+    color: white;
+}
+
+:host ::ng-deep .sales.p-slider{
+    .p-slider-handle{
+    background: chocolate !important;
+    border: 2px solid chocolate !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .sales.p-slider{
+    .p-slider-range{
+        background: rgb(175, 88, 25) !important;
+    }
+}
+
+:host ::ng-deep .salesReturns.p-slider{
+    .p-slider-handle{
+    background: blue !important;
+    border: 2px solid blue !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .salesReturns.p-slider{
+    .p-slider-range{
+        background: rgb(1, 1, 158) !important;
+    }
+}
+:host ::ng-deep .transfers.p-slider{
+    .p-slider-handle{
+    background: yellowgreen !important;
+    border: 2px solid yellowgreen !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .transfers.p-slider{
+    .p-slider-range{
+        background: rgb(136, 184, 42) !important;
+    }
+}
+:host ::ng-deep .adjustments.p-slider{
+    .p-slider-handle{
+    background: rgb(1, 92, 92) !important;
+    border: 2px solid rgb(1, 92, 92) !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .adjustments.p-slider{
+    .p-slider-range{
+        background: teal !important;
+    }
+}
+:host ::ng-deep .purchases.p-slider{
+    .p-slider-handle{
+    background: rgb(36, 105, 66) !important;
+    border: 2px solid rgb(36, 105, 66) !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .purchases.p-slider{
+    .p-slider-range{
+        background: seagreen !important;
+    }
+}
+:host ::ng-deep .purchaseReturns.p-slider{
+    .p-slider-handle{
+    background: rgb(107, 107, 1) !important;
+    border: 2px solid rgb(107, 107, 1) !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .purchaseReturns.p-slider{
+    .p-slider-range{
+        background: olive !important;
+    }
+}
+:host ::ng-deep .productions.p-slider{
+    .p-slider-handle{
+    background: rgb(121, 22, 22) !important;
+    border: 2px solid rgb(121, 22, 22) !important;
+    border-radius: 10px;
+    }
+}
+
+:host ::ng-deep .productions.p-slider{
+    .p-slider-range{
+        background: firebrick !important;
+    }
+}
+:host ::ng-deep .p-slider-handle{
+    background: #da0000 !important;
+    border: 2px solid #da0000 !important;
+    border-radius: 10px;
+    display: none !important;
+}
+
+:host ::ng-deep .p-slider-range {
+    background: #af0303 !important;
+}
+.progress-view {
+	overflow: hidden;
+	position: relative;
+	height: 1.5rem;
+	background: #6e6e6e;
+	border-radius: 10px;
+  }
+
+.progress-view-value {
+	display: none;
+	height: 100%;
+	position: absolute;
+	width: 0;
+	border: 0 none;
+	margin: 0;
+  }
+  
+  .progress-view-text {
+	font-weight: 500;
+	height: 100%;
+	position: absolute;
+	text-align: left;
+	width: 100%;
+	display: block;
+	color: rgb(255, 255, 255);
+	line-height: 1.5rem;
+	margin-left: 4%;
+  }
+  
+
+  :host ::ng-deep .totals {
+    margin-bottom: 2px;
+    margin-top: -1em;
+  }
+
+  .costDecrease {
+    // font-weight: 700;
+    color: #FF5252;
+}
+
+.material-icons.avatar{ 
+    color: #868e96; 
+    font-size: 25;
+    display: inline-flex !important;
+    vertical-align: middle;
+    font-weight: 400;
+}

@@ -1,0 +1,160 @@
+<p-sidebar [(visible)]="visible" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <div class="p-grid" style="height: 30px;">
+        <div class="p-col-11" style="margin-top: 5px;">
+            <h5>Empresa</h5>
+        </div>
+        <div class="p-col-1">
+            <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="hideDialog()"></button>
+        </div>
+    </div>    
+    <hr/>
+    <div class="p-grid">
+        <div class="p-col-12"> 
+            <div class="card">
+                <div class="p-fluid p-grid p-formgrid">
+                    
+                    <div class="p-field p-col-12">
+                        <label for="active">Razón comercial <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input [(ngModel)]="_company.name" [class]="submitted && (!_company.name || !_company.name.trim()) ? 'ng-dirty ng-invalid' : ''"  type="text" pInputText  maxlength="100" (input)="_validations.toCapitalizeSimbology($event)" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)">                   
+                        <small class="p-invalid" *ngIf="submitted && (!_company.name || !_company.name.trim())">La razón comercial es requerida</small>
+                       
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Razón social <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input [(ngModel)]="_company.socialName" [class]="submitted && (!_company.socialName || !_company.socialName.trim()) ? 'ng-dirty ng-invalid' : ''"  type="text" pInputText  maxlength="100" (input)="_validations.toCapitalizeSimbology($event)" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)">                   
+                        <small class="p-invalid" *ngIf="submitted && (!_company.socialName || !_company.socialName.trim())">La razón social es requerida.</small>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Clasificación <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                        <p-dropdown  [options]="companyClassifications" [(ngModel)]="_company.idClassification" placeholder="Seleccione..." appendTo="body" [class]="submitted && _company.idClassification <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _company.idClassification <= 0">La clasificación es requerida.</small>
+                    </div>
+
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Tipo de empresa <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                        <p-dropdown  [options]="companyTypes" [(ngModel)]="_company.idType" placeholder="Seleccione..." appendTo="body" [class]="submitted && _company.idType <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _company.idType <= 0">El tipo de empresa es requerido.</small>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Grupo de empresa <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                        <p-dropdown  [options]="companyGroups" [(ngModel)]="_company.idGroup" placeholder="Seleccione..." appendTo="body" [class]="submitted && _company.idGroup <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _company.idGroup <= 0">El grupo de empresa es requerido.</small>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <label for="active">País <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                        <p-dropdown  [options]="countries" [(ngModel)]="_company.idCountry" placeholder="Seleccione..." appendTo="body" [class]="submitted && _company.idCountry <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (onChange)="onLoadDocumentType(_company.idCountry)"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && _company.idCountry <= 0">El país es requerido.</small>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Tipo de documento <span [ngStyle]="{'color':'red'}">*</span></label>                    
+                        <p-dropdown  [options]="documentTypeList" [(ngModel)]="_company.idTypeIdentification" placeholder="Seleccione..." appendTo="body" [class]="submitted && _company.idTypeIdentification <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (onChange)="onClearIndetifier()"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && (!_company.identification || !_company.identification.trim())">El tipo de documento es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Número de documento <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input [(ngModel)]="_company.identification" [class]="submitted && (!_company.identification || !_company.identification.trim()) ? 'ng-dirty ng-invalid' : ''"  type="text" pInputText oninput="this.value = this.value.length == 1 ? this.value.charAt(0).toUpperCase() : this.value.charAt(0).toUpperCase() + this.value.substr(1).toLowerCase()" maxlength="25" (keyup.enter)="submit()" (keypress)="onValidateDocumentInput($event)"  (paste)="_validations.noPaste($event)" [attr.disabled]="disabled ? '' : null">                   
+                        <small class="p-invalid" *ngIf="submitted && (!_company.identification || !_company.identification.trim())">El RIF es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="active">NIT </label>
+                        <input [(ngModel)]="_company.nit" [class]="submitted"  type="text" numbersOnly pInputText maxlength="100" (keyup.enter)="submit()" >                   
+                        <!-- <small class="p-invalid" *ngIf="submitted && (!_company.nit || !_company.nit.trim())">El NIT es requerido</small> -->
+                    </div>
+
+
+                   
+
+                    <div class="p-field p-col-12">
+                        <label for="active">Estatus</label>
+                        <p-dropdown [options]="statusList" [(ngModel)]="_company.active" appendTo="body" [disabled]="_company.id <= 0" (keyup.enter)="submit()"></p-dropdown>
+                    </div>
+        
+                    <div class="p-field p-col-12">
+                        <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                    </div>
+                    <div class="p-fluid p-grid p-mt-2">
+                        <!-- Telefonos -->
+                        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+                            <p-table class="simple-footer-table" [value]="_company.contactNumbers">
+                                <ng-template pTemplate="caption">
+                                    Teléfonos <span [ngStyle]="{'color':'red'}">*</span>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-phone let-i="rowIndex">
+                                    <tr>
+                                        <td class="p-text-center" width="56%">(+{{phone.areaCode}}){{phone.number}}</td>
+                                        <td class="p-text-center" width="38%"><strong>{{phone.type}}</strong></td>
+                                        <td class="p-text-right" width="6%">
+                                            <button #b1 (click)="showPhoneMenu($event,phoneMenu,i)" pButton pRipple type="button" icon="pi pi-ellipsis-v" class="p-button-text"></button>
+                                            <p-menu #phoneMenu appendTo="body" [popup]="true" [model]="menuItemsPhone"></p-menu>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <button pButton pRipple type="button" (click)="contactNumberDialogVisible=true" label="+ Agregar" class="p-button-text"></button>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <!-- Direcciones -->
+                        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+                            <p-table class="simple-footer-table" [value]="_company.addresses">
+                                <ng-template pTemplate="caption">
+                                    Direcciones <span [ngStyle]="{'color':'red'}">*</span>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-address let-i="rowIndex">
+                                    <tr>
+                                        <td [ngStyle]="{'overflow-wrap':'break-word'}">
+                                            <strong class="p-mt-2">{{address.addressType}}</strong>
+                                            <div class="p-mt-1">
+                                                {{address.street}}, {{address.city}}, {{address.municipality}},
+                                                {{address.state}}, {{address.country}}
+                                            </div>
+                                            <div class="p-mt-1">
+                                                <strong class="p-mt-2" *ngIf="address.postalCode">Código postal:
+                                                </strong>{{address.postalCode}}
+                                            </div>
+                                            <div class="p-mt-1">
+                                                <strong class="p-mt-2" *ngIf="address.edifice">Edificio:
+                                                </strong>{{address.edifice}}
+                                            </div>
+                                            <div class="p-mt-1">
+                                                <strong class="p-mt-2" *ngIf="address.floor">Piso:
+                                                </strong>{{address.floor}}
+                                            </div>
+                                            <div class="p-mt-1">
+                                                <strong class="p-mt-2" *ngIf="address.reference">Referencia:
+                                                </strong>{{address.reference}}
+                                            </div>
+                                        </td> 
+                                        <td class="p-text-right" width="15%">
+                                            <button (click)="showAddressMenu($event,addressMenu,i)" pButton pRipple type="button" icon="pi pi-ellipsis-v" class="p-button-text"></button>
+                                            <p-menu #addressMenu appendTo="body" [popup]="true" [model]="menuItemsAddress"></p-menu>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <button pButton pRipple type="button" (click)="addressDialogVisible=true" label="+ Agregar" class="p-button-text"></button>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <br>
+                        <button pButton pRipple label="Guardar" [disabled]="_company.isdisabled" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+                   
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>
+<app-edit-contact-numbers (onSubmit)="onSubmitContactNumber($event)" (onToggle)="onHideContacNumber($event)" [visible]="contactNumberDialogVisible"></app-edit-contact-numbers>
+<app-edit-address (onSubmit)="onSubmitAddress($event)" (onToggle)="onToggleAddress($event)" [visible]="addressDialogVisible"></app-edit-address>

@@ -1,0 +1,44 @@
+
+export class ValidationProduct {
+    id: number;
+    productName: string;
+    packageType: string;
+    unitByPackage: number;
+    barcode: string;
+    internalReference: string;
+    wasWeighed: boolean;
+    totalInvoiceUnits: number;
+    requestedUnit: number;
+    differenceUnit: number;
+    costByPackageBase: number;
+    unitCostBase: number;
+    totalCostBase: number;
+    netCostBase: number;
+    netFactorBase: number;
+    netCostSellBase: number;
+    netFactorSellBase: number;
+    costByPackage: number;
+    unitCost: number;
+    totalCost: number;
+    netCost: number;
+    netFactor: number;
+    netCostSell: number;
+    netFactorSell: number;
+    totalTaxable: number;
+    totalDeductibles: number;
+    factorSell: number;
+    retailPriceBase: number;
+    retailPrice: number;
+    status:number=0;
+    image: string="";
+    category: string ="";
+    unitmedition:string="";
+    idPackaging: number=-1;
+    namePackagin: string="";
+    packagingQuantity: number=-1;
+    indAdded: number=-1;
+    invoicePacking:number=0;
+    receivedPacking:number=0;
+    taxableTotal:number=0;
+    deductibleTotal:number=0;
+}

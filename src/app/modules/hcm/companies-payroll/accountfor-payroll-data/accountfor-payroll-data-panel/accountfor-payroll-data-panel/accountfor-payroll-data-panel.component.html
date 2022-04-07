@@ -1,0 +1,77 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow-y': 'unset'}" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div class="p-col-11" style="margin-top: 5px;">
+          <h5>Cuenta bancaria</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>    
+    <hr />
+  
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          
+          <div class="p-field p-grid p-col-12" style="display: none;">
+            <input type="number" [(ngModel)]="record.idLaborRelationship">
+            <input type="number" [(ngModel)]="record.accountforPayrollDataId">
+            <input type="text" [(ngModel)]="record.bank">
+            <input type="text" [(ngModel)]="record.typeAccount">
+            <input binary="true" inputId="binary" [(ngModel)]="record.indActive">
+          </div>
+          
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="bankId">Banco <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [filter]="true" inputId="bankId" [options]="banksList" [(ngModel)]="record.bankId" [class]="submitted && record.bankId == -1 ? 'ng-dirty ng-invalid' : ''"
+                placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (onChange)="changeBank($event)"></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.bankId == -1"> El banco es requerido</small>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="typeAccountId">Tipo de cuenta <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [filter]="true" inputId="typeAccountId" [options]="bankAccountTypeList" [(ngModel)]="record.typeAccountId" [class]="submitted && record.typeAccountId == -1 ? 'ng-dirty ng-invalid' : ''"
+                placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (onChange)="asignarNombreTipoCuenta($event)"></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.typeAccountId == -1"> El tipo de cuenta es requerido</small>
+            </div>
+          </div>
+            
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Número de cuenta <span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-p-0">
+                <input type="text" [(ngModel)]="record.accountNumber" numbersOnly pInputText maxlength="20" (input)="validateBankNumber()" [class]="submitted && messageAccountNumber != '' ? 'ng-dirty ng-invalid' : ''"/>
+                <small class="p-invalid" *ngIf="submitted && messageAccountNumber != ''">{{messageAccountNumber}}</small> 
+              </div>
+            </div>
+          </div>
+   
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+                <p-checkbox #formIndActive id="indActive" [binary]="true" [(ngModel)]="record.indActive"></p-checkbox>
+              <label for="indActive">   Principal </label>
+            </div>
+          </div>
+
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2">
+                <!-- {{auxLabel}} -->
+              </button>
+                <!-- {{ auxIndex>0 ? "Agregar":"Guardar" }} -->
+              <!-- <button *ngIf="record" pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button> -->
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+</p-sidebar>
+    

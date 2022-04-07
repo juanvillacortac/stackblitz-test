@@ -1,0 +1,150 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div *ngIf="!this.userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_PERMISSION_ID) || (!showFilters && !supplierViewer)" class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <h4>{{ 'srm.merchandise_receptions.viewer' | translate}}</h4>
+        </div>
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CREATE_RECEPTION_VDR_PERMISSION_ID)"  pTooltip=" {{ 'add' | translate }}" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="menu.toggle($event)" tooltipPosition="top"></button>
+            <p-tieredMenu #menu [model]="receptionStatusOptions" [popup]="true"></p-tieredMenu>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_PERMISSION_ID)" pTooltip="{{ 'filters' | translate }}" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" tooltipPosition="top"></button>
+        </div>
+    </div>
+    <app-reception-filters *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_PERMISSION_ID)" (search)="search()"
+    (exportExcel)="exportExcel()" (exportPDF)="exportPDF()" [(filters)]="filters" [supplierViewer]="supplierViewer" [expanded]="showFilters" [loading]="loading"  [dataUnavailable]="dataUnavailable" class="p-mt-3"></app-reception-filters>
+</div>
+<div class="card p-m-0" style="margin-top: 20px!important;">
+    <p-table #dt [columns]="_selectedColumns" [rowHover]="true" [value]="receptionList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+            [scrollable]="true"  currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" [rowsPerPageOptions]="[10,25,50]" >
+                <ng-template pTemplate="caption">
+                    <p-multiSelect [options]="hiddenColumns" [(ngModel)]="selectedColumns" optionLabel="{{ 'header' | translate }}" [maxSelectedLabels]="0"
+                    [disabled]="dataUnavailable" selectedItemsLabel="{{'primeng.multiSelectColumns' | translate}} " [style]="{minWidth: '200px'}" placeholder="{{'primeng.chooseColumns' | translate}}">
+                        <ng-template pTemplate="item" let-item>
+                            {{item.header | translate}}
+                        </ng-template>
+                    </p-multiSelect>
+                </ng-template>
+                
+<!--                
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <ng-container *ngFor="let col of columns">
+                            <ng-container *ngIf="col.field === 'edit'">
+                                <col style="width:100px"> 
+                            </ng-container>
+                            <ng-container *ngIf="col.field !== 'edit'"> 
+                                <col style="min-width:185px">
+                            </ng-container>
+                        </ng-container>
+                    </colgroup>
+                </ng-template> -->
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns" >
+                            <th [ngStyle]="{'display': col.display,'width': (col.field == 'edit') ? '100px' : '185px' ,'font-size':'small'}" [pSortableColumn]="col.field" >
+                                {{ col.header | translate }}
+                                <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+                            </th>
+                            <th></th>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-reception let-columns="columns">
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':(col.field == 'edit') ? '100px' : '185px' }" >
+
+                                <div *ngIf="col.field === 'status'; else booleanCell" >
+                                    <span  [class]="'status-badge status-active'">{{(reception[col.field])}}</span>
+                                </div>
+
+                                <ng-template #booleanCell >
+                                    <app-active-label *ngIf="col.field == 'boolean'; else numberCell" [active]="reception[col.field]" [isYesOrNoMode]="true"></app-active-label>
+                                </ng-template>
+
+                                <ng-template #numberCell >
+                                    <span *ngIf="col.dataType === 'number'; else stringImage">{{(reception[col.field]) |number:'1.2-2'}} </span>
+                                </ng-template>
+
+
+                                <ng-template #stringImage >
+                                    <span *ngIf="col.dataType === 'string-image'; else dateCell">
+                                        <app-user-image [userName]="reception[col.field]" ></app-user-image>
+                                    </span>
+                                </ng-template>
+
+                                <ng-template #dateCell >
+                                    <span *ngIf="col.dataType === 'date'; else editCell">
+                                        <span *ngIf="!isMinimumDateTimeValue((reception[col.field]))">
+                                            {{getValidDate((reception[col.field]))| date: 'dd/MM/yyyy HH:mm'}}
+                                        </span>
+                                    </span>
+                                </ng-template>
+
+                                <ng-template #editCell >
+                                    <span *ngIf="col.dataType === 'button'; else textCell">
+                                            <button
+                                            *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_CHILD_RECEPTIONS_ID) 
+                                            && (reception.statusId==receptionIdStatus.pending || reception.statusId==receptionIdStatus.started)
+                                            && !this.supplierViewer && !reception.isCentralizedInvoice && reception.receptionTypeId == receptiontype.parent"
+                                            pButton
+                                            pRipple
+                                            icon="pi pi-file-o"
+                                            pTooltip=" {{ 'srm.reception.child_create' | translate }}"
+                                            class="p-button-rounded p-button-secondary p-mr-2"
+                                            (click)="onShowchildReceptionDetail(reception)">
+                                            </button>
+                                        <ng-container *ngIf="userPermissions.allowed(this.permissionsIDs.CHECK_RECEPTION_PERMISSION_ID)">
+                                            <button
+                                                pButton
+                                                pRipple
+                                                icon="pi pi-pencil"
+                                                pTooltip=" {{ 'view_detail' | translate }}"
+                                                class="p-button-rounded p-button-success p-mr-0"
+                                                (click)="onShowDetail(reception)">
+                                            </button>
+                                        </ng-container>
+                                    </span>
+                                    <!-- *ngIf="allowAddChild(reception)" -->
+
+                                </ng-template>
+
+                                <ng-template #textCell >
+                                    <span>{{(reception[col.field])}}</span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                      <td [ngStyle]="{'text-align': 'center', 'font-weight': '600'}" [attr.colspan]="columns.length-1"> No existen resultados</td>
+                    </tr>
+                  </ng-template>
+
+                <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+    </p-table>
+</div>
+<ng-container *ngIf='receptionModalShow'>
+    <app-modal-reception
+        [visible]="receptionModalShow"
+        [receptionStatus]="receptionStatus"
+        (hideDialogForm)="childCallBack($event)">
+    </app-modal-reception>
+</ng-container>
+
+<ng-container *ngIf='chieldReceptionModalShow'>
+    <app-modal-child-reception
+    [visible]="chieldReceptionModalShow"
+    [receptionId]="receptionIdSelected"
+    (hideDialogForm)="childReceptionCallBack($event)">
+    </app-modal-child-reception>
+</ng-container>

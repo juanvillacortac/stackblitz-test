@@ -1,0 +1,93 @@
+<div class="p-grid">
+<div class="p-col-12 p-lg-12 p-md-12 p-sm-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Masivo" (click)="showMasive($event)"  class="p-button-info p-mt-1"></button>
+</div>
+<div class="p-col-12 p-md-12 p-sm-12 p-lg-12">
+    <p-accordion>
+        <p-accordionTab *ngFor="let contact of _CompaniesListTemp" (click)="searchContactsByIdCompany(contact && contact.id ? contact.id : 0,$event)" [selected]="contact.id == contactexpanded ? true : false">
+        <!-- <p-accordionTab *ngFor="let contact of _CompaniesListTemp" [selected]="contact.id == contactexpanded ? true : false"> -->
+            <ng-template pTemplate="header">
+                <div class="p-grid" style="width: 100%;">
+                    <div class="p-md-10" style="margin-top:8px !important ;">
+                      <label  class="p-mr-2"><i [class]="PrintCheck(contact.id) == true ? 'pi pi-check' : ''"></i></label>
+                      <!-- <label  class="p-mr-2"><i [class]="existCheck == true ? 'pi pi-check' : ''"></i></label> -->
+
+                      <label>{{contact.socialName}}</label>
+                    </div>
+                    <div class="p-md-2 p-d-flex p-jc-end">
+                        <!-- <button pButton pRipple icon="pi pi-plus"  class="p-button-rounded p-button-success" (click)="showAddPanelValidationFactor($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button> -->
+                        <button  pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="showAddContactModal($event,contact.id)"  pTooltip="Agregar contacto" tooltipPosition="top" style="height: 2rem!important;width: 2rem!important;"></button> 
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="p-grid">
+                    <div class="p-col-12 p-mt-3 p-md-12 p-lg-12">
+                            <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                              <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                              </span>  
+                              <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-2">
+                                    <div class="card p-m-0">
+                                      <!-- <p-table #dt [columns]="displayedColumnsContacts" [rowHover]="true" [value]="GetListAndCheck(contact.id)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" (onRowSelect)="onRowSelect($event)" [(selection)]="SelectedContactNumber"
+                                                   currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-mt-2">    -->
+                                      <p-table #dt [columns]="displayedColumnsContacts" [rowHover]="true" [value]="_ContactFilterList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" (onRowSelect)="onRowSelect($event)" [(selection)]="SelectedContactNumber"
+                                                   currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-mt-2">
+                                            <ng-template pTemplate="header" let-columns>
+                                              <tr>
+                                                <ng-container *ngFor="let col of columns">
+                                                  <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                  </th>
+                                                </ng-container>
+                                                <th></th>
+                                              </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-contact let-columns="columns" let-i="rowIndex">
+                                              <tr>
+                                                <ng-container *ngFor="let col of columns">
+                                                  <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                                                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="contact[col.field]"></app-active-label> 
+                                                    <ng-template #textCell>
+                                                      <span>{{col.template(contact)}} </span>
+                                                    </ng-template>
+                                                  </td>
+                                                </ng-container>
+                                                <td style="text-align:center !important">           
+                                                  <button (click)="editContact(contact,i)" pButton pRipple icon="pi pi-pencil"
+                                                    class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button>
+                                                    <button (click)="removeContact(contact)" pButton pRipple icon="pi pi-times"
+                                                      class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"></button>
+                                                </td>
+                                              </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                              <tr>
+                                                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-1">No existen resultados</td>
+                                              </tr>
+                                            </ng-template>
+                                     
+                                            <ng-template pTemplate="paginatorleft">
+                                            </ng-template>
+                                            <ng-template pTemplate="paginatorright">
+                                            </ng-template>
+                                          </p-table>
+                                      </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-accordionTab>
+    </p-accordion>
+</div>
+</div>
+
+<app-contact-number-supplier [(idCompany)]="idCompany" (onSubmit)="onSubmitContactNumberSupplier($event)"
+  (onToggle)="onHideContacNumberSupplier($event)" [visible]="contactNumberSupplierDialogVisible">
+</app-contact-number-supplier>
+<app-contact-number-suppliers-masive (onToggle)="onHideMasive($event)" [(_dataSupplier)]="_dataSupplierContacts" [(_ContactFilterList)]="_dataSupplierContacts.contactNumbers"
+[visible]="contactNumberSupplierMasiveDialogVisible" (onSubmit)="onSubmitContactNumberSupplierMasive($event)"></app-contact-number-suppliers-masive>
+

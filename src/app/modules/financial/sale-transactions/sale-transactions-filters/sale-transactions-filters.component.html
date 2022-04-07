@@ -1,0 +1,106 @@
+<div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+    <div class="p-field p-grid">
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="active">Número de documento</label>
+            <input type="text" [(ngModel)]="filters.documentNumber" maxlength="255" pInputText (keyup.enter)="search()">
+        </div>
+
+        <!-- <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="Categoría">Fecha a filtrar</label>
+          <p-dropdown [filter]="true" [options]="filterData.date" (keyup.enter)="search()"
+              placeholder="Seleccione..." [resetFilterOnHide]="true"  emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados.">
+          </p-dropdown>
+      </div> -->
+
+      <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="transactionDate">Fecha inicio</label>
+          <p-calendar [showIcon]="true" inputId="transactionDate"  [(ngModel)]="filters.startDate"
+              [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+              yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+          </p-calendar>
+      </div>
+
+      <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="transactionDate">Fecha fin</label>
+          <p-calendar [showIcon]="true" inputId="transactionDate" [(ngModel)]="filters.endDate"
+              [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+              yearRange="1970:2030" dateFormat="dd/mm/yy" (keyup.enter)="search()">
+          </p-calendar>
+      </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="lote">Lote</label>
+            <div class="p-inputgroup">
+              <!-- [(ngModel)]="filters.lotId" -->
+              <input type="text" pInputText pKeyFilter="int" [value]="lot?.lotName"
+                  [class]="false && !lot ? 'ng-dirty ng-invalid' : ''" disabled>
+              <button pButton icon="pi pi-times" style="border-radius: 0;" (click)="lot = null"></button>
+              <button pButton icon="pi pi-search"
+                  style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                  (click)="lotModal = true"></button>
+          </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="lote">Cliente</label>
+          <div class="p-inputgroup">
+            <!-- [(ngModel)]="filters.providerCustomerId" -->
+            <input type="text" pInputText pKeyFilter="int" [value]="client?.socialReason"
+                [class]="false && !client ? 'ng-dirty ng-invalid' : ''" disabled>
+            <button pButton icon="pi pi-times" style="border-radius: 0;" (click)="client = null"></button>
+            <button pButton icon="pi pi-search"
+                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                (click)="clientModal = true"></button>
+        </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Origen</label>
+            <p-dropdown [filter]="true" [options]="filterData.originModule" (keyup.enter)="search()" [(ngModel)]="filters.originModuleId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Moneda</label>
+            <p-dropdown [filter]="true" [options]="filterData.currencies" (keyup.enter)="search()" [(ngModel)]="filters.transactionCurrencyId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="Categoría">Sucursal</label>
+          <p-dropdown [filter]="true" [options]="filterData.branchoffice" (keyup.enter)="search()" [(ngModel)]="filters.businessId"
+              placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados.">
+          </p-dropdown>
+      </div>
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Estatus de la transacción</label>
+            <p-dropdown [filter]="true" [options]="filterData.status" (keyup.enter)="search()" [(ngModel)]="filters.transactionStatusTypeId"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+
+    </div>
+</div>
+
+<div class="p-grid p-align-center vertical-container">
+    <div class="p-d-flex p-jc-end p-col-12 p-lg-12" style="width: 100%">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()"  icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>
+
+<sale-transactions-client-modal [(displayModal)]="clientModal" [clients]="filterData.clients"
+[classifications]="clientClassifications" (onSelect)="client = $event"></sale-transactions-client-modal>
+
+<app-sale-transactions-lot-modal [(displayModal)]="lotModal" [lots]="filterData.lots"
+(onSelect)="lot = $event"></app-sale-transactions-lot-modal>

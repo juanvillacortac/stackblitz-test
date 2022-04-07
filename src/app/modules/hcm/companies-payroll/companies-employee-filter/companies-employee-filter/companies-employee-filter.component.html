@@ -1,0 +1,63 @@
+
+<div class="p-mt-4 p-align-center vertical-container p-p-3">
+    <div class="p-grid p-fluid">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4" tooltipPosition="left" life="500">
+            <!-- <label for="companiesList">Empresas</label> -->
+            <p-dropdown [(ngModel)]="filters.branchOfficeId" name="companiesList" [options]="branchOffices" placeholder="Sucursal" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" (keyup.enter)="search()"></p-dropdown>
+        </div>
+
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.employmentCode" name="employmentCode" id="employmentCode" type="text" maxlength="10" pInputText (keyup.enter)="search()">
+                    <label>Código</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="employeeName" [(ngModel)]="filters.employeeName" type="text" maxlength="250" pInputText (keyup.enter)="search()">
+                    <label for="employeeName">Nombre</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid p-fluid container-date">
+
+        <div class="p-col-12 p-md-4 p-lg-4"life="500">
+            <span class="p-float-label">
+                <p-calendar #formIngresoCalendar yearRange="1970:2030" [(ngModel)]="fechaIngreso" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+                    (onSelect)="onBlurMethod($event)" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                    [readonlyInput]="true" [yearNavigator]="true" [maxDate]="maxDate">
+                </p-calendar>
+                <label for="Ingreso">Ingreso</label>
+            </span>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-4 " life="500">
+            <span class="p-float-label">
+                <p-calendar #formAntiguedadCalendar yearRange="1970:2030" [(ngModel)]="fechaAntiguedad" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+                    readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                    [readonlyInput]="true" [yearNavigator]="true" [maxDate]="maxDate">
+                </p-calendar>
+                <label for="Antigüedad">Antigüedad</label>
+            </span>
+            
+        </div>
+        
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4" life="500">
+            <!-- <label for="statuslist">Estatus</label> -->
+            <p-dropdown id="statuslist" name="cboactive" [options]="statuslist" [(ngModel)]="filters.idEstatus" placeholder="Estatus" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-offset-5 p-md-7 p-lg-6 p-lg-offset-6 container-button p-pr-0">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <button pButton pRipple label="Importar" [disabled]="loading" (click)="massiveImport()" icon="pi pi-paperclip" class="p-mr-2"></button>
+        <p-splitButton label="Exportar" icon="pi pi-file-o" [model]="items"></p-splitButton>
+    </div>
+</div>

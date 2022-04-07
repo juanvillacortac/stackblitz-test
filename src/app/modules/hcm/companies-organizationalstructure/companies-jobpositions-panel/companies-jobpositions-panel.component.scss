@@ -1,0 +1,19 @@
+:host ::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
+  .p-panel-titlebar {
+    background: transparent !important;
+  }
+
+  p-panel.p-panel-toggleable .p-panel-header {
+    background: transparent !important;
+  }
+
+  app-companies-jobpositions-panel > p-dialog {
+      padding: 0 !important;
+      height: 0 !important;
+      width: 0 !important;
+  }
+}
+.p-panel.p-panel-toggleable .p-panel-header{
+    background:transparent!important;
+}
+

@@ -1,0 +1,42 @@
+
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+    </span>
+    <button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Agregar" class="p-button-success p-mr-2" (click)="add()"></button>
+  </div>
+  <p-table #table [columns]="cols" [value]="genericModel" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10" [paginator]="true"
+           [rowHover]="true" dataKey="id" [scrollable]="true" scrollHeight="240px"
+           currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true" #dt>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        
+        <th *ngFor="let col of columns" class="p-text-center" pSortableColumn="{{col.field}}">
+          <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          {{col.header}}
+        </th>
+        <th class="p-text-center"> 
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns" class="p-text-center">
+          <span *ngIf="rowData[col.field] != true && rowData[col.field] != false">{{rowData[col.field]}}</span>
+          <!-- <p-tableCheckbox *ngIf="rowData[col.field] == true || rowData[col.field] == false" [value]="rowData[col.field]" [disabled]="true"></p-tableCheckbox> -->
+          <p-checkbox [binary]="true" readonly="true" *ngIf="rowData[col.field] == true || rowData[col.field] == false" [(ngModel)]="rowData[col.field]"></p-checkbox>
+        </td>
+        <td class="p-text-center">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(rowData, indicator)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deletelevel(level)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        Total {{genericModel ? genericModel.length : 0 }} registros.
+      </div>
+    </ng-template>
+  </p-table>
+

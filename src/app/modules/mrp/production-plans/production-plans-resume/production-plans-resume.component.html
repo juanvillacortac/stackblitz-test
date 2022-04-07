@@ -1,0 +1,88 @@
+<h3>{{ 'mrp.production_plan.production_plans' | translate }}</h3>
+<div class="p-fluid">
+    <div class="p-field">
+        <span class="p-float-label">
+            <input pInputText #name id="name" [disabled]="true" [ngModel]="displayName" maxlength="15" lettersOnly required/>
+        </span>
+        <br/>
+    </div>
+    <div class="p-field">
+        <label for="float-input">Avance general</label>
+        <app-progress-view [progress]="displayProgress" [align]="progressAlign" [barColor]="getPlanStatusColor()"></app-progress-view>
+    </div>  
+</div>
+<p-table #dt
+        [value]="displayRecipes" 
+        [columns]="cols"
+        [paginator]="true" 
+        [rows]="5" 
+        [showCurrentPageReport]="true" 
+        [(selection)]="selectedPlanRecipe"
+        (onRowSelect)="onRecipeSelected($event)"
+        currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">>
+<ng-template pTemplate="header">
+    <tr>
+        <th *ngFor="let col of cols" pSortableColumn={{col.field}} [ngStyle]="{'width': columnWidth(col.field)}">
+            {{ col.header | translate }}
+            <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit' && col.field !== 'idProductionOrder'"></p-sortIcon>
+        </th>
+    </tr>
+</ng-template>
+<ng-template pTemplate="body" let-planRecipe>
+    <tr [pSelectableRow]="planRecipe" [pSelectableRowIndex]="planIndex" >
+        <td *ngFor="let col of cols">
+
+            <div *ngIf="col.field === 'status'; else accessCell">
+                <span [class]="'status-badge status-' + planRecipeStatus(planRecipe)">{{ 'mrp.production_plan.' + planRecipeStatus(planRecipe) | translate }}</span>
+            </div>
+
+            <ng-template #accessCell>
+                <div *ngIf="col.field === 'action'; else numberCell">
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" (click)="onRecipeSelected(planRecipe)" pTooltip="Ver orden"></button>
+                </div>
+            </ng-template>
+
+            <ng-template #numberCell>
+                <div *ngIf="col.field === 'amount'; else textCell" >
+                    {{(planRecipe.amount)|number:'1.1-2'}} gr
+                </div>
+            </ng-template>
+
+            <ng-template #textCell>{{planRecipe[col.field]}}</ng-template>
+        </td>
+    </tr>
+</ng-template>
+</p-table>
+
+<p-table #dtIngredients
+        *ngIf="false"
+        [value]="displayRecipes" 
+        [columns]="cols"
+        [paginator]="true" 
+        [showCurrentPageReport]="true" 
+        [rows]="5" 
+        [(selection)]="selectedPlanRecipe"
+        dataKey="id"
+        currentPageReportTemplate="{{ 'primeng.footerShort' | translate }}">
+<ng-template pTemplate="header">
+    <tr>
+        <th *ngFor="let col of cols" pSortableColumn={{col.field}} [ngStyle]="{'width': (col.field === 'select') ? '3rem' : ''}">
+            {{ col.header | translate }}
+            <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit' && col.field !== 'select'"></p-sortIcon>
+        </th>
+    </tr>
+</ng-template>
+<ng-template pTemplate="body" let-planRecipe>
+    <tr [pSelectableRow]="planRecipe" [pSelectableRowIndex]="planIndex" [pSelectableRowDisabled]="true">
+        <td *ngFor="let col of cols">
+            <div *ngIf="col.field === 'elaborationCapacity'; else statusCell" [value]="planRecipe">
+                {{(planRecipe.elaborationCapacity)|number:'1.1-2'}}
+            </div>
+            <div #statusCell *ngIf="col.field === 'status'; else textCell" [value]="planRecipe">
+                
+            </div>
+            <ng-template #textCell>{{planRecipe[col.field]}}</ng-template>
+        </td>
+    </tr>
+</ng-template>
+</p-table>

@@ -1,0 +1,20 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" (keyup.enter)="search()" name="name" id="name" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="100" pInputText>
+                <label>Nombre</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="status" (keyup.enter)="search()" appendTo="body" [(ngModel)]="filters.active" placeholder="Estatus">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>
+

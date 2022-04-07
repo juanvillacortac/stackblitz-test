@@ -1,0 +1,60 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Datos adicionales" [(visible)]="showDialog"
+  [style]="{width:'25%'}" [modal]="true" class="address-dialog" [draggable]="false" [resizable]="false">
+    <div class="p-grid p-align-center vertical-container p-p-3">
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        <span>Número de transferencia: </span>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        <b>{{merchandiseBranchTransfer.transfersNumber}}</b>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        Sucursal origen: 
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        {{merchandiseTransfer.originBranch.branchOfficeName}}
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        Sucursal Destino: 
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-6 p-fluid">
+        {{merchandiseBranchTransfer.destinationBranch.branchOfficeName}}
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="edit">
+        <label>Número de control <span [ngStyle]="{'color':'red'}">*</span></label>
+        <input name="name" [disabled]="!edit" [(ngModel)]="merchandiseBranchTransfer.controlNumber" id="name" type="text" pInputText maxlength="25">
+        <small class="p-invalid" *ngIf="submitted && edit && (merchandiseBranchTransfer.controlNumber == null || merchandiseBranchTransfer.controlNumber == '')">El número de control es requerido</small>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="!edit">
+        <label>Vehículo <span [ngStyle]="{'color':'red'}">*</span></label>
+        <div class="p-inputgroup">
+          <input type="text" [(ngModel)]="vehiclesString" pInputText placeholder="Vehículo" [disabled]="true">   
+          <button (click)="showSearchVehicle()" type="button" pButton pRipple icon="pi pi-search" styleClass="p-button-warn"></button>      
+        </div>
+        <small class="p-invalid" *ngIf="submitted && (vehiclesString == '')">El vehiculo es requerido</small>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="!edit">
+        <label>Fecha de salida <span [ngStyle]="{'color':'red'}">*</span></label>
+        <p-calendar [(ngModel)]="departureDate" dateFormat="dd/mm/yy" appendTo="body" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" inputId="navigators"></p-calendar>
+        <small class="p-invalid" *ngIf="submitted && (departureDate == null || departureDate == undefined)">La fecha de salida es requerida</small>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="!edit">
+        <label>Fecha de entrada <span [ngStyle]="{'color':'red'}">*</span></label>
+        <p-calendar [(ngModel)]="entryDate" dateFormat="dd/mm/yy" appendTo="body" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" inputId="navigators"></p-calendar>
+        <small class="p-invalid" *ngIf="submitted && (entryDate == null || entryDate == undefined)">La fecha de entrada es requerida</small>
+        <small class="p-invalid" *ngIf="submitted && (departureDate.getTime() > entryDate.getTime())">La fecha de salida tiene que ser menor a la fecha de entrada</small>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="edit">
+        <label>Número de guía de movilización</label>
+        <input name="name" [disabled]="!edit" [(ngModel)]="merchandiseBranchTransfer.transportGuideNumber" id="name" type="text" pInputText maxlength="25">
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12 p-fluid" *ngIf="edit">
+        <label>Observaciones</label>
+        <textarea name="name" [disabled]="!edit" [(ngModel)]="merchandiseBranchTransfer.observations" id="name" type="text" pInputText maxlength="300" rows="2" style="resize: none;" cols="30"></textarea>
+      </div>
+    </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Guardar" (click)="saveAdditionalData()" icon="pi pi-save"
+      class="btn p-button-info p-mr-2 p-fluid"></button>
+  </ng-template>
+</p-dialog>
+<app-search-vehicles [(showDialog)]="showDialogVehicle" (addvehicleslist)="addvehicleslist()" [(merchandiseBranchTransfer)]="merchandiseBranchTransferNew" [(merchandiseBranchTransferDB)]="merchandiseBranchTransfer"></app-search-vehicles>

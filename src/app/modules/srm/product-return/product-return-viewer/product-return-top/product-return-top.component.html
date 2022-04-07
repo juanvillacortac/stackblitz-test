@@ -1,0 +1,18 @@
+<div class="p-d-flex p-flex-column p-flex-md-row">
+    <div class="card p-mr-4 p-mb-4 p-lg-4"> 
+         <app-list-team [(dataViewModel)]="dataViewModelBuyer" [(paginator)]="paginator" ></app-list-team>
+    </div>
+    <div class="p-mr-4 p-mb-4 p-lg-4">
+       <!--  <h5>Ordenes de compra</h5>
+          -->
+        <app-list-number-indicator  [(data)]="indicatorsnumberODC" style="height:370px ;"></app-list-number-indicator>
+    
+    </div>
+    <div class="card p-mr-4 p-mb-4 p-lg-4">
+
+        <h5>Top 10 de operados con mas compras concretadas</h5>
+        <p-chart type="doughnut" [data]="dashboardData" [options]="horizontalOptions" [style]="{'width': '50%'}" ></p-chart>
+    </div>
+ 
+</div>
+

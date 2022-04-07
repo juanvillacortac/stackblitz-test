@@ -1,0 +1,83 @@
+<div *ngIf="!showMaterialsList">
+    <div class="p-grid card p-m-0 p-pb-0">
+        <div class="p-col-6">
+            <div class="p-col-12" >
+                <div class="p-grid p-formgroup-inline">
+                    <div class="p-field p-col">
+                        <label for="input">Sala </label>
+                        <input type="text" pInputText disabled class="p-mt-2" [(ngModel)]="processingRoom.name"> 
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="input">Tipo de animal que procesa </label>
+                        <input type="text" pInputText disabled class="p-mt-2" [(ngModel)]="processingRoom.animalType">  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-6">
+            <app-table-header 
+            [idAddPermission]="this.permissionsIDs.SHOW_RAWMATERIALS_DETAIL_PERMISSION_ID" 
+            [idFilterPermission]="this.permissionsIDs.CHECK_RAWMATERIALS_PERMISSION_ID" 
+            (addPressed)="openNew()" 
+            (filterPressed)="showFilters=!showFilters" 
+            (editFilterField)="dt.filterGlobal($event.target.value, 'contains')">
+        </app-table-header>
+        
+        </div>
+        <app-raw-materials-filters class="p-col-12" (onSearch)="search($event)" [(filters)]="filters" [expanded]="showFilters" [loading]="loading"></app-raw-materials-filters>
+    </div>
+    
+    <div class="card">
+        <div class="p-mr-4 p-ml-4">
+            <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="rawMaterials" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <ng-container *ngFor="let col of columns">  
+                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                          {{ col.header | translate }}
+                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                        <th></th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rawMaterial let-columns="columns" let-rowData>
+                <tr>
+                  <ng-container *ngFor="let col of columns">
+                      <td [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }">
+                            <div *ngIf="col.field === 'performance'; else textCell">
+                                {{(rawMaterial.performance)|number:'1.2-2'}}%
+                        </div>                
+                          <ng-template #textCell >
+                            {{rowData[col.field]}}
+                          </ng-template>
+                      </td>
+                  </ng-container>
+                    <td  *ngIf="this.userPermissions.allowed(this.permissionsIDs.SHOW_RAWMATERIALS_DETAIL_PERMISSION_ID)">                
+                        <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" (click)="edit(rawMaterial)" ></button>       
+                        <button  pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Ver Detalle" (click)="editDetail(rawMaterial)"></button>   
+                        <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" pTooltip="{{ 'delete' | translate }}"  (click)="delete(rawMaterial)" ></button>                                          
+                    </td>
+                </tr>
+            </ng-template>
+              <ng-template pTemplate="paginatorleft">
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                    </ng-template>
+            </p-table>
+        </div>
+
+        <div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+            <div class="p-field">
+                <button pButton type="button" pRipple  class="p-button-secondary" icon="pi pi-arrow-left" (click)="cancel()"  pTooltip="{{ 'primeng.cancel' | translate }}" label="{{ 'return' | translate}}"></button>
+            </div> 
+        </div>
+    </div>
+</div>
+
+<app-materials-list *ngIf="showMaterialsList" [rawMaterial]="rawMaterial" (cancel)="cancelSettings($event)"></app-materials-list>
+<p-sidebar [(visible)]="showRawMaterialDialog" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right" [style]="{'overflow-y': 'auto'}" *ngIf="showRawMaterialDialog" styleClass="p-sidebar-md" >
+    <app-raw-materials-detail [(rawMaterial)]="rawMaterial" (onHideDialogForm)="childCallBack($event)" [rawMaterialsAdded]="rawMaterials" ></app-raw-materials-detail>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="delete"></p-confirmDialog>

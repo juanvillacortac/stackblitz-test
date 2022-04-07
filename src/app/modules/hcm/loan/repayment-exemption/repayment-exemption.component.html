@@ -1,0 +1,64 @@
+<p-dialog header="Exonerar prestamo" (onHide)="outForm()" [(visible)]="visible" [blockScroll]="true" [style]="{width: '70vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="p-fluid p-grid p-formgrid">
+        <div class="p-grid p-col-12 p-field p-align-center p-mb-2 vertical-container">
+            <div class="p-col-12 p-mt-4 p-lg-5">
+                <p class="titleRepayment">Monto por amortizar: {{symbolArray[0]}} {{repaymentAmount | number}}</p>
+            </div>
+            <div class="p-grid p-col-12 p-mt-4 p-lg-7">
+                <span class="p-col-12 p-md-6 titleRepayment">Total por amortizar: </span>
+                <div class="p-inputgroup p-col-12 p-md-6">
+                    <span class="p-inputgroup-addon">{{symbolArray[0]}}</span>
+                    <p-inputNumber class="shareAmount" id="conversionNeto" [(ngModel)]="totalRepaymentEdit" [min]="0" maxlength="16" 
+                        mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" required (ngModelChange)="updateMax()">
+                    </p-inputNumber>
+                </div>
+            </div>
+        </div>
+        <div class="p-grid p-field p-col-12 p-lg-5">
+            <div class="p-col-12">
+                <p-dropdown [options]="motiveDropdown" placeholder="Motivo" [(ngModel)]="motiveSelect" emptyFilterMessage="Sin resultados"
+                     emptyMessage="Sin resultados" [disabled]="!(repaymentAmount == 0 && totalRepaymentAmount > 0)"></p-dropdown>
+            </div>
+            <!-- <small class="p-invalid" *ngIf="submitted && motiveSelect == -1">La divisa es requerida</small> -->
+        </div>
+
+        <div class="p-field p-grid p-col-12">
+          <p-table #dt [rowHover]="true" [value]="repaymentListQuota" [paginator]="true" [rows]="10"
+          [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+          [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th class="p-text-center">Fecha de pago </th>
+                <th class="p-text-center">Tipo de nómina</th>
+                <th class="p-text-center">Monto por pagar</th>
+                <th class="p-text-center">Amortizar</th>
+                <th class="p-text-center">Diferencia</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-paymentPlan>
+            <tr *ngIf="paymentPlan != []">
+                <td class="p-text-center"><p>{{paymentPlan.payDate | date: "dd/MM/yyyy"}}</p></td>
+                <td class="p-text-center"><p>{{paymentPlan.payrollType}}</p></td>
+                <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.pendingAmount| number}}</p></td>
+                <td>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">{{symbolArray[0]}}</span>
+                        <p-inputNumber class="shareAmount" id="conversionNeto" [(ngModel)]="paymentPlan.repaymentAmount" [min]="0" [max]="repaymentAmount+paymentPlan.repaymentAmount > paymentPlan.pendingAmount ? paymentPlan.pendingAmount : repaymentAmount+paymentPlan.repaymentAmount" maxlength="16" 
+                            mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" required (ngModelChange)="updateData(index)" [disabled]="paymentPlan.repaymentAmount == 0 && repaymentAmount == 0 || paymentPlan.pendingAmount == 0">
+                        </p-inputNumber>
+                    </div>
+                </td>
+                <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.repaymentDifference| number}}</p></td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft"></ng-template>
+          <ng-template pTemplate="paginatorright"></ng-template>
+      </p-table>
+        </div>
+        <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+                <button id="Agregar" pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="!(repaymentAmount == 0 && totalRepaymentAmount > 0 && motiveSelect != -1)"></button>
+            </div>
+        </div>
+    </div>
+</p-dialog>

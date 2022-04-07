@@ -1,0 +1,90 @@
+<div class="p-grid">
+  <div class="p-col-12 p-lg-12 p-md-12 p-sm-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Masivo" (click)="showMasiveExhange($event)" class="p-button-info p-mt-1"></button>
+  </div>
+  <div class="p-col-12 p-lg-12 p-md-12 p-sm-12">
+    <p-accordion>
+      <p-accordionTab *ngFor="let exchangerate of _CompaniesListTemp"
+        (click)="searchExhangeRatesByIdCompany(exchangerate.id,$event)"
+        [selected]="exchangerate.id == echangerateexpanded ? true : false">
+        <ng-template pTemplate="header">
+          <div class="p-grid" style="width: 100%;">
+            <div class="p-md-10" style="margin-top:8px !important ;">
+              <label  class="p-mr-2"><i [class]="PrintCheck(exchangerate.id) == true ? 'pi pi-check' : ''"></i></label>
+              <label>{{exchangerate.socialName}}</label>
+            </div>
+            <div class="p-md-2 p-d-flex p-jc-end">
+              <!-- <button pButton pRipple icon="pi pi-plus"  class="p-button-rounded p-button-success" (click)="showAddPanelValidationFactor($event,branchOffice.idBranchOffice)" pTooltip="Agregar" style="height: 2rem!important;width: 2rem!important;"></button> -->
+              <button pButton pRipple icon="pi pi-plus" class="p-button-success"
+                (click)="showAddExchangeRateModal($event,exchangerate.id)" pTooltip="Agregar tasa"
+                 tooltipPosition="top" style="height: 2rem!important;width: 2rem!important;"></button>
+            </div>
+          </div>
+        </ng-template>
+        <!-- <ng-template pTemplate="content"> -->
+        <div class="p-col-12 p-lg-12 p-md-12  p-sm-12  p-xs-12">
+          <div class="p-grid p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+          </span> 
+          <div class="card p-m-0">
+            <p-table #dt [columns]="displayedColumnsCustomTaxes" [rowHover]="true" (onRowSelect)="onRowSelect($event)"
+              [(selection)]="SelectedExchangeRate" [value]="_ExchangeRateFilterList" [paginator]="true" [rows]="10"
+              [showCurrentPageReport]="true"
+              currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+              [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo p-mt-2">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                  </ng-container>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-exchangeRates let-columns="columns">
+                <tr>
+
+                  <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+                      <span>{{col.template(exchangeRates)}} </span>
+                    </td>
+                  </ng-container>
+                  <td style="text-align:center !important">           
+                      <button *ngIf="exchangeRates.idExchangeRateSupplier<=0" (click)="removeExchange(exchangeRates)" pButton pRipple icon="pi pi-times"
+                        class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"></button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                  <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-1">No existen resultados</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="paginatorleft">
+              </ng-template>
+              <ng-template pTemplate="paginatorright">
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+        </div>
+        <!-- </ng-template> -->
+
+      </p-accordionTab>
+
+    </p-accordion>
+  </div>
+
+</div>
+
+<app-add-exchange-tax [(idCompany)]="idCompany" (onSubmit)="onSubmitExchange($event)"
+  (onToggle)="onToggleExchange($event)" [(_supplier)]="_dataSupplierExchangeRate" [visible]="exchangerateDialogVisible">
+</app-add-exchange-tax>
+<app-add-masive-exchange-tax (onToggle)="onHideMasiveExchange($event)" (onSubmit)="onSubmitExchangeMasive($event)"
+  [(_supplier)]="_dataSupplierExchangeRate" [visible]="exchangerateMasiveDialogVisible"
+  [(_ExchangeRateFilterList)]="_dataSupplierExchangeRate.exchangeRates"></app-add-masive-exchange-tax>

@@ -1,0 +1,85 @@
+.position-icon-right .ui-button-text {
+    padding: 0.4em 2.1em 0.4em 1em;
+}
+
+.position-icon-right .ui-button-icon-primary {
+    left: auto;
+    right: 0.5em;
+}
+
+.align-center {
+    margin-top: 1rem;
+}
+
+.align-right {
+    float: right;
+}
+
+.view-center {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+h3:first-child {
+    margin-top: 1rem;
+}
+
+h2:first-letter {
+    text-transform:capitalize;
+}
+
+.legend-eraser{
+    width: 12px;
+    height: 14px;
+    border: solid #8a427a;
+    background-color: #e1cfe7;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.legend-execution{
+    width: 12px;
+    height: 14px;
+    border: solid #0891cf;
+    background-color: #B3E5FC;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.legend-processed{
+    width: 12px;
+    height: 14px;
+    border: solid #d9a300;
+    background-color: #FFECB3;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.legend-finalized{
+    width: 12px;
+    height: 14px;
+    border: solid #439446;
+    background-color: #C8E6C9;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.legend-cancelled{
+    width: 12px;
+    height: 14px;
+    border: solid #e60017;
+    background-color: #FFCDD2;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.legend-dispatched{
+    width: 12px;
+    height: 14px;
+    border: solid #d96900;
+    background-color: #ffdeb3;
+    display: inline-block;
+    border-radius: 4px;
+}
+

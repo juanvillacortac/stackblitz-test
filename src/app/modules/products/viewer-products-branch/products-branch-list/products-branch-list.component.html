@@ -1,0 +1,137 @@
+<div class="card p-m-0 p-pb-0">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+    <div>
+      <!-- <button pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo"
+        (click)="openNew()"></button> -->
+      <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help"
+        [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"
+        tooltipPosition="top"></button>
+    </div>
+  </div>
+  <app-products-branch-filter class="p-mt-3" [loading]="loading" (onSearch)="SearchProductsBranch()"
+    [(filters)]="productBranchFilters" [(productBranchList)]="productBranchListDB" [expanded]="showFilters">
+  </app-products-branch-filter>
+</div>
+<div class="card p-m-0">
+
+  <p-table #dt [columns]="displayedColumnsProduct" [value]="productBranchList" dataKey="idProduct" [paginator]="true"
+    [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col style="width:50px">
+        <col style="width:50px">
+        <col style="width:50px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <ng-container *ngFor="let col of columns">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-expanded="expanded">
+      <tr>
+        <td>
+          <button type="button" pButton pRipple [pRowToggler]="product"
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td><button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="onViewProduct(product)" pTooltip="Editar" tooltipPosition="top"></button></td>
+        <td>
+          <div class="container-img">
+            <img [alt]="product.product.name" [src]="product.product.image == null || product.product.image == ''  ? defeatImage
+                    : product.product.image" style="vertical-align: middle" class="p-shadow-4 imgcatalog" />
+          </div>
+        </td>
+        <td><b>{{product.product.name}}</b></td>
+        <td style="overflow-wrap: break-word">{{product.product.category.name}}</td>
+        <td>{{product.product.referent}}</td>
+        <td>{{product.product.classification.name}}</td>
+        <td>{{product.product.structureType.name}}</td>
+        <td>{{product.totalavailable}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-product>
+      <tr>
+        <td colspan="9" style="padding: 0;">
+          <div>
+            <p-table [columns]="displayedColumns" [value]="getPackings(product.idProduct)" dataKey="idPacking">
+              <ng-template pTemplate="header" let-columnsp>
+      <tr>
+        <th></th>
+        <th style="width: 50px;"></th>
+        <th style="width: 50px;"
+          *ngIf="this.userPermissions.allowed(this.permissionsIDs.INACTIVATE_BRANCH_PRODUCT_PERMISSION_ID)"></th>
+        <ng-container *ngFor="let col of columnsp">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-packing let-columnsp="columns">
+      <tr>
+        <td></td>
+        <td style="width: 50px;">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="onViewPackingProduct(packing)" pTooltip="Editar" tooltipPosition="top"></button>
+        </td>
+        <td style="width: 50px;"
+          *ngIf="this.userPermissions.allowed(this.permissionsIDs.INACTIVATE_BRANCH_PRODUCT_PERMISSION_ID)">
+          <button pButton pRipple [icon]="packing.product.status.id == 1 ? 'pi pi-minus-circle' : 'pi pi-check'"
+            [ngClass]="packing.product.status.id == 1 ? 'p-button-rounded p-button-danger p-mr-2' : 'p-button-rounded p-button-success p-mr-2'"
+            (click)="changeStatusProduct(packing)"
+            [pTooltip]="packing.product.status.id == 1 ? 'Desincorporar' : 'Activar'" tooltipPosition="top"></button>
+        </td>
+        <ng-container *ngFor="let col of columnsp">
+          <td
+            [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'text-align' : col.field === 'basePVP' || col.field === 'conversionPVP'|| col.field === 'units'|| col.field === 'available'|| col.field === 'totalUnits' ? 'right' : 'left'}">
+            <span *ngIf="col.field === 'product.status.name' && packing.product.status.id == 1"
+              class="status-badge status-active">Activo</span>
+            <span *ngIf="col.field === 'product.status.name' && packing.product.status.id == 2"
+              class="status-badge status-inactive">Desincorporado</span>
+            <span *ngIf="col.field != 'product.status.name'">{{col.template(packing)}} </span>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+</p-table>
+</div>
+<app-tabs-dialog [(showDialog)]="showExpressTab" [(productPacking)]="productPackingModel"
+  [(indtabsactive)]="indtabsactive"></app-tabs-dialog>
+<app-reason-panel [(showDialog)]="showDialogReason" [(idproduct)]="idproduct" [(idBranchOffice)]="idBranchOffice"
+  [(packingBranchOffice)]="productPackingModel" (refreshPackingBranchOffice)="refreshPackingBranchOffices()"
+  [idModule]="idModule">
+</app-reason-panel>

@@ -1,0 +1,122 @@
+<div
+  class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row p-mt-6"
+>
+  <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+    <i class="p-text-bold pi pi-book"></i> Documentos a aplicar
+  </div>
+  <div class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3">
+    <button
+      pButton
+      pRipple
+      icon="pi pi-plus"
+      class="p-button-success"
+      pTooltip="Agregar"
+      tooltipPosition="top"
+      (click)="showModal = true"      
+      [disabled]="!charge"
+    ></button>
+  </div>
+</div>
+
+<p-table
+  #dt
+  dataKey="id"
+  [value]="data"
+  [columns]="cols"
+  [resizableColumns]="false"
+  #treeRef
+  styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows"
+>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th
+        *ngFor="let col of cols; let i = index"
+        [ngStyle]="{
+          display: col.display,
+          'overflow-wrap': 'break-word',
+          'text-align': i == 0 ? 'left' : 'center'
+        }"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+      >
+        {{ col.header }}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+      <th [ngStyle]="{ 'text-align': 'center' }"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-data let-columns="cols" let-i="rowIndex">
+    <tr>
+      <ng-container *ngFor="let col of cols">
+        <td
+          [ngStyle]="{
+            display: col.display,
+            'overflow-wrap': 'break-word',
+            'text-align': 'left' 
+          }"
+          class="ui-resizable-column"
+        >
+          <div>
+            <span
+              style="overflow-wrap: break-word"
+              *ngIf="col.field != 'amountToApply'"
+              >{{ col.template(data) }}</span
+            >
+            <ng-container *ngIf="col.field == 'amountToApply'">
+              <p-inputNumber
+                mode="decimal"
+                [(ngModel)]="data.amountToApply"
+                prefix="$"
+                [showButtons]="true"
+                [inputStyle]="{ width: '100%' }"
+                [min]="0"
+                [max]="charge.remainingAmount - countAppliedTotal + data.amountToApply"
+              >
+              </p-inputNumber>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+      <td [ngStyle]="{ 'text-align': 'center' }">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-rounded p-button-danger p-mr-2"
+          pTooltip="Quitar"
+          (click)="delete(i)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <ng-container>
+      <tr>
+        <td
+          [ngStyle]="{ 'text-align': 'center' }"
+          [attr.colspan]="columns.length + 1"
+        >
+          <p-message
+            severity="info"
+            [text]="
+              isFiltered
+                ? 'No existen resultados que coincidan con la búsqueda.'
+                : 'No existen registros.'
+            "
+            styleClass="p-col-12 p-mr-2"
+          ></p-message>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorleft"> </ng-template>
+  <ng-template pTemplate="paginatorright"> </ng-template>
+</p-table>
+
+<app-conllection-transaction-documents-to-apply-modal
+  [(displayModal)]="showModal"
+  [client]="client"
+  (onSelect)="appendToList($event)"
+>
+</app-conllection-transaction-documents-to-apply-modal>

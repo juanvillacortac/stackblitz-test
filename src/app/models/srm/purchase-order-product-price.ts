@@ -1,0 +1,43 @@
+export class PurchaseOrderProductPrice {
+    idPurchaseOrderDetail:number=-1;
+    idPacking :number=-1;
+    productId:number=-1;
+    bar :string="";
+    idPackingType :number=-1;
+    packingType:string="";
+    idPresentation :number=-1;
+    presentation :string="";
+    unitsNumberPacking:number=0;
+    idUnitMeasurePresentation :number=-1;
+    packingNumbers:number=0;
+    unitsNumber :number=0;
+    totalUnits :number=0;
+    minimunFactor:number=0;
+    maximunFactor:number=0;
+    mediumFactor :number=0;
+    netFactor :number=1;
+    netSalesFactor :number=1;
+    salesFactor :number=0;
+    salesFactorNew :number=0;
+    baseCost :number=0;
+    baseCostNew :number=0;
+    unitCostConversion :number=0;
+    convertionCost :number=0;
+    netCost :number=0;
+    netCostConversion :number=-0;
+    salesNetCost :number=0;
+    salesNetCostConvertion :number=0;
+    pvpBase :number=0;
+    pvpConversion :number=0;
+    pvpBaseNew :number=0;
+    pvpConversionNew :number=-0;
+    indAdded :number=1;
+    taxableBase:number=0
+    taxableConversion:number=0;
+    deductibleBase:number=0;
+    deductibleConvertion:number=0;
+     ///valores fijos para calculos imponibles deducible
+     netcostfijo:number=0;
+     salesnetcostfijo:number=0;
+    indApply:number=0;
+}

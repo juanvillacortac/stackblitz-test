@@ -1,0 +1,87 @@
+<p-dialog (onShow)="ngOnInit()" [(visible)]="displayModal" [closable]="false" [draggable]="false" [modal]="true"
+    [breakpoints]="{'640px': '90vw', '980px': '80vw'}" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [focusOnShow]="true">
+
+    <ng-template pTemplate="header">
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <h4 style="margin: 0">Buscar impuesto</h4>
+            <button class="p-dialog-header-close p-dialog-header-icon p-link ng-star-inserted" (click)="hideDialog()">
+                <span class="pi pi-times"></span>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="p-grid p-align-center p-mb-2 vertical-container">
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-multiSelect pInput="types" appendTo="body" [(ngModel)]="taxTypeFilterIds"
+                            [resetFilterOnHide]="true" [options]="taxData.types" [baseZIndex]="10000000000"
+                            [filter]="true" (onChange)="selectedTax = null; selectedRate = null"
+                            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [optionLabel]="'name'"
+                            [ngStyle]="{ 'width': '100%' }" [optionValue]="'id'">
+                        </p-multiSelect>
+                        <label for="name">Tipo de aplicación<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <span class="p-float-label">
+                    <p-dropdown pInput=""
+                        [options]="getTaxList(taxData.raws || [], taxTypeFilterIds || [], taxData.wOriginTable || [])"
+                        [(ngModel)]="selectedTax" placeholder="&nbsp;" [filter]="true" [showClear]="true"
+                        (onChange)="selectedRate = null" [resetFilterOnHide]="true" [baseZIndex]="10000000000"
+                        [disabled]="!taxTypeFilterIds.length" [ngStyle]="{ 'width': '100%' }"
+                        emptyFilterMessage="Sin resultados." appendTo="body" emptyMessage="Sin resultados.">
+                    </p-dropdown>
+                    <label>Impuesto <span [ngStyle]="{'color':'red'}">*</span></label>
+                </span>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" *ngIf="getBaseTax(selectedTax)">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <input pInputText type="text" [disabled]="true" [value]="getBaseTax(selectedTax).name" />
+                        <label>Impuesto base<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown pInput="" [options]="rateOptions[selectedTax]" [(ngModel)]="selectedRate"
+                            [filter]="true" placeholder="&nbsp;" [showClear]="true" [resetFilterOnHide]="true"
+                            emptyFilterMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body"
+                            [ngStyle]="{ 'width': '100%' }" emptyMessage="Sin resultados." [disabled]="!selectedTax">
+                        </p-dropdown>
+                        <label>Tasa<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-col-12 p-mt-3 p-md-4" *ngIf="getBaseTax(selectedTax)">
+                <div class="p-inputgroup">
+                    <span class="p-float-label">
+                        <p-dropdown pInput="" [options]="baseRateOptions[selectedTax]" [(ngModel)]="selectedBaseTaxRate"
+                            [filter]="true" placeholder="&nbsp;" [showClear]="true" [resetFilterOnHide]="true"
+                            emptyFilterMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body"
+                            [ngStyle]="{ 'width': '100%' }" emptyMessage="Sin resultados." [disabled]="!selectedTax">
+                        </p-dropdown>
+                        <label>Tasa del impuesto base<span [ngStyle]="{'color':'red'}"> *</span></label>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple [disabled]="!selectedRate || !selectedTax || (getBaseTax(selectedTax) && !selectedBaseTaxRate)" (click)="select()"
+            label="Agregar" class="p-button-info"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [baseZIndex]="1000000000000"></p-confirmDialog>

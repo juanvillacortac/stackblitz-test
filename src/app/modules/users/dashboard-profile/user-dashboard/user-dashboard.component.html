@@ -1,0 +1,13 @@
+<div class="p-d-flex p-d-flex p-flex-column p-flex-md-row">
+    <div class="p-d-flex-column" style="width: 100%;">
+        <app-user-details [(person)]="person"></app-user-details>  
+        <app-profile-details-dashboard></app-profile-details-dashboard> 
+        <app-user-options></app-user-options> 
+    </div>
+    <div class="p-d-flex-column" style="width: 100%;">
+        <app-contact-details [(profile)]="profile" [(addresses)]="addresses" [(phones)]="phones" [onEditProfile]="onEditProfile"></app-contact-details> 
+        <app-rating-details></app-rating-details>
+    </div>
+    <p-toast position="top-right"></p-toast>
+</div>
+

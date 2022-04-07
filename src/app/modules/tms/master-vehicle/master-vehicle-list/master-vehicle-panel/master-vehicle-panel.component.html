@@ -1,0 +1,126 @@
+<p-sidebar [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}" [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()">
+    <h5 class="p-m-0">Vehículo</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+
+                <div *ngIf="_showInput" class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Código<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input id="float-input" [(ngModel)]="_vehicle.vehicleCode" type="text" pInputText disabled required>                    
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="active"> Propietario <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div class="p-inputgroup">
+                    <span class="p-float-label">
+                      <input type="text" pInputText [(ngModel)]="_vehicle.vehicleOwner" readonly="true" class="responsible">
+                      <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=false)" class="btresponsible"></p-button>                        
+                    </span>                      
+                  </div>
+                  <small class="p-invalid" *ngIf="submitted && (!_vehicle.vehicleOwner || !_vehicle.vehicleOwner.trim())">El propietario es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Uso<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="VehicleTypeList" [(ngModel)]="_vehicle.vehicleTypeID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _vehicle.vehicleTypeID < 0">El uso del vehículo es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Marca<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="VehicleModelList" [(ngModel)]="_vehicle.vehicleModelID" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _vehicle.vehicleModelID < 0">El modelo del vehículo es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                      <label>Placa <span [ngStyle]="{'color':'red'}">*</span></label>
+                      <input [(ngModel)]="_vehicle.vehicleRegistrationPlate" name="VehicleRegistrationPlate" id="VehicleRegistrationPlate" type="text" pInputText maxlength="50">
+                      <small class="p-invalid" *ngIf="submitted && (!_vehicle.vehicleRegistrationPlate || !_vehicle.vehicleRegistrationPlate.trim())">La placa del vehiculo es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                      <label>Año</label>
+                      <p-inputNumber [(ngModel)]="_vehicle.vehicleYear" min="0" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="0" maxlength="4"></p-inputNumber>                                    
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                      <label>Serial del motor</label>
+                      <input [(ngModel)]="_vehicle.motorSerialNumber" name="MotorSerialNumber" id="MotorSerialNumber" type="text" pInputText maxlength="50">
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                      <label>Color</label>
+                      <input [(ngModel)]="_vehicle.vehicleColor" name="VehicleColor" id="VehicleColor" type="text" pInputText noneSpecialCharacters maxlength="50">
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label>Capacidad de carga (kg)</label>
+                  <p-inputNumber [(ngModel)]="_vehicle.chargeCapacity" min="0" mode="decimal" [minFractionDigits]="3" maxlength="22"></p-inputNumber>              
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label>Kilometraje (km)</label>                      
+                        <p-inputNumber [(ngModel)]="_vehicle.kilometers" min="0" mode="decimal"[minFractionDigits]="3" maxlength="22"></p-inputNumber>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Remolque </label>
+                    <div class="p-inputgroup">
+                      <span class="p-float-label">
+                        <input type="text" pInputText [(ngModel)]="_vehicle.vehicleTrailer" readonly="true" class="responsible">
+                        <button icon="pi pi-times" pButton (click)="cleanText()" [style]="{'display':_vehicle.vehicleTrailer.trim() == ''?'none':'block'}" class="p-button-text"></button>  
+                        <p-button icon="pi pi-search" (click)="showModalTrailer()" class="btresponsible"></p-button>                                                
+                      </span>                      
+                    </div>
+                    <!-- <small class="p-invalid" *ngIf="submitted && (!_vehicle.vehicleOwner || !_vehicle.vehicleOwner.trim())">El propietario es requerido</small> -->
+                  </div>
+
+                  
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>                    
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_vehicle.active" placeholder="Estatus" [disabled]="_vehicle.id<=0" (keyup.enter)="submit()" ></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Observaciones </label>
+                    <textarea [(ngModel)]="_vehicle.observation" [rows]="3" [cols]="60" maxlength="500" pInputTextarea></textarea>
+                </div>    
+                <div class="p-fluid p-grid p-mt-2">
+                    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+                        <p-table class="simple-footer-table" [value]="_vehicle.driversPerVehicleList">
+                            <ng-template pTemplate="caption">
+                                Conductores
+                            </ng-template>
+                            <ng-template pTemplate="body" let-drivers let-i="rowIndex">
+                                <tr>                                    
+                                    <td class="p-text-center" width="90%"><strong>{{drivers.driver}} ({{drivers.typeDriver}})</strong></td>
+                                    <td class="p-text-right" width="10%">
+                                        <button #b1 (click)="showDriversMenu($event,driversMenu,i)" 
+                                        pButton pRipple type="button" icon="pi pi-ellipsis-v" class="p-button-text"></button>
+                                        <p-menu #driversMenu appendTo="body" [popup]="true" [model]="menuItemsDrivers"></p-menu>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">    
+                                <button pButton pRipple type="button" (click)="showModalDriver()" label="+ Agregar" class="p-button-text"></button>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<app-modal-aggregate-vehicle-driver (onSubmit)="onSubmitDrivers($event)"></app-modal-aggregate-vehicle-driver>
+<app-modal-aggregate-trailer (onSubmit)="onSubmitTrailer()"></app-modal-aggregate-trailer>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [_status]="false" [multiples]="multiples"></operator-modal-list>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

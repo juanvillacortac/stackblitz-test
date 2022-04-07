@@ -1,0 +1,42 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Agregar conteos" [(visible)]="showDialogCount"
+  [style]="{width:'50%'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [modal]="true" class="address-dialog">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="p-fluid p-grid p-formgrid">
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <b>Conteos realizados:</b>
+          <label style="margin-left:20px;">{{_cont.countsMade}}</label>
+        </div>
+
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <b>Operador:</b>
+          <p-dropdown name="active" [options]="operatorlist" appendTo="body" [(ngModel)]="_cont.idOperator"
+            placeholder="Operador" (onChange)="onChange($event)" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && (_cont.idOperator <=-1)" (keyup.enter)="submit()">Ingrese un operador</small>
+        </div>
+
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <b>Cantidad:</b>
+          <p-inputNumber *ngIf="_cont.indHeavy==true" [(ngModel)]="_cont.count" min="0" mode="decimal" maxlength="15"
+            [minFractionDigits]="3"  (onFocus)="clear($event)" (keyup.enter)="submit()"></p-inputNumber>
+          <p-inputNumber *ngIf="_cont.indHeavy==false" [(ngModel)]="_cont.count" min="0" (keyup.enter)="submit()" maxlength="15"></p-inputNumber>
+          <small class="p-invalid" *ngIf="submitted && (_cont.count ==undefined || _cont.count==null)" (keyup.enter)="submit()">Ingrese la cantidad</small>
+        </div>
+
+        <div class="p-field p-col-12 p-sm-12 p-md-12">
+          <b>Cantidad contada:</b>
+          <div style="text-align: center;">
+            <h4 *ngIf="_cont.indHeavy==true && _cont.count !=undefined">
+              {{_cont.count.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3})}}</h4>
+            <h4 *ngIf="_cont.indHeavy==false">{{_cont.count}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2"></p-button>
+    <p-button icon="pi pi-ban" (click)="showDialogCount=false" label="Cancelar" styleClass="p-button-secondary">
+    </p-button>
+  </ng-template>
+</p-dialog>

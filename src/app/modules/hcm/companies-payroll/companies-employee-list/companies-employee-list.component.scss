@@ -1,0 +1,22 @@
+:host ::ng-deep {
+    .p-fileupload-choose {
+        border-radius: 6px;
+    }
+
+    #filterTitle {
+        font-size: 17px;
+        font-weight: 700;
+    }
+    @media screen and (width: 320px) {
+        .p-datepicker.p-datepicker-buttonbar {
+            display: none !important;
+        }
+    }
+        .custom{
+            background: transparent;
+            margin-top: 0rem;
+            padding: 0px;
+            min-height: 0vh;
+        }
+
+}

@@ -1,0 +1,47 @@
+<p-table [value]="listProduct" styleClass="p-datatable-sm" responsiveLayout="scroll">
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <p-tag styleClass="p-mr-2" [rounded]="true" onclick="prueba()" severity="success" value="disponible"></p-tag>
+            <p-tag styleClass="p-mr-2" severity="warning" value="bajo stock" [rounded]="true"></p-tag>
+            <p-tag styleClass="p-mr-2" severity="danger" [rounded]="true" value="sin stock"></p-tag>
+
+           
+          </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Sucursal</th>
+            <th>Disponible</th>
+            <th>Punto mínimo</th>
+            <th>Punto medio</th>
+            <th>Punto máximo</th>
+            <th>...</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-InventoryProductInfo>
+        <tr [ngStyle]="{'text-align': 'center'}" >
+            <td>{{InventoryProductInfo.branchName}}</td>
+            <td>
+                <div [ngClass]="{'outofstock': (InventoryProductInfo.inventory===0) , 'lowstock': (InventoryProductInfo.inventory > 0 && InventoryProductInfo.pointMin >InventoryProductInfo.inventory),'instock': InventoryProductInfo.inventory >InventoryProductInfo.pointMin && InventoryProductInfo.inventory>0 }">
+                    
+                    {{InventoryProductInfo.inventory}}
+                </div>
+            </td>
+            <td>{{InventoryProductInfo.pointMin}}</td>
+            <td>{{InventoryProductInfo.pointMedium}}</td>
+            <td>{{InventoryProductInfo.pointMax}}</td>
+            <td>
+                <ng-container *ngIf="InventoryProductInfo.inventory===0 || InventoryProductInfo.inventory< InventoryProductInfo.pointMin">
+                 
+                  
+                    <button  type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2"
+                    pTooltip="Agregar" tooltipPosition="top" (click)="CreateOrder(7)"></button>
+                  <!--   <button  type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2"
+                    pTooltip="Agregar" tooltipPosition="top" (click)="CreateOrder(0)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PURCHASE_ORDER_PERMISSION_ID)"></button>
+       -->
+                </ng-container>
+            </td>
+           
+        </tr>
+    </ng-template>
+</p-table>

@@ -1,0 +1,14 @@
+
+    <img class="container circle user-image" [alt]="(userName)" [src]="img" [width]="width" (click)="showDetails()"  /> 
+    <span class="image-text title"  [ngStyle]="{'font-size.px': fontSize}"> {{userName}}</span> 
+
+<ng-container *ngIf='profileDetailModalShow'>
+    <app-employee-profile-detail 
+        [visible]="profileDetailModalShow" 
+        [id]="userId"
+        [name]="userName"
+        [image]="img"
+        [viewMoreButton]="false"
+        (hideDialogForm)="childCallBack($event)">
+    </app-employee-profile-detail>
+</ng-container>

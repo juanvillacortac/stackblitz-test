@@ -1,0 +1,114 @@
+:host ::ng-deep {    
+    .imgcatalog{
+     max-width: 100%;
+     max-height: 100%;
+    }
+    .fullheightcard .p-card
+    {
+        height: 100%!important;
+    }
+    .p-progressbar-value{
+        background: #7eb8c9;
+    }
+ }
+ .container-img{
+   border-radius: 50%;
+   height: 75px;
+   display: flex;
+   width: 75px;
+   justify-content: center;
+   overflow: hidden;
+   align-items: center;
+ }
+ .cubicaje{
+    width: auto !important;
+    padding: 5px !important;
+    height: auto !important;
+    font-size: 1.875em !important;
+ }
+
+ .container-imgtable{
+    border-radius: 50%;
+    height: 50px;
+    display: flex;
+    width: 50px;
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+  }
+  .card {
+   padding:2px !important ;
+  }
+ .tabcolor{
+    // background: linear-gradient(
+    //     256deg, #65afc4 0%, #88c0d0 100%);
+        background: linear-gradient(
+            256deg, #C6DAE6 0%, #C6DAE6 100%) !important
+ }
+
+ .customProgress .p-progressbar .p-progressbar-value{
+    background: rgb(164, 213, 247);
+}
+ .badge {
+    height:100px ;
+    border-radius: 10px;
+    font-size: 11px;
+    padding: 3px 10px;
+    text-align: center;
+    min-width: 55px;
+    margin-right: 4px;
+ 
+    &.rounded-pill {
+        background: #88c0d0;
+        color: #ffffff;
+    }
+ 
+}
+.time {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #88c0d0;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 3px 10px;
+    text-align: center;
+    min-width: 55px;
+    margin-right: 4px;
+}
+
+
+ @media screen and (max-width: 40rem) {
+    :host ::ng-deep {
+        .p-datatable {
+            &.p-datatable-responsive-demo {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tfoot > tr > td {
+                    display: none !important;
+                }
+
+                .p-datatable-tbody > tr > td {
+                    text-align: left;
+                    display: block;
+                    width: 100%;
+                    float: left;
+                    clear: left;
+                    border: 0 none;
+
+                    .p-column-title {
+                        padding: .4rem;
+                        min-width: 30%;
+                        display: inline-block;
+                        margin: -.4em 1em -.4em -.4rem;
+                        font-weight: bold;
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
+                    }
+                }
+            }
+        }
+       
+    }
+}

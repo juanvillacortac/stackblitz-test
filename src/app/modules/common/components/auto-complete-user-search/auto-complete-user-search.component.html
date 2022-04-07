@@ -1,0 +1,31 @@
+
+<p-autoComplete 
+    [(ngModel)]="selectedUser" 
+    [suggestions]="filteredUsers" 
+    (completeMethod)="searchUsers($event)" 
+    [dropdown]="false" 
+    [multiple]="true"
+    appendTo="body"
+    [minLength]="1"
+    [showEmptyMessage]="true"
+    emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+    (onSelect)="onSelection($event)"
+    (onUnselect)="onChangeSelection()"
+    [forceSelection]="true"
+    [placeholder]="placeholderUsers | translate"
+    field="person.name"
+    >
+        <ng-template let-user pTemplate="item">
+            <div class="country-item">
+                <img src="assets/layout/images/topbar/avatar-gaspar.png" width="32" style="vertical-align: middle"  />
+                <span class="image-text" style="margin-left: 8px;">  {{user.person.name + ' ' +user.person.lastName}}</span>
+            </div>
+        </ng-template>
+        <ng-template let-value pTemplate="selectedItem">
+    
+                <img [alt]="(userName)" src="assets/layout/images/topbar/avatar-gaspar.png" width="27" style="vertical-align: middle" />
+                <span class="image-text" style="margin-left: 8px;">  {{value.person.name + ' ' + value.person.lastName}}</span>
+
+        </ng-template>
+
+</p-autoComplete>

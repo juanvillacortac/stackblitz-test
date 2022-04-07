@@ -1,0 +1,133 @@
+
+<div class="p-grid">
+    <div class="p-col-12 p-md-3" style="height: 50rem;">
+        <div class=" p-shadow-0 p-card" id="primaryInfo">
+            <companybar [(_company)]="_company"></companybar>
+            <app-companies-generalinfo-tab [(_company)]="_company" [(companyType)]="companyType" [(companyClass)]="companyClass"></app-companies-generalinfo-tab>
+        </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <div class="p-col-12 p-md-9">
+        <div class="p-grid" id="formTabsDiv">
+            <div class="p-col-12 p-md-10">
+                <div style="padding: .5em 0 1em 0">
+                    <p-button (click)="activeIndex = 0" [styleClass]="activeIndex == 0? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Datos Generales"></p-button>
+                    <p-button (click)="activeIndex = 1" [styleClass]="activeIndex == 1? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Plan de cuentas"></p-button>
+                    <p-button (click)="activeIndex = 2" [styleClass]="activeIndex == 2? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Entes gubernamentales"></p-button>
+                    <p-button (click)="activeIndex = 3" [styleClass]="activeIndex == 3? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Estructura organizativa"></p-button>
+                </div>
+            </div>
+        </div>
+
+            <!-- ///////////////////  Datos Generales ///////////////////// -->
+            <div class="p-grid p-fluid p-pl-2" *ngIf="activeIndex == 0">
+                <div class="p-col-12 p-md-6">
+                    <app-companies-addresses [(_company)]="_company"></app-companies-addresses>
+                </div>
+    
+                <div class="p-col-12 p-md-6">
+                    <div *ngIf="_company.bankAccounts != undefined &&_company.bankAccounts.length > 0">
+                        <app-companies-bank-accounts [(_company)]="_company.bankAccounts" [(companyType)]="companyType" [(companyClass)]="companyClass"></app-companies-bank-accounts>
+                    </div>
+    
+                    <div *ngIf="_company.bankAccounts != undefined &&_company.bankAccounts.length <= 0">
+                        <p-card header="Cuentas bancarias" class="p-card-shadow p-col-12 p-md-6 readOnlyCard" id="cuentasBancarias">
+                            <div class="p-grid">
+                                <!-- <p-messages severity="info">
+                                    <ng-template pTemplate>
+                                        <div class="p-ml-2">No existen cuentas bancarias asociadas a la empresa.</div>
+                                    </ng-template>
+                                  </p-messages> -->
+                                <div class="p-col-12">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-3 p-lg-3 p-mt-2">
+                                            Principal: 
+                                        </div>
+                                        <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                                            <input type="text" pInputText disabled value="xxxx.xxxx.xxxx.xxxx" />
+                                        </div>
+                                    </div>
+                    
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                                            Secundaria: 
+                                        </div>
+                                        <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                                            <input type="text" pInputText disabled value="xxxx.xxxx.xxxx.xxxx" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                                            Secundaria: 
+                                        </div>
+                                        <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                                            <input type="text" pInputText disabled value="xxxx.xxxx.xxxx.xxxx" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                                            Secundaria: 
+                                        </div>
+                                        <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                                            <input type="text" pInputText disabled value="xxxx.xxxx.xxxx.xxxx" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-card>
+                    </div>
+    
+                    <div class="p-col-12 p-mt-3" style="padding-left: 0; padding-right: 0;">
+                        <app-companies-commercial-registration [(idcompany)]="idcompany" [(_company)]="_company"></app-companies-commercial-registration>
+                    </div>
+    
+                    <div class="p-col-12 p-mt-3" style="padding-left: 0; padding-right: 0;">
+                        <app-companies-legal-representative  [(idcompany)]="idcompany" [(_company)]="_company"></app-companies-legal-representative>
+                    </div>
+                </div>
+            </div>
+            <!-- ///////////////////  Fin Datos Generales ///////////////////// -->
+
+            <!-- ///////////////////  Plan de cuentas ///////////////////// -->
+            <div class="card p-m-0 p-pb-3" *ngIf="activeIndex == 1">
+                <app-companies-account-plan-list [(idcompany)]="idcompany" ></app-companies-account-plan-list>
+            </div>
+            <!-- ///////////////////  Fin Plan de cuentas ///////////////////// -->
+
+            <!-- ///////////////////  Entes gubernamentales ///////////////////// -->
+            <div *ngIf="activeIndex == 2">
+                <app-company-govAgency-list [(idCountry)]="_company.idCountry" [(idCompany)]="idcompany" ></app-company-govAgency-list>
+            </div>
+            <!-- ///////////////////  Fin Entes gubernamentales ///////////////////// -->
+
+            <!-- ///////////////////  Estructura organizativa ///////////////////// -->
+            <div *ngIf="activeIndex == 3">
+              <app-companies-organizationalstructure-tab></app-companies-organizationalstructure-tab>
+            </div>
+            <!-- ///////////////////  Fin Estructura organizativa ///////////////////// -->
+        </div>
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+</div>
+    <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <div class="p-grid">
+        <div style="position: fixed; bottom: 10px; right: 10px;">
+            <button pButton pRipple icon="pi pi-arrow-left" class="p-button-secondary" label="Regresar" (click)="regresar()" ></button>
+        </div>
+    </div>
+    <!-- <p-tabView>
+        <p-tabPanel header="Datos generales">
+            <div class="p-grid">
+                
+
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Plan de cuentas">
+           
+        </p-tabPanel>
+        <p-tabPanel header="Entes gubernamentales">
+        </p-tabPanel>
+        <p-tabPanel header="Estructura organizativa">
+        </p-tabPanel>
+    </p-tabView> -->

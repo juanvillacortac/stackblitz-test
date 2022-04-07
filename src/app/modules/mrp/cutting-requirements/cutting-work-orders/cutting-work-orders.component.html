@@ -1,0 +1,127 @@
+<div class="card p-m-0 p-pb-0">
+    <h5 for="dropdown">{{ 'mrp.cutting_order.fields.animal_type' |  translate }} </h5>
+    <div class="p-d-flex">
+        <p-dropdown emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate }}"  class="p-mr-2 p-dropdown-wide" [options]="groupedRooms" [(ngModel)]="selectedItem" (onChange)="onRoomChanged()" placeholder="{{ 'selection_default' | translate }}" [group]="true" [showClear]="false">
+            <ng-template let-group pTemplate="group">
+                <div class="p-d-flex p-ai-center">
+                    <i class="pi pi-th-large p-mr-2"></i>
+                    <span>{{group.label}}</span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+</div>
+<div class="card p-m-0">
+    <p-table [value]="orders" dataKey="id" [columns]="displayedColumns" [expandedRowKeys]="expandedRows">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <ng-container *ngFor="let col of columns">  
+                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                          {{ col.header | translate }}
+                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                        <th pSortableColumn="performance">
+                            {{ 'mrp.cutting_order.fields.tb_performance' | translate }}
+                            <p-sortIcon field="performance"></p-sortIcon>
+                        </th>
+                  </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuttingOrder let-columns="columns" let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple (click)="itemExpanded(cuttingOrder, expanded)" [pRowToggler]="cuttingOrder" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }">
+                            <div *ngIf="col.field === 'realWeight' || col.field === 'performance'; else statusCell">
+                                {{(cuttingOrder[col.field])|number:'1.2-2'}} 
+                            </div> 
+
+                            <ng-template #statusCell>
+                                <div *ngIf="col.field === 'status'; else textCell">
+                                    <app-status-label [status]="getCuttingOrderStatus(cuttingOrder[col.field])"></app-status-label>
+                                </div>
+                            </ng-template>   
+
+                            <ng-template #textCell>
+                                {{cuttingOrder[col.field]}}
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                    <td>                      
+                        <p-knob [(ngModel)]="cuttingOrder.performance" [readonly]="true" [size]="65"></p-knob>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-cuttingOrder>
+                <tr>
+                    <td colspan="6">
+                        <div class="p-p-2">
+                            <p-table [value]="cuttingOrder.cuttings" dataKey="id">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="name">{{ 'mrp.cutting_order.fields.tb_description' | translate }} <p-sortIcon field="name"></p-sortIcon></th>
+                                        <th pSortableColumn="realWeight">{{ 'mrp.cutting_order.fields.tb_weight' | translate }} <p-sortIcon field="realWeight"></p-sortIcon></th>
+                                        <th pSortableColumn="performance">{{ 'mrp.cutting_order.fields.tb_expected_performance' | translate }} <p-sortIcon field="performance"></p-sortIcon></th>
+                                        <th style="width: 150px"></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-cutting>
+                                    <tr>
+                                        <td>{{ cutting.name }}</td>
+                                        <td>{{ cutting.realWeight | number:'1.2-2' }}</td>
+                                        <td>
+                                            <app-progress-view [width]="70" [align]="align" [progress]="getPerformanceProgress(cutting, cuttingOrder)" [progressColor]="getPerformanceProgressColor(cutting, cuttingOrder)" [warningPercentage]='allowedPercentagesProgressBarIDs.WARNING_VALUE_DIFERENCE_PERFORMANCE' [successPercentage]='allowedPercentagesProgressBarIDs.SUCCESS_VALUE_DIFERENCE_PEFORMANCE'></app-progress-view>
+                                        </td>
+                                        <td>
+                                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="editDetail(cuttingOrder, cutting)" pTooltip=" {{ 'add' | translate }}"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6">{{ 'mrp.cutting_order.emptymessage' | translate }}</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div>
+                                        {{ 'mrp.cutting_order.fields.tb_total_rawMaterial' | translate }} {{ getTotalRawMaterial(cuttingOrder)|number:'1.2-2'}}
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+                            <div class="p-field p-mr-2">
+                                <button pButton type="button" pRipple  class="p-button-info" icon="pi pi-save" (click)="finishCuttingOrder(cuttingOrder)" label="{{ 'mrp.cutting_order.btn_finish' | translate}}"></button>
+                            </div> 
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" style="text-align: center; font-weight: 600">{{ 'result_not_found' | translate }}</td>
+                </tr>
+            </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="{{ 'mrp.cutting_order.add_weight' | translate }}" (onHide)="onHideDisplayAddWeight()" [(visible)]="displayAddWeight" [breakpoints]="{'960px': '75vw'}" [style]="{width: '30vw'}" [baseZIndex]="10000" [modal]="true"
+    [draggable]="false" [resizable]="false">
+    <label class="p-mb-2">{{ cutting.name }}</label>
+    <div class="p-grid p-fluid p-mt-2">
+        <div class="p-col-12">
+            <div class="p-inputgroup">
+                <p-inputNumber [(ngModel)]="addedWeight" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100" class="p-num-added-weight"
+                decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" maxlength=15>
+                </p-inputNumber>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+    <p-button (click)="displayAddWeight=false" label="{{ 'mrp.cutting_order.cancel' | translate }}" styleClass="p-button-text" icon="pi pi-times"></p-button>
+    <p-button (click)="addWeight()" label="{{ 'mrp.cutting_order.add' | translate }}" styleClass="p-button-text" icon="pi pi-check"></p-button>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,102 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Compras" [(visible)]="showDialog"
+  [style]="{width:'50%'}" [modal]="true" class="address-dialog" [draggable]="false" [resizable]="false">
+  <div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Monedas <span *ngIf="showFilters">> Filtrar</span></h5> -->
+      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dtpm.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar..." />
+      </span>
+    </div>
+   <!--  <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+        <div class="p-col-12 p-md-4 p-lg-3">
+          <div class="p-inputgroup">
+            <span class="p-float-label">
+              <input [(ngModel)]="filters.barcode" type="text" pInputText numbersOnly maxlength="20" (keyup.enter)="search()">
+              <label>Número de la compra</label>
+            </span>
+          </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3">
+          <div class="p-inputgroup">
+            <span class="p-float-label">
+              <input [(ngModel)]="filters.name" type="text" pInputText noneSpecialCharacters maxlength="50"
+                (keyup.enter)="search()">
+              <label>Proveedor</label>
+            </span>
+          </div>
+        </div>
+       
+        <div class="p-col-12 p-md-4 p-lg-3">
+          <div class="p-inputgroup">
+            <span class="p-float-label">
+                <p-dropdown [options]="statusList" appendTo="body" [(ngModel)]="filters.existence" placeholder="Estatus" (keyup.enter)="search()">
+                </p-dropdown>
+              <label>Estatus</label>
+            </span>
+          </div>
+        </div>
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-jc-end" style="text-align: right;">
+          <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+            class="btn p-button-info p-mr-2"></button>
+          <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+            class="btn p-button-secondary"></button>
+        </div>
+      </div> -->
+  </div>
+  <div class="card p-m-0">
+    <p-table #dtpm [columns]="displayedColumns" [rowHover]="true" [value]="purchasesList" dataKey="idProductBranchOfficePacking"
+      [(selection)]="selectedPurchase" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display ,'overflow-wrap': 'break-word'}">
+              <span class="p-column-title">{{col.header}}</span>
+              <app-ind-blocked-label *ngIf="col.field === 'indBlocked'; else textCell"
+                [indBlocked]="product[col.field]">
+              </app-ind-blocked-label>
+              <ng-template #textCell>
+                <span>{{col.template(product)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Agregar" (click)="addProducts()" icon="pi pi-plus"
+      class="btn p-button-info p-mr-2"></button>
+    <button pButton pRipple icon="pi pi-ban" (click)="showDialogAddProduct=false" label="Cancelar"
+      class="btn p-button-secondary">
+    </button>
+  </ng-template>
+</p-dialog>

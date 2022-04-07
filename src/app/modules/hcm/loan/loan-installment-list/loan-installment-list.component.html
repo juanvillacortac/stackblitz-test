@@ -1,0 +1,39 @@
+<p-card header="Plan de pago" class="p-card-shadow box p-col-12">
+    <div class="p-field p-col-12 p-d-flex p-jc-end p-pr-0" id="quota-form" style="display: none;">
+        <button pButton pRipple class="p-button p-button-success p-ml-2" (click)="create()"
+            pTooltip="Crear cuota" tooltipPosition="top" icon="pi pi-plus" [disabled]="lockedButton == 1" [style]="lockedButton == 3 ? 'display: none': 'display: flex'">  
+        </button>
+    </div>
+    <p-table #dt [rowHover]="true" [value]="paymentPlan" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th class="p-text-center">Cuota </th>
+              <th class="p-text-center">Tipo de nómina </th>
+              <th class="p-text-center">Monto de cuota</th>
+              <th class="p-text-center">Monto pagado</th>
+              <th class="p-text-center">Diferencia</th>
+              <th class="p-text-center">Fecha de pago</th>
+              <th class="p-text-center">Estatus</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-paymentPlan >
+          <tr *ngIf="paymentPlan != []">
+              <td class="p-text-center"><p>{{index+1}}</p></td>
+              <td class="p-text-center"><p>{{paymentPlan.payrollType}}</p></td>
+              <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.quotaAmount| number}}</p></td>
+              <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.paidAmount| number}}</p></td>
+              <td class="p-text-center"><p>{{symbolArray[0]}} {{paymentPlan.pendingAmount| number}}</p></td>
+              <td class="p-text-center"><p>{{paymentPlan.payDate| date: "dd/MM/yyyy"}}</p></td>
+              <td class="p-text-center"><p>{{paymentPlan.status}}</p></td>
+              
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft"></ng-template>
+        <ng-template pTemplate="paginatorright"></ng-template>
+    </p-table>
+    <div class="p-field p-col-12 p-d-flex p-jc-end p-pr-0" style="display: none;" *ngIf="paymentPlan.length > 0 && visibleButton">
+        <button pButton pRipple class="p-button p-button-info p-ml-2" (click)="submit()" icon="pi pi-save" label="Guardar"></button>
+    </div>
+</p-card>

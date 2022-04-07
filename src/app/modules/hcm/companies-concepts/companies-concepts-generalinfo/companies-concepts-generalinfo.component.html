@@ -1,0 +1,81 @@
+<p-card header="Datos generales">
+    <div class="p-fluid p-formgrid p-grid">
+
+        <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-4 inside">
+                <label for="float-input">Abreviatura<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <input [(ngModel)]="conceptEdit.abbreviation" id="abbreviation" type="abbreviation" maxlength="25" pInputText 
+                [class]="submitted && (!conceptEdit.abbreviation || !conceptEdit.abbreviation.trim()) ? 'ng-dirty ng-invalid' : ''"
+                [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)">
+                <small class="p-invalid" *ngIf="submitted && conceptEdit.abbreviation == ''">La abreviatura es requerida</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-4">
+                <label for="float-input">Descripción<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <input [(ngModel)]="conceptEdit.concept" id="description" name="description" type="text" maxlength="250" pInputText
+                [class]="submitted && (!conceptEdit.concept || !conceptEdit.concept.trim()) ? 'ng-dirty ng-invalid' : ''" 
+                [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)">
+                <small class="p-invalid" *ngIf="submitted && conceptEdit.concept == ''">La descripción es requerida</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-4">
+                <label></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-checkbox class="p-ml-2 p-mt-5" [(ngModel)]="conceptEdit.indIncident" binary="true"
+                inputId="indIncident" [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></p-checkbox>
+                <label for="conceptEdit.indIncident"> Concepto de incidencia</label>
+              </div>
+            </div>
+        </div>
+    
+    </div>
+    <br>
+    <div class="p-divider-content p-mt-3 p-mb-3">
+        <h4 class="p-card-title">Información complementaria</h4>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-4 inside">
+                <label for="float-input">Tipo de concepto<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-dropdown [(ngModel)]="conceptEdit.conceptTypeId" [options]="conceptsTypes" id="conceptsTypes"placeholder="Seleccione..." emptyFilterMessage="Sin resultados" 
+                emptyMessage="Sin resultados" [class]="submitted && conceptEdit.conceptTypeId == -1 ? 'ng-dirty ng-invalid' : ''" [filter]="true" 
+                [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && conceptEdit.conceptTypeId == -1">El tipo es requerido</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-4">
+                <label for="float-input">Unidad de tiempo<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-dropdown [(ngModel)]="conceptEdit.unitId" [options]="measureUnitList" id="units"  placeholder="Seleccione..." emptyFilterMessage="Sin resultados"
+                [filter]="true" emptyMessage="Sin resultados" [class]="submitted && conceptEdit.unitId == -1 ? 'ng-dirty ng-invalid' : ''" 
+                [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && conceptEdit.unitId == -1">La unidad de tiempo es requerida</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-4">
+                <label for="float-input">Prioridad de cálculo</label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-inputNumber id="calcPriority" aria-placeholder="Prioridad de cálculo" placeholder="" [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"
+                  [(ngModel)]="conceptEdit.calcPriority" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-info" incrementButtonClass="p-button-info" 
+                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0" [maxlength]="3" [class]="submitted && (conceptEdit.calcPriority == null || conceptEdit.calcPriority < 0) ? 'ng-dirty ng-invalid' : ''">
+                </p-inputNumber>
+                <small class="p-invalid" *ngIf="submitted && conceptEdit.calcPriority == null">La prioridad de cálculo es requerida</small>
+              </div>
+
+            </div>
+        </div>
+       
+    </div>
+    <div class="p-field p-col-12">
+        <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+      </div>
+    <div class="p-fliud p-formgrid p-grid p-mt-2">
+        <div class="p-field p-col-12 p-md-12" align="right">
+            <button id="saving2" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info saving p-mr-3"
+              *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)" (click)="saveConcept()" [disabled]="actionButton"></button>
+        </div>
+    </div>
+</p-card>

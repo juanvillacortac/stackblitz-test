@@ -1,0 +1,37 @@
+<div class="card widget_panel "  [ngClass]="{'center-container': centered}" >
+    <div class="p-grid">
+        <div class="p-col-12 align-items-center " >
+            <div >
+                <span class="sub-title">{{mainTittle}}</span>
+                <div class="total">
+                    {{total | number:totalDecimalPipe}} <span *ngIf="totalPercent">%</span> 
+                    <span *ngIf="totalIcon?.length > 0" class="material-icons main" >{{totalIcon}}</span>
+                </div>
+                <span class="sub-title">{{totalTittle}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid" style="width: inherit;">
+        <div class="p-col-6 align-items-center timeline-content ">
+            <div> 
+                 <span class="subtotal" > {{subTotalLeft | number:subTotalLeftDecimalPipe}} <span *ngIf="subTotalLeftPercent">%</span></span>
+                <span *ngIf="showLeftCostIncreaseArrow" class="material-icons avatar costIncrease" >arrow_drop_up</span>
+            </div>  
+            <span class="sub-title">{{subTotalLeftTittle}}</span>
+        </div>
+        <div class="p-col-6 align-items-center timeline-content ">
+            <div>
+                <span class="subtotal" > {{subTotalRight | number:subTotalRightDecimalPipe}}<span *ngIf="subTotalRightPercent">%</span></span>
+                <span *ngIf="showRightCostIncreaseArrow"class="material-icons avatar costDecrease" >arrow_drop_down</span>
+            </div>
+            <span class="sub-title">{{subtotalRightTittle}}</span>
+        </div>
+        <div class="p-col-12 align-items-center timeline-content ">
+            <div>
+                <span class="sub-title"> {{statSubTitle}}</span>
+                
+            </div>
+        </div>
+    </div>
+</div>

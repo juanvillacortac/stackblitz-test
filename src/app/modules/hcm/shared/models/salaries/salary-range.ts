@@ -1,0 +1,20 @@
+export class SalaryRange {
+    idCompany: number = -1;
+    idSalaryRange: number = -1;
+    idJobPosition: number = -1;
+    jobPosition: string = "";
+    idTypeSalary: number = -1;
+    typeSalary: string = "";
+    minAmount: number = -1;
+    maxAmount: number = -1;
+    idCurrency: number = -1;
+    abbreviation: string = "";
+    currency: string = "";
+    symbol: string = "";
+    conversionFactor: number = -1;
+    dateFactor: string = '';
+    dateCreate: string = '';
+    dateUpdate: string = '';
+    userCreate: string = "";
+    userUpdate: string = "";
+}

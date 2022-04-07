@@ -1,0 +1,48 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Impuesto</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>País <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_countries" (keyup.enter)="saveProductTaxe()" [(ngModel)]="_productTaxes.taxRate.tax.country.id" (onChange)="listTaxes()" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_productTaxes.taxRate.tax.country.id == -1 || _productTaxes.taxRate.tax.country.id == undefined)">El país es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Impuesto <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [options]="_taxes" (onChange)="listTaxRates()" (keyup.enter)="saveProductTaxe()" [(ngModel)]="_productTaxes.taxRate.tax.id" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_productTaxes.taxRate.tax.id == -1 || _productTaxes.taxRate.tax.id == undefined)">El impuesto es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados." (onChange)="getValue()" [filter]="true" [options]="_taxRates" (keyup.enter)="saveProductTaxe()" [(ngModel)]="_productTaxes.taxRate.id"  placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_productTaxes.taxRate.id == -1 || _productTaxes.taxRate.id == undefined)">La tasa es requerida</small>
+                    <small class="p-invalid" *ngIf="submitted && !youCanDoIt">Esta tasa ya esta asignada a este producto</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Valor<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber disabled suffix=" %" id="VALOR"  [(ngModel)]="_productTaxes.taxRate.value" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" :min="0" :max="9999999" max="9999999" maxlength=15 (paste)="_validations.noPaste($event)"></p-inputNumber>
+                  </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="status" [disabled]="_productTaxes.id <= 0" appendTo="body" [(ngModel)]="_productTaxes.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple [disabled]="saving" label="Guardar" (click)="saveProductTaxe()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+

@@ -1,0 +1,42 @@
+<div class="card" style="align-content: center; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+  <div class="p-grid">
+      <div class="p-col-12 p-md-5 p-lg-4" style="align-content: center;">
+        <span>     
+            <h2 class="p-field title">IMS Dashboard</h2>        
+          
+        </span>
+      </div>
+      <div class=" p-col-12 p-md-7 p-lg-4" style="text-align: center;">
+        
+        <label class="color">Sucursal: </label>
+        <p-dropdown [options]="branchOfficeList"   [(ngModel)]="selection" (onChange)="loadFrequency()"  appendTo="body" placeholder="Seleccione una sucursal" [filter]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown >
+        <!-- <p-dropdown [options]="branchOfficeList"   [ngModel]="selection" (ngModelChange)="selection = $event; loadFrequency()"  appendTo="body" placeholder="Seleccione una sucursal" [filter]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown > -->
+      </div>
+
+      <div class="p-col-12 p-md-7 p-lg-4" style="text-align: right;">
+        <p-selectButton StyleClass="pruebaestilo" [options]="optionsTime"  (onChange)="loadFrequency()" [(ngModel)]="value1" optionLabel="title" optionValue="value">   
+        </p-selectButton>
+      </div>
+      <div  class="p-col-12 p-md-12 p-lg-12" style="text-align: right; ">
+         <strong>{{UpdateDate}}</strong>
+      </div>
+  </div>
+
+
+</div>
+<div class="p-grid">    
+  <div class="p-col-12 p-lg-4 p-md-12 p-sm-12" *ngIf="productivityMetricsData?.length || precisionMetricsData.length">                
+      <app-dashboard-layaout [(dashboardData)]="productivityMetricsData" [titleout]="titleProductivity"></app-dashboard-layaout> 
+      <app-dashboard-layaout [(dashboardData)]="precisionMetricsData" [titleout]="titlePrecision"  ></app-dashboard-layaout>           
+  </div>
+  <div class="p-col-12 p-lg-4 p-md-12 p-sm-12" *ngIf="inventoryValuationMetricsData?.length || salesMetricsData.length">
+  <app-dashboard-layaout [(dashboardData)]="inventoryValuationMetricsData" [titleout]="titleInventoryValuation"></app-dashboard-layaout> 
+      <app-dashboard-layaout [(dashboardData)]="salesMetricsData" [titleout]="titleSales"></app-dashboard-layaout>          
+  </div>
+  <div class="p-col-12 p-lg-4 p-md-12 p-sm-12" *ngIf="lossMetricsData?.length || profitabilityMetricsData.length">        
+      <app-dashboard-layaout [dashboardData]="lossMetricsData" [titleout]="titleLoss"></app-dashboard-layaout>              
+      <app-dashboard-layaout [dashboardData]="profitabilityMetricsData" [titleout]="titleProfitability"></app-dashboard-layaout>                       
+  </div>
+</div>

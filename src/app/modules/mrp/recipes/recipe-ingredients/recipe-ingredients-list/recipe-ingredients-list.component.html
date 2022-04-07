@@ -1,0 +1,353 @@
+<br/>
+<div class="card p-m-0 p-pb-0">
+<div class="card widget-support-request">
+  <div class="p-grid p-nogutter">
+      <div class="p-col-6 title">
+        <h4>{{recipeSelected.name}}</h4>
+      </div>
+      <div class="p-col-6 support-info">
+        <p><i class="pi pi-chevron-circle-right"></i> Pesado:</p>
+        
+        <span class="highlighted">{{recipeSelected.isWeight ? "Si": "No"}}</span>
+      </div>
+  </div>
+  <hr/>
+<div class="card">
+  <div class="p-col-12 p-d-flex p-ai-center p-jc-center">
+    <div class="p-grid p-col-12">
+      <div class="p-field  p-col-12 p-md-4">
+        <br>
+      <div class="p-grid p-nogutter  overview-box-2" style="text-align:center">
+        <div class="p-col-3 overview-box-icon">
+            <i class="pi pi-clock" style="font-size: 2rem"></i>  
+        </div>
+        <div class="p-col-6 overview-box-text">
+            <h5>{{recipeSelected.prepTime}}hr</h5>
+            <span>Tiempo de preparación</span>
+        </div>
+      </div>
+    </div>
+  
+      <div class="p-field  p-col-12 p-md-4">
+        <br>
+      <div class="p-grid p-nogutter  overview-box-2"  style="text-align:center">
+        <div class="p-col-3 overview-box-icon">
+            <i class="pi pi-list" style="font-size: 2rem"></i>  
+        </div>
+        <div class="p-col-6 overview-box-text">
+            <h5>{{recipeSelected.qtyPortionResult}}</h5>
+            <span>Porciones</span>
+        </div>
+      </div>
+    </div>
+    <div class="p-field  p-col-12 p-md-4">
+      <br>
+    <div class="p-grid p-nogutter  overview-box-2"  style="text-align:center">
+      <div class="p-col-3 overview-box-icon">
+          <i class="pi pi-chart-line" style="font-size: 2rem"></i>  
+      </div>
+      <div class="p-col-6 overview-box-text">
+          <h5>{{unitOfMeasurementSelected.name}}</h5>
+          <span>Unidad de medida</span>
+      </div>
+    </div>
+  </div>
+    </div>  
+  </div>
+  <div class="p-grid  p-formgrid p-text-center">
+    <div class="p-col-12  p-md-4 p-d-flex p-ai-center p-jc-center">
+      <div class="p-field p-col-12">
+        <p-knob [(ngModel)]="recipeSelected.expectedDepletion" [size]="140" [max]="100" [readonly]="true" valueTemplate="{value}%" valueColor="cadetblue"></p-knob>
+        <h5>Merma</h5>
+      </div>
+    </div>
+    <div class="p-col-12  p-md-4 p-d-flex p-ai-center p-jc-center">
+      <div class="p-field p-col-12">
+        <p-knob [(ngModel)]="recipeSelected.laborCost" [size]="140" [max]="recipeSelected.laborCost > 100 ? recipeSelected.laborCost:100" [readonly]="true" valueTemplate="{value}%" valueColor="darkslateblue"></p-knob>
+        <h5>Mano de obra</h5>
+      </div>
+  </div>
+  <div class="p-col-12  p-md-4 p-d-flex p-ai-center p-jc-center">
+    <div class="p-field p-col-12">
+      <p-knob [(ngModel)]="recipeSelected.factoryCost" [size]="140" [max]="recipeSelected.factoryCost > 100 ? recipeSelected.factoryCost:100" [readonly]="true" valueTemplate="{value}%"  valueColor="darkolivegreen"></p-knob>
+      <h5>Costo fabril</h5>
+    </div>
+  </div>
+  </div>
+
+</div>
+
+</div>
+<div class="p-grid">
+  <div class="p-field p-col-12 p-md-8">
+    <p-panel header="{{ 'mrp.recipe_ingredient.recipe_ingredients' | translate}}">
+      <div class="p-grid">
+        <div class="p-col-12" style="margin-left: -14px;">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+          <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+          </span>
+          <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_RECIPE_INGREDIENTS_PERMISSION_ID)"  pTooltip=" {{ 'add' | translate }}" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>       
+          </div>
+        </div>
+      </div>
+        <div class="p-col-12">
+          <div class="card p-m-0">
+              <p-table #dt 
+              [columns]="displayedColumns"
+              [value]="ingredientList" 
+              [rowHover]="true" 
+              [paginator]="false" 
+              [showCurrentPageReport]="false" 
+              [scrollable]="true"
+              scrollHeight="flex"
+              [style] ="{height: '575px'}"
+              [rows]="10" 
+              [rowsPerPageOptions]="[10,25,50]"
+              currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+                  <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        <ng-container *ngFor="let col of columns">  
+                            <th [ngStyle]="{'display': col.display, 'text-align': col.field === 'actualCost' || col.field === 'qty' ? 'right':  col.field === 'isSupply' ? 'center': 'left'}" [pSortableColumn]="col.field" >
+                              {{ col.header | translate }}
+                              <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+                          </th>
+                        </ng-container>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-ingredient  let-columns="columns">
+                      <tr>
+
+                          <ng-container *ngFor="let col of columns">
+                              <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word',  'text-align': col.field === 'actualCost' || col.field === 'qty' ? 'right':  col.field === 'isSupply' ? 'center': 'left'}">
+                                <app-active-label *ngIf="col.field === 'isSupply'; else numberCell" [active]="ingredient[col.field]" [isYesOrNoMode]="true"></app-active-label>                         
+                                  
+                                <ng-template #numberCell >
+                                      <div *ngIf="col.field === 'actualCost'; else textCell">
+                                          {{(ingredient.actualCost)|number:'1.2-2'}}
+                                      </div>
+                                  </ng-template>
+
+                                  <ng-template #textCell >
+                                      <div *ngIf="col.field !== 'edit'; else editCell">
+                                          {{ingredient[col.field]}}
+                                      </div>
+                                  </ng-template>
+              
+                                  <ng-template #editCell  >
+                                    <div style="text-align: center;">                   
+                                      <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_RECIPE_INGREDIENTS_PERMISSION_ID)">
+                                        <button   pButton pRipple icon="pi pi-pencil" pTooltip=" {{ 'edit' | translate }}" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(ingredient.id)"></button>                                
+                                        <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="{{ 'delete' | translate }}"  (click)="onDelete(ingredient.id)" ></button>                          
+                                      </ng-container> 
+                                    </div>
+                                  </ng-template>
+                                
+                              </td>
+                          </ng-container>
+                      </tr>
+                  </ng-template>
+              </p-table>
+          </div>
+        </div>
+     </div>
+    </p-panel>
+  </div>
+
+  <div class="p-field p-col-12 p-md-4">
+    <p-panel header="Costos">
+      <p-messages  *ngIf="recipeToRecalculate > 0" severity="warn" [enableService]="false" [closable]="true" >
+        <ng-template pTemplate>
+                <span class="p-message-icon pi pi-exclamation-triangle"></span>
+                <span class="p-message-detail"> 
+                  Hay cambios en los valores generales que afectan los costos/PVP de la receta.
+                <br>
+                    <span class="p-message-summary">Por favor, presione "Calcular" para tomar los nuevos valores </span>  
+                </span>
+        </ng-template>
+    </p-messages>
+      <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+          <div *ngIf="!validateIngredients && submitted" class="p-invalid">
+            <div>
+                Debe ingresar al menos un ingrediente.
+            </div>
+          </div>  
+       </span>
+        <div>
+          <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_RECIPE_INGREDIENTS_PERMISSION_ID)" [disabled]="!disabledCalculateButton"
+          tooltipPosition="top" pTooltip="{{'calculated_cost' |translate }}" label=" Calcular" pButton pRipple icon="pi pi-refresh" 
+          class="p-ml-auto p-button-help" (click)="onCalculateRecipeCost()"></button>   
+        </div>
+      </div>
+
+    <div class="p-grid"> 
+      <div class="p-col-12"> 
+        <div class="card widget-timeline" style=" margin-top: -25px;">
+          <div class="timeline-row recipePriceBox">
+            <div class="p-grid p-nogutter">
+                <div class="p-col-1">
+                    <div pRipple class="timeline-icon comment-icon">
+                        <i class="pi pi-percentage"></i>
+                    </div>
+                </div>
+                <div class="p-col-11">
+                    <div class="p-grid p-nogutter">
+                        <div class="p-col-12 p-md-10 timeline-content">
+                          <div class="title recipe-price-box-tittle">
+                            <h6>Factor de venta <span [ngStyle]="{'color':'red'}">* </span></h6>
+                          </div>    
+                            <div class="p-fluid p-grid p-formgrid" >        
+                              <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                                <p-inputNumber id="sellingFactor" name="sellingFactor"  [(ngModel)]="sellingFactor" #sellingFactorModel="ngModel"  (keyup.enter)="onCalculateRecipeCost()"  mode="decimal" maxlength="16" [minFractionDigits]="2" [maxFractionDigits]="2"  
+                                [showButtons]="true"  suffix="" [min]="0" [max]="1000" [step]="0.01" (onInput)="onChangeSellingFactor()"
+                                [ngClass]="{'ng-dirty':(validateSellingFactor 
+                                          && (sellingFactorModel.dirty || sellingFactorModel.touched || submitted)),
+                                          'ng-invalid':(validateSellingFactor 
+                                          && (sellingFactorModel.dirty || sellingFactorModel.touched || submitted))}"
+                                 required ></p-inputNumber>   
+                                <div *ngIf="validateSellingFactor
+                                            && (sellingFactorModel.dirty || sellingFactorModel.touched || submitted)"
+                                class="p-invalid">
+                                      El factor de venta debe ser mayor a 0.
+                              </div>  
+                              </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="timeline-row recipePriceBox">
+            <div class="p-grid p-nogutter">
+                <div class="p-col-1">
+                    <div pRipple class="timeline-icon chart-icon">
+                        <i class="pi pi-angle-right"></i>
+                    </div>
+                </div>
+                <div class="p-col-11">
+                    <div class="p-grid p-nogutter ">
+                        <div class="p-col-10 timeline-content">  
+                            <span class="recipe-price-box-value"> {{(recipeCost.finalWeightCalculated)|number:'1.2-2'}} kg/L</span>
+                            <div class="title recipe-price-box-tittle">
+                              <h6>Peso final calculado</h6>
+                            </div> 
+                        </div>
+                        <div class="p-col-2 timeline-time">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-row recipePriceBox">
+          <div class="p-grid p-nogutter">
+              <div class="p-col-1">
+                  <div pRipple class="timeline-icon comment-icon">
+                      <i class="pi pi-tags"></i>
+                  </div>
+              </div>
+              <div class="p-col-11">
+                  <div class="p-grid p-nogutter">
+                    <div class="p-col-10 timeline-content"> 
+                        <span class="recipe-price-box-value">  {{(recipeCost.portionCost)|number:'1.2-2'}}</span>
+                        <div class="title recipe-price-box-tittle">
+                          <h6>Costo por porción</h6>
+                        </div>  
+                    </div>
+                      <div class="p-col-2 timeline-time">
+                          <span></span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>   
+        <div class="timeline-row recipePriceBox">
+          <div class="p-grid p-nogutter">
+              <div class="p-col-1">
+                  <div pRipple class="timeline-icon chart-icon">
+                      <i class="pi pi-shopping-cart"></i>
+                  </div>
+              </div>
+              <div class="p-col-11">
+                <div class="p-grid p-nogutter">
+                  <div class="p-col-10 timeline-content p-align-right">  
+                      <span class="recipe-price-box-value"> {{(recipeCost.supplyCost)|number:'1.2-2'}}</span>
+                      <div class="title recipe-price-box-tittle">
+                        <h6>Costo de insumos</h6>
+                      </div> 
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="timeline-row recipePriceBox">
+          <div class="p-grid p-nogutter">
+              <div class="p-col-1">
+                  <div pRipple class="timeline-icon camera-icon">
+                      <i class="pi pi-dollar"></i>
+                  </div>
+              </div>
+              <div class="p-col-11">
+                <div class="p-grid p-nogutter">
+                  <div class="p-col-10 timeline-content"> 
+                      <span class="recipe-price-box-value"> {{(recipeCost.netCost)|number:'1.2-2'}}</span>
+                      <div class="title recipe-price-box-tittle">
+                        <h6>Costo de receta</h6>
+                      </div>  
+                  </div>
+                    <div class="p-col-2 timeline-time">
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="timeline-row recipePriceBox">
+          <div class="p-grid p-nogutter">
+              <div class="p-col-1">
+                  <div pRipple class="timeline-icon camera-icon">
+                      <i class="pi pi-money-bill"></i>
+                  </div>
+              </div>
+              <div class="p-col-11">
+                <div class="p-grid p-nogutter">
+                  <div class="p-col-10 timeline-content"> 
+                      <span class="recipe-price-box-value"> {{(recipeCost.netCostPvp)|number:'1.2-2'}}</span>
+                      <div class="title recipe-price-box-tittle">
+                        <h6>PVP</h6>
+                      </div>  
+                  </div>
+                    <div class="p-col-2 timeline-time">
+                        <span></span>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+          <app-footer-form-buttons 
+            [showSave]="this.userPermissions.allowed(this.permissionsIDs.UPDATE_RECIPE_INGREDIENTS_PERMISSION_ID)"
+            [saveToolTip]="disabledSaveButton ? 'Debe calcular el costo de la receta' : 'save' | translate"
+            (acceptPressed)="onSave()" 
+            (cancelPressed)="cancel()">
+          </app-footer-form-buttons>
+        </div>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+  </div>
+</div>
+</div>
+
+<p-sidebar [(visible)]="showDialog" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="showDialog" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}" >
+  <app-recipe-ingredients-detail  [idRecipe]="idRecipe" [recipeIngredients]="ingredient" [addedRecipeIngredient]="ingredientList" (hideDialogForm)="childCallBack($event)" ></app-recipe-ingredients-detail> 
+</p-sidebar>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" key="delete"></p-confirmDialog>

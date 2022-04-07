@@ -1,0 +1,88 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>Período de calendario</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>   
+          <hr />
+          <div class="p-col-12">
+            <div class="card">
+              <div class="p-fluid p-grid p-formgrid">
+
+                <div class="p-field p-grid p-col-12">
+                    <label for="active" class="p-col-12 p-md-6 p-lg-5">Tipo de nómina</label>
+                    <span class="p-col-12 p-md-6 p-lg-7" style="font-weight: bolder;">{{payrollTypeObject.name}}</span>
+                  </div>
+                <div class="p-field p-grid p-col-12">
+                    <label for="active" class="p-col-12 p-md-6 p-lg-5">Año</label>
+                    <span class="p-col-12 p-md-6 p-lg-7" style="font-weight: bolder;">{{filter.year}}</span>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                    <label for="active" class="p-col-12 p-md-6 p-lg-5">Periodicidad</label>
+                    <span class="p-col-12 p-md-6 p-lg-7" style="font-weight: bolder;">{{payrollTypeObject.periodicity}}</span>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12 p-lg-6 ">
+                        <label>Fecha de inicio</label>
+                        <div class="p-col-12 p-pl-0 p-pr-0">
+                            <p-calendar #formStarDate [(ngModel)]="startDate" [minDate]="dayB" placeholder="Fecha de Inicio"  
+                            (onSelect)="setEndDay(startDate)" yearRange="2000:2030" dateFormat="dd/mm/yy" [disabled]="record.idStatus != 72"
+                            readonlyInput="true" [showIcon]="true"  [monthNavigator]="true" appendTo="body"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [baseZIndex]="10000000000">
+                          </p-calendar>
+                          <small class="p-invalid" *ngIf="submitted && startDate == null">La fecha de inicio es requerida</small>
+                        </div>
+                      
+                  </div>       
+                  <div class="p-col-12 p-lg-6 ">
+                      <label>Fecha final</label>
+                      <div class="p-col-12 p-pl-0 p-pr-0">
+                          <p-calendar #formDateEnd [(ngModel)]="endDate" placeholder="Fecha Final" appendTo="body" [baseZIndex]="10000000000" 
+                          yearRange="1970:2030" dateFormat="dd/mm/yy"
+                          readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                          [readonlyInput]="true" showButtonBar="true" disabled="disabled" [yearNavigator]="true" >
+                      </p-calendar>
+                      </div>
+                      
+                  </div>
+                </div>
+
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12 p-lg-6">
+                        <label>Día de pago</label>
+                        <div class="p-col-12 p-pl-0 p-pr-0">
+                            <input inputId="payDay" disabled="disabled" pInputText maxlength="2" [(ngModel)]="payDay" [disabled]="record.idStatus != 72">
+                            
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-lg-6 ">
+                        <label>Fecha de pago</label>
+                        <div class="p-col-12 p-pl-0 p-pr-0">
+                            <p-calendar #formPaymentDate [(ngModel)]="paymentDate"  placeholder="Fecha Pago"appendTo="body" [baseZIndex]="10000000000" 
+                            yearRange="1970:2030" dateFormat="dd/mm/yy" (onSelect)="setPaymentDate()"
+                            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [minDate]="dayB" [maxDate]="paymentMaxDate"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" >
+                            </p-calendar>
+                        </div>            
+                    </div>
+                </div>
+                  
+  
+                <div class="p-field p-col-12" *ngIf="record.idStatus == 72">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-grid p-col-12" *ngIf="record.idStatus == 72">
+                  <div class="p-col-12">
+                    
+                    <button id="Agregar" pButton pRipple label="Agregar" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_CALENDAR_HCM_PERMISSION_ID)"  (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+    </p-sidebar>
+

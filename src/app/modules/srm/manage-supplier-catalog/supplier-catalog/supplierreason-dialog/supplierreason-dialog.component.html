@@ -1,0 +1,19 @@
+<p-dialog header="Desactivar producto del catálago" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog"  [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '40vw'}"
+[draggable]="false" [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Motivo <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown  [options]="reasonList" [filter]="true" appendTo="body" emptyFilterMessage="Sin resultados."  emptyMessage="Sin resultados." placeholder="Seleccione..." [(ngModel)]="_supplierxprod.idReasons" [class]="submitted && (!_supplierxprod.idReasons || _supplierxprod.idReasons<0) ? 'ng-dirty ng-invalid' : ''" >
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _supplierxprod.idReasons<= 0">El motivo es requerido.</small>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-1">
+            <label for="active">Observación</label>
+            <textarea pInputTextarea [(ngModel)]="_supplierxprod.description" rows="3" style="resize: none;" cols="30"  pInputTextarea maxlength="100"></textarea>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton (click)="SaveReasons()" pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+        <button pButton (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,154 @@
+<div *ngIf="showPanelPrincipal">
+  <!--Panel de busqueda-->
+  <div class="card p-m-1">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!--titulo con icono filtar-->
+      <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+        <i class="pi pi-book p-text-bold"></i> Lotes
+      </div>
+
+      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+      </span>
+      <div>
+        <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.WRITE_LOT_PERMISSION_ID)" -->
+        <button pButton pRipple icon="pi pi-plus" class="p-button-success" [ngClass]="{'p-button-danger':showDialog}"
+                (click)="showDialog = true" pTooltip="Crear nuevo" tooltipPosition="top">
+        </button>
+        <button pButton pRipple icon="pi pi-filter" class="p-button-help p-ml-2" [ngClass]="{'p-button-danger':showFilters}"
+                (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+      </div>
+    </div>
+    <app-lots-filters (onSearch)="search()" [(filtered)]="filtered" [(filter)]="lotsFilter" [(iExist)]="iExist" [expanded]="showFilters" [(loading)]="loading" class="p-mt-3"></app-lots-filters>
+  </div>
+
+  <!--panel de resultado-->
+  <div class="p-m-1">
+    <!--botones contraer-->
+    <div style="margin-bottom: 1rem">
+      <button style="margin-right: .5rem; margin-top: 1rem;"
+              pButton type="button" label="Expandir todos"  (click)="toggleExpanded(true)"></button>
+      <button  class="p-mt-3" pButton type="button"
+              label="Contraer todos" (click)="toggleExpanded(false)"></button>
+    </div>
+    <!--fin botones contraer-->
+
+    <p-table #dt dataKey="id" [value]="moduleLotsList" styleClass="p-table-sm" [rows]="10"
+             [autoLayout]="true" [rowHover]="true"
+             [expandedRowKeys]="expandedRows"
+             [paginator]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+             [showCurrentPageReport]="true"
+             (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()"
+             [globalFilterFields]="['moduleContent','lotName','creationStartDateString',
+             'createdByUserName']">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 2.8rem;"><i class="pi pi-sitemap" style="font-size: 1.4rem"></i></th>
+          <th pSortableColumn="id" colspan="4">Módulos<p-sortIcon field="id"></p-sortIcon></th>
+
+          <th style=" padding-right: 8px!important;text-align: right;"><span style="color: #579ce7;">Agiliza tus transacciones</span></th>
+          <th style=" width: 4rem; padding-left: 0px !important; padding-bottom: 8px !important;">
+            <span pTooltip="Agrupa tus transacciones en lotes y podrás contabilizar un gran número de ellas a la vez. " tooltipPosition="top" class="p-button-icon pi pi-info-circle" aria-hidden="true" style="cursor: pointer;color: #579ce7;"></span>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-module let-expanded="expanded">
+        <tr>
+          <td>
+            <button type="button" pButton pRipple [pRowToggler]="module" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td>
+          <td style="font-weight: bold;">{{module.moduleContent}}</td>
+
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-moduleLotsList>
+        <tr>
+          <td colspan="7">
+            <div class="p-p-3">
+              <p-table #dt [value]="moduleLotsList.lots" dataKey="id" [paginator]="true" [rows]="10"
+                       [globalFilterFields]="['lots.lotName','lots.creationStartDateString',
+                           'lots.createdByUserName']">
+                <ng-template pTemplate="header">
+        <tr>
+          <th style="text-align: center" pSortableColumn="id">Número de lote <p-sortIcon field="lotName"></p-sortIcon></th>
+          <th style="text-align: center" pSortableColumn="allowsEntry">Permite entrada <p-sortIcon field="allowsEntry"></p-sortIcon></th>
+          <th style="text-align: center" pSortableColumn="creationStartDateString">Fecha de creación <p-sortIcon field="creationStartDateString"></p-sortIcon></th>
+          <th style="text-align: center" pSortableColumn="createdByUserName">Creado por <p-sortIcon field="createdByUserName"></p-sortIcon></th>
+          <th style="text-align: center" pSortableColumn="indStatusLot">Estatus <p-sortIcon field="indStatusLot"></p-sortIcon></th>
+          <th style="text-align: center"> </th>
+        </tr>
+
+      </ng-template>
+      <ng-template pTemplate="body" let-lots>
+        <tr>
+          <td style="text-align:center;">{{lots.lotName}}</td>
+          <td style="text-align:center;">
+            <p-checkbox readonly="true" [(ngModel)]="lots.allowsEntry" [binary]="true"></p-checkbox>
+            <!-- <ng-template #no> <p-checkbox readonly="true" [(ngModel)]="notchecked" [binary]="true"   ></p-checkbox></ng-template> -->
+          </td>
+          <td style="text-align: center">
+            {{lots.creationStartDateString}}
+          </td>
+
+          <td style="text-align: center">
+            {{lots.createdByUserName}}
+          </td>
+          <td style="text-align: center" class="ui-resizable-column">
+            <!-- <p-tag *ngIf="lot.indStatusLot == 1" severity="success" styleClass="p-mr-2" [value]="lot.typeStatusLot"></p-tag>
+            <p-tag *ngIf="lot.indStatusLot == 2" severity="danger" styleClass="p-mr-2" [value]="lot.typeStatusLot"></p-tag> -->
+            <span [class]="'lots-' + lots.indStatusLot">{{lots.typeStatusLot}}</span>
+
+            <!-- <app-active-label [active]="lot.typeStatusLot == 1">{{lot.typeStatusLot}}</app-active-label> -->
+            <!-- <span [class]="'lot-badge lot-' + lot.indStatusLot"> {{lot.typeStatusLot}}</span> -->
+
+
+
+          </td>
+          <td style="text-align: center" class="ui-resizable-column">
+            <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.WRITE_LOT_PERMISSION_ID)" -->
+            <button pButton pRipple icon="pi pi-pencil" (click)="edit(lots)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-lot>
+        <tr *ngIf="lotsList.length == 0">
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="6">
+
+            <p-message severity="info" *ngIf="filtered && (lotsList.length == 0)" text="No existen resultados que coincidan con la búsqueda." styleClass="p-col-12 p-md-12 p-sm-12"></p-message>
+            <p-message severity="info" *ngIf="!filtered && lotsList.length == 0" text="No existen registros." styleClass="p-col-12 p-mr-2"></p-message>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+  </td>
+  </tr>
+  </ng-template>
+  <ng-template pTemplate="footer" let-lot>
+    <tr *ngIf="moduleLotsList == 0">
+
+      <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+
+        <p-message severity="info" *ngIf="filtered && (moduleLotsList.length == 0)" text="No existen resultados que coincidan con la búsqueda." styleClass="p-col-12 p-md-12 p-sm-12"></p-message>
+        <p-message severity="info" *ngIf="!filtered && moduleLotsList.length == 0" text="No existen registros." styleClass="p-col-12 p-mr-2"></p-message>
+      </td>
+    </tr>
+  </ng-template>
+  </p-table>
+
+</div>
+<app-lots-panel [(showDialog)]="showDialog" (onUpdate)="search()" [module]="0" [(filters)]="lotsFilter">
+</app-lots-panel>
+</div>
+
+<!--<app-lots-details *ngIf="showPanelEdit" (onUpdate)="search()" [(_data)]="lot" [(filters)]="lotsFilter">
+</app-lots-details>-->
+

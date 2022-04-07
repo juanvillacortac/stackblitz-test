@@ -1,0 +1,173 @@
+<div class="card">
+    <div class="card p-pb-0 p-mb-0 p-fluid p-grid">
+        <form class="p-fluid p-grid p-col-12 " [formGroup]="entityExistsForm" (ngSubmit)="onCheckEntityExist()">
+            <div class="p-grid p-col-12 p-md-12">
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-dropdown [options]="identifierTypeOptions" id="identifierTypes" [autoDisplayFirst]="false"
+                                    [showClear]="false" formControlName="identifierType"
+                                    (onChange)="onIdentifierTypeSelected()"></p-dropdown>
+                        <label for="identifierTypes">Seleccione un tipo de documento</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="dni" #dni formControlName="dniNumber" noneSpecialCharacters maxlength="15"
+                               (keyup)="onDniNumberKeyUp()" required/>
+                        <label for="dni">Número de documento</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <div *ngIf="isAddMode">
+                        <button pButton type="submit" pRipple [disabled]="!entityExistsForm.valid" class="p-button-info"
+                                label="{{'security_module.user.verify' | translate}}" icon="pi pi-search"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card p-fluid p-grid">
+        <form class="p-fluid p-grid p-col-12" [formGroup]="userForm" (ngSubmit)="onSubmitEntity()">
+            <h2>Datos personales</h2>
+            <div class="p-fluid p-grid p-col-12 p-pb-0" formGroupName="person">
+                <label>
+                    <input type="text" placeholder="id" formControlName="id" hidden>
+                    <input type="text" placeholder="id" formControlName="identifierType" hidden>
+                </label>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="name" #name lettersOnly formControlName="name" maxlength="20" required/>
+                        <label for="name">Nombre</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="secondName" #secondName lettersOnly formControlName="secondName"
+                               maxlength="20"/>
+                        <label for="secondName">Segundo nombre</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="lastName" #lastName lettersOnly formControlName="lastName" maxlength="25"
+                               required/>
+                        <label for="lastName">Apellido</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="secondLastName" #secondLastName lettersOnly
+                               formControlName="secondLastName" maxlength="20"/>
+                        <label for="secondLastName">Segundo apellido</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-calendar inputId="calendar" dataType="date" dateFormat="dd/mm/yy" [yearNavigator]="true"
+                                    yearRange="1950:2050" formControlName="birthDate" [minDate]="minDate"
+                                    [maxDate]="maxDate"
+                                    [readonlyInput]="true" required>
+                        </p-calendar>
+                        <label for="calendar">Fecha de nacimiento</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-dropdown [options]="genderOptions" id="gender" [autoDisplayFirst]="false" [showClear]="false"
+                                    formControlName="gender" required></p-dropdown>
+                        <label for="gender">Género</label>
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <p-dropdown [options]="maritalOptions" id="maritalStatus" [autoDisplayFirst]="false"
+                                    [showClear]="false" formControlName="maritalStatus" required></p-dropdown>
+                        <label for="maritalStatus">Estado civil</label>
+                    </span>
+                </div>
+                <div class="p-fluid p-grid p-col-12 p-md-8 p-ml-0 p-pl-0 p-pr-0" formGroupName="phones">
+                    <div class="p-field p-col-12 p-md-6">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="phonePrefixes.value" id="prefix" [autoDisplayFirst]="false"
+                                        [showClear]="false" formControlName="prefix" optionLabel="codePrefix" required>
+                            </p-dropdown>
+                            <label for="prefix">Prefijo</label>
+                        </span>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <span class="p-float-label">
+                            <input pInputText numbersOnly id="phoneNumber" formControlName="phoneNumber"
+                                   maxlength="11"/>
+                            <label for="phoneNumber">Número de teléfono</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6" hidden>
+                    <span class="p-float-label">
+                        <input pInputText id="imagen" #imagen formControlName="imagen"/>
+                        <label for="imagen">Imagen</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-fluid p-grid p-col-12 p-pt-0">
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="mainEmail" #mainEmail formControlName="mainEmail" maxlength="50"
+                               required/>
+                        <label for="mainEmail">Correo electrónico</label>
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4">
+                    <span class="p-float-label">
+                        <input pInputText id="secondaryEmail" #secondaryEmail formControlName="secondaryEmail"
+                               maxlength="50"/>
+                        <label for="secondaryEmail">Correo electrónico secundario</label>
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4" *ngIf="!isAddMode" hidden>
+                    <span class="p-float-label">
+                        <p-dropdown [options]="statusOptions" optionValue="value" id="status" [autoDisplayFirst]="false"
+                                    [showClear]="false" formControlName="status" required
+                                    placeholder="Estatus"></p-dropdown>
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4" *ngIf="!isAddMode">
+                    <span class="p-float-label">
+                        <p-dropdown #userStatus id="userStatus" [options]="statusOptions" optionLabel="label"
+                                    optionValue="value" [autoDisplayFirst]="false"
+                                    [(ngModel)]="statusSelected" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                        <label for="userStatus">Estatus</label>
+                    </span>
+                </div>
+            </div>
+            <div class="p-formgroup-inline p-fluid p-col-12 p-jc-end" *ngIf="isAddMode">
+                <div class="p-field p-mr-2">
+                    <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"
+                                     acceptButtonStyleClass="p-button-primary"
+                                     rejectButtonStyleClass="p-button-outlined"
+                                     acceptLabel="Si"></p-confirmDialog>
+                    <button pButton type="button" pRipple class="p-button-danger" icon="pi pi-times"
+                            (click)="resetForm()" label="{{'cancel' | translate}}"
+                            pTooltip="{{'cancel' | translate }}"></button>
+                </div>
+                <div class="p-field">
+                    <button pButton type="submit" pRipple [disabled]="!userForm.valid || !entityExistsForm.valid "
+                            class="p-button-secondary" icon="pi pi-angle-right" label="{{'next' | translate}}"
+                            pTooltip="{{'next' | translate }}"></button>
+                </div>
+            </div>
+        </form>
+
+        <div class="p-fluid p-col-12" *ngIf="!isAddMode">
+            <app-footer-form-buttons *ngIf="!isAddMode" (acceptPressed)="onUpdateStatus()"
+                                     (cancelPressed)="cancel()">
+            </app-footer-form-buttons>
+        </div>
+    </div>
+    <p-toast position="top-right" key="register-user"></p-toast>
+</div>

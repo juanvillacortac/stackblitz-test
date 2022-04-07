@@ -1,0 +1,120 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+  <div class="p-grid" style="height: 30px;">
+    <div id="header" class="p-col-11" style="margin-top: 5px;">
+        <h5>Pensión alimentaria</h5>
+    </div>
+    <div class="p-col-1">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+    </div>
+  </div>   
+        <hr />
+        <div class="p-col-12">
+          <div class="card">
+            <div class="p-fluid p-grid p-formgrid">
+              <div class="p-field p-grid p-col-12" style="display: none;">
+                <input type="number" [(ngModel)]="record.idLaborRelationshipxFamilyBurden">
+                <input type="number" [(ngModel)]="record.idLaborRelationship">
+              </div>
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12">
+                  <label for="active">Beneficiario<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-dropdown [options]="_familyDropdown" [(ngModel)]="record.idLaborRelationshipxFamilyBurden" placeholder="Seleccione..."  [class]="submitted && record.idLaborRelationshipxFamilyBurden == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                  <small class="p-invalid" *ngIf="submitted && record.idLaborRelationshipxFamilyBurden == -1"> El beneficiario es requerido</small>
+                </div>
+              </div>
+
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Nombre del representante<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" [(ngModel)]="record.firstNameBeneficiary" pInputText maxlength="70" [class]="submitted && record.firstNameBeneficiary == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (input)="_validations.toCapitalizeString($event)"/> 
+                    <small class="p-invalid" *ngIf="submitted && record.firstNameBeneficiary == ''"> El nombre del representante es requerido</small>
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6 inter-content">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Apellido del representante<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" [(ngModel)]="record.lastNameBeneficiary" pInputText maxlength="70" [class]="submitted && record.lastNameBeneficiary == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (input)="_validations.toCapitalizeString($event)"/> 
+                    <small class="p-invalid" *ngIf="submitted && record.lastNameBeneficiary == ''"> El apellido del representante es requerido</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Tipo de documento<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="_entityTypeDropdown" [(ngModel)]="record.iDocumentTypeBeneficiary" placeholder="Seleccione..."  [class]="submitted && record.iDocumentTypeBeneficiary == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && record.iDocumentTypeBeneficiary == -1"> La entidad del documento es requerida</small>
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6 inter-content">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Documento del representante<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" [(ngModel)]="record.documentNumberBeneficiary" pInputText maxlength="70" [class]="submitted && record.documentNumberBeneficiary == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                    <small class="p-invalid" *ngIf="submitted && record.documentNumberBeneficiary == ''"> El número de documento es requerido</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12">
+                  <label for="active">Número de registro<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <input type="text" [(ngModel)]="record.recordNumber" pInputText maxlength="70" [class]="submitted && record.recordNumber == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                  <small class="p-invalid" *ngIf="submitted && record.recordNumber == ''"> El número de registro es requerido</small>
+                </div>
+              </div>
+
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Tipo de sueldo<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <!-- <p-dropdown [disabled]="true" [options]="salaryTypesDropdown" [(ngModel)]="record.idSalaryType" placeholder="Seleccione..."  [class]="submitted && record.iDocumentTypeBeneficiary == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown> -->
+                    <input type="text" [disabled]="true" [(ngModel)]="salary.typeSalary" pInputText/> 
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6 inter-content">
+                  <label for="active">Sueldo<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <div id="salary-content" class="p-col-12 p-pl-0 p-pr-0 p-mt-0">
+
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">Bs</span>
+                        <p-inputNumber [(ngModel)]="salary.amount" disabled="disabled" [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Porcentaje<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber [(ngModel)]="record.porcentage" mode="decimal" maxlength="5" [minFractionDigits]="2" [maxFractionDigits]="2" [class]="submitted && record.porcentage <= 0.00 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (ngModelChange)="updateData(true)"></p-inputNumber>
+                  <small class="p-invalid" *ngIf="submitted && record.porcentage <= 0.00"> El porcentaje es requerido</small>
+                  </div>
+                </div>
+                <div class="p-col-12 p-lg-6 inter-content">
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <label for="active">Importe<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">Bs</span>
+                      <p-inputNumber [(ngModel)]="record.amount" mode="decimal" maxlength="14" [minFractionDigits]="2" [maxFractionDigits]="2" [class]="submitted && record.amount <= 0.00 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (ngModelChange)="updateData(false)"></p-inputNumber>
+                    </div>
+                    <small class="p-invalid" *ngIf="submitted && record.amount <= 0.00"> El importe es requerido</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-field p-col-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+              </div>
+              <div class="p-field p-grid p-col-12">
+                <div class="p-col-12">
+                  <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </p-sidebar>

@@ -1,0 +1,62 @@
+<div class="p-grid p-align-center p-mt-4 p-p-3 vertical-container" *ngIf="expanded">
+
+    <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-3">
+
+        <span class="p-float-label">
+            <input id="name" [(ngModel)]="accountNumber" numbersOnly (keyup.enter)="search()" pInputText maxlength="50">
+            <label for="name">Número de cuenta</label>
+
+        </span>
+
+    </div>
+
+
+    <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-3">
+        <span class="p-float-label">
+            <label for="dropdown">Banco</label>
+            <p-dropdown [resetFilterOnHide]="true" [filter]="true" (keyup.enter)="search()" [options]="bank"
+                optionLabel="name"  [(ngModel)]="bankId" optionValue="id" placeholder="Banco" [showClear]="true"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </span>
+    </div>
+
+    <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-3">
+        <span class="p-float-label">
+            <label for="dropdown">Tipo</label>
+            <p-dropdown [resetFilterOnHide]="true" [(ngModel)]="bankAccountTypeId" [options]="bankAccountType" optionLabel="name" optionValue="id"
+                (keyup.enter)="search()" placeholder="Tipo de cuenta" [showClear]="true"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </span>
+    </div>
+
+    <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-3">
+        <span class="p-float-label">
+            <label for="dropdown">Moneda</label>
+            <p-dropdown [resetFilterOnHide]="true" [(ngModel)]="currencyId" [options]="currency" optionLabel="name" optionValue="id"
+                [filter]="true" (keyup.enter)="search()" placeholder="Moneda" [showClear]="true"
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </span>
+    </div>
+
+  
+
+    <div class="p-fluid p-col-12 p-mt-3 p-md-4 p-lg-3">
+        <span class="p-float-label">
+            <label for="dropdown">Estatus</label>
+            <p-dropdown [(ngModel)]="active" (keyup.enter)="search()" [options]="status" placeholder="Estatus"
+                [showClear]="true">
+            </p-dropdown>
+        </span>
+    </div>
+
+    <div class="p-d-flex p-jc-end p-col-12 p-md-3 p-lg-12" style="width: 100%">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>
+

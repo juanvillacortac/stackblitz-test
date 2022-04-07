@@ -1,0 +1,77 @@
+
+<div class="p-field p-grid p-col-12">
+    <div class="p-col-12 p-md-6 p-mb-1">
+        <h4 class="p-card-title">Cuentas bancarias</h4>
+    </div>
+    <div class="p-col-12 p-md-6 p-mb-1" align="right">
+        <button pButton pRipple icon="pi pi-plus p-button-success" tooltipPosition="top" pTooltip="Agregar" class="p-button-success p-mr-2" (click)="add()" [disabled]="disabledSave > 0"></button>
+    </div>
+</div>
+    
+<div *ngIf="bankAccountsList.length > 0">
+    <p-table [value]="bankAccountsList" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10"
+      [rowHover]="true" dataKey="accountforPayrollDataId" [scrollable]="false" scrollHeight="240px"
+      currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true" #dt editMode="row">
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="p-text-center">Institución/Banco</th>
+              <th class="p-text-center">Tipo de cuenta</th>
+              <th class="p-text-center">Nº de cuenta</th>
+              <th class="p-text-center">Principal</th>
+              <th style="width:8rem"></th>
+          </tr>
+      </ng-template>
+      <!-- <ng-template pTemplate="body" let-bankAccountsList let-editing="editing" let-ri="rowIndex"> -->
+      <ng-template *ngIf="bankAccountsList != []" pTemplate="body" let-bankAccountsList>
+          <!-- <tr [pEditableRow]="bankAccountsList"> -->
+          <tr>
+              <td style="display: none !important;" class="p-text-center">
+                  {{bankAccountsList.bankId}}
+              </td>
+              <td style="display: none !important;" class="p-text-center">
+                  {{bankAccountsList.typeAccountId}}
+              </td>
+              <td class="p-text-center">
+                  {{bankAccountsList.bank}}
+              </td>
+              <td class="p-text-center">
+                  {{bankAccountsList.typeAccount}}
+              </td>
+              <td class="p-text-center">
+                  {{bankAccountsList.accountNumber}}
+              </td>
+              <td class="p-text-center">
+                  <p-checkbox [binary]="true" [readonly]="true" [(ngModel)]="bankAccountsList.indActive"></p-checkbox>
+              </td>
+              <td style="text-align:center">
+                  <!-- <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(bankAccountsList)" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(bankAccountsList)" pTooltip="Guardar" class="p-button-rounded p-button-success p-button-text p-mr-2" tooltipPosition="top" placeholder="Top"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(bankAccountsList, ri)" pTooltip="Regresar" class="p-button-rounded p-button-danger p-button-text" tooltipPosition="top" placeholder="Top"></button> -->
+                  <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="edit(bankAccountsList)" pTooltip="Editar" tooltipPosition="top"></button>
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template *ngIf="bankAccountsList == []" pTemplate="footer">
+          <p-messages severity="info">
+              <div class="p-ml-2">Always bet on Prime.</div>
+          </p-messages>
+     </ng-template>
+
+    </p-table>
+</div>
+
+
+<div *ngIf="bankAccountsList.length < 1">
+    <div class="p-col-12" style="padding: 0.5rem 0;">
+        <div class="box box-stretched">
+            <p-messages severity="info">
+            <ng-template pTemplate>
+                <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                <div class="p-ml-2">El trabajador no posee cuentas asociadas</div>
+            </ng-template>
+            </p-messages>
+        </div>
+    </div>
+</div>
+  <!-- <app-accountfor-payroll-data-panel *ngIf="showSidebar5" [(showSidebar)]="showSidebar5" [(record)]="newAccountforPayrollData" (backUnChanged)="resetValues($event)" (recordSave)="saveAccountforPayrollData($event)"></app-accountfor-payroll-data-panel> -->
+

@@ -1,0 +1,20 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Imponibles y deducibles" [draggable]="false" [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'60vw'}" [modal]="true">
+    <!-- <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+     
+    </div> -->
+    <!-- <div class="p-grid">
+        <div class="p-col-12 p-mt-3 p-md-12 p-lg-12"> [selected]="indactive==false? true: false" [selected]="indactive==true? true : false" -->
+            
+            <p-tabView id="ChildTab" [(activeIndex)]="activeIndex">
+                <p-tabPanel header="Imponibles"  [disabled]="indTabdeductible">
+                    <app-taxable (_sendTaxables)="sendList($event)" (onhide)="onHide()" (_sendTaxablesHeader)="sendListTaxableHeader($event)" (_sendTaxablesHeaderDetalleP)="sendListTaxableHeaderDetailProd($event)" [(ProductOrder)]="ProductOrder" [(PurchaseOrder)]="PurchaseOrder" [(_productsSelecteds)]="_products"></app-taxable>
+                </p-tabPanel>
+                <p-tabPanel header="Deducibles" [disabled]="!indTabdeductible">
+                    <app-deductible  [(subtotalHeader)]="subtotalHeader" (onhide)="onHide()" [(ProductOrder)]="ProductOrder" (_sendDeductibles)="sendList($event)" (_sendTaxablesHeader)="sendListTaxableHeader($event)" (_sendTaxablesHeaderDetalleP)="sendListTaxableHeaderDetailProd($event)" [(PurchaseOrder)]="PurchaseOrder" [(_productsSelecteds)]="_products"></app-deductible>
+                </p-tabPanel>
+            </p-tabView>
+        <!-- </div>
+    </div> -->
+    
+</p-dialog>
+

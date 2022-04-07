@@ -1,0 +1,78 @@
+<div class="card" style="align-content: center; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+  <div class="p-grid">
+      <div class="p-col-12 p-md-5 p-lg-6" style="align-content: center;">
+        <span>     
+            <h2 class="p-field title">FMS Dashboard</h2>        
+          
+        </span>
+      </div>
+      <div class="p-col-12 p-md-7 p-lg-6" style="text-align: right;">
+        <p-selectButton StyleClass="pruebaestilo" [options]="optionsTime"  [(ngModel)]="value1" optionLabel="title" optionValue="value">
+                
+        </p-selectButton>
+      </div>
+  </div>
+</div>
+<div class="p-grid">
+  <div class="p-col-12 p-md-6 p-lg-12">
+      
+    <ng-container *ngIf="dashboardData1?.length">
+      <app-dashboard-layaout  [(dashboardData)]="dashboardData1" [(titleout)]="titleout11"></app-dashboard-layaout> 
+    </ng-container>
+     
+  </div>
+
+</div>
+<div class="p-grid">
+
+ 
+  <div class="p-col-12  p-sm-12 p-md-8 p-lg-6 ">
+
+    <ng-container *ngIf="dashboardData3?.length">
+    <app-dashboard-layaout [(dashboardData)]="dashboardData3" [minHeight]=40 [(titleout)]="titleout5"></app-dashboard-layaout>
+  </ng-container>
+
+  </div>
+  <div class="p-col-12 p-sm-12 p-md-8 p-lg-6">
+
+    <ng-container *ngIf="dashboardData4?.length">
+
+    <app-dashboard-layaout [dashboardData]="dashboardData4" [minHeight]=40 [(titleout)]="titleout6"></app-dashboard-layaout>
+  </ng-container>
+
+  </div>
+  <div class="p-col-12  p-sm-12 p-md-8 p-lg-6">
+    <ng-container *ngIf="dashboardData5?.length">
+
+    <app-dashboard-layaout [(dashboardData)]="dashboardData5" [minHeight]=105 [(titleout)]="titleout8"></app-dashboard-layaout> 
+  </ng-container>
+
+  </div>
+
+  <div class="p-col-12  p-sm-12 p-md-8 p-lg-6">
+    <ng-container *ngIf="dashboardData6?.length">
+
+    <app-dashboard-layaout [(dashboardData)]="dashboardData6" [minHeight]=105 [(titleout)]="titleout7"></app-dashboard-layaout> 
+  </ng-container>
+
+  </div>
+
+  <div class="p-col-12 p-sm-12 p-md-8 p-lg-6">
+    <ng-container *ngIf="dashboardData7?.length">
+
+    <app-dashboard-layaout [(dashboardData)]="dashboardData7" [minHeight]=115 [(titleout)]="titleout9"></app-dashboard-layaout> 
+  </ng-container>
+
+  </div>
+
+  <div class="p-col-12  p-sm-12 p-md-8 p-lg-6">
+    <ng-container *ngIf="dashboardData8?.length">
+
+    <app-dashboard-layaout [(dashboardData)]="dashboardData8" [minHeight]=115 [(titleout)]="titleout10"></app-dashboard-layaout> 
+  </ng-container>
+
+  </div>
+
+</div>
+
+

@@ -1,0 +1,45 @@
+table {
+    width: 100%;
+}
+
+.status-badge {
+    height:100px ;
+    border-radius: 10px;
+    font-size: 11px;
+    padding: 3px 10px;
+    text-align: center;
+    min-width: 55px;
+    margin-right: 4px;
+    margin-left: 4px;
+
+    &.status-in-draft {
+        background: #e1cfe7;
+        color: #ab42b4;
+    }
+
+    &.status-in-action {
+        background: hsl(187, 100%, 90%);
+        color: #428ae7;
+    }
+    &.status-waiting {
+        background: #ebec86;
+        color: #f37b0a;
+    }
+    &.status-finalize {
+        background: #C8E6C9;
+        color: #256029;
+    }
+    &.status-canceled {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+    &.status-noassgned {
+        background: #d1d1cb;
+        color: #27211b;
+    }
+
+    &.status-delayed {
+        background: #eec963;
+        color: #f17d08;
+    }
+}

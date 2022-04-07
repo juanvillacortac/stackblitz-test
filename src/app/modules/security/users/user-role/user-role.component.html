@@ -1,0 +1,52 @@
+<h2 class="p-m-0">{{formTitle | translate}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card p-pb-0">
+            <div class="p-fluid p-grid p-formgrid" [formGroup]="addUserRoleForm">
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="roleType">Tipo de rol</label>
+                    <p-dropdown [options]="rolTypes" [disabled]="isEdit" id="roleType" formControlName="idType"
+                                placeholder="{{'security_module.user.select_type_rol' | translate}}" [showClear]="true"
+                                (onChange)="onRoleTypeSelected($event.value)"></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="rol">Rol</label>
+                    <p-dropdown [options]="roles" [disabled]="isEdit || !roleTypeSelected" id="rol"
+                                formControlName="idRole" placeholder="{{'security_module.user.select_rol' | translate}}" [showClear]="true"
+                                (onChange)="onRoleSelected($event.value)"></p-dropdown>
+                </div>
+            </div>
+
+            <span *ngIf="systems.length > 0">
+                    <h5>{{'security_module.systems' | translate}}</h5>
+                <div class="p-fluid p-grid p-formgrid p-pl-4">
+                    <div *ngFor="let system of systems">
+                        <div class="p-field">
+                            <span [class]="'time '">{{system.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </span>
+
+            <h5>{{'security_module.user.offices' | translate}}</h5>
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-fluid p-col-12 p-md-12">
+                    <table>
+                        <td class="p-col-12 p-md-12">
+                            <div class="p-col-12 p-md-12">
+                                <app-check-list [itemsDisabled]="roleAdded" [options]="officesView"
+                                                (onSelect)="onOfficesSelected($event)"></app-check-list>
+                            </div>
+                        </td>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="p-fluid p-col-12">
+            <app-footer-form-buttons [disableSave]="!addUserRoleForm.valid || roleAdded" (acceptPressed)="onSave()" (cancelPressed)="onEmitHideForm(false)">
+            </app-footer-form-buttons>
+        </div>
+    </div>
+    <p-toast position="top-right" key="user-role"></p-toast>
+</div>

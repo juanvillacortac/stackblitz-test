@@ -1,0 +1,24 @@
+<p-card [header]="conceptEdit.concept == '' || !conceptEdit.concept ? 'Nuevo concepto' : conceptEdit.conceptCode+' '+conceptEdit.concept" styleClass="readOnlyCard">
+    <div class="p-grid">
+        <div class="p-col-12" id="companyImageContainer">
+            <img src="assets/layout/images/dashboard/credit_card_cards_icon_153986.svg" alt="no image" height="200" width="200" class="p-offset-1 p-col-11" style="margin: 0 auto; border-radius: 50%;" />
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <label class="p-text-bold">
+                Código
+            </label> : {{conceptEdit.conceptCode}} <br>
+            <label class="p-text-bold">
+                Abreviatura 
+            </label>: {{conceptEdit.abbreviation}} <br>
+            <label class="p-text-bold">
+                Descripción 
+            </label>: {{conceptEdit.concept == '' || !conceptEdit.concept ? 'Nuevo concepto' : conceptEdit.concept}}
+            <br>
+            <label class="p-text-bold">
+                Tipo de concepto 
+            </label>: {{conceptEdit.conceptType}}
+        </div>
+    </div>
+</p-card>

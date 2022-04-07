@@ -1,0 +1,73 @@
+.kpi_panel{
+    width: 100%;
+    height: calc(100% - 20px) !important;
+}
+
+.chart_count{
+    display: block;
+    font-size: 1.5vw;
+    font-family: roboto;
+    color: #b2b2b3;
+    margin: 2%;
+}
+
+.flex-wrapper {
+    display:table;
+    width:100%;
+    height: calc(100% - 20px) !important;
+    table-layout: fixed;
+  }
+  
+  .single-chart {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 70%;
+    height:  calc(100% - 20px) !important;
+  }
+
+  .single-chart svg {
+    height:  calc(100% - 20px) !important;
+  }
+  
+  .circular-chart {
+    max-width: 45%;
+    max-height: 45%;
+  }
+  
+  .circle-bg {
+    fill: none;
+    stroke: #eceff4;
+    stroke-width: 3.8;
+  }
+  
+  .circle {
+    fill: none;
+    stroke-width: 3.8;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+  }
+  
+  @keyframes progress {
+    0% {
+      stroke-dasharray: 0 100;
+    }
+  }
+  
+  .circular-chart.orange .circle {
+    stroke: #ff6961;
+  }
+  
+  .circular-chart.orange .target-complete {
+    stroke: #ace3a7;
+  }
+  .circular-chart.orange .target-incomplete {
+    stroke: #ff6961;
+  }
+
+  .percentage {
+    fill: #b2b2b3;
+    font-family: sans-serif;
+    font-size: 0.4em;
+    text-anchor: middle;
+  }

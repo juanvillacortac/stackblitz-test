@@ -1,0 +1,7 @@
+<div class="p-m-0" *ngIf="loaded">
+  <app-internal-bank-transfer-tree [currencies]="currencies" [(currentPage)]="currentPage" [(elementsPerPage)]="elementsPerPage"
+    [totalPaginatorElements]="totalPaginatorElements" [transactions]="transactions"  [isFiltered]="isFiltered" #treeComp
+    (onEdit)="edit($event)" (onRefresh)="fetchData()">
+    <app-internal-bank-transfer-filters [filterData]="filterData" [loading]="loading" (onSearch)="fetchData($event, true)"></app-internal-bank-transfer-filters>
+  </app-internal-bank-transfer-tree>
+</div>

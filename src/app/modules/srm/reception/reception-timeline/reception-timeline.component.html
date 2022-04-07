@@ -1,0 +1,35 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="show()" (onHide)="hideDialog()" [showCloseIcon]="true" styleClass="p-sidebar-md"
+[blockScroll]="true"  [dismissible]="false" position="right"  [style]="{'overflow': 'hidden'}">
+    <div class="card">
+        <div style=" position: -webkit-sticky; position: sticky; top: 0; position: center;">
+            <h5>{{reception.receptionNumber}}</h5>
+        </div>
+
+        <p-scrollPanel [style]="{width: '100%', height: '40vw'}" styleClass="custombar1">
+            <div class="centrar-verticalmente">
+                <ng-container *ngIf="waiting">
+                    <p-progressSpinner style="display: flex; justify-content: center; align-items: center; vertical-align: middle;"></p-progressSpinner>
+                </ng-container>
+            </div>
+        
+            <p-timeline [value]="timeline" align="alternate" styleClass="customized-timeline">
+                <ng-template pTemplate="marker" let-event >
+                    <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.color">
+                        <i [ngClass]="event.icon"></i>
+                    </span>
+                </ng-template>
+
+                <ng-template pTemplate="content" let-event>
+                    <p-card [header]="event.status" [subheader]="event.ocurrencyDate | date: 'dd/MM/yyyy h:mm:ss a'">
+                                <h5>{{event.ocurrency}}</h5>
+                                <div class="p-inputgroup image-cropper" >
+                                    <img  *ngIf="event.userImage =='X'" src="https://ui-avatars.com/api/?name={{event.userUpdate}}&background=17a2b8&color=fff&rounded=true&bold=true&size=200" width="32" style="vertical-align: middle;" class="clipped" />
+                                    <img  *ngIf="event.userImage !='X'" [src]="event.userImage" width="32" style="vertical-align: middle;" class="clipped" />
+                                    <span class="p-ml-1">{{event.userUpdate | titlecase}}</span>
+                                </div>
+                            </p-card>   
+                </ng-template>
+            </p-timeline>
+        </p-scrollPanel>
+    </div>
+</p-sidebar> 

@@ -1,0 +1,227 @@
+<p-dialog header="Empaque" [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [modal]="true"
+  [style]="{width: '70vw'}" [draggable]="false" [resizable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+  <div class="p-grid p-formgrid">
+    <div class="p-fluid p-field p-col-12 p-md-12 p-lg-12">
+      <p-fieldset legend="Empaque">
+        <div class="p-grid">
+          <div class="p-fluid p-field p-col-12 p-md-3 p-lg-3 p-xs-12 p-sm-12">
+            <label for="active">Tipo de empaque<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [options]="_packingtypes" [disabled]="true" (onChange)="getPackingPresentation()"
+              [(ngModel)]="_packing.packingType.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.packingType.id == -1 || _packing.packingType.id == undefined)">El tipo de
+              empaque
+              es requerido</small>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-3 p-lg-3">
+            <label for="active">Presentación del empaque<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+              [disabled]="_packing.packingType.id == 2" [options]="_packagingpresentations"
+              [(ngModel)]="_packing.packagingPresentation.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.packagingPresentation.id == -1 || _packing.packagingPresentation.id == undefined)">La
+              presentación del empaques es requerido</small>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-3 p-lg-3">
+            <label for="active">Uso del empaque<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+              [options]="_useofpackagings" [(ngModel)]="_packing.useofPackaging.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.useofPackaging.id == -1 || _packing.useofPackaging.id == undefined)">El uso
+              del
+              empaque es requerido</small>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-3 p-lg-3">
+            <label for="units">Número de unidades<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-inputgroup">
+              <input [disabled]="_packing.id > 0" name="units" id="units" (keyup.enter)="savePacking()"
+                [class]="submitted && (_packing.units == undefined || _packing.units == 0) ? 'ng-dirty ng-invalid' : ''"
+                type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="min"
+                [(ngModel)]="_packing.units" min="1" maxlength=12 max="100000000000"
+                (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+              <span class="p-inputgroup-addon" pTooltip="El número de unidades debe ser mayor a 1."><i
+                  class="pi pi-info-circle"></i></span>
+            </div>
+            <small class="p-invalid" *ngIf="submitted && ( _packing.units == undefined)">El Número de unidades es
+              requerido</small>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.units <= 1 && _packing.packingType.id != 2 && _packing.units != undefined)">El
+              número de unidades debe ser mayor a 1</small>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-4 p-lg-4">
+            <label for="active">Tipo de generación<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown (onChange)="ValidateGenerationType()" [(ngModel)]="_packing.groupingGenerationBarId"
+              [options]="groupinggenerationbarlist" appendTo="body" [disabled]="_packing.units == 1">
+            </p-dropdown>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-4 p-lg-4">
+            <label for="active">Tipo de GTIN<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+              [disabled]="_packing.groupingGenerationBarId != 1 || _packing.units == 1" (onChange)="setSize()"
+              [options]="_gtintypes" [(ngModel)]="_packing.gtinType.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.gtinType.id == -1 || _packing.gtinType.id == undefined)">El
+              tipo de GTIN es requerido</small>
+          </div>
+
+          <div class="p-fluid p-field p-col-12 p-md-4 p-lg-4">
+            <label>Barra <span [ngStyle]="{'color':'red'}">*</span></label>
+
+            <div class="p-inputgroup">
+              <input
+                [disabled]="_packing.groupingGenerationBarId != 1 || _packing.units == 1"
+                name="barra"
+                [class]="submitted && (_packing.barcode == undefined || _packing.barcode.trim()) =='' ? 'ng-dirty ng-invalid' : ''"
+                [(ngModel)]="_packing.barcode" id="barcode" type="text" (keyup)="ValidateGtin($event.target.value)"
+                pInputText [maxLength]="_maxGTIN"
+                [pKeyFilter]="_aplhaNumeric == true ? _validations.AlphaNumeric : _validations.Numeric">
+              <button type="button" style="background-color: white;color: black;" pButton pRipple icon="pi pi-times"
+                (click)="clearInputBarCode()" *ngIf="_packing.groupingGenerationBarId == 2"
+                pTooltip="Borrar barra"></button>
+              <button type="button" pButton pRipple icon="pi pi-reply" (click)="showDialogBarCode()"
+                *ngIf="_packing.groupingGenerationBarId == 2" pTooltip="Generar barra"></button>
+            </div>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.barcode == undefined || _packing.barcode.trim() =='')">La
+              barra es requerida</small>
+            <small class="p-invalid" *ngIf="IndGtin">{{messagevalidationgtin}}</small>
+            <small class="p-invalid" *ngIf="_barraRepetida">Esta barra ya existe en el sistema</small>
+
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+    <div class="p-fluid p-field p-col-12 p-md-6 p-lg-6">
+      <p-fieldset legend="Presentación">
+        <div class="p-grid">
+          <div class="p-field p-col-12 p-md-6 p-lg-6">
+            <label for="active">Agrupación de unidad de medida<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+              [options]="_groupingunitsmeasure" (onChange)="listmeasurementunits()"
+              [(ngModel)]="_packing.measurementUnit.groupingUnitofMeasure.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.measurementUnit.groupingUnitofMeasure.id == -1 || _packing.measurementUnit.groupingUnitofMeasure.id == undefined)">La
+              agrupación de unidad de medida es requerida</small>
+          </div>
+          <div class="p-field p-col-12 p-md-6 p-lg-6">
+            <label for="active">Unidad de medida del empaque<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+              [options]="_measurementunits" [(ngModel)]="_packing.measurementUnit.id" placeholder="Seleccione...">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.measurementUnit.id == -1 || _packing.measurementUnit.id == undefined)">La
+              unidad de medida del empaque es requerida</small>
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+
+    <div class="p-fluid p-field p-col-12 p-md-6 p-lg-6">
+      <p-fieldset legend="Paletizado">
+        <div class="p-grid">
+          <div class="p-field p-col-12 p-md-6 p-lg-6">
+            <label for="maxLitters">Niveles por paleta</label>
+            <input name="maxLitters" id="maxLitters" (keyup.enter)="savePacking()"
+              [class]="submitted && (_packing.maxLitters == undefined || _packing.maxLitters < 0) ? 'ng-dirty ng-invalid' : ''"
+              type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="min"
+              [(ngModel)]="_packing.maxLitters" min="1" maxlength=12 max="100000000000"
+              (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.maxLitters == undefined  || _packing.maxLitters < 0 )">Los
+              niveles por paleta es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-6 p-lg-6">
+            <label for="packingsByLitters">Empaques por nivel</label>
+            <input name="packingsByLitters" id="packingsByLitters" (keyup.enter)="savePacking()"
+              [class]="submitted && (_packing.packingsByLitters == undefined || _packing.packingsByLitters < 0) ? 'ng-dirty ng-invalid' : ''"
+              type="text" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" pInputText id="min"
+              [(ngModel)]="_packing.packingsByLitters" min="1" maxlength=12 max="100000000000"
+              (paste)="_validations.noPaste($event)" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small class="p-invalid"
+              *ngIf="submitted && (_packing.packingsByLitters == undefined  || _packing.packingsByLitters < 0 )">Los
+              empaques
+              por nivel es requerido</small>
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+
+    <div class="p-fluid p-field p-col-12 p-md-12 p-lg-12">
+      <p-fieldset legend="Dimensiones y peso">
+        <div class="p-grid">
+          <div class="p-field p-col-12 p-md-2 p-lg-2">
+            <label for="high">Alto</label>
+            <p-inputNumber suffix=" cm" name="high" (onBlur)="getVolume()" id="high" (keyup.enter)="savePacking()"
+              [class]="submitted && _packing.high < 0 && _packing.high != undefined ? 'ng-dirty ng-invalid' : ''"
+              id="high" [(ngModel)]="_packing.high" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+              :min="0" :max="9999999" max="9999999" maxlength=15 (paste)="_validations.noPaste($event)"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted &&  _packing.high < 0 ">El alto debe ser mayor a 0</small>
+          </div>
+          <div class="p-field p-col-12 p-md-2 p-lg-2">
+            <label for="width">Ancho</label>
+            <p-inputNumber suffix=" cm" name="width" (onBlur)="getVolume()" id="width" (keyup.enter)="savePacking()"
+              [class]="submitted && _packing.width < 0 && _packing.width != undefined ? 'ng-dirty ng-invalid' : ''"
+              id="width" [(ngModel)]="_packing.width" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+              :min="0" :max="9999999" max="9999999" maxlength=15 (paste)="_validations.noPaste($event)"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted &&   _packing.width < 0 ">El ancho debe ser mayor a 0</small>
+          </div>
+          <div class="p-field p-col-12 p-md-2 p-lg-2">
+            <label for="length">Largo</label>
+            <p-inputNumber suffix=" cm" name="length" (onBlur)="getVolume()" id="length" (keyup.enter)="savePacking()"
+              [class]="submitted && _packing.length < 0 && _packing.length != undefined ? 'ng-dirty ng-invalid' : ''"
+              id="length" [(ngModel)]="_packing.length" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+              :min="0" :max="9999999" max="9999999" maxlength=15 (paste)="_validations.noPaste($event)"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted &&   _packing.length < 0 ">El largo debe ser mayor a 0</small>
+          </div>
+          <div class="p-field p-col-12 p-md-3 p-lg-3">
+            <label for="volume">Volumen</label>
+            <p-inputNumber suffix=" cm3" [disabled]="true" name="volume" id="volume" (keyup.enter)="savePacking()"
+              [class]="submitted && _packing.volume < 0 && _packing.volume != undefined ? 'ng-dirty ng-invalid' : ''"
+              id="volume" [(ngModel)]="_packing.volume" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+              :min="0" :max="9999999" max="9999999" maxlength=15 (paste)="_validations.noPaste($event)"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted &&   _packing.volume < 0 ">El volumen es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-3 p-lg-3">
+            <label for="weight">Peso</label>
+            <p-inputNumber suffix=" Kg" name="weight" id="weight" (keyup.enter)="savePacking()"
+              [class]="submitted && _packing.weight < 0 && _packing.weight != undefined ? 'ng-dirty ng-invalid' : ''"
+              type="text" id="weight" [(ngModel)]="_packing.weight" mode="decimal" [minFractionDigits]="2"
+              [maxFractionDigits]="2" :min="0" :max="9999999" max="9999999" maxlength=15
+              (paste)="_validations.noPaste($event)"></p-inputNumber>
+            <small class="p-invalid" *ngIf="submitted &&  _packing.weight < 0 ">El peso debe ser mayor a 0</small>
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+
+    <div class="p-fluid p-field p-col-12 ">
+      <label for="active">Estatus</label>
+      <p-dropdown [options]="status" [(ngModel)]="_packing.active" placeholder="Estatus" [disabled]="true">
+
+      </p-dropdown>
+    </div>
+    <div class="p-fluid p-field p-col-12 ">
+      <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+    </div>
+    <div class="p-field p-col-12 p-md-12" style="text-align: right;">
+      <button pButton pRipple label="Guardar" (click)="savePacking()" icon="pi pi-save"
+        class="p-button-info p-mr-2"></button>
+    </div>
+  </div>
+
+  <!-- <button pButton pRipple label="Cancelar" (click)="hideDialog()" icon="pi pi-times" class="p-button-secondary"></button> -->
+
+
+</p-dialog>
+<barcode-panel [(showDialog)]="_showdialogbarcode" [(IdTypeGenerationBar)]="IdTypeGenerationBar" [(BarCode)]="_packing.barcode" [(IndGenerationBar)]="IndGenerationBar"></barcode-panel>
+<!-- <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog> -->

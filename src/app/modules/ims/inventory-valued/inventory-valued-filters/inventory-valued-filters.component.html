@@ -1,0 +1,87 @@
+<div *ngIf="expanded">
+    <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.barcode" #barcode type="text" pInputText (keyup.enter)="searchValuedInventories()" (keypress)="validations.keyPressForGtin($event);" (paste)="_validations.PasteOnlyNumbers($event)"
+                    pInputText maxlength="130">
+                    <label for="float-input">{{ 'ims.inventory_valued.barcode' | translate }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.productName" type="text" maxlength="300" pInputText noneSpecialCharacters (keyup.enter)="searchValuedInventories()">
+                    <label for="float-input">{{ 'ims.inventory_valued.product_name' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.reference" #reference type="text" pInputText (keyup.enter)="searchValuedInventories()" maxlength="100">
+                    <label>{{ 'ims.inventory_valued.reference' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.factoryReference" #factoryReference type="text" pInputText (keyup.enter)="searchValuedInventories()" maxlength="100">
+                    <label>{{ 'ims.inventory_valued.factory_reference' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <!-- categories -->
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="searchValuedInventories()" placeholder="{{ 'ims.inventory_valued.categories' | translate }}" readonly="true">
+                <app-dropdown-tree [treeData]='categoryService._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                    [isDisabled]='false' 
+                    (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+                <div class="p-inputgroup">
+                    <input type="text" pInputText placeholder="{{ 'ims.inventory_valued.suppliers' | translate }}" [(ngModel)]="suppliers" readonly="true">
+                    <button icon="pi pi-search" pButton pRipple (click)="showSuppliersModal()"></button>          
+                </div>
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+                <p-multiSelect [options]="statuses" [(ngModel)]="selectedStatuses" [filter]="true" optionLabel="name" (keyup.enter)="searchValuedInventories()" 
+                placeholder="{{ 'ims.inventory_valued.statuses' | translate }}" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"></p-multiSelect>
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+                <p-dropdown  [options]="dateTypes" optionLabel="name" optionValue="id"  
+                [autoDisplayFirst]="true" [(ngModel)]="filters.dateTypeId" [filter]="true" (keyup.enter)="searchValuedInventories()" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"  placeholder="{{ 'ims.inventory_valued.date_type' | translate }}"></p-dropdown> 
+            </div>
+
+            <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+                <span pTooltip="{{ 'ims.inventory_valued.start_date' | translate }}" tooltipPosition="right" class="p-float-label">
+                    <p-calendar inputId="calendar" [(ngModel)]="startDate" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="endDate"  readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+                </span>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+                <span pTooltip="{{ 'ims.inventory_valued.end_date' | translate }}" tooltipPosition="right" class="p-float-label">
+                    <p-calendar inputId="endCalendar" [(ngModel)]="endDate" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="todayDate" [minDate]="startDate" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+                </span>
+            </div>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" (click)="searchValuedInventories()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+
+<app-supplier-common-modal *ngIf="supplierDialogVisible" (onToggle)="toggleSupplier($event)" [suppliermodal]="suppliermodal" (suppliermodalChange)="suppliermodalChange($event)" [visible]="supplierDialogVisible" [multiple]="true"></app-supplier-common-modal>

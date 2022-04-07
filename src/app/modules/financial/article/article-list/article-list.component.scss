@@ -1,0 +1,36 @@
+:host ::ng-deep {
+
+    .costos p {
+        margin: 0;
+        text-align: right;
+        overflow-wrap: 'break-word';
+    }
+
+    .p-overflow-hidden {
+        overflow: hidden;
+    }
+    .status-badge {
+        border-radius: 2px;
+        padding: 0.1em .5rem;
+        font-size: 1rem;
+        letter-spacing: .3px;
+        display: inline-flex;
+        margin: 2px;
+    
+        &.status-finalize {
+            background: #dee2e6;
+            color: #256029;
+        }
+        &.status-noassgned {
+            background: #ffe5dd;
+            color: #27211b;
+        }
+    
+        &.status-delayed {
+            background: #d8eafb;
+            color: #27211b;
+        }
+    }
+    
+    }
+    

@@ -1,0 +1,57 @@
+
+<p-panel header="Cargos" [toggleable]="true" class="readOnlyCard">
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2" *ngIf="jobs && jobs.length > 0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..."/>
+    </span>
+    <!--<button pButton pRipple icon="pi pi-plus p-button-success" pTooltip="Crear nuevo" class="p-button-success p-mr-2" (click)="editJob(_jobpass)"></button>-->
+    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ATTRIBUTES_PERMISSION_ID) && this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success p-mr-2" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editJob(_jobpass)"></button>
+  </div>
+  <p-table #dt [value]="jobs" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10" [paginator]="true" [globalFilterFields]="['name','hierarchicalLevel']"
+           [rowHover]="true" dataKey="id" [scrollable]="true" scrollHeight="240px" *ngIf="jobs && jobs.length > 0"
+           currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="false">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="hierarchicalLevel">Nivel <p-sortIcon field="hierarchicalLevel"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="fixedPositions">Fijas <p-sortIcon field="fixedPositions"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="temporaryPositions">Temporales <p-sortIcon field="temporaryPositions"></p-sortIcon></th>
+        <th class="p-text-center">
+        </th>
+      </tr> 
+    </ng-template>
+    <ng-template pTemplate="body" let-Job>
+      <tr>
+        <td>{{Job.name}}</td>
+        <td class="p-text-center">{{Job.idHierarchicalLevel}}</td>
+        <td class="p-text-center">{{Job.fixedPositions}}</td>
+        <td class="p-text-center">{{Job.temporaryPositions}}</td>
+        <td class="p-text-center">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editJob(Job)" pTooltip="Editar" tooltipPosition="top"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteJob(Job)" pTooltip="Eliminar" tooltipPosition="top"></button>
+
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        Total {{jobs ? jobs.length : 0 }} registros.
+      </div>
+    </ng-template>
+  </p-table>
+
+  <div *ngIf="jobs == null || jobs.length == 0">
+    <div class="p-grid">
+      <div class="p-col-12 p-fluid">
+        <p-messages severity="info">
+          <ng-template pTemplate>
+            <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+            <div class="p-ml-2">No existen cargos asociados a esta empresa.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+
+</p-panel>

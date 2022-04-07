@@ -1,0 +1,109 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_PERMISSION_ID)" -->
+            <!-- <button pButton pRipple  icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo"></button>
+            *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_LOT_PERMISSION_ID)" -->
+            <!-- <p-splitButton pRipple pTooltip="Crear nuevo" icon="pi pi-plus" [model]="items" class="p-button-success"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_LOT_PERMISSION_ID)"></p-splitButton> -->
+            
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"></button>
+        </div>
+    </div>
+    <app-oc-filter (onSearch)="search()" [(filters)]="purchaseFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3" [(ordersviewerlist)]="_viewerdocumentsupplierService._PurchaseOrderList" [(_selectedColumns)]="_selectedColumns"></app-oc-filter>
+</div>
+
+<div class="card p-m-0">
+    <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="_viewerdocumentsupplierService._PurchaseOrderList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+    scrollHeight="750px"  [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+    <!-- <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        </div>
+    </ng-template>       -->
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <!-- <col style="width:150px"> -->
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            
+            <!-- <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px"> -->
+            <!-- <col style="width:150px"> -->
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="caption">
+        <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+            selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}" placeholder="Elija las columnas"></p-multiSelect>
+    </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th></th>
+            <!-- <th style="display: none;" pSortableColumn="Id">Id</th> -->
+            <!-- <th></th> -->
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field" >
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                        <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                    </div>
+              </th>
+            </ng-container>
+            
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order let-columns="columns">
+          <tr>
+            <td>
+                <button pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-success p-mr-2"  pTooltip="Crear tarea de recepción"></button>
+                  <button pButton pRipple icon="pi pi-pencil"  class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ODC_PROVIDER)" (click)='edit(order)'></button>
+
+            </td>
+                <!-- <td style="display: none;">{{product.id}}</td> -->
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]"></app-active-label>
+                    <ng-template #textCell>
+                        <span>{{col.template(order)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+          </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer" let-columns>
+        <ng-container *ngIf="_viewerdocumentsupplierService._PurchaseOrderList==null || _viewerdocumentsupplierService._PurchaseOrderList?.length == 0">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="16">
+            <span>No existen resultados.</span>
+          </td>
+        </tr>
+        </ng-container>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>

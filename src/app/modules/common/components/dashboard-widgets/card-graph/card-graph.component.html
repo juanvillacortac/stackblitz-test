@@ -1,0 +1,26 @@
+
+    <div class="card widget-card-graph graph-1">
+        <div class="graph-header">
+            <h5>{{legend}}</h5>            
+            <p-knob [(ngModel)]="currentValue" [size]="150" [readonly]="true"></p-knob>
+           <!-- <div class="graph">
+               
+                 <div class="graph-border">
+                    <div class="graph-block"></div>
+                </div>
+                <div class="graph-center"></div> 
+            </div>  -->
+        </div>
+        <div class="graph-content">
+            
+            <!-- <div class="graph-icon"><img id="j_idt167" src="/mirage/javax.faces.resource/images/dashboard/primeicons-apple.svg.xhtml?ln=mirage-layout" alt="" />
+            </div> -->
+            <div class="graph-content-text">
+                <!-- <h5>{{currentValue}}</h5> -->
+                
+                <span *ngIf="ShownLabel()==1"><i class="pi pi-caret-up" style="font-size: 2rem"></i><h5>{{targetValue}}% sobre el objetivo</h5> </span>
+                <span *ngIf="ShownLabel()==2"><i class="pi pi-caret-down" style="font-size: 2rem"></i> <h5>{{targetValue}}% por debajo del objetivo</h5></span>
+            </div>
+        </div>
+    </div>
+

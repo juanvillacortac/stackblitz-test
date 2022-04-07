@@ -1,0 +1,240 @@
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">  
+            <h2 class="p-m-0">{{formTitle}}</h2>  
+            <br/>
+            <div class="p-fluid p-grid p-formgrid"  [formGroup]="recipeForm">
+                <div *ngIf="isEdit" class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Producto salida</label>
+                        <input id="name" pInputText #name [(ngModel)]="outputProductName" [ngModelOptions]="{standalone: true}" disabled >  
+                </div>  
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input id="name" pInputText #name sentenceType maxlength="30" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        [ngClass]="{'p-invalid':(recipeForm.controls.name.invalid && (recipeForm.controls.name.dirty || recipeForm.controls.name.touched || submitted))}" formControlName="name" required >  
+                        <div *ngIf="recipeForm.controls.name.invalid && (recipeForm.controls.name.dirty || recipeForm.controls.name.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="recipeForm.controls.name.errors?.required">
+                                El nombre es requerido.
+                            </div>
+                        </div>                      
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">
+                    <label for="dropdown">Unidad de medida <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="unitOfMeasurement.value" [virtualScroll]="true" itemSize="30" [showClear]="true" optionLabel="name"
+                         [autoDisplayFirst]="false" formControlName="unitOfMeasurementSelected" 
+                         [class]="{'ng-dirty':(recipeForm.controls.unitOfMeasurementSelected.invalid && (recipeForm.controls.unitOfMeasurementSelected.dirty || recipeForm.controls.unitOfMeasurementSelected.touched || submitted))}"  required >                      
+                        </p-dropdown>
+                        <div *ngIf="recipeForm.controls.unitOfMeasurementSelected.invalid && (recipeForm.controls.unitOfMeasurementSelected.dirty || recipeForm.controls.unitOfMeasurementSelected.touched || submitted)"
+                          class="p-invalid">
+                            <div *ngIf="recipeForm.controls.unitOfMeasurementSelected.errors?.required">
+                                La unidad de medida es requerida.
+                            </div>
+                        </div>     
+                </div>  
+         
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Condiciones de almacenaje </label>
+                        <input id="storageCondition" pInputText #storageCondition sentenceType maxlength="30" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        formControlName="storageCondition" >                           
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Tiempo máximo de almacenaje </label>
+                    <p-inputNumber #storageTime mode="decimal" maxlength="24"  [minFractionDigits]="2" [maxFractionDigits]="2"  (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="storageTime" [showButtons]="true"  suffix=" horas" [min]="0"  [step]="0.1"></p-inputNumber>     
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Tiempo de preparación <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #prepTime mode="decimal" maxlength="24" [minFractionDigits]="2" [maxFractionDigits]="2"  (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="prepTime" [showButtons]="true"  suffix=" horas" [min]="0"  [step]="0.1"
+                    [ngClass]="{'ng-dirty':validatePrepTime,'ng-invalid':validatePrepTime}"
+                    required ></p-inputNumber>   
+                    <div *ngIf="validatePrepTime"
+                    class="p-invalid">
+                        <div *ngIf="recipeForm.controls.prepTime.errors?.required">
+                            El tiempo de preparación es requerido.
+                            </div>
+                            <div *ngIf="recipeForm.controls.prepTime.errors?.ValueMoreThanZeroValidator">
+                                El tiempo de preparación debe ser mayor a 0.
+                            </div>
+                        </div>    
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Porciones <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #qtyPortionResult maxlength="15" mode="decimal"  [minFractionDigits]="0" [maxFractionDigits]="0"  (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="qtyPortionResult" [showButtons]="true"  [min]="0"  [step]="1"
+                    [ngClass]="{'ng-dirty'  :validateQtyPortionResult,
+                                'ng-invalid':validateQtyPortionResult}"
+                    required ></p-inputNumber>   
+                    <div *ngIf="validateQtyPortionResult"
+                    class="p-invalid">
+                        <div *ngIf="recipeForm.controls.qtyPortionResult.errors?.required">
+                            Porciones es requerido.
+                            </div>
+                            <div *ngIf="recipeForm.controls.qtyPortionResult.errors?.ValueMoreThanZeroValidator">
+                                Porciones debe ser mayor a 0.
+                            </div>
+                        </div>    
+                </div>
+ 
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Aplicar valor mano de obra </label>
+                       <div class="p-inputgroup">
+                           <span class="p-inputgroup-addon"><p-checkbox  binary="true" (onChange)="applylaborCostChange($event)" [formControl]="recipeForm.controls['applyLaborCost']"></p-checkbox></span>    
+                           <p-inputNumber  #laborCost mode="decimal"  maxlength="10"  
+                            suffix=" %" [step]="0.1" [min]="0" [max]="100" [minFractionDigits]="2" [maxFractionDigits]="2" 
+                            (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                            [disabled] = "!checkApplyLaborCost"
+                            formControlName="laborCost" [ngStyle]="{'flex':' 1 1 auto'}"  [showButtons]="true"
+                            [ngClass]="{'ng-dirty'  :validateLaborCost,
+                            'ng-invalid':validateLaborCost}"
+                           ></p-inputNumber> 
+    
+                       </div>  
+                       <div *ngIf="validateLaborCost" class="p-invalid">
+                            <div>
+                                Debe ingresar un valor de mano de obra mayor a 0.
+                            </div>
+                        </div>  
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Aplicar valor de costo fabril </label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon"><p-checkbox binary="true" (onChange)="applyFactoryCostChange($event)" [formControl]="recipeForm.controls['applyFactoryCost']"></p-checkbox></span>    
+                            <p-inputNumber  #factoryCost mode="decimal"  maxlength="10"  suffix=" %" [step]="0.1" [min]="0" [max]="100" [minFractionDigits]="2" [maxFractionDigits]="2"  
+                            (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                            [disabled] = "!checkApplyFactoryCost"
+                            formControlName="factoryCost" [ngStyle]="{'flex':' 1 1 auto'}"  [showButtons]="true"  
+                            [ngClass]="{'ng-dirty'  :validateFactoryCost,
+                                        'ng-invalid':validateFactoryCost}"
+                            ></p-inputNumber> 
+
+                        </div>  
+                        <div *ngIf="validateFactoryCost" class="p-invalid">
+                                <div>
+                                    Debe ingresar un valor de costo fabril mayor a 0.
+                                </div>
+                        </div>  
+                </div>
+   
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Merma </label>
+                    <p-inputNumber #expectedDepletion mode="decimal" maxlength="10" [minFractionDigits]="2" [maxFractionDigits]="2"  (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="expectedDepletion" [showButtons]="true"  suffix=" %" [min]="0" [max]="100"  [step]="0.1"></p-inputNumber>     
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">                
+                    <label for="input">Margen recalculo PVP <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber #calculationMargin maxlength="10" mode="decimal"  [minFractionDigits]="2" [maxFractionDigits]="2"  (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="calculationMargin" [showButtons]="true" suffix=" %" [min]="0" [max]="100"  [step]="0.1"
+                    [ngClass]="{'ng-dirty'  :validateCalculationMargin,
+                                'ng-invalid':validateCalculationMargin}"
+                    required ></p-inputNumber>   
+                    <div *ngIf="validateCalculationMargin"
+                    class="p-invalid">
+                        <div *ngIf="recipeForm.controls.calculationMargin.errors?.required">
+                            Margen recalculo PVP.
+                            </div>
+                            <div *ngIf="recipeForm.controls.calculationMargin.errors?.ValueMoreThanZeroValidator">
+                                Margen recalculo PVP debe ser mayor a 0.
+                            </div>
+                        </div>    
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 p-sm-4">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown appendTo="body" [autoDisplayFirst]="false" formControlName="active" [options]="status"  placeholder="Seleccionar estatus" [showClear]="false" [disabled]="!isEdit">
+                    </p-dropdown>
+                    
+                </div>   
+                <div class="p-field p-col-12 p-md-4 p-sm-4"> 
+                    <div class=" p-col-3 p-md-3 p-sm-3">                
+                        <label for="inputSwitch">Pesado </label>
+                    </div>
+                    <div class="p-field p-col-3 p-md-3 p-sm-3" style="margin-top: 10px;">                
+                        <p-inputSwitch #inputSwitch (onChange)="handleChange($event)"  formControlName="isWeight"></p-inputSwitch>
+                    </div>
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input">Preparación </label>
+                    <textarea rows="5" cols="30" maxlength="220" pInputTextarea formControlName="preparation"></textarea>
+                </div>  
+
+
+
+                <div class="p-col-12 p-md-12"*ngIf="!isEdit">
+                    <button #search id="search" pButton pRipple icon="pi pi-plus" pTooltip="Agregar producto salida" class="p-button-success" [disabled]="ingredientAdded" (click)="searchIngredient()"></button>
+                </div>
+            </div>      
+
+            <div class="p-fluid p-grid p-formgrid" *ngIf="!isEdit">
+                <div class="card p-m-0">
+                    <p-table [value]="ingredients" 
+                    [rowHover]="true" 
+                    [paginator]="false" 
+                    [showCurrentPageReport]="false" 
+                    [rows]="1" 
+                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <ng-container *ngFor="let col of cols">  
+                                    <th [ngStyle]="{'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-ingredient>
+                            <tr>
+                                <ng-container *ngFor="let col of cols">
+                                    <td [ngStyle]="{'overflow-wrap': 'break-word'}">   
+                                            <div *ngIf="col.field === 'actualCost'; else textCell">
+                                                {{(ingredient.actualCost)|number:'1.2-2'}}
+                                            </div>
+                                        <ng-template #textCell>
+                                            <div *ngIf="col.field !== 'edit'; else editCell">
+                                                {{ingredient[col.field]}}
+                                            </div>
+                                        </ng-template>
+                                                    
+                                        <ng-template #editCell  >
+                                            <ng-container >
+                                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="{{'delete' | translate }}" (click)="removeIngredient()"></button>
+                                            </ng-container>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>             
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+
+            <div *ngIf="(!ingredientAdded && submitted && !isEdit)" class="card">   
+                <div class="p-invalid">
+                    <span>Debe agregar un producto de salida.</span>
+                </div> 
+            </div> 
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span class="p-invalid">(*) Campos obligatorios</span>
+            </div> 
+        
+            <app-footer-form-buttons (acceptPressed)="onSave()" (cancelPressed)="cancel()"></app-footer-form-buttons>
+        </div>
+    </div>
+    <p-toast position="top-right" key="tax"></p-toast>
+</div>
+
+<span *ngIf="!isEdit && showSearching">
+    <app-output-product-recipe-search [(showPanel)]="showSearching" (getResult)="getItemsSelected($event)" ></app-output-product-recipe-search>
+</span>

@@ -1,0 +1,87 @@
+
+<div class="p-fluid p-grid">
+  <div class="p-grid p-col-12">
+    <div class="p-col-12 p-md-6 p-lg-3" life="500">
+      <span class="p-float-label">
+        <p-dropdown placeholder="Tipo de sueldo" [(ngModel)]="salaryType" [options]="salaryTypeDropdown" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"></p-dropdown>
+        <!-- <label for="SalaryType">Tipo de sueldo</label> -->
+      </span>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-3" life="500">
+      <span class="p-float-label">
+        <p-dropdown placeholder="Motivo" #Motive inputId="Motive" [options]="motivesDropdown" [(ngModel)]="optMotive" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"></p-dropdown>
+        <!-- <label for="Motive">Motivo</label> -->
+      </span>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-3">
+      <span class="p-float-label">
+        <p-calendar [yearRange]="yearRange" [(ngModel)]="fechaDesde" dateFormat="dd/mm/yy" (keyup.enter)="searchSalaryHistory()"
+                    (onSelect)="fromBlurMethod($event)" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                    [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [maxDate]="fromMaxDate">
+        </p-calendar>
+        <label for="fechaDesde">Fecha desde</label>
+      </span>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-3">
+      <span class="p-float-label">
+        <p-calendar [yearRange]="yearRange" [(ngModel)]="fechaHasta" dateFormat="dd/mm/yy" (keyup.enter)="searchSalaryHistory()"
+                    (onSelect)="toBlurMethod($event)" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                    [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [minDate]="toMinDate">
+        </p-calendar>
+        <label for="fechaHasta">Fecha hasta</label>
+      </span>
+    </div>
+  </div>  
+</div>
+
+<div class="p-field p-col-12 p-md-12" align="right">
+  <button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-info p-mr-2"
+      (click)="searchSalaryHistory()"></button>
+</div>
+<div class="p-grid p-fluid">
+  <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_salaryForPayrollDataService.SalariesForPayrollDataList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+             currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" 
+             [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo"
+             *ngIf="_salaryForPayrollDataService.SalariesForPayrollDataList && _salaryForPayrollDataService.SalariesForPayrollDataList.length > 0">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-SalariesForPayrollData let-columns="columns">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}">
+              <app-active-label *ngIf="col.field === 'active'; else fecha" [active]="SalariesForPayrollData[col.field]"></app-active-label>
+
+              <ng-template #fecha>
+                <span style="white-space: pre-wrap;" *ngIf="col.field === 'validityDate'; else textCell">{{col.template(SalariesForPayrollData) |  date: "dd/MM/yyyy"}} </span>
+              </ng-template>
+              <ng-template #textCell>
+                <span style="white-space: pre-wrap;">{{col.template(SalariesForPayrollData)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-messages severity="info" *ngIf="!(_salaryForPayrollDataService.SalariesForPayrollDataList && _salaryForPayrollDataService.SalariesForPayrollDataList.length > 0)" >
+  <ng-template pTemplate>
+      <div class="p-ml-2">No existen sueldos asociados a este trabajador.</div>
+  </ng-template>
+</p-messages>
+

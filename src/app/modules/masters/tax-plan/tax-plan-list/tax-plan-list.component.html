@@ -1,0 +1,9 @@
+<div class="p-m-0" *ngIf="loaded">
+  <app-tax-plan-tree [plans]="plans" [isFiltered]="isFiltered" (openModal)="modal.openNew()" #treeComp
+    (onEdit)="modal.openEdit($event)">
+    <app-tax-plan-filters [(isFiltered)]="isFiltered" [types]="types" [expanded]="treeComp?.showFilters" (onSearch)="fetchData($event)" [modules]="modulesList" #filters>
+    </app-tax-plan-filters>
+  </app-tax-plan-tree>
+  <app-tax-plan-mutation-modal (needRefresh)="refreshModalData()" [rawTaxes]="taxes" [appTypes]="appTypes" [types]="types" (onSave)="filters.search()" #modal>
+  </app-tax-plan-mutation-modal>
+</div>

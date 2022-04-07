@@ -1,0 +1,46 @@
+<!-- <p-card [style]="{'width': '100%', 'margin-bottom': '0.5em'}"> -->
+    
+    <div class="p-text-center">
+        <div class="p-grid">
+
+            <div class="p-col-12" id="companyImageContainer">
+
+
+                <img *ngIf="_company.id != 1" [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" alt="no image" height="150" width="150" class="imgcatalog" style="margin: 0 auto; border-radius: 50%;" />
+
+                <img *ngIf="_company.id == 1" src="assets/layout/images/logo-sigo.jpg" alt="no image" height="150" width="150" class="imgcatalog" style="margin: 0 auto; border-radius: 50%;" />
+
+            </div>
+
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12 p-pt-0 p-pb-0">
+                <!-- <span style="margin-bottom: 0%;">Razón comercial: </span> -->
+                <h5 style="margin-bottom: 0%;">{{_company.name}}</h5>
+            </div>
+            <div class="p-col-12 p-text-center p-nogutter" style="padding: 0;">
+                {{_company.socialName}}
+            </div>
+            <div class="p-col-12 p-text-center p-nogutter" style="padding: 0;">
+                {{_company.identifier}}-{{_company.identification }}
+            </div>
+        </div>
+
+        <div *ngIf="_company.active == true" class="p-col-12">
+            <p-divider align="center">
+                <p-tag severity="success" id="tagActiva" class="p-m-4" value="ACTIVA"></p-tag>
+            </p-divider>
+            <div severity="success" style="font-size:1rem;" value="ACTIVA"></div>
+        </div>
+
+        <div *ngIf="_company.active == false" class="p-col-12">
+            <p-divider align="center">
+                <p-tag severity="success" id="tagInactiva" class="p-m-4" value="INACTIVA"></p-tag>
+            </p-divider>
+            <div severity="success" style="font-size:1rem;" value="INACTIVA"></div>
+        </div>
+        
+    </div>
+
+<!-- </p-card> -->

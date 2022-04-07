@@ -1,0 +1,41 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Descripción</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">País <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="countryList" [class]="submitted && _description.countryId <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="addDescription()" appendTo="body" [(ngModel)]="_description.countryId" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _description.countryId <= 0">El país es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tipo de descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="descriptionTypeList" [class]="submitted && _description.descriptionTypeId <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="addDescription()" appendTo="body" [(ngModel)]="_description.descriptionTypeId" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" (keyup.enter)="addDescription()" *ngIf="submitted && _description.descriptionTypeId <= 0">El tipo descripción es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="description">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <textarea id="description" [class]="submitted && (!_description.description || !_description.description.trim()) ? 'ng-dirty ng-invalid' : ''" (input)="_validations.toUppercaseString($event)" pInputTextarea style="resize: none;" [(ngModel)]="_description.description" rows="3" cols="20" maxlength="100"></textarea>
+                    <small class="p-invalid" (keyup.enter)="addDescription()" *ngIf="submitted && (!_description.description || !_description.description.trim())">La descripción es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="statusList" (keyup.enter)="addDescription()" [disabled]="_description.id <= 0" appendTo="body" [(ngModel)]="_description.active" placeholder="Seleccione...">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple label="Guardar" (click)="addDescription()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

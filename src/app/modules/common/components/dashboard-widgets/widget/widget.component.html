@@ -1,0 +1,218 @@
+<div class="widget_panel scrolleable" [ngSwitch]="data.widgetType" [ngStyle]="{'opacity': data.disabled ? '0.2' : 'initial', 'pointer-events': data.disabled ? 'none' : 'unset'}">
+  <div class="widget_panel" *ngSwitchCase="type.knob" >
+      <app-knob-indicator 
+        [(currentValue)]="data.currentValue"  
+        [(targetValue)]="data.targetValue" 
+        [(size)]="data.size">
+      </app-knob-indicator>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.stat" >
+      <app-stat 
+        [(mainTittle)]="data.mainTittle"
+        [(total)]="data.total"
+        [(subTotalRight)]="data.subTotalRight"
+        [(subTotalLeft)]="data.subTotalLeft"
+        [(totalPercent)]="data.totalPercent"
+        [(subTotalRightPercent)]="data.subTotalRightPercent"
+        [(subTotalLeftPercent)]="data.subTotalLeftPercent"
+        [(totalTittle)]="data.totalTittle"
+        [(subtotalRightTittle)]="data.subtotalRightTittle"
+        [(subTotalLeftTittle)]="data.subTotalLeftTittle"
+        [(totalDecimalPipe)]="data.totalDecimalPipe"
+        [(subTotalRightDecimalPipe)]="data.subTotalRightDecimalPipe"
+        [(subTotalLeftDecimalPipe)]="data.subTotalLeftDecimalPipe"
+        [(showLeftCostIncreaseArrow)]="data.showLeftCostIncreaseArrow"
+        [(showRightCostIncreaseArrow)]="data.showRightCostIncreaseArrow"
+        [(statSubTitle)]="data.statSubTitle"
+        [(totalIcon)]="data.totalIcon"
+        [(centered)]="data.centered">
+      </app-stat>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.chart">
+      <app-p-chart-responsive 
+        height="95%" 
+        width="100%"  
+        [(nroModal)]="data.nroModal"   
+        [(type)]="data.chartType" 
+        [(data)]="data.data" 
+        [(options)]="data.options" 
+        [(value)]="data.value" 
+        [(caption)]="data.caption">
+      </app-p-chart-responsive >      
+  </div>
+ 
+  <div class="widget_panel" *ngSwitchCase="type.circleNumber"  >
+      <app-circle-number-indicator 
+        [(maxValue)]="data.maxValue" 
+        [(currentValue)]="data.currentValue" 
+        [(targetValue)]="data.targetValue" 
+        [(legend)]="data.legend">
+      </app-circle-number-indicator>
+  </div>
+
+  <div class="widget_panel"  *ngSwitchCase="type.number" >
+      <app-number-indicator 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(icon)]="data.icon" >
+      </app-number-indicator>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.table">
+    <app-table-responsive></app-table-responsive>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.genericTable" >
+      <app-generic-table 
+        [(displayedColumns)]="data.displayedColumns" 
+        [(data)]="data.data">
+      </app-generic-table>
+  </div>
+  
+  <div class="widget_panel" *ngSwitchCase="type.sliderList" >
+      <app-slider-list 
+        [(data)]="data.data"
+        [(maxRow)]="data.maxRow">
+      </app-slider-list>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.listTeam">
+      <app-list-team 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(icon)]="data.icon">
+      </app-list-team>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.cardGraph">
+      <app-card-graph 
+        height="100%"
+        width="100%" 
+        [(currentValue)]="data.currentValue"
+        [(targetValue)]="data.targetValue">
+      </app-card-graph>
+  </div>
+  
+  <div class="widget_panel" *ngSwitchCase="type.listnumberindicator">
+      <app-list-number-indicator 
+        [(nroModal)]="data.nroModal" 
+        [(data)]="data.data">
+      </app-list-number-indicator>
+  </div>
+  
+  <div class="widget_panel" *ngSwitchCase="type.dataviewList">
+      <app-dataview-list 
+        [(dataViewModel)]="data.data" 
+        [(paginator)]="paginator">
+      </app-dataview-list>
+  </div>
+  
+  <div class="widget_panel" *ngSwitchCase="type.percentInd">
+      <app-percent-ind 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(image)]="data.image" 
+        [(objectiveDescription)]="data.objectiveDescription" 
+        [(color)]="data.color"
+        [(target)]="data.target" 
+        [(sublegend)]="data.sublegend" 
+        [(symbol)]="data.symbol" 
+        [(valueVsTarget)]="data.valueVsTarget">
+      </app-percent-ind>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.percentIndCond">
+      <app-percend-ind-condition 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(image)]="data.image"
+        [(target)]="data.target" 
+        [(mayor)]="data.mayor" 
+        [(symbol)]="data.symbol" 
+        [(menor)]="data.menor" 
+        [(sublegend)]="data.sublegend" 
+        [(valueVsTarget)]="data.valueVsTarget">
+      </app-percend-ind-condition>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.targetInd">
+      <app-target-ind 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(image)]="data.image"  
+        [(objectiveDescription)]="data.objectiveDescription" 
+        [(color)]="data.color"
+        [(target)]="data.target" 
+        [(sublegend)]="data.sublegend" 
+        [(valueVsTarget)]="data.valueVsTarget">
+      </app-target-ind>
+  </div>
+
+  <div class="widget_panel" *ngSwitchCase="type.rankingTable" >
+      <app-ranking-table 
+        [(data)]="data.data" 
+        [(valueTittle)]="data.valueTittle">
+      </app-ranking-table>
+  </div>
+
+  <div class="" *ngSwitchCase="type.rankingStat" >
+      <app-ranking-stat 
+              [(position)]="data.position"
+              [(positionSummary)]="data.positionSummary"
+              [(subPosition)]="data.subPosition"
+              [(userName)]="data.userName"
+              [(userId)]="data.userId"
+              [(img)]="data.img">
+      </app-ranking-stat>
+  </div>
+
+  <div class="widget_panel2" *ngSwitchCase="type.tableInd" >
+    <app-table-indicator 
+        [(currentValue)]="data.currentValue" 
+        [(legend)]="data.legend" 
+        [(image)]="data.image" 
+        [(target)]="data.target" 
+        [(sublegend)]="data.sublegend" 
+        [(valueVsTarget)]="data.valueVsTarget"  
+        [(name)]="data.name"
+        [(tableData)]="data.tableData">
+    </app-table-indicator>
+  </div>
+
+  <div class="widget_panel2" *ngSwitchCase="type.dataviewListProduct">
+    <app-dataview-list-product 
+        [(dataViewModel)]="data.data" 
+        [(paginator)]="paginator">
+    </app-dataview-list-product>
+  </div>
+
+        <div class="widget_panel" *ngSwitchCase="type.profileDetails" >
+          <app-profile-details 
+            [(id)]="data.id"  
+            [(name)]="data.name" 
+            [(image)]="data.image">
+          </app-profile-details>
+        </div>
+        
+        <div class="widget_panel" *ngSwitchCase="type.tablesales" >
+          <app-table-sales 
+          [(displayedColumns)]="data.displayedColumns" 
+          [(data)]="data.data">
+        </app-table-sales>
+        </div>
+        <!--default case when there are no matches -->
+        <div *ngSwitchDefault  class="widget_panel" > 
+            <div class="p-grid p-fluid ">
+                <div class="p-col-12 ">
+                    <div class="card ">
+                        
+                        WIDGET NO ENCONTRADO
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+

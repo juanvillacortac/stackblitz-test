@@ -1,0 +1,118 @@
+<div *ngIf="expanded">
+    <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.barcode" #barcode type="text" pInputText (keypress)="validations.keyPressForGtin($event);" (paste)="_validations.PasteOnlyNumbers($event)"
+                    pInputText maxlength="130" (keyup.enter)="searchReport()">
+                    <label for="float-input">{{ getTextTranslateKey('barcode') | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.productName" type="text" maxlength="300" pInputText noneSpecialCharacters  (keyup.enter)="searchReport()">
+                    <label for="float-input">{{ getTextTranslateKey('product_name') | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.reference" #reference type="text" pInputText (keyup.enter)="searchReport()" maxlength="100">
+                    <label>{{ getTextTranslateKey('reference') | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.factoryReference" #factoryReference type="text" pInputText (keyup.enter)="searchReport()" maxlength="100">
+                    <label>{{ getTextTranslateKey('factory_reference') | translate }}</label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.scaleCode" type="text" maxlength="25" numbersOnly pInputText noneSpecialCharacters (keyup.enter)="searchReport()">
+                    <label for="float-input">{{ getTextTranslateKey('scale_code') | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="{{ getTextTranslateKey('supplier') | translate }}" [(ngModel)]="supplierstring" readonly="true">
+                <button icon="pi pi-search" pButton pRipple (click)="showSuppliersModal()"></button>          
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" pInputText id="brands" [(ngModel)]="brandsString" (keyup.enter)="searchReport()" placeholder="{{ getTextTranslateKey('mark') | translate }}" readonly="true">
+                <button icon="pi pi-search" pButton pRipple (click)="brandDialogVisible=true"></button>
+            </div>
+        </div>
+        
+        <!-- categories -->
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="searchReport()" placeholder="{{ getTextTranslateKey('categories') | translate }}" readonly="true">
+                <app-dropdown-tree [treeData]='this.categoryService._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                [isDisabled]='false' 
+                (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <p-dropdown #indInventory [options]="existenceList" [(ngModel)]="filters.indInventory" (keyup.enter)="searchReport()" 
+            emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" placeholder="{{ getTextTranslateKey('ind_stock') | translate }}"></p-dropdown> 
+        </div>
+        
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <p-dropdown [options]="statuses" [(ngModel)]="filters.statusId" [filter]="true" optionLabel="name" (keyup.enter)="searchReport()" 
+            placeholder="{{ getTextTranslateKey('status') | translate }}" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+            emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"></p-dropdown>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <p-dropdown [options]="areas" [(ngModel)]="filters.areaId" [filter]="true" optionLabel="name" (keyup.enter)="searchReport()" 
+            placeholder="{{ getTextTranslateKey('area') | translate }}" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+            emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"></p-dropdown>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <p-dropdown [options]="weightedInds" [(ngModel)]="filters.IndWeighted" [filter]="true" (keyup.enter)="searchReport()" 
+            placeholder="{{ getTextTranslateKey('ind_weighted') | translate }}" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+            emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"></p-dropdown>
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'start_date' | translate }}" tooltipPosition="right" class="p-float-label">
+                <p-calendar  inputId="calendar" [(ngModel)]="startDate" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="endDate"  readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'end_date' | translate }}" tooltipPosition="right" class="p-float-label">
+                <p-calendar inputId="endCalendar" [(ngModel)]="endDate" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="todayDate" [minDate]="startDate" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="{{ 'search' | translate }}" (click)="searchReport()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="{{ 'clear' | translate }}"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+
+<app-supplier-modal-list  (onToggle)="toggleSupplier($event)" (FiltersChange)="FiltersChange($event)" (supplierinput)="supplierstring" [(filters)]="supplierFilters" [visible]="supplierDialogVisible"></app-supplier-modal-list>
+<app-brand-modal-list  (onToggle)="onToggleBrand($event)" [(BrandsString)]="brandsString" [(filters)]="supplierBrandFilters"  [visible]="brandDialogVisible" [singleSelection]="true"></app-brand-modal-list>

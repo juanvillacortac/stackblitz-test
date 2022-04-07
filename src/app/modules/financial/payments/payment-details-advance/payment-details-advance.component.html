@@ -1,0 +1,401 @@
+<ng-container>
+    <div class="menorMargen card">
+      <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+        <div class="p-field p-grid">
+          <div class="p-lg-6 p-col-12 p-formgroup-inline">
+            <div class="" style="width: 47.5%; margin-right: 5%">
+              <label for="documentNumber">Número de documento</label>
+              <input
+                type="text"
+                inputId="documentNumber"
+                [disabled]="true"
+                maxlength="255"
+                pInputText
+              />
+            </div>
+            <div class="" style="width: 47.5%">
+              <label for="CurrencyShowed"
+                >Tipo de Pago
+                <span [ngStyle]="{ color: 'red' }">*</span></label
+              >
+              <p-dropdown
+                [options]="paymentType"
+                [filter]="true"
+                inputId="CurrencyShowed"
+                placeholder="Aplicion Directa "
+                [resetFilterOnHide]="true"
+                [resetFilterOnHide]="true"
+                emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados."
+              >
+              </p-dropdown>
+            </div>
+  
+            <div style="margin-bottom: 1.5rem; width: 100%"></div>
+  
+            <div class="" style="width: 47.5%; margin-right: 5%">
+              <label for="CurrencyShowed"
+                >Lote
+                <span [ngStyle]="{ color: 'red' }">*</span></label
+              >
+              <p-dropdown
+                [filter]="true"
+                inputId="CurrencyShowed"
+                placeholder="Seleccione... "
+                [resetFilterOnHide]="true"
+                [resetFilterOnHide]="true"
+                emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados."
+              >
+              </p-dropdown>
+            </div>
+  
+            <div class="" style="width: 47.5%">
+              <label for="documentDate"
+                >Fecha de pago <span [ngStyle]="{ color: 'red' }">*</span>
+              </label>
+              <p-calendar
+                [showIcon]="true"
+                inputId="documentDate"
+                [monthNavigator]="true"
+                [readonlyInput]="true"
+                showButtonBar="true"
+                [yearNavigator]="true"
+                yearRange="1970:2030"
+                dateFormat="dd/mm/yy"
+              >
+              </p-calendar>
+            </div>
+          </div>
+  
+          <div class="p-lg-6 p-col-12 p-formgroup-inline">
+            <p-table [value]="upsideTable" responsiveLayout="scroll">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Numero de carta</th>
+                  <th>Fecha de generación</th>
+                  <th>Estatus</th>
+                  <th>Usuario Responsable</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.letterNumber }}</td>
+                  <td>{{ item.generationDate }}</td>
+                  <td>{{ item.status }}</td>
+                  <td>{{ item.responsibleUser }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+  
+          <div style="width: 100%; height: 5%">
+            <hr />
+          </div>
+  
+          <!--Dropdown 
+                       Documento a aplicar-->
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="accountingDate"
+              >Fecha de contabilización
+              <span [ngStyle]="{ color: 'red' }">*</span>
+            </label>
+            <p-calendar
+              [showIcon]="true"
+              [monthNavigator]="true"
+              [readonlyInput]="true"
+              showButtonBar="true"
+              [yearNavigator]="true"
+              yearRange="1970:2030"
+              dateFormat="dd/mm/yy"
+            >
+            </p-calendar>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="description">Descripción</label>
+            <textarea
+              [rows]="5"
+              [cols]="100"
+              inputId="description"
+              pInputTextarea
+              autoResize="autoResize"
+            ></textarea>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="currency">Moneda</label>
+            <input
+              type="text"
+              inputId="currency"
+              [disabled]="true"
+              maxlength="255"
+              pInputText
+            />
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="OriginBank"
+              >Banco de origen <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="OriginBank"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="BankAccount"
+              >Cuenta bancaria <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="BankAccount"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="ExchangeRateType"
+              >Tipo de tasa de cambio
+              <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="ExchangeRateType"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="Rate"
+              >Tasa <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="Rate"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="ExchangeRateConvertionType"
+              ><small>Tipo de tasa de cambio de conversión </small>
+              <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="ExchangeRateConvertionType"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field p-col-12 p-md-6 p-xl-3">
+            <label for="ExchangeRate"
+              >Tasa de conversión<span [ngStyle]="{ color: 'red' }"
+                >*</span
+              ></label
+            >
+            <p-dropdown
+              [filter]="true"
+              inputId="ExchangeRate"
+              placeholder="Seleccione... "
+              [resetFilterOnHide]="true"
+              [resetFilterOnHide]="true"
+              emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados."
+            >
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="p-field p-col-12">
+        <span [ngStyle]="{ color: 'red' }">(*) Campos obligatorios</span>
+      </div>
+
+      <strong style="font-size:medium;"><i class="p-text-bold pi pi-book"></i> Anticipos</strong>
+      <p-table [value]="paymentsApplications" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documentos</th>
+                <th>Total</th>
+                <th>Saldo</th>
+                <th>Monto</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{product.document}}</td>
+                <td>{{product.total}}</td>
+                <td>{{"$" + product.balance}}</td>
+                <td><p-inputNumber mode="decimal" [(ngModel)]="product.amount"
+                    (ngModelChange)="product.amount = $event" prefix="$" [showButtons]="true"
+                    [inputStyle]="{ width: '100%' }" [min]="0" [minFractionDigits]="2"
+                    [maxFractionDigits]="2" [maxlength]="24">
+                </p-inputNumber></td>
+            </tr>
+        </ng-template>
+     </p-table>
+  
+
+  
+      <div class="p-grid" style="display: flex; margin-bottom: 4rem">
+        <div class="p-col-12" style="text-align: right">
+          <strong style="font-size: small">Total Aplicado</strong>
+        </div>
+        <div class="p-col-12" style="text-align: right">
+          <strong style="font-size: small">$ 600</strong>
+        </div>
+  
+        <div class="p-col-12" style="text-align: right">
+          <strong style="font-size: small">Bs. 20.000.000,00</strong>
+        </div>
+        <hr />
+      </div>
+  
+      <div
+        style="
+          display: flex;
+          margin-bottom: 1rem;
+          justify-content: space-between;
+          width: 100%;
+          align-items: center;
+          padding: 0.5rem;
+        "
+      >
+        <strong style="font-size:medium;"><i class="p-text-bold pi pi-book"></i> Distribucion de cuentas</strong>
+  
+        <button
+          pButton
+          pRipple
+          label="Agregar"
+          (click)="showModal = true"
+          class="p-button-primary"
+        ></button>
+      </div>
+      <p-table [value]="distributions" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Descripción</th>
+            <th>Cuenta contable</th>
+            <th>Tipo</th>
+            <th>Auxiliar</th>
+            <th>Débito</th>
+            <th>Crédito</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-distribution>
+          <tr>
+            <td>{{ distribution.description }}</td>
+            <td>{{ distribution.accountingAcount }}</td>
+            <td>{{ distribution.type }}</td>
+            <td>{{ distribution.auxiliar }}</td>
+            <td>{{ "$ " + distribution.debit }}</td>
+            <td>{{ "$ " + distribution.credit }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+  
+      <div class="p-grid">
+        <div class="p-col-12" style="text-align: right">
+          <strong style="font-size: medium">
+            Total: <span style="color: green">$600 </span>
+            <span style="color: green">$600</span></strong
+          >
+        </div>
+      </div>
+  
+      <div class="p-grid" style="display: flex; margin-top: 2rem">
+        <div
+          class="p-col-6 p-md-3 p-sm-2"
+          style="gap: 0.5rem; display: flex; flex-wrap: wrap"
+        >
+          <!-- (click)="ToRecord()" -->
+          <button
+            pButton
+            pRipple
+            label="Anular"
+            class="p-button-primary"
+          ></button>
+  
+          <button
+            pButton
+            pRipple
+            label="Cancelar"
+            class="p-button-primary"
+          ></button>
+        </div>
+  
+        <div
+          class="p-col-6 p-md-9 p-sm-10 p-jc-end"
+          style="gap: 0.5rem; display: flex; flex-wrap: wrap"
+        >
+            <button
+            pButton
+            pRipple
+            label="Descargar Archivo"
+            class="p-button-primary"
+          ></button>
+          <button
+            pButton
+            pRipple
+            label="Generar Carta"
+            class="p-button-primary"
+          ></button>
+  
+          <button
+            pButton
+            pRipple
+            label="Contabilizar"
+            class="p-button-primary"
+          ></button>
+  
+          <button
+            pButton
+            pRipple
+            label="Guardar"
+            class="p-button-primary"
+          ></button>
+  
+          <button
+            pButton
+            pRipple
+            label="Cancelar"
+            class="p-button-primary"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <app-payments-document-select-modal
+    [(displayModal)]="showModal"
+  ></app-payments-document-select-modal>
+  

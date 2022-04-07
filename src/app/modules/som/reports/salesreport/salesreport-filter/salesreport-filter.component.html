@@ -1,0 +1,169 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.name" name="name" id="name" type="text" pInputText maxlength="300"
+          (keyup.enter)="search()">
+        <label>Nombre del producto</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 input">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.barcode" name="barcode" id="barcode" type="text" (keyup.enter)="search()" pInputText
+          maxlength="100">
+        <label>Barra</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+      <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="search()"
+        disabled class="responsible">
+      <p-button icon="pi pi-search" (click)="op.toggle($event)"></p-button>
+    </div>
+    <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '450px'}">
+      <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox"
+        [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Buscar..." />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+
+          <tr>
+            <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+              {{col.header}}
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns; let i = index"
+              [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+              <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)">
+              </p-treeTableCheckbox>
+              <ng-template #textCell>
+                {{rowData[col.field]}}
+              </ng-template>
+              <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]">
+              </app-active-label>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [ngStyle]="{'text-align': 'center'}" colspan="4"><span style="font-weight: 500;">No se encontraron
+                resultados.</span></td>
+          </tr>
+        </ng-template>
+      </p-treeTable>
+    </p-overlayPanel>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 input">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input [(ngModel)]="filters.internalRef" name="internalRef" id="internalRef" type="text" pInputText
+          (keyup.enter)="search()" maxlength="100">
+        <label>Referencia interna</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="producttypelist" [(ngModel)]="filters.productTypeId" (keyup.enter)="search()"
+      placeholder="Tipo de producto" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="statuslist" [(ngModel)]="filters.statusId" (keyup.enter)="search()" placeholder="Estatus"
+      emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="structuretypelist" [(ngModel)]="filters.structureTypeId" (keyup.enter)="search()"
+      placeholder="Tipo de estructura" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="origintypelist" resetFilterOnHide="true" [(ngModel)]="filters.originTypeId"
+      (keyup.enter)="search()" placeholder="Tipo de origen" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="classificationlist" resetFilterOnHide="true" [(ngModel)]="filters.classificationId"
+      (keyup.enter)="search()" placeholder="Clasificación" [filter]="true" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-multiSelect [options]="brandslist" resetFilterOnHide="true" [(ngModel)]="brandsselected" placeholder="Marca"
+      [virtualScroll]="true" itemSize="30" (onChange)="ValidateChecksBrands()" display="chip" (keyup.enter)="search()"
+      [filter]="true" emptyFilterMessage="Sin resultados."></p-multiSelect>
+    <!-- <p-dropdown [options]="brandslist"  [(ngModel)]="filters.classificationId" placeholder="Marca">
+        </p-dropdown> -->
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="heavylist" [(ngModel)]="filters.indHeavy" placeholder="Pesado" (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="list" [(ngModel)]="filters.indActiveBuy" placeholder="Compra" (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="list" [(ngModel)]="filters.indActiveSale" placeholder="Venta" (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="list" [(ngModel)]="filters.indConsignment" placeholder="Consignación"
+      (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="list" [(ngModel)]="filters.indOnline" placeholder="Venta online" (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="existencelist" [(ngModel)]="filters.existence" placeholder="Existencia"
+      (keyup.enter)="search()">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+    <p-calendar id="ToD" [(ngModel)]="filters.iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      (onSelect)="onBlurMethod($event)" readonlyInput="true" [showIcon]="true" [disabled]="dnormal" [maxDate]="mDate">
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+    <p-calendar id="ToF" [minDate]="filters.iDate" [(ngModel)]="filters.fDate" dateFormat="dd/mm/yy"
+      (keyup.enter)="search()" readonlyInput="true" [showIcon]="true" [maxDate]="nDate" [disabled]="dnormal">
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="datelist" [(ngModel)]="filters.datePersonalize" [disabled]="dpersonalize"
+      (keyup.enter)="search()" emptyFilterMessage="Sin resultados.">
+    </p-dropdown>
+
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <label class="p-mr-2">Fecha personalizada</label>
+    <p-checkbox [(ngModel)]="filters.personalize"  [binary]="true" (ngModelChange)="active($event)"></p-checkbox>
+  </div>
+  <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+      class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+      class="p-button-secondary p-mr-2"></button>
+    <Button pButton pRipple label="Excel" [disabled]="loading" (click)="exportExcel()" icon="pi pi-file-excel"
+      class="btn p-button-success" pTooltip="Exportar" tooltipPosition="top"></Button>
+  </div>
+</div>

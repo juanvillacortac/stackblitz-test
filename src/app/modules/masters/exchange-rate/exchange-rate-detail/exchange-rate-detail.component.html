@@ -1,0 +1,57 @@
+<p-sidebar  styleClass="p-sidebar-md" [style]="{'overflow-y': 'auto'}"
+        [(visible)]="showPanel"
+        (onShow)="ngOnInit()" 
+        (onHide)="hideDialog()" 
+        [blockScroll]="false" 
+        [showCloseIcon]="true"  
+        [dismissible]="false" 
+        position="right" >
+    <h5 class="p-m-0"> {{ getTextTranslateKey('edit_title') | translate }}</h5>
+    <hr/>
+    <div class="p-grid">
+        <div class="p-col-12"> 
+            <div class="card">       
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">   
+                        <label for="dropdown">{{ getTextTranslateKey('exchange_rate_type') |  translate }} <span [ngStyle]="{'color':'red'}">*</span></label> 
+                        <p-dropdown [options]="exchangeRateTypes" #idExchangeRateType [(ngModel)]="exchangeRate.idExchangeRateType"  
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" [showClear]="true" [autoDisplayFirst]="false"
+                        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id"></p-dropdown>
+                        <small class="p-invalid" *ngIf="!validations[0]?.isValid">{{  validations[0]?.error | translate }}</small>  
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">   
+                        <label for="dropdown">{{ getTextTranslateKey('currency_of') |  translate }} <span [ngStyle]="{'color':'red'}">*</span></label> 
+                        <p-dropdown [options]="currencies" #idOiriginCurrency [(ngModel)]="exchangeRate.idOiriginCurrency"  
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" [showClear]="true" [autoDisplayFirst]="false"
+                        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id"></p-dropdown>
+                        <small class="p-invalid" *ngIf="!validations[1]?.isValid">{{  validations[1]?.error | translate }}</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">   
+                        <label for="dropdown">{{ getTextTranslateKey('currency_to') |  translate }} <span [ngStyle]="{'color':'red'}">*</span></label> 
+                        <p-dropdown [options]="currencies" #idDestinationCurrency [(ngModel)]="exchangeRate.idDestinationCurrency"  
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" [showClear]="true" [autoDisplayFirst]="false"
+                        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" optionLabel="name" optionValue="id"></p-dropdown>
+                        <small class="p-invalid" *ngIf="!validations[2]?.isValid">{{  validations[2]?.error | translate }}</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ getTextTranslateKey('conversion_factor') | translate}}<span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber [(ngModel)]="exchangeRate.conversionFactor" mode="decimal" [minFractionDigits]="2" maxlength='7'></p-inputNumber>     
+                        <small class="p-invalid" *ngIf="!validations[3]?.isValid">{{  validations[3]?.error | translate }}</small>                  
+                    </div>
+                </div>
+
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <span class="p-invalid">{{ 'required_fields' | translate}}</span>
+                    </div> 
+                    <div class="p-field p-col-12 p-md-12">
+                            <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" (click)="save()" label="{{ 'save' | translate }}"></button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>

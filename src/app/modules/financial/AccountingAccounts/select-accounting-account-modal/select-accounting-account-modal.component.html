@@ -1,0 +1,78 @@
+
+
+
+<p-dialog header="Seleccionar cuenta contable" (onShow)="ngOnInit()" [(visible)]="displayModal" (onHide)="hideDialog()" [modal]="true"  [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="card p-m-0">
+    <!-- styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" -->
+        <p-table   [resizableColumns]="false"   styleClass="p-datatable-sm" [rowHover]="true" [value]="selectaccountingaccountlist"   [paginator]="false" [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col style="width:25px">
+                <col style="width:150px">
+            </colgroup>
+        </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let col of displayedColumns; " [ngStyle]="{'text-align': col.field === 'partida' ? 'center' : 'left'}">
+                        
+                        {{col.header}}
+                       
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-accountingAccount  let-columns="columns" let-rowData let-i="rowIndex">
+               
+                <ng-container *ngIf="rowData">
+                    <tr>
+                        <td >
+                               Nivel  {{i+1}}           
+                        </td>
+                        <td >
+                            
+                            <div class="p-fluid p-centrar p-col-12 p-mt-12 p-md-12 p-lg-12">
+                                <span class="p-float-label">
+                                    <!-- //ng-tns-c68-34 p-dropdown p-component -->
+                                    <!-- {{ i == 0 ? log(partida) : null }} -->
+                                    <p-dropdown [options]="rowData" class="p-inputwrapper-focus" #partida [ngModel]="selectedItem[i]" [disabled]="viewMode || selectaccountingaccountlist[i].length==0" [autoDisplayFirst]="viewMode" [filter]="true" (onChange)="onChange($event)" [placeholder]="!viewMode ? 'Seleccione...' : null" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                                    ></p-dropdown>
+                                   
+                                </span>
+
+                            </div>
+                                                  
+                        </td>
+                    </tr>
+              
+                  </ng-container>
+
+            </ng-template>
+
+        </p-table>
+    </div>
+        <ng-template pTemplate="footer">
+            <div class="card p-m-0">
+            <ng-container>
+             
+              <tr>
+               
+                <h5 *ngIf="CuentaContable || CuentaContable.trim()"  >Cuenta: {{formatCode(CuentaContable)}}</h5>
+                <h5 *ngIf="!CuentaContable || !CuentaContable.trim()"> {{CuentaContable}} </h5>
+              
+              </tr>
+              <span layout="row" *ngIf="CuentaContable || CuentaContable.trim()"><hr flex/></span>
+               
+                <button  pButton pRipple label="Aceptar" icon="pi pi-check" style="  margin-right: 0.5rem" [disabled]="viewMode" (click)="SaveSelectAccountingAccount()"
+                    class="p-button-info p-mr-2"></button>
+             
+            </ng-container>
+            </div>
+          </ng-template>
+        
+     
+</p-dialog>
+
+

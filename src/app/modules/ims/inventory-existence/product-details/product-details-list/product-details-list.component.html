@@ -1,0 +1,253 @@
+<app-product-existence-details-headboard [(productSelected)]="productSelected" [(filters)]="filters"  (search)="search()"></app-product-existence-details-headboard>
+<div class ="card" *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INVENTORY_EXISTENCE_PRODUCT_DETAILS_ID)">
+    <div class="p-grid p-fluid p-ai-center vertical-container p-jc-center totals" >
+
+        <div class="p-col-4 p-xl-1 p-lg-4" style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-dollar" styleClass="p-mr-2 sales-Avatar"  
+            class="p-mb-2 p-d-block"  pTooltip="{{ 'ims.product_existence.sales_totals' | translate}}"  shape="circle"></p-avatar>       
+            <div [ngClass]="{'costDecrease': getTotalSales() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalSales())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4" style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-step-backward" styleClass="p-mr-2 salesReturns-Avatar" size="xlarge" 
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.salesReturns_totals' | translate}}" shape="circle"></p-avatar>  
+            <div [ngClass]="{'costDecrease': getTotalSalesReturns() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalSalesReturns())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4" style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-send" styleClass="p-mr-2 transfers-Avatar" size="xlarge" 
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.transfers_totals' | translate}}"  shape="circle"></p-avatar>   
+            <div [ngClass]="{'costDecrease': getTotalTransfers() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalTransfers())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4 " style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-sliders-v" styleClass="p-mr-2 adjustments-Avatar" size="large" 
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.adjustments_totals' | translate}}" shape="circle"></p-avatar>   
+            <div [ngClass]="{'costDecrease': getTotalAdjustments() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalAdjustments())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4" style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-shopping-cart" styleClass="p-mr-2 purchases-Avatar"  size="large"
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.purchases_totals' | translate}}" shape="circle"></p-avatar>  
+            <div [ngClass]="{'costDecrease': getTotalPurchases() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalPurchases())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4 " style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-user" styleClass="p-mr-2 purchaseReturns-Avatar" size="large" 
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.purchaseReturns_totals' | translate}}" shape="circle"></p-avatar>  
+            <div [ngClass]="{'costDecrease': getTotalPurchaseReturns() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalPurchaseReturns())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+        <div class="p-col-4 p-xl-1 p-lg-4" style="text-align: center; margin-inline: 16px;">
+            <p-avatar icon="pi pi-arrow-down" styleClass="p-mr-2 productions-Avatar" size="large" 
+            class="p-mb-2 p-d-block" pTooltip="{{ 'ims.product_existence.productions_totals' | translate}}" shape="circle"></p-avatar>  
+            <div [ngClass]="{'costDecrease': getTotalProductions() < 0}">
+                <span class="product-category p-d-block" >{{(getTotalProductions())|number:'1.3-3'}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="cardTable p-field p-col-12">
+        <p-dataView #dv [value]="productExistenceDetailsList" [paginator]="true" [rows]="4" filterBy="itemDate" 
+        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" [sortField]="sortField" [sortOrder]="sortOrder"
+        [showCurrentPageReport]="true" currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}"   layout="grid">
+            <ng-template pTemplate="header">
+                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+                    <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="{{ 'sort_by' | translate }} " 
+                     emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                     [disabled]="dataUnavailable" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                    <span class=" p-mb-2 p-mb-md-0 p-d-none p-d-md-inline-flex">
+                        <span class="p-mr-2 " >
+                            <app-excel-export-button  [disabled]="dataUnavailable" (click)="exportExcel()"></app-excel-export-button>
+                        </span>
+                        <span class=" p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="search" pInputText pTooltip="{{'search_by_date_format' | translate}}" placeholder="{{ 'search_by_date' | translate }}" (input)="dv.filter(getValueFormat($event.target.value))">
+                        </span>
+
+                    </span>
+                    <span class=" p-mb-2 p-mb-md-0 p-d-md-none">
+                        <span class=" p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="search" pInputText pTooltip="{{'search_by_date_format' | translate}}" placeholder="{{ 'search_by_date' | translate }}" (input)="dv.filter(getValueFormat($event.target.value))">
+                        </span>
+                    </span>
+                    <span class="p-d-md-none"><app-excel-export-button  [disabled]="dataUnavailable" (click)="exportExcel()"></app-excel-export-button></span>
+                </div>
+            </ng-template>
+            <ng-template let-product pTemplate="gridItem">
+                <div class="p-col-12 p-xl-3 p-lg-6">
+                    <div class="product-grid-item cardTable">
+                        <div class="product-grid-item-top">
+                            <div>
+                                <span class="material-icons avatar product-category-icon"  pTooltip="{{ 'ims.product_existence.itemDate_field' | translate}}" tooltipPosition="left">event</span> 
+                                <span class="product-category">{{product.itemDate | date: 'dd/MM/yyyy'}}</span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="widget-timeline">
+                            <div class="timeline-row recipePriceBox"pRipple (click)="onSalesClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">  
+                                                <a ><span class="recipe-price-box-value"> {{ 'ims.product_existence.sales_field' | translate}}</span></a>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.sales < 0}">
+                                                    <span>{{(product.sales)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="sales" [(ngModel)]="product.sales" disabled [min]="0" [max]="getMaxSales()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onSalesReturnsClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">  
+                                                <span class="recipe-price-box-value"> {{ 'ims.product_existence.salesReturns_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.salesReturns < 0}">
+                                                    <span>{{(product.salesReturns)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="salesReturns" [(ngModel)]="product.salesReturns" disabled [min]="0" [max]="getMaxSalesReturns()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onTransfersClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">  
+                                                <span class="recipe-price-box-value"> {{ 'ims.product_existence.transfers_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.transfers < 0}">
+                                                    <span>{{(product.transfers)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="transfers" [(ngModel)]="product.transfers" disabled [min]="0" [max]="getMaxTransfers()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onAdjustmentsClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">   
+                                                <span class="recipe-price-box-value">  {{ 'ims.product_existence.adjustments_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.adjustments < 0}">
+                                                    <span>{{(product.adjustments)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="adjustments" [(ngModel)]="product.adjustments" disabled [min]="0" [max]="getMaxAdjustments()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onPurchasesClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">  
+                                                <span class="recipe-price-box-value"> {{ 'ims.product_existence.purchases_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.purchases < 0}">
+                                                    <span>{{(product.purchases)|number:'1.3-3'}}</span>
+                                                 </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="purchases" [(ngModel)]="product.purchases" disabled [min]="0" [max]="getMaxPurchases()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onPurchaseReturnsClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">   
+                                                <span class="recipe-price-box-value">{{ 'ims.product_existence.purchaseReturns_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.purchaseReturns < 0}">
+                                                     <span>{{(product.purchaseReturns)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="purchaseReturns" [(ngModel)]="product.purchaseReturns" disabled [min]="0" [max]="getMaxPurchaseReturns()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-timeline" style=" margin-top: -25px;">
+                            <div class="timeline-row recipePriceBox" (click)="onProductionsClicked($event, product)" pTooltip="{{ 'view_detail' | translate}}">
+                                <div class="p-grid p-nogutter">
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-nogutter ">
+                                            <div class="p-col-12 p-md-7 timeline-content">  
+                                                <span class="recipe-price-box-value"> {{ 'ims.product_existence.productions_field' | translate}}</span>
+                                            </div>
+                                            <div class="p-col-12 p-md-5 timeline-time">
+                                                <div [ngClass]="{'costDecrease': product.productions < 0}">
+                                                    <span>{{(product.productions)|number:'1.3-3'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-col-12" style=" margin-top: 5px;">
+                                                <p-slider styleClass="productions" [(ngModel)]="product.productions" disabled [min]="0" [max]="getMaxProductions()"></p-slider>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>
+</div>
+<p-dialog  [(header)]="tittle" [(visible)]="showTransactionDetails" [modal]="true" [breakpoints]="{'960px': '75vw'}" [style]="{width: '70vw'}" [baseZIndex]="10000" 
+    [draggable]="false" [resizable]="false">
+
+<div *ngIf="showTransactionDetails">
+    <app-product-transaction-details [(filters)]="transactionsFilters"[(tittle)]="tittle" (close)="overPanelCallBack($event)"></app-product-transaction-details>
+</div>
+</p-dialog>

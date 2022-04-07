@@ -1,0 +1,27 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input (keyup.enter)="search()" [(ngModel)]="filters.name" name="name" id="name" type="text" pInputText>
+        <label>Nombre</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+      <span class="p-float-label">
+        <input (keyup.enter)="search()" [(ngModel)]="filters.abbreviation" name="abbreviation" id="abbreviation" type="text" pInputText>
+        <label>Abreviatura</label>
+      </span>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown (keyup.enter)="search()" [options]="status" appendTo="body" [(ngModel)]="currentVal" placeholder="Estatus" optionLabel="name">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+  </div>
+</div>

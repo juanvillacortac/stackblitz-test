@@ -1,0 +1,35 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Presentación de empaques</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" (keyup.enter)="savePackagingpresentation()" [class]="submitted && (!_packagingpresentation.name || !_packagingpresentation.name.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText id="name" [(ngModel)]="_packagingpresentation.name" (input)="_validations.toCapitalizeSimbology($event)" (keypress)="_validations.keyPressOnlyLettersAndNumbers($event);" (paste)="_validations.noPaste($event)" maxlength="100" autofocus />
+                    <small class="p-invalid" *ngIf="submitted && (!_packagingpresentation.name || !_packagingpresentation.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tipo de empaque <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown (keyup.enter)="savePackagingpresentation()" [class]="submitted && _packagingpresentation.idPackingType <= 0 ? 'ng-dirty ng-invalid' : ''" [options]="_packingtype" appendTo="body" [(ngModel)]="_packagingpresentation.idPackingType" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _packagingpresentation.idPackingType <= 0">El tipo de empaque es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="status" [disabled]="_packagingpresentation.id <= 0" appendTo="body" [(ngModel)]="_packagingpresentation.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="savePackagingpresentation()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

@@ -1,0 +1,74 @@
+
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Ente gubernamental </label>
+        <p-dropdown [options]="governmentalAgencies" id="governmentalAgency" name="governmentalAgency"
+         [(ngModel)]="filters.governmentalAgency" placeholder="Seleccione..."
+         (onChange)="getGovernmentalRecordsByAgency($event)" (keyup.enter)="search()"
+         [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" > 
+        </p-dropdown>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div> 
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Registro gubernamental </label>
+        <p-dropdown [options]="governmentalRecords" id="governmentalRecord" name="governmentalRecord"
+         [(ngModel)]="filters.governmentalRecord" placeholder="Seleccione..." 
+         (onChange)="getGovernmentalRecordTypes($event)" (keyup.enter)="search()"
+          [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+        </p-dropdown>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div>  
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Tipo de registro </label>
+        <p-dropdown [options]="governmentalRecordTypes" id="governmentalRecordType" name="governmentalRecordType"
+         [(ngModel)]="filters.governmentalRecordType" placeholder="Seleccione..."
+         (keyup.enter)="search()"
+          [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+        </p-dropdown>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div>  
+</div>
+
+<div class="p-grid p-p-3">
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Nombre corto </label>
+        <p-dropdown [options]="governmentalAgenciesShortNames" id="governmentalAgencyShortName" name="governmentalAgencyShortName"
+         [(ngModel)]="filters.governmentalAgency" placeholder="Seleccione..." 
+         (onChange)="getGovernmentalRecordsByAgency($event)" (keyup.enter)="search()"
+          [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+        </p-dropdown>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div> 
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Registro fiscal </label>
+        <div class="p-grid" style="justify-content: center;">
+            <div class="p-fluid p-col-12 p-grid" style="padding-left: 0px; padding-right: 0px;">
+                <div class="p-fluid p-col-12 p-lg-6 p-md-6 p-align-center vertical-container" >
+                    <p-dropdown [options]="identifierTypeOptions" id="identifierTypeOptions" name="identifierTypeOptions"
+                     [(ngModel)]="filters.documentType" placeholder="Seleccione..."
+                     (keyup.enter)="search()"
+                      [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados">
+                    </p-dropdown>
+                </div>
+                <div class="p-fluid p-col-12 p-lg-6 p-md-6">
+                    <input id="DocumentNumber" name="DocumentNumber" type="text" pInputText numbersOnly [(ngModel)]="filters.documentNumber" placeholder="Documento" maxlength="20" >
+                </div>
+            </div>
+        </div>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div>
+    <div class="p-fluid p-col-12 p-lg-4 p-md-4">
+        <label for="active">Estatus </label>
+        <p-dropdown [options]="statuslist" id="statuslist" name="statuslist" [(ngModel)]="filters.estatus" placeholder="Seleccione..."
+        (keyup.enter)="search()"
+        [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+        <!-- <small class="p-invalid" >El tipo es requerido</small> -->
+    </div> 
+</div>
+
+<div class="p-grid p-align-center vertical-container p-p-3">
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

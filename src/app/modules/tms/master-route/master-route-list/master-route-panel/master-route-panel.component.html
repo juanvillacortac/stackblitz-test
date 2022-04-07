@@ -1,0 +1,83 @@
+<p-sidebar [(visible)]="_showPanel" (onShow)="ngOnInit()" (onHide)="hidePanel()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}">
+    <h5 class="p-m-0">Rutas</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Código de ruta</label>
+                    <input id="float-input"  [(ngModel)]="_route.codeRoute" type="text" pInputText disabled>
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Sucursal de origen<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="branchOfficeOriginList" [(ngModel)]="_route.idBranchOfficeOrigin" placeholder="Seleccione..." ></p-dropdown>                    
+                    <small class="p-invalid" *ngIf="_submitted && _route.idBranchOfficeOrigin < 0">La sucursal origen es requerida</small>
+                    <small class="p-invalid" *ngIf="_submitted && _route.idBranchOfficeOrigin > 0 && _route.idBranchOfficeOrigin == _route.idBranchOfficeDestination">La sucursal origen debe ser diferente a la sucursal destino</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Sucursal de destino<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="branchOfficeDestinationList" [(ngModel)]="_route.idBranchOfficeDestination" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="_submitted && _route.idBranchOfficeDestination < 0">La sucursal destino es requerida</small>
+                    <small class="p-invalid" *ngIf="_submitted && _route.idBranchOfficeDestination > 0 && _route.idBranchOfficeOrigin == _route.idBranchOfficeDestination">La sucursal destino debe ser diferente a la sucursal origen</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Distancia aproximada (km)<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber [(ngModel)]="_route.approximateDistance" min="0" mode="decimal" [minFractionDigits]="3" maxlength="22">
+                        <!-- (keypress)="CalculateEntriesOutpouts($event)" (onFocus)="clear($event)" (keyup.enter)="AddProductToList(_dataAdjustmentDetail)" (keyup.backspace)="CalculateEntriesOutpouts($event)" -->
+                    </p-inputNumber>
+                    <small class="p-invalid" *ngIf="_submitted && (!_route.approximateDistance || !_route.approximateDistance.toString().trim())">El distancia aproximada es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Tiempo aproximado (hrs)<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-inputNumber [(ngModel)]="_route.approximateTime" min="0" mode="decimal" [minFractionDigits]="2" maxlength="22">
+                        <!-- (keypress)="CalculateEntriesOutpouts($event)" (onFocus)="clear($event)" (keyup.enter)="AddProductToList(_dataAdjustmentDetail)" (keyup.backspace)="CalculateEntriesOutpouts($event)" -->
+                    </p-inputNumber>
+                    <small class="p-invalid" *ngIf="_submitted && (!_route.approximateTime || !_route.approximateTime.toString().trim())">El tiempo aproximado es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Viáticos <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="indViaticList" [(ngModel)]="_route.indViatics" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="_submitted && (_route.indViatics == null)">El viatico es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Moneda</label>
+                    <p-dropdown [options]="currencyList" [(ngModel)]="_route.idCurrency" placeholder="Seleccione..." ></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label>Monto de viático</label>
+                    <p-inputNumber [(ngModel)]="_route.viaticAmount" min="0" mode="decimal" [minFractionDigits]="2" maxlength="22">
+                        <!-- (keypress)="CalculateEntriesOutpouts($event)" (onFocus)="clear($event)" (keyup.enter)="AddProductToList(_dataAdjustmentDetail)" (keyup.backspace)="CalculateEntriesOutpouts($event)" -->
+                    </p-inputNumber>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>                    
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_route.active" placeholder="Estatus" [disabled]="_route.id<=0" (keyup.enter)="submit()" ></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Observaciones: </label>
+                    <textarea [(ngModel)]="_route.observations" [rows]="3" [cols]="60" maxlength="500" pInputTextarea></textarea>
+                </div>                                                   
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

@@ -1,0 +1,264 @@
+<div class="p-grid" id="formDiv">
+
+<!-- SECCION DE EDICION -->
+<!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PERSONAL_DATA_PERMISSION_ID) && activeIndex == 0 && checked" -->
+    <div class="p-col-12">
+        <div class="p-grid">
+            <p-card header="Prestamos" class="p-card-shadow box p-col-12">
+                <div class="p-d-flex p-jc-end p-pr-0" id="quota-form">
+                    <button pButton pRipple class="p-button p-button-info p-ml-2" (click)="sendRepayment(1)"
+                        pTooltip="Amortizar" tooltipPosition="top" icon="pi pi-plus" *ngIf="dataSave && loanSingle.quotaList.length > 0">
+                    </button>
+                    <button pButton pRipple class="p-button p-button-success p-ml-2" (click)="sendRepayment(2)"
+                        pTooltip="Exonerar" tooltipPosition="top" icon="pi pi-check" *ngIf="dataSave && loanSingle.quotaList.length > 0">
+                    </button>
+                    <button pButton pRipple class="p-button p-button-danger p-ml-2"
+                        pTooltip="Suspender" tooltipPosition="top" icon="pi pi-ban" *ngIf="dataSave && loanSingle.quotaList.length > 0">
+                    </button>
+                </div>
+                <!-- botones de amortizar, exonerar y suspender -->
+            </p-card>
+            <p-card header="Trabajador" class="p-card-shadow box p-col-12 p-md-7">
+            
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12">
+                        <p-dropdown id="TypesVarying" placeholder="Seleccione..." [filter]="true" [(ngModel)]="loanSingle.idLaborRelationship" [options]="employmentList" life="500" [dropdownIcon]="dataSave ? null : 'pi pi-chevron-down'"
+                            emptyFilterMessage="Sin resultados" [class]="submitted && loanSingle.idLaborRelationship == -1  ? 'ng-dirty ng-invalid' : ''" emptyMessage="Sin resultados" [disabled]="dataSave">
+                        </p-dropdown>    
+                        <small class="p-invalid" *ngIf="submitted && loanSingle.idLaborRelationship == -1">El trabajador es requerido</small>
+                    </div>
+                </div>
+            
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6" life="500">
+                        <label for="statuslist" *ngIf="dataSave">Tipo de prestamo</label>
+                        <p-dropdown id="statuslist" name="cboactive" [options]="loanTypeDropdown" [(ngModel)]="loanSingle.idLoanType" placeholder="Tipo de prestamo" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" 
+                            [dropdownIcon]="dataSave ? null : 'pi pi-chevron-down'" [class]="submitted && loanSingle.idLoanType == -1  ? 'ng-dirty ng-invalid' : ''" [disabled]="dataSave">
+                        </p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && loanSingle.idLoanType == -1">El tipo de prestamo es requerido</small>
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist" *ngIf="dataSave">Fecha de emisión</label>
+                        <p-calendar #formIngresoCalendar yearRange="1970:2030" [(ngModel)]="createDate" dateFormat="dd/mm/yy" [disabled]="dataSave" [readonlyInput]="true" 
+                            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" placeholder="Fecha de emisión" [disabled]="true" [yearNavigator]="true" >
+                        </p-calendar>
+                        <!-- <small class="p-invalid" *ngIf="submitted && createDate == null">La fecha de emisión es requerida</small> -->
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist" *ngIf="dataSave">Fecha de inicio</label>
+                        <p-calendar #formIngresoCalendar yearRange="1970:2030" [(ngModel)]="discountStartDate" dateFormat="dd/mm/yy" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" [minDate]="createDate"
+                            readonlyInput="true" [showIcon]="true" [class]="submitted && discountStartDate == null ? 'ng-dirty ng-invalid' : ''" [disabled]="dataSave" placeholder="Fecha de inicio">
+                        </p-calendar>
+                        <small class="p-invalid" *ngIf="submitted && discountStartDate == null">La fecha de inicio es requerida</small>
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist" *ngIf="dataSave">Fecha de entrega</label>
+                        <p-calendar #formIngresoCalendar yearRange="1970:2030" [(ngModel)]="loanPayDate" dateFormat="dd/mm/yy" [readonlyInput]="true" [yearNavigator]="true" placeholder="Fecha de entrega"
+                            readonlyInput="true" [showIcon]="true" [monthNavigator]="true" [class]="submitted && loanPayDate == null ? 'ng-dirty ng-invalid' : ''" [disabled]="dataSave" [minDate]="createDate">
+                        </p-calendar>
+                        <small class="p-invalid" *ngIf="submitted && loanPayDate == null">La fecha de entrega es requerida</small>
+                    </div>
+                
+                </div>
+            </p-card>
+            <p-card header="Indicadores" class="p-card-shadow box p-col-12 p-md-5">
+                <div class="card widget-card-graph graph-1">
+
+                        <div _ngcontent-aji-c140="" class="graph-header">
+                            <h5 _ngcontent-aji-c140="">Orders</h5>
+                            <div _ngcontent-aji-c140="" class="graph">
+                                <div _ngcontent-aji-c140="" class="graph-border">
+                                    <div _ngcontent-aji-c140="" class="graph-block"></div>
+                                </div>
+                                <div _ngcontent-aji-c140="" class="graph-center"></div>
+                            </div>
+                        </div>
+                        <div _ngcontent-aji-c140="" class="graph-content">
+                            <div _ngcontent-aji-c140="" class="graph-icon"><img _ngcontent-aji-c140=""
+                                    src="assets/layout/images/dashboard/primeicons-apple.svg" alt="mirage-layout"></div>
+                            <div _ngcontent-aji-c140="" class="graph-content-text">
+                                <h5 _ngcontent-aji-c140="">49.2k</h5>
+                                <hr _ngcontent-aji-c140=""><span _ngcontent-aji-c140=""><i _ngcontent-aji-c140=""
+                                        class="pi pi-arrow-up"></i> 42% more than last month</span>
+                            </div>
+                        </div>
+
+                </div>
+            </p-card>
+            <p-card header="Ajustes" class="p-card-shadow box p-col-12">            
+                <div class="p-fluid p-formgrid p-grid">
+                    <div [class]="!dataSave ? 'p-field p-col-12 p-md-4' : 'p-field p-col-12 p-md-6'" life="500" id="currency" >
+                        <label *ngIf="dataSave" for="statuslist">Divisa</label>
+                        <p-dropdown name="cboactive" [options]="coinDropdown" placeholder="Divisa" [(ngModel)]="currencySelect" [class]="submitted && currencySelect == -1  ? 'ng-dirty ng-invalid' : ''"
+                            emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" (onChange)="selectCurrency($event)" [disabled]="dataSave" [dropdownIcon]="dataSave ? null : 'pi pi-chevron-down'"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && currencySelect == -1">La divisa es requerida</small>
+                    </div>
+
+                    <div *ngIf="!dataSave" class="p-field p-col-12 p-md-4" life="500" id="rate" >
+                        <!-- <label for="statuslist">Divisa</label> -->
+                        <p-dropdown name="cboactive" [options]="rateDropdown" placeholder="Tasa" [(ngModel)]="rateSelect" [class]="submitted && rateSelect == 0  ? 'ng-dirty ng-invalid' : ''"
+                            emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" (onChange)="selectRate($event)"></p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && rateSelect == 0">La tasa es requerida</small>
+                        
+                    </div>
+                
+                    <div [class]="!dataSave ? 'p-field p-col-12 p-md-4' : 'p-field p-col-12 p-md-6'" life="500">
+                        <label *ngIf="dataSave" for="statuslist">Factor de conversión</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                            <p-inputNumber id="conversion" mode="decimal" [(ngModel)]="loanSingle.conversionFactor" maxlength="19" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6" life="500">
+                        <label for="statuslist">Monto</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                            <p-inputNumber id="loanAmount" mode="decimal" [(ngModel)]="loanSingle.amount" maxlength="15" [class]="submitted && (loanSingle.amount <= 0 || loanSingle.amount == undefined)  ? 'ng-dirty ng-invalid' : ''"
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" (ngModelChange)="amountChange($event)" [disabled]="dataSave">
+                            </p-inputNumber>
+                        </div>
+                        <small class="p-invalid" *ngIf="submitted && (loanSingle.amount <= 0 || loanSingle.amount == undefined)">{{loanSingle.amount == undefined ? 'El monto es requerido' : 'El monto debe ser mayor a cero'}}</small>
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist">Monto (conversión)</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                            <p-inputNumber id="conversionLoanAmount" mode="decimal" [(ngModel)]="loanSingle.conversionAmount" maxlength="19" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true">
+                            </p-inputNumber>
+                        </div>
+                        <!-- <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon span-input">{{simbolCoin2}}</span>  
+                            <input [value]="loanSingle.amount*loanSingle.conversionFactor" pInputText type="text">
+                        </div> -->
+                    </div>
+                
+                    <div class="p-field p-col-12" life="500">
+                        <label for="statuslist">Interés</label>
+                        <div class="p-inputgroup">
+                            <p-inputNumber id="interesRate" mode="decimal" [(ngModel)]="loanSingle.interestRate" [max]="100" [class]="submitted && (loanSingle.interestRate < 0 || loanSingle.interestRate == undefined)? 'ng-dirty ng-invalid' : ''"
+                            [minFractionDigits]="2" [maxFractionDigits]="2" life="500" (ngModelChange)="interestRateChange($event)" [disabled]="dataSave">
+                            </p-inputNumber>
+                            <span class="p-inputgroup-addon span-input">%</span> 
+                        </div>
+                        <small class="p-invalid" *ngIf="submitted && (loanSingle.interestRate < 0 || loanSingle.interestRate == undefined)">{{loanSingle.interestRate == undefined ? 'El interés es requerido' : 'El interés debe ser mayor o igual a cero'}}</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist">Total interés</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                            <p-inputNumber mode="decimal" [(ngModel)]="loanSingle.interestRateAmount" maxlength="16" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true" id="interestRateAmount">
+                            </p-inputNumber>
+                        </div>
+                        <!-- <input [(ngModel)]="loanSingle.interestRateAmount" pInputText type="text"> -->
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist">Total interés (conversión)</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                            <p-inputNumber mode="decimal" [(ngModel)]="loanSingle.conversionInterestRateAmount" maxlength="20" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true" id="conversionInterestRateAmount">
+                            </p-inputNumber>
+                        </div>
+                        <!-- <input [(ngModel)]="loanSingle.interestRateAmount" pInputText type="text"> -->
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6" life="500">
+                        <label for="statuslist">Neto</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                            <p-inputNumber id="neto" mode="decimal" [(ngModel)]="loanSingle.loanAmount" maxlength="20" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true">
+                            </p-inputNumber>
+                        </div>
+                        <!-- <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon span-input">{{simbolCoin1}}</span>  
+                            <input [value]="loanSingle.amount+loanSingle.interestRateAmount" [(ngModel)]="loanSingle.loanAmount" pInputText type="text">
+                        </div> -->
+                    </div>
+                
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist">Neto (conversión)</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                            <p-inputNumber id="conversionNeto" mode="decimal" [(ngModel)]="loanSingle.conversionLoanAmount" maxlength="23" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true">
+                            </p-inputNumber>
+                        </div>
+                        <!-- <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon span-input">{{simbolCoin2}}</span>  
+                            <input [value]="loanSingle.loanAmount*loanSingle.conversionFactor" pInputText type="text">
+                        </div> -->
+                    </div>
+                
+                    
+                    <div class="p-field p-col-12 p-md-6" life="500">
+                        <label for="statuslist">Monto por cuota</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                            <p-inputNumber id="amount" mode="decimal" [(ngModel)]="loanSingle.quotaAmount" [max]="loanSingle.amount" [class]="submitted && (loanSingle.quotaAmount <= 0 || loanSingle.quotaAmount == undefined)  ? 'ng-dirty ng-invalid' : ''"
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" (ngModelChange)="shareAmountChange($event)" [disabled]="dataSave">
+                            </p-inputNumber>
+                        </div>
+                        <small class="p-invalid" *ngIf="submitted && (loanSingle.quotaAmount <= 0 || loanSingle.quotaAmount == undefined)">{{loanSingle.quotaAmount == undefined ? 'El monto por cuota es requerido' : 'El monto por cuota debe ser mayor a cero'}}</small>
+                    </div>
+                    <!-- <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon span-input">{{simbolCoin1}}</span>  
+                        <input [value]="loanSingle.loanAmount/loanSingle.quotasAmount" pInputText type="text">
+                    </div> -->
+                    <div class="p-field p-col-12 p-md-6 "life="500">
+                        <label for="statuslist">Monto por cuota (conversión)</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                            <p-inputNumber id="conversionAmount" mode="decimal" [(ngModel)]="loanSingle.conversionQuotaAmount" maxlength="20" 
+                                [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="true">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12" life="500">
+                        <label for="statuslist">Total de cuotas</label>
+                        <p-inputNumber id="quotasAmount" mode="decimal" [(ngModel)]="loanSingle.quotasAmount" maxlength="5" 
+                            [minFractionDigits]="0" [maxFractionDigits]="0" life="500" [disabled]="true">
+                        </p-inputNumber>
+                    </div>
+
+                    <!-- <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon span-input">{{simbolCoin2}}</span>  
+                        <input [value]="(loanSingle.loanAmount/loanSingle.quotasAmount)*loanSingle.conversionFactor" pInputText type="text">
+                    </div> -->
+                </div>
+                <div class="p-field p-col-12"life="500">
+                    <div class="p-d-flex p-jc-end p-pr-0">
+                        <button pButton pRipple class="p-button p-button-info p-ml-2" (click)="submit()" icon="pi pi-save" label="Guardar" *ngIf="!dataSave && !paid"></button>
+                        <button pButton pRipple class="p-button p-button-info p-ml-2" (click)="updateData()" icon="pi pi-pencil" label="Modificar ajustes" *ngIf="dataSave && !paid"></button>
+                    </div>
+                </div>
+            </p-card>
+            <div class="p-grid" id="formButtonsDiv">
+                <div id="regresarDiv">
+                    <button id="regresar" pButton pRipple icon="pi pi-arrow-left" class="p-button-secondary" label="Regresar" (click)="returnBack()"></button>
+                </div>
+            </div>
+            <app-loan-installment-list *ngIf="dataSave" [paymentPlan]="loanSingle.quotaList" [lockedButton]="paymentPlanLocked" [visibleButton]="buttonSavePlan" [symbolArray]="symbolCoinArray" (SendPanelLoan)="sendPanel($event)" (SavePlanList)="savePaymentPlan($event)"></app-loan-installment-list>
+            
+            <app-loan-installment-panel *ngIf="showPaymentPlan" [loan]="loanSingle" [payrollTypeList]="payrollTypeList" [symbolArray]="symbolCoinArray" 
+            [visible]="showPaymentPlan" (backUnChange)="resetValues($event)" (paymentPlanPreview)="loadPaymentPlan($event)"></app-loan-installment-panel>
+
+            <app-repayment-list *ngIf="showRepayment && repaymentType == 1" [visible]="showRepayment" [quotaList]="loanSingle.quotaList" [idLoan]="loanSingle.idLoan" [symbolArray]="symbolCoinArray" (backUnChange)="resetValues($event)" (saveRepayment)="saveRepaymentRecord($event)"></app-repayment-list>
+            <app-repayment-exemption *ngIf="showRepayment && repaymentType == 2" [visible]="showRepayment" [quotaList]="loanSingle.quotaList" [idLoan]="loanSingle.idLoan" [symbolArray]="symbolCoinArray" (backUnChange)="resetValues($event)" (saveRepayment)="saveRepaymentRecord($event)"></app-repayment-exemption>
+            <app-repayment-discontinue *ngIf="showDiscontinue" ></app-repayment-discontinue>
+        </div>
+    </div>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+

@@ -1,0 +1,68 @@
+import { PurchaseOrderProduct } from "./purchase-order-product";
+
+export class PurchaseOrderModal {  
+    idOrderPurchase:number=-1;
+    idAgrupationOrderPurchase:number=-1
+    idCompany:number=-1;
+    numOC:string="";
+    supReasonCommercial:string="";
+    idDeliveryType:number=-1;
+    deliveryType:string="";
+    idDeliveryMethod:number=-1;
+    deliveryMethod:string="";
+    idTypeTransport:number=-1;
+    typeTransport:string="";
+    idTypeDocumentOC:number=-1;
+    typeDocumentOC:string="";
+    idTypeDistribution:number=-1;
+    typeDistribution:string="";
+    idBranchOrigin:number=-1;
+    branchOrigin:string="";
+    idBranchRequest:number=-1;
+    branchRequest:string="";
+    idCountry:number=-1;
+    countryOrigin:string="";
+    idCountryRequest:number=-1;
+    countryRequest:string="";
+    idPort:number=-1;
+    portOrigin:string="";
+    idPortRequest:number=-1;
+    portRequest:string="";
+    idStatus:number=-1;
+    status:string="";
+    idSupplier:number=-1;
+    supplier:string="";
+    idPaymentCondition:number=-1;
+    paymentCondition:string="";
+    idPaymentMethod:number=-1;
+    paymentMethod:string="";
+    idCurrencyType:number=-1;
+    currencyType:string="";
+    idCurrency:number=-1;
+    currency:string="";
+    idTaxPlan:number=-1;
+    taxPlan:string=""
+    idRateType:number=-1;
+    rateType:string="";
+    exchangeRate:string="";
+    internalObservation:string=""
+    supplierObservation:string="";
+    cubing:number=0
+    indAproved :boolean=false;
+    createdbyId:number=-1
+    createdby:string="";
+    updatedbyId:number=-1;
+    updatedby:string="";
+    responsibleId:number=-1;
+    responsible:string="";
+    approvedbyId:number=-1;
+    approvedby:string="";
+    deliveryDate:Date;
+    expiredDate:Date;
+    dispatchDate :Date;
+    createdDate:Date;
+    updatedDate:Date;
+    purchaseOrderProduct:PurchaseOrderProduct[]=[];
+    nroitem:number=0;
+    indPurchase:number=0;
+}

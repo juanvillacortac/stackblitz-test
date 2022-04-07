@@ -1,0 +1,122 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="true"
+[showCloseIcon]="!saving" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+   
+
+<h5 class="p-m-0">Cuenta bancaria</h5>
+    <hr />
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+         
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="numero">Número de cuenta <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input  #name  [(ngModel)]="_data.accountNumber" type="text"  numbersOnly pInputText
+               (input)="_validations.toCapitalizeSimbology($event)"   maxlength="50" [class]="this.nomString || submitted && (!_data.accountNumber || !_data.accountNumber.trim()) ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()">
+               <small class="p-invalid" *ngIf="this.nomString || submitted && (!_data.accountNumber|| !_data.accountNumber.trim())">El número de cuenta es requerido</small>            
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="banco"> Banco <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-dropdown [options]="bank"  [filter]="true" (onChange)="onChangeBank($event)" [(ngModel)]="_data.bankId"  optionLabel="name" optionValue="id"
+                  [class]="submitted && _data.bankId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                  [resetFilterOnHide]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && _data.bankId<=-1">El banco  es requerido</small>
+              
+            </div>
+
+          
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="numero">Cuenta contable </label>
+              <input  #name  [(ngModel)]="_data.accountingAccount" type="text" pInputText
+               (input)="_validations.toCapitalizeSimbology($event)" maxlength="50" [disabled]="true">
+                         
+            </div>
+  
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label > Auxiliar <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown [options]="auxiliaries" [disabled]="_data.bankId>0 &&!indPermiteAuxiliar"  [(ngModel)]="_data.auxiliaryId" 
+                [class]=" submitted && indPermiteAuxiliar && _data.auxiliaryId<=-1 ? 'ng-dirty ng-invalid' : ''" 
+                   placeholder="Seleccione..."
+                    emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && indPermiteAuxiliar && _data.auxiliaryId<=-1">El auxiliar es requerido</small>
+                <small class="p-invalid" *ngIf="indPermiteAuxiliar && !auxiliaries?.length">La cuenta contable seleccionada no posee auxiliares disponibles</small>
+                <small class="p-invalid" *ngIf="_data.bankId>0 && !indPermiteAuxiliar">La cuenta contable seleccionada no permite auxiliares.</small>
+            </div>
+   
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label >Moneda <span [ngStyle]="{'color':'red'}">*</span> </label>
+              <p-dropdown [options]="currency"  [(ngModel)]="_data.currencyId"  (onChange)="currencyOnchange($event)"  optionLabel="name" optionValue="id"
+                [class]="submitted && _data.currencyId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && _data.currencyId<=-1">La moneda es requerida</small>
+              
+          </div>
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label >Tipo de cuenta <span [ngStyle]="{'color':'red'}">*</span> </label>
+            <p-dropdown [options]="bankAccountType"   [(ngModel)]="_data.bankAccountTypeId" optionLabel="name" optionValue="id"
+              [class]="submitted && _data.bankAccountTypeId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && _data.bankAccountTypeId<=-1">El tipo es requerido</small>
+            
+        </div>
+
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+          <label >Tasa de pago por defecto </label>
+          <p-dropdown [options]="bankAccountExchangeRateByCurrency" [filter]="true"  [showClear]="_data.exchangeRatePaymentId>0" [(ngModel)]="_data.exchangeRatePaymentId" optionLabel="exchangeType" optionValue="id"  placeholder="Seleccione..."
+          [disabled]="_data.currencyId<=-1"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-12 p-sm-12">
+        <label >Tasa de depósito por defecto</label>
+        <p-dropdown [options]="bankAccountExchangeRateByCurrency" [filter]="true" [showClear]="_data.depositExchangeRateId>0"  [disabled]="_data.currencyId<=-1"  [(ngModel)]="_data.depositExchangeRateId" optionLabel="exchangeType" optionValue="id"
+        placeholder="Seleccione..."
+            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+    </div>
+
+
+    <div class="p-field p-col-12 p-md-12 p-sm-12">
+      <label for="active">Pago mínimo </label>
+      <div class="p-inputgroup cost-input">
+          <p-inputNumber mode="decimal"  [(ngModel)]="_data.minimumPayment"
+              [disabled]="_data.currencyId <= -1 " [min]="0"
+              [minFractionDigits]="4" [maxFractionDigits]="4" [maxlength]="23">  
+          </p-inputNumber>        
+      </div>
+
+      <!-- <small class="p-invalid" *ngIf="submitted && _data.minimumPayment<=0">El pago mínimo es
+          requerido</small> -->
+
+
+  </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="name">Descripción</label>
+                <input id="float-input" [(ngModel)]="_data.descripcionBankAccount" type="text" pInputText
+                 (input)="_validations.toCapitalizeSimbology($event)"  maxlength="255"  (keyup.enter)="save()">
+                
+              </div>
+  
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown name="cboactive" [options]="statuslist"  [(ngModel)]="_data.active" placeholder="Estatus"
+                  [disabled]="_data.bankAccountId <= -1" (keyup.enter)="save()"></p-dropdown>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+             
+              <button [disabled]="saving" pButton pRipple label="Guardar" (keyup.enter)="save()" (click)="save()" icon="pi pi-save"
+                class="p-button-info p-mr-2">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-sidebar>
+
+
+
+
+

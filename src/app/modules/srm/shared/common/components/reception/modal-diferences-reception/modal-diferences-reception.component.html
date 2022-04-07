@@ -1,0 +1,127 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Diferencia" [(visible)]="visible" [style]="{width:'50%'}"
+  [modal]="true" class="address-dialog">
+  <div class="p-grid p-mt-2">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+        <label>Unidades</label>
+        <p-inputNumber *ngIf="_product.indHeavy==true" [(ngModel)]="diferencesReception.unitDiferences" mode="decimal" [maxFractionDigits]="3" [disabled]="isdisabled"> 
+      </p-inputNumber>
+      <p-inputNumber  *ngIf="_product.indHeavy==false" [(ngModel)]="diferencesReception.unitDiferences"  [maxFractionDigits]="0" [disabled]="isdisabled"> 
+    </p-inputNumber>
+      </div>
+
+    <!-- <div class="p-col-12 p-md-3 p-lg-3 p-sm-3 p-fluid">
+      <label>Tipo <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown (keyup.enter)="add()" [options]="typemotivelist" appendTo="body" [(ngModel)]="diferencesReception.idTypemotive"
+         placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+         (onChange)="resetForm(diferencesReception.idTypemotive)">
+      </p-dropdown>
+      <small class="p-invalid" *ngIf="submitted && (diferencesReception.idTypemotive <=0)">El tipo es requerido.</small>
+    </div> -->
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+        <label>Motivo <span [ngStyle]="{'color':'red'}">*</span></label>
+        <p-dropdown (keyup.enter)="add()" [options]="motivelist" appendTo="body" [(ngModel)]="diferencesReception.idmotive"
+           placeholder="Seleccione..." [filter]="true" 
+          emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && (diferencesReception.idmotive<=0)">El motivo es requerido.</small>
+      </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+      <label>Cantidad <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-inputNumber *ngIf="_product.indHeavy==true" [(ngModel)]="diferencesReception.quantity" [maxFractionDigits]="0" (onFocus)="clear($event)"> 
+      </p-inputNumber>
+      <p-inputNumber *ngIf="_product.indHeavy==false" [(ngModel)]="diferencesReception.quantity" [maxFractionDigits]="3" (onFocus)="clear($event)"> 
+    </p-inputNumber>
+      <small class="p-invalid" *ngIf="submitted && (diferencesReception.quantity==0)">La Cantidad es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+      <label for="active">Observación </label>
+      <textarea pInputTextarea [(ngModel)]="diferencesReception.observation"
+       [rows]="3" [cols]="40" maxlength="500"  style="resize: none;"></textarea>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4">
+        <!-- <p-checkbox [(ngModel)]="diferencesReception.indDevolucion" binary="true" inputId="binary"></p-checkbox> -->
+        <p-inputSwitch class="p-mr-4" [(ngModel)]="diferencesReception.indDevolucion"> </p-inputSwitch>
+        <label clas="p-ml-2">Devolución</label>
+    </div>
+    
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Agregar" (click)="add()" icon="pi pi-plus-circle"
+        class="p-button-secondary p-mr-2"></button>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+      <small class="p-invalid">(*) Campos obligatorios</small>
+    </div>
+  </div>
+  <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <span class="p-input-icon-left p-ml-auto p-mr-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar" />
+      </span>
+
+    </div>
+  </div>
+
+  <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_DetailListTemp"
+      [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th [ngStyle]="{'width': '130px'}"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-diferences let-columns="columns">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <span class="p-column-title">{{col.header}}</span>
+              <!-- <app-indheavy-label *ngIf="col.field =='indDevolucion'; else textCell" [indHeavy]="product[col.field]">
+            </app-indheavy-label> -->
+            <div  *ngIf="col.field =='indDevolucion'; else textCell">
+              <span *ngIf="diferences.indDevolucion==true" [class]="'status-badge status-active'">Si</span>
+              <span *ngIf="diferences.indDevolucion==false" [class]="'status-badge status-inactive'">No</span> 
+            </div>
+              <ng-template #textCell>
+                <span>{{col.template(diferences)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>
+            <!-- (click)="onRemoveSpecification(specification.id)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+            <button  *ngIf="diferences.id<0" pButton pRipple icon="pi pi-trash" (click)="onRemove(diferences)" class="p-button-rounded p-button-danger p-mr-2"
+              pTooltip="Eliminar"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+             Total : {{quantitytotal.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) }}.
+        </div>
+    </ng-template>
+    </p-table>
+
+  </div>
+  <div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Aplicar" (click)="apply()" icon="pi pi-check" class="p-button-info p-mr-2"
+      [disabled]="load"></button>
+    <button pButton pRipple  icon="pi pi-ban" (click)="visible=false" label="Cancelar" class="p-button-secondary">
+    </button>
+  </div>
+</p-dialog>

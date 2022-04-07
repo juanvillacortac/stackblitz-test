@@ -1,0 +1,27 @@
+:host ::ng-deep {
+  .p-dialog-content {
+    height: 90%;
+  }
+
+  p-dropdown div {
+    border-radius: 4px 0px 0px 4px;
+  }
+
+  .fieldseth fieldset {
+    margin-bottom: 10px;
+  }
+
+  .p-tabview div ul{
+    justify-content: space-around;
+  }
+}
+
+.container-img-viewer{
+  border-radius: 50%;
+  height: 100px;
+  display: flex;
+  width: 100px;
+  justify-content: center;
+  overflow: hidden;
+  align-items: center;
+}

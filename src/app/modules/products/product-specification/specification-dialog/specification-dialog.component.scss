@@ -1,0 +1,12 @@
+:host ::ng-deep { 
+    .p-sidebar-content {
+        overflow-y: unset !important;
+        position: relative;
+    }
+
+    .p-multiselect-token-icon{
+        margin-left: 0.1rem;
+        margin-right: 0.5rem;
+        margin-top: 0.1rem;
+    }
+}

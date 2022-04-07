@@ -1,0 +1,64 @@
+
+ <div class="p-grid p-fluid">
+
+    <!-- <div class="p-col-12 p-md-1 p-lg-1 p-mt-2">
+        <label>Año:</label>
+    </div> -->
+   <div class="p-col-12 p-md-3 p-lg-3">
+     <span class="p-float-label">
+       <p-dropdown #year111 inputId="year" [(ngModel)]="yearDef" [options]="yearsDropdown" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true"
+       (keyup.enter)="searchDiscounts()"></p-dropdown>
+       <label for="year">Año</label>
+     </span>
+   </div>
+    <div class="p-col-12 p-md-2 p-lg-2">
+        <button id="search" pButton pRipple (click)="searchDiscounts()" icon="pi pi-search" tooltipPosition="top" pTooltip="Buscar" class="p-button-info"></button>
+    </div>
+
+</div>
+
+<div class="p-grid p-fluid">
+    <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_ISLRDiscountService._ISLRDiscountList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                 currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" 
+                 [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" 
+                 *ngIf="_ISLRDiscountService._ISLRDiscountList  && _ISLRDiscountService._ISLRDiscountList.length > 0">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-ISLRDiscount let-columns="columns">
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}">
+                  <!-- <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="ISLRDiscount[col.field]"></app-active-label>
+                  
+                  <ng-template #textCell >
+                    <span style="white-space: pre-wrap;">{{col.template(ISLRDiscount)}} </span>
+                  </ng-template> -->
+                    <span *ngIf="col.field == 'withheldAmount'">{{col.template(ISLRDiscount)}} {{mainCurrency}}</span>
+                    <span *ngIf="col.field != 'withheldAmount'">{{col.template(ISLRDiscount)}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+        </p-table>  
+      </div>
+</div>
+<p-messages severity="info" *ngIf="!(_ISLRDiscountService._ISLRDiscountList  && _ISLRDiscountService._ISLRDiscountList.length > 0)" >
+  <ng-template pTemplate>
+      <div class="p-ml-2">No existen ajustes de ISLR asociados a este trabajador.</div>
+  </ng-template>
+</p-messages>

@@ -1,0 +1,10 @@
+.dialog {
+  min-width: 50vw;
+  max-width: 90vw;
+}
+
+@media (min-width: 768px) {
+  .dialog {
+    max-width: 70vw;
+  }
+}

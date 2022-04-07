@@ -1,0 +1,229 @@
+<p-fieldset legend="Datos generales" [toggleable]="true" [style]="{'width': '100%', 'margin-bottom': '0.5em'}"
+  styleClass="p-shadow-0 ">
+  <div class="p-formgrid p-grid">
+    <div class="p-fluid p-col-12 p-md-8 p-sm-8 p-lg-8">
+      <div class="p-field p-grid">
+        <div class="p-field p-col-12  p-lg-6 p-md-6 p-mt-2">
+          <label for="active">Número de documento: </label>
+          <app-status-count-label *ngIf="_conteo.id <= 0" [idstatus]="this.statusIDs.NO_ASSIGNED_STATUS_ID">
+          </app-status-count-label>
+          <b *ngIf="_conteo.id > 0"> {{_conteo.numberDocument}}</b>
+        </div>
+        <div class="p-field p-col-12 p-lg-6 p-md-6 p-mt-2">
+          <label for="active"> Estatus: </label>
+          <!-- <b> {{_conteo.id <= 0 ? " Planificado" : _conteo.status}}</b> -->
+          <app-status-count-label *ngIf="_conteo.id <= 0" [idstatus]="this.statusIDs.NO_ASSIGNED_STATUS_ID">
+          </app-status-count-label>
+          <app-status-count-label *ngIf="_conteo.id >0" [idstatus]="_conteo.idstatus">
+          </app-status-count-label>
+        </div>
+      </div>
+      <div class=" p-field p-grid">
+        <div class="p-field p-col-12 p-md-4  p-lg-4 p-mt-2">
+          <label for="active">Área: <span [ngStyle]="{'color':'red'}">*</span> </label>
+          <p-dropdown [options]="arealist" [(ngModel)]="_conteo.idArea" [filter]="true" placeholder="Seleccione..."
+            [class]="submitted && _conteo.idArea <=0 ? 'ng-dirty ng-invalid' : ''" [disabled]="cstatus"
+            (onClick)="onchangeArea($event)" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && _conteo.idArea<=0">El área es requerida</small>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-2">
+          <label for="active"> Categoría: <span [ngStyle]="{'color':'red'}">*</span> </label>
+          <p-dropdown [options]="categorylist" [(ngModel)]="_conteo.idCategory" [filter]="true"
+            [class]="submitted && _conteo.idCategory <= -2 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+            [disabled]="cstatus" (onClick)="onchangeCategory($event)" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && _conteo.idCategory<=-2">La categoría es requerida</small>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-2">
+          <label for="active"> Responsable: <span [ngStyle]="{'color':'red'}">*</span> </label>
+          <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="Responsable" [(ngModel)]="_conteo.responsibleUser"
+              [class]="submitted && _conteo.idResponsibleUser <= -1 ? 'ng-dirty ng-invalid' : ''" disabled
+              class="responsible">
+            <p-button icon="pi pi-search" (click)="showmodalResponsible()"
+              *ngIf="_conteo.idstatus <=this.statusIDs.IN_DRAFT_STATUS_ID" class="btresponsible"></p-button>
+          </div>
+          <small class="p-invalid" *ngIf="submitted && (_conteo.idResponsibleUser <=-1)">El responsable es
+            requerido</small>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-2">
+          <label for="active"> Descripción: <span [ngStyle]="{'color':'red'}">*</span> </label>
+          <input [(ngModel)]="_conteo.description" type="text" pInputText [pKeyFilter]="valid" maxlength="50" (keypress)="isFormEdit=true"
+            [class]="submitted && (!_conteo.description || !_conteo.description.trim())? 'ng-dirty ng-invalid' : ''" [disabled]="dstatus">
+          <small class="p-invalid" *ngIf="submitted && (!_conteo.description || !_conteo.description.trim())">La
+            descripción es requerida</small>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-2">
+          <label for="active"> Fecha inicial: </label>
+          <p-calendar id="ToD" [(ngModel)]="_conteo.iDate" dateFormat="dd/mm/yy" (onSelect)="onBlurMethod($event)"
+            [minDate]="minDate" readonlyInput="true" [showIcon]="true" [disabled]="cstatus">
+          </p-calendar>
+        </div>
+        <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-2">
+          <label for="active"> Fecha final: </label>
+          <p-calendar id="ToF" [minDate]="_conteo.iDate" [(ngModel)]="fDate" dateFormat="dd/mm/yy" readonlyInput="true"
+            [showIcon]="true" [disabled]="true">
+          </p-calendar>
+        </div>
+        <div class="p-field p-col-12 p-md-8 p-lg-12 p-mt-2">
+          <label for="active">Observación: </label>
+          <textarea [(ngModel)]="_conteo.observation" [rows]="3" [cols]="60" maxlength="500" pInputTextarea
+            autoResize="autoResize" [disabled]="dstatus" (keypress)="isFormEdit=true"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="p-field p-col-12 p-md-4 p-sm-6 p-lg-4">
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+            <p-table #dt class="simple-footer-table" [value]="_OperatorListTemp" [scrollable]="true"
+              scrollHeight="250px">
+              <ng-template pTemplate="caption">
+                Operadores   
+                <span [ngStyle]="{'color':'red'}">*</span>
+              </ng-template>
+              <ng-template pTemplate="body" let-operator let-i="rowIndex">
+                <tr>
+                  <td class="p-text-center" width="40%">{{operator.operator}}</td>
+                  <td class="p-text-right" width="10%">
+                    <button *ngIf="operator.idPysicalCount <= 0" (click)="removeOperator(operator)" pButton pRipple
+                      icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" pTooltip="Eliminar"></button>
+                    <button *ngIf="operator.idPysicalCount>0 && _conteo.idstatus<=this.statusIDs.IN_ACTION_STATUS_ID"
+                      (click)="inactiveOperator(operator)" pButton pRipple icon="pi pi-times"
+                      class="p-button-rounded p-button-danger p-mr-2" pTooltip="Inactivar"></button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="summary" style="text-align:center !important;">
+                <button pButton pRipple type="button" *ngIf="_conteo.idstatus<= this.statusIDs.IN_ACTION_STATUS_ID"
+                  (click)="showmodal(multiples=true,model=false)" label="+ Agregar" class="p-button-text"></button>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-12 p-lg-12">
+    <div class="p-col-12 p-md-4 p-lg-4 p-d-flex ">
+      <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clear()" icon="pi pi-ban"
+        class="btn p-button-secondary p-mr-2" *ngIf="_conteo.idstatus<=this.statusIDs.IN_DRAFT_STATUS_ID"></button>
+    </div>
+  </div>
+</p-fieldset>
+<p-fieldset legend="Detalles" [toggleable]="true">
+  <div class="card p-m-0 p-pb-0">
+
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Monedas <span *ngIf="showFilters">> Filtrar</span></h5> -->
+      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dtc.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar..." />
+      </span>
+      <div>
+        <button pButton pRipple label="Productos" [disabled]="loading" (click)="addProduct()" icon="pi pi-plus"
+          class="btn p-button-info p-mr-2" *ngIf="_conteo.idstatus<=this.statusIDs.IN_ACTION_STATUS_ID"></button>
+        <Button pButton pRipple label="Excel" [disabled]="loading" (click)="exportExcel()" icon="pi pi-file-excel"
+          class="btn p-button-success" pTooltip="Exportar" tooltipPosition="top" *ngIf="_conteo.id > 0 && _DetailListTemp !=undefined  && _DetailListTemp.length >0"></Button>
+      </div>
+    </div>
+  </div>
+  <div class="card p-m-0">
+    <p-table #dtc [columns]="displayedColumns" [rowHover]="true" [value]="_DetailListTemp" [(selection)]="selectedDetail"
+      [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width:4rem;overflow-wrap:break-word"></th>
+          <th style="width:4rem;overflow-wrap:break-word"></th>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th style="width:6rem;overflow-wrap:break-word">
+            <p-tableHeaderCheckbox [disabled]="dstatus"></p-tableHeaderCheckbox> Bloqueo
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-detail let-columns="columns">
+        <tr>
+          <td>
+            <button type="button" pButton pRipple
+              *ngIf="detail.count==0 && detail.idStatus<this.statusIDs.WAITING_FOR_ADJUSTMENT_STATUS_ID"
+              (click)="removeDetail(detail)" class="p-button-rounded p-button-danger" icon="pi pi-trash"
+              pTooltip="Eliminar detalle"></button>
+          </td>
+          <td>
+            <button type="button" pButton pRipple *ngIf="detail.id>0 && _conteo.idstatus>this.statusIDs.IN_DRAFT_STATUS_ID" (click)="viewDetail(detail)"
+              class="p-button-rounded p-button-success" icon="pi pi-plus" pTooltip="Añadir conteo"></button>
+          </td>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <span class="p-column-title">{{col.header}}</span>
+              <app-ind-adjustment-label *ngIf="col.field === 'tight'; else textCell" [tight]="detail[col.field]">
+              </app-ind-adjustment-label>
+              <ng-template #textCell>
+                <span>{{col.template(detail)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>
+            <span class="p-column-title">Bloqueo</span>
+            <p-tableCheckbox *ngIf="detail.id>0" [value]="detail" pTooltip="Bloqueo" [disabled]="dstatus"></p-tableCheckbox>
+          </td>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+</p-fieldset>
+<div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+  <button pButton pRipple label="Guardar"
+    *ngIf="(_conteo.idstatus<=this.statusIDs.IN_ACTION_STATUS_ID || _conteo.idstatus==this.statusIDs.DELAYED_STATUS_ID) && this.userPermissions.allowed(this.permissionsIDs.UPDATE_INVENTORY_COUNT_PERMISSION_ID)"
+    [disabled]="loading" (click)="save()" icon="pi pi-save" class="btn p-button-info p-mr-2"></button>
+  <button pButton pRipple label="Iniciar"
+    *ngIf="_conteo.id>0 && (_conteo.idstatus==this.statusIDs.IN_DRAFT_STATUS_ID || _conteo.idstatus==this.statusIDs.DELAYED_STATUS_ID)  && this.userPermissions.allowed(this.permissionsIDs.ACTION_INVENTORY_COUNT_PERMISSION_ID)"
+    [disabled]="loading" (click)="start()" icon="pi pi-play" class="btn p-button-save p-mr-2"></button>
+  <button pButton pRipple label="Anular"
+    *ngIf="_conteo.id>0 && (_conteo.idstatus<=this.statusIDs.WAITING_FOR_ADJUSTMENT_STATUS_ID || _conteo.idstatus==this.statusIDs.DELAYED_STATUS_ID) && this.userPermissions.allowed(this.permissionsIDs.CANCELED_INVENTORY_COUNT_DETAIL__PERMISSION_ID)"
+    [disabled]="loading" (click)="cancel()" icon="pi pi-ban" class="btn p-button-danger p-mr-2"></button>
+  <!-- <p-splitButton pRipple label="Finalizar"
+    *ngIf="_conteo.id>0 && _conteo.idstatus==this.statusIDs.IN_ACTION_STATUS_ID && this.userPermissions.allowed(this.permissionsIDs.FINALIZED_INVENTORY_COUNT_DETAIL__PERMISSION_ID)"
+    (onClick)="finalizeWithAdjustment()" [disabled]="loading" class="p-button-save p-mr-2" tooltipPosition="top"
+    [model]="itemsActions"></p-splitButton> -->
+
+    <button pButton pRipple label="Finalizar" (click)="menu.toggle($event)"  icon="pi pi-check"
+    *ngIf="_conteo.id>0 && _conteo.idstatus==this.statusIDs.IN_ACTION_STATUS_ID && this.userPermissions.allowed(this.permissionsIDs.FINALIZED_INVENTORY_COUNT_DETAIL__PERMISSION_ID)"
+     [disabled]="loading" class="p-button-save p-mr-2" tooltipPosition="top"></button>
+     <p-tieredMenu #menu [model]="item" [popup]="true"></p-tieredMenu>
+  <button pButton pRipple label="Regresar" *ngIf="!isFromCalendar" (click)="backList()" icon="pi pi-arrow-left"
+    class="btn p-button-secondary p-mr-2"></button>
+</div>
+
+
+<product-count-modal [(showDialogAddProduct)]="_showdialogAddProduct" [(_DetailListTemp)]="_DetailListTemp"
+  [(idCategory)]="_idCategory" [(idArea)]="_idArea"></product-count-modal>
+<count-for-count-modal-list [(showDialogDetail)]="_showdialogDetail" (onSubmit)="onSubmitCountDetail($event)" [(_OperatorListTemp)]="_OperatorListTemp"
+  [(_CountListTemp)]="_CountListTemp" [(_detailinventorycount)]="_detailinventorycount" [(filters)]="filters"
+  [(_conteo)]="_conteo"></count-for-count-modal-list>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" [title]="operatorModalTitle"
+  (onToggle)="onHideOperator($event)" [multiples]="multiples" [(_OperatorListTemp)]="_OperatorListTemp"
+  [(_conteo)]="_conteo"></operator-modal-list>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

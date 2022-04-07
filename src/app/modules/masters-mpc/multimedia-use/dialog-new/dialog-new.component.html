@@ -1,0 +1,44 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+  <h5 class="p-m-0">Uso de multimedia</h5>
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="name">Nombre<span [ngStyle]="{'color':'red'}">*</span></label>
+            <input (keyup.enter)="saveMultimediaUse()" [class]="submitted && (!_multimediause.name || !_multimediause.name.trim()) ? 'ng-dirty ng-invalid' : ''" type="text" (input)="_validations.toCapitalizeSimbology($event)" pInputText id="name" [(ngModel)]="_multimediause.name" (paste)="_validations.noPaste($event)" maxlength="100" autofocus (keypress)="_validations.keyPressOnlyLetters($event);" />
+            <small style="display: block;" class="p-invalid" *ngIf="submitted && (_multimediause.name.trim() == '')">El nombre es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="description">Descripción</label>
+            <input (keyup.enter)="saveMultimediaUse()" id="description" type="text" pInputText [(ngModel)]="_multimediause.description" maxlength="80"/>
+          </div>
+          <!-- <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="maxAmount">Cantidad máxima<span [ngStyle]="{'color':'red'}">*</span></label>
+            <input (keyup.enter)="saveMultimediaUse()" [class]="submitted && (!_multimediause.maxAmount || _multimediause.maxAmount <= 0) ? 'ng-dirty ng-invalid' : ''" id="maxAmount" oninput="this.value.length > 12 ? this.value.substr(0,11) : this.value" (paste)="_validations.noPaste($event)" type="text" pInputText [(ngModel)]="_multimediause.maxAmount" min="1" maxlength=12 max="100000000000" (keypress)="_validations.keyPressOnlyNumbers($event);" />
+            <small style="display: block;" class="p-invalid" *ngIf="submitted && _multimediause.maxAmount <= 0 && _multimediause.maxAmount != undefined">La cantidad máxima no puede ser menor o igual a cero</small>
+            <small style="display: block;" class="p-invalid" *ngIf="submitted && (_multimediause.maxAmount == undefined || !_multimediause.maxAmount)">La cantidad máxima es requerida</small>
+          </div> -->
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="color">Color</label><br>
+            <p-colorPicker (keyup.enter)="saveMultimediaUse()" [(ngModel)]="_multimediause.color" id="color" style="width: 100%;"></p-colorPicker>
+            <small style="display: block;" class="p-invalid" *ngIf="submitted && (_multimediause.color == undefined || _multimediause.color == '')">El color es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Estatus<span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown (keyup.enter)="saveMultimediaUse()" [options]="status" [disabled]="_multimediause.id <= 0 || _multimediause.id == undefined" appendTo="body" [(ngModel)]="_multimediause.active" placeholder="Estatus">
+
+            </p-dropdown>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button pButton pRipple label="Guardar" (click)="saveMultimediaUse()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

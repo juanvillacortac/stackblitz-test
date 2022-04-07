@@ -1,0 +1,95 @@
+<div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+    <div class="p-field p-grid">
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="active">Número de documento</label>
+            <input type="text" [(ngModel)]="filter.documentNumber"  maxlength="255" pInputText >
+        </div>
+  
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="Categoría">Fecha a filtrar</label>
+          <p-dropdown [filter]="true"  
+              placeholder="Seleccione..." [options]="dateFilterOptions" [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados." [(ngModel)]="filter.filterDateTypeOfId">
+          </p-dropdown>
+      </div>
+  
+      <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="transactionDate">Fecha inicio</label>
+          <p-calendar [showIcon]="true" inputId="transactionDate"  
+              [monthNavigator]="true" [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true"
+              yearRange="1970:2030" dateFormat="dd/mm/yy" [(ngModel)]="filter.beginDate">
+          </p-calendar>
+      </div>
+  
+      <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="transactionDate">Fecha fin</label>
+          <p-calendar [showIcon]="true" inputId="transactionDate" 
+              [monthNavigator]="true" [readonlyInput]="true"  [(ngModel)]="filter.endDate" showButtonBar="true" [yearNavigator]="true"
+              yearRange="1970:2030" dateFormat="dd/mm/yy" >
+          </p-calendar>
+      </div>
+  
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="lote">Banco origen</label>
+            <p-dropdown [filter]="true" [options]="originBanks"
+              placeholder="Seleccione..." [resetFilterOnHide]="true" [(ngModel)]="filter.bankId" emptyFilterMessage="Sin resultados." 
+              emptyMessage="Sin resultados." (onChange)="updateAccounts()">
+            </p-dropdown>
+        </div>
+  
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+          <label for="Categoría">Numero de cuenta origen</label>
+          <p-dropdown [filter]="true" 
+              placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." [(ngModel)]="filter.bankAccount" [options]="bankAccounts"
+              emptyMessage="Sin resultados." [disabled]="!filter.bankId || filter.bankId == -1 ">
+          </p-dropdown>
+        </div> 
+
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="lote">Proveedor</label>
+            <div class="p-inputgroup">
+              <input type="text" pInputText pKeyFilter="int" [value]="filter.provider ? filter.provider : ''"
+                 disabled>
+              <button pButton icon="pi pi-times" style="border-radius: 0;" ></button>
+              <button pButton icon="pi pi-search"
+                  style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+                  (click)="supplierModal = true"></button>
+            </div>
+          </div>
+      
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Tipo </label>
+            <p-dropdown [filter]="true"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." [(ngModel)]="filter.paymentTypeId" [options]="paymentTypes"
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+  
+        <div class="p-field p-col-12 p-md-3 p-lg-3 p-mt-3">
+            <label for="Categoría">Estatus </label>
+            <p-dropdown [filter]="true"
+                [options]="paymentStatusses"
+                placeholder="Seleccione..." [resetFilterOnHide]="true" [(ngModel)]="filter.paymentStatusId" emptyFilterMessage="Sin resultados."
+                emptyMessage="Sin resultados.">
+            </p-dropdown>
+        </div>
+    </div>
+  </div>
+  
+  <div class="p-grid p-align-center vertical-container">
+    <div class="p-d-flex p-jc-end p-col-12 p-lg-12" style="width: 100%">
+        <button pButton pRipple label="Buscar" [disabled]="loading"   icon="pi pi-search"
+            class="p-button-info p-mr-2" (click)="search()"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clean()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>
+
+<sale-transactions-client-modal
+    [(displayModal)]="supplierModal"
+    [clients]="suppliers"
+    [classifications]="supplierClassifications"
+    (onSelect)="getSupplier($event)"
+  ></sale-transactions-client-modal>
+   
+  

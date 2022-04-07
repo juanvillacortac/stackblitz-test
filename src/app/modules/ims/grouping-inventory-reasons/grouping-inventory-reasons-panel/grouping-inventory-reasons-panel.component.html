@@ -1,0 +1,29 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}">
+    <h5 class="p-m-0">Agrupación de motivos de inventario</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input id="float-input"  [(ngModel)]="_grouping.name" [class]="submitted && (!_grouping.name || !_grouping.name.trim()) ? 'ng-dirty ng-invalid' : ''"  [pKeyFilter]="valid" type="text" pInputText (input)="_validations.toCapitalizeString($event)" maxlength="50" (keyup.enter)="submit()" (paste)="_validations.noPaste($event)" required >                   
+                    <small class="p-invalid" *ngIf="submitted && (!_grouping.name || !_grouping.name.trim())">El nombre es requerido</small>
+                </div>    
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <!-- <p-checkbox  name="active" [(ngModel)]="_pricegrouping.active" [binary]="true" [disabled]="_pricegrouping.id<=0"></p-checkbox> -->
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_grouping.active" placeholder="Estatus" [disabled]="_grouping.id<=0" (keyup.enter)="submit()" ></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

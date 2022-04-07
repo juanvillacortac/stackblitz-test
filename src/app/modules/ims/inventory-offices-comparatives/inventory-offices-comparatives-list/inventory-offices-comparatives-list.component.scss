@@ -1,0 +1,62 @@
+.box{
+    background: transparent !important;
+    border: 0px !important;
+    border-bottom: 0px solid #ddd !important;
+    margin-bottom: 0.5em;
+}
+.box-tittle{
+    margin-top: 0.5em;
+    color:#9199a9;
+    font-size: 12px;
+    font-weight: 600;
+}
+.box-value{
+    color: #555;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+}
+.box-sub-value{
+    color: #555;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: right;
+}
+
+
+.status-badge {
+    border-radius: 2px;
+    padding: .25em .5rem; 
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .3px;
+
+    &.status-active {
+        background: #6366F1;
+        color: #fff;
+    }
+
+    &.status-standBy {
+        background: #b3e5fc;
+        color: #23547b;
+    }
+
+    &.office-option {
+        background-color: #ffd8b2;
+        color: #805b36;
+    }
+
+    &.positive-option {
+        background: #C8E6C9;
+        color: #256029;
+    }
+    &.negative-option {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+    &.cero-option {
+        background: #616364;
+        color: #ffff;
+    }
+}

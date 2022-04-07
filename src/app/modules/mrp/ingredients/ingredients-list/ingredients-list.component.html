@@ -1,0 +1,63 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_INGREDIENTS_PERMISSION_ID)" pTooltip=" {{ 'add' | translate }}" pButton pRipple icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INGREDIENTS_PERMISSION_ID)"  pTooltip= "{{ 'filters' | translate }}" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"></button>
+        </div>
+    </div>
+
+    <app-ingredients-filters *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_INGREDIENTS_PERMISSION_ID)" (search)="search()" [(filters)]="ingredientFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-ingredients-filters>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="ingredientList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display}" [pSortableColumn]="col.field" >
+                  {{col.header}}
+                  <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-ingredient let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                    <app-active-label *ngIf="col.field === 'isDerived'; else textCell" [active]="ingredient[col.field]" [isYesOrNoMode]="false"></app-active-label>
+             
+                    <ng-template #textCell >
+                        <span *ngIf="col.field !== 'edit'; else editCell">{{col.template(ingredient)}} </span>
+                    </ng-template>
+
+                    <ng-template #editCell  >
+                        <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.UPDATE_INGREDIENTS_PERMISSION_ID)">
+                            <button   pButton pRipple icon="pi pi-pencil"  pTooltip=" {{ 'edit' | translate }}" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(ingredient)"></button>
+                        </ng-container>
+                        <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.CHECK_SUBSTITUTE_INGREDIENT_PERMISSION_ID)">
+                            <button   pButton pRipple icon="pi pi-eye" pTooltip=" {{ 'view_detail' | translate }}"  class="p-button-rounded p-button-secondary p-mr-2" (click)="onShowIngredientSustitution(ingredient)"></button>
+                        </ng-container>
+                    </ng-template>
+                   
+                </td>
+            </ng-container>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>
+<p-sidebar [(visible)]="showDialog" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="showDialog" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}" >
+ <app-ingredients-detail [(ingredients)]="ingredient" [(exceptionsIngredients)]="ingredientList"  (hideDialogForm)="childCallBack($event)" ></app-ingredients-detail> 
+</p-sidebar>
+
+<p-sidebar [(visible)]="openSustitutionIngredientSetting" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="openSustitutionIngredientSetting" styleClass="p-sidebar-md" [style]="{'overflow-y': 'auto'}">
+    <app-substitutions-ingredient-setting [(ingredient)]="ingredient" (onHideDialogForm)="childCallBackSustitution($event)" ></app-substitutions-ingredient-setting>
+</p-sidebar>

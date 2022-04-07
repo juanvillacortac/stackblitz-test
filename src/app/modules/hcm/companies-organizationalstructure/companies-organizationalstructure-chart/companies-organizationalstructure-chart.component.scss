@@ -1,0 +1,88 @@
+
+:host ::ng-deep .p-organizationchart {
+
+  .p-person {
+    padding: 0;
+    border: 1px solid #eee;
+    background-color: #ffffff;
+    color: #495ebb;
+    z-index: 0;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .node-header, .node-content {
+    padding: .7rem 1.7rem;
+    // border: 1px solid #495ebb;
+    // background-color: #495ebb;
+    color: #fff;
+    border: 1px solid #8fb56f;
+    background-color: #8fb56f;
+  }
+
+  .department-cfo {
+    background-color: #7247bc;
+    color: #ffffff;
+  }
+
+  .department-coo {
+    background-color: #a534b6;
+    color: #ffffff;
+  }
+
+  .department-cto {
+    // background-color: #e9286f;
+    background-color: #65afc4;
+    color: #ffffff;
+  }
+
+  p-cargo {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem !important;
+    border-radius: 50px;
+  }
+  .p-overlaypanel .p-component{
+    top: 0px !important;
+    left: 0px !important;
+    width: 100px !important;
+  }
+  .p-toast-message{
+    background-color: #cce5ff;
+    top: calc(45% - 100px)!important;
+    margin-top: 10% !important;
+  }
+
+
+}
+
+:host ::ng-deep {
+  .p-panel-header span {
+      color: #5E81AC;
+      font-size: 1.5rem;
+      font-weight: 700 !important;
+  }
+
+  .p-panel .p-panel-header {
+      border: unset;
+      background: unset;
+  }
+
+  div.p-panel-content {
+      border: unset;
+  }
+
+  .p-panel .p-panel-content {
+      padding: 0 !important;
+  }
+
+  .p-panel-header.ng-star-inserted {
+      padding: 0rem 1.25rem;
+      margin-bottom: 1rem;
+  }
+
+  .p-datatable-scrollable-view {
+      height: 275px;
+  }
+  
+}

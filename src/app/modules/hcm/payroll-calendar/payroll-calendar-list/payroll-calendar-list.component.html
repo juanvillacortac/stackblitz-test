@@ -1,0 +1,86 @@
+<div class="card">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+      <!--<label *ngIf="!showFilters" id="filterTitle">Empresas</label>-->
+      <h4 *ngIf="!showFilters" id="filterTitle">Calendario de nómina</h4>
+    </div>
+    <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row">
+      <div>
+        <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_CALENDAR_HCM_PERMISSION_ID)" icon="pi pi-plus" class="p-button-success boton-crear p-ml-3"  
+        pTooltip="Crear nuevo" tooltipPosition="top" (click)="newCalendar()" id="add" [disabled]="notFound"></button>
+        <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+        (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+      </div>
+    </div>
+  </div>
+  <app-payroll-calendar-filter (onSearch)="search()" [(filters)]="payrollCalendarFilter" (clearList)="clearList()" [showList]="showList"  [expanded]="showFilters" [loading]="loading"
+    class="p-mt-3">
+  </app-payroll-calendar-filter> 
+</div>
+
+ <div class="card" *ngIf="payrollcalendars.length > 0 && showList">
+  <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row p-mb-4" >
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-md-0 p-mb-lg-0" *ngIf="payrollcalendars.length > 0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+    <div>
+      <button pButton pRipple icon="pi pi-plus" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_CALENDAR_HCM_PERMISSION_ID)" class="p-button-success" [ngClass]="{'p-button-danger':showSidebar}"
+      pTooltip="Agregar período" tooltipPosition="top" (click)="newPeriod()" [disabled]="notAddDate">
+      </button>
+    </div>
+  </div>
+    <p-table [resizableColumns]="false" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" 
+      #dt [columns]="displayedColumns" [rowHover]="true" [value]="payrollCalendarList" (sortFunction)="customSort($event)" [customSort]="true">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }" pResizableColumn [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>  
+          <th></th>    
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-payrollcalendars let-columns="columns">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+              
+              <div *ngIf="col.field == 'status'; else textCell" style="text-align: left;">
+                <div *ngIf="payrollcalendars.idStatus == 72" [class]="'status-badge status-delayed'">{{payrollcalendars.status}}</div>
+
+                <div *ngIf="payrollcalendars.idStatus != 72" [class]="'status-badge status-finalize'">{{payrollcalendars.status}}</div>
+              </div>
+             
+              <ng-template #textCell>
+                <span>{{col.template(payrollcalendars)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>
+            <button *ngIf="payrollcalendars.idStatus == 72 && this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_CALENDAR_HCM_PERMISSION_ID)"  pButton pRipple type="button" icon="pi pi-pencil" (click)="onEdit(payrollcalendars)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button>
+            <button *ngIf="payrollcalendars.idStatus != 72" pButton pRipple type="button" icon="pi pi-eye" (click)="onEdit(payrollcalendars)" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Ver detalles" tooltipPosition="top" placeholder="Top"></button>
+          </td>
+        </tr>
+      </ng-template> 
+      <ng-template pTemplate="footer" let-columns>
+        <ng-container>
+          <tr *ngIf="payrollcalendars.length == 0" >
+            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+            
+            </td>
+          </tr>
+        </ng-container>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="card" *ngIf="payrollcalendars && payrollcalendars.length == 0 && showList">
+    <p-message severity="info"  text="No existen resultados que coincidan con la búsqueda." styleClass="p-col-12 p-mr-2"></p-message>
+  </div>
+<!-- End Table-->
+<app-payroll-calendar-panel *ngIf="showSidebar" [showDialog]="showSidebar" [payrollType]="idPayrollCalendar" [year]="yearCalendar" [tope]="topDate" (backUnChanged)="resetValues($event)"></app-payroll-calendar-panel>
+<app-payroll-calendar-modal *ngIf="showModal" [showDialog]="showModal" [record]="calendarPeriod" [filter]="payrollCalendarFilter" [tope]="topDate" (backUnChange)="resetValues()" (saveData)="updateCalendar($event)"></app-payroll-calendar-modal>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

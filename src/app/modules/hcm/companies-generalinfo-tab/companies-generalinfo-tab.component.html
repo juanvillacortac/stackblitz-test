@@ -1,0 +1,68 @@
+<div class="p-grid p-ml-3 p-mr-3">
+    <div class="p-col-12">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                <label>NIT:</label>
+            </div>
+            <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                <input type="text" pInputText disabled value="{{_company.nit}}" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                <label>Tipo:</label>
+            </div>
+            <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                <input type="text" pInputText disabled value="{{companyType}}" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-3 p-mt-2 p-fluid">
+                <label>Clase:</label>
+            </div>
+            <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                <input type="text" pInputText disabled value="{{companyClass}}" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-mt-2 p-fluid">
+                <label style="font-weight: bolder;">Cierre fiscal</label>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-3 p-fluid">
+                <label style="padding: 0px;">Mes:</label>
+            </div>
+            <div class="p-col-9 p-fluid">
+                <input style="padding: 0px !important;" type="text" pInputText disabled value="{{_company.closingMonth}}" />
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-3 p-fluid p-pt-0 p-pb-0">
+                <label style="padding: 0px;">Día:</label>
+            </div>
+            <div class="p-col-9 p-fluid p-pt-0 p-pb-0">
+                <input style="padding: 0px !important;" type="text" pInputText disabled value="{{_company.closingDay}}" />
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12 p-mt-2 p-fluid">
+                <label style="font-weight: bolder;">Teléfono</label>
+            </div>
+        </div>
+        <div class="p-col-12" style="padding-top: 0;padding-bottom: 0;">
+            <div class="p-grid" *ngFor="let tlf of _company.contactNumbers">
+                <div class="p-col-12 p-md-3 p-lg-3 p-fluid" style="padding-left: 0px !important;">
+                    <label>{{tlf.type}}: </label>
+                </div>
+                <div class="p-col-12 p-md-9 p-lg-9 p-fluid">
+                    <i class="pi pi-phone p-mr-2 p-mt-0" style="font-size: 1rem"></i><input id="tlf" type="text" pInputText disabled value="(+{{tlf.areaCode}}) {{tlf.number}}" />
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

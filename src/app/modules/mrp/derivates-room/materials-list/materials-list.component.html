@@ -1,0 +1,75 @@
+<div class="card">
+    <div class="p-grid p-ml-2">
+        <div class="p-col-4">
+            <div class="p-grid p-formgroup-inline">
+                <div class="p-field p-col">
+                    <h5 *ngIf='isEdit'>{{ 'mrp.ingredients.barcode' | translate }}</h5>
+                    <input type="text" pInputText [(ngModel)]="rawMaterial.barcode" [disabled]="isEdit" class="p-mt-2" numbersOnly> 
+                </div>
+                <div class="p-field p-col">
+                    <h5 *ngIf='isEdit'>Materia prima</h5>
+                    <label for="input" *ngIf='!isEdit'>Materia prima <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" pInputText [(ngModel)]="rawMaterial.name" [disabled]="isEdit" class="p-mt-2" lettersOnly>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-m-0">
+        <button pButton pRipple label="{{ 'mrp.cutting_order.add_derivative' | translate }}" icon="pi pi-plus" class="p-button-outlined p-mb-3" (click)="openNew()" ></button>
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true"  [value]="materials" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                <ng-container *ngFor="let col of columns">  
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                      {{ col.header | translate }}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+                    <th></th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-material let-columns="columns" let-rowData>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                  <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                      <div *ngIf="col.field === 'percentage'; else textCell">
+                            {{(material.percentage)|number:'1.2-2'}}%
+                       </div>
+                      <ng-template #textCell >
+                        {{rowData[col.field]}}
+                      </ng-template>
+                  </td>
+              </ng-container>
+                <td>                
+                    <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" pTooltip="{{ 'delete' | translate }}"  (click)="delete(material)" ></button>                          
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+               Total Rendimiento: {{ getTotalPerformance()|number:'1.2-2'}}%
+            </div>
+        </ng-template>
+          <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+        </p-table>
+    </div>
+
+    <div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+            <div class="p-field p-mr-2">
+                <button pButton type="button" pRipple  class="p-button-info" icon="pi pi-save" (click)="save()" label="{{ 'save' | translate}}"></button>
+            </div> 
+            <div class="p-field">
+                <button pButton type="button" pRipple  class="p-button-danger" icon="pi pi-times" (click)="cancelSettings()" label="{{ 'primeng.cancel' | translate}}"></button>
+            </div> 
+    </div>
+
+</div>
+
+<app-materials-search [(showPanel)]='showDialog' [(rawMaterialSelected)]="rawMaterial" (onHideDialog)="onHideDerivateDialog($event)" (itemsSelected)='itemsSelected($event)' [(addedMaterials)]="materials"></app-materials-search>
+
+<p-toast position="top-right" key="derivates"></p-toast>

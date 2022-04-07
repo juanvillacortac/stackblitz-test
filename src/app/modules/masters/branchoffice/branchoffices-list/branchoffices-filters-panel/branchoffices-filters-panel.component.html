@@ -1,0 +1,41 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.branchOfficeName" type="text" pInputText firstLetterUpperCase maxlength="100" (keyup.enter)="search()">
+                <label>Sucursal</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.branchOfficeCode" type="text" pInputText numbersOnly maxlength="10" (keyup.enter)="search()">
+                <label>Código</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.branchOfficeManager" type="text" pInputText lettersOnly maxlength="100" (keyup.enter)="search()">
+                <label>Gerente</label>
+            </span>
+        </div>
+    </div>    
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="companyList" [(ngModel)]="filters.idCompany" placeholder="Empresa" (keyup.enter)="search()"></p-dropdown><!-- [showClear]="true" -->
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="branchOfficeTypes" [(ngModel)]="filters.idBranchOfficeType" placeholder="Tipo de sucursal" (keyup.enter)="search()"></p-dropdown>
+    </div>    
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <p-dropdown [options]="statusList" [(ngModel)]="filters.active" placeholder="Estatus" (keyup.enter)="search()"></p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end" >
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

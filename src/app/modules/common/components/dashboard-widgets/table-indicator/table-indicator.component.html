@@ -1,0 +1,39 @@
+<div class="grid">
+    <div class="p-col-12">
+        <div class="card p-d-flex">
+          <div class="p-d-flex p-flex-column">
+            <!-- <h5 class="">Consolidado de ventas para el periodo actual</h5> -->
+            <p-table [value]="tableData" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">Descripción</th>
+                  <th [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">{{name}}</th>
+                  <th [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">Monto</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product>
+                <tr>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">{{product.description}}</td>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">{{product.quantity}}</td>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">${{formatAmount(product.amount)}}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="footer">
+                <tr>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">{{name}} netas</td>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">{{quantity}}</td>
+                  <td [ngStyle]="{'overflow-wrap': 'break-word'}" class="ui-resizable-column">${{formatAmount(amount)}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div class="p-d-flex p-flex-column knob-chart">
+            <p-chart type="pie" [data]="consolidatedSalesPie" [options]="pieOptions" [style]="{'width': '100px'}"></p-chart>
+            <p-knob class="p-as-center" [(ngModel)]="consolidatedSales" [size]="100" [max]="100" [readonly]="true"
+              valueTemplate="{value}%" [valueColor]="colors.red">
+            </p-knob>
+          </div>
+        </div>
+      </div>
+
+</div>

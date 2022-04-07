@@ -1,0 +1,43 @@
+:host ::ng-deep {
+
+    .p-dropdown{
+        width: 100%;
+    }
+
+    #factor input:first-child,
+    #conversion input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    #amount, #amount .p-inputnumber-input{
+        width: 100%;
+    }
+
+    #amount input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    @media screen and (max-width: 1024px){
+        .p-grid > .p-col-12{
+            width: 100%;
+        }
+
+        .inside{
+            margin-bottom: 1rem;
+        }
+
+        .p-sidebar{
+            overflow: scroll;
+        }
+    }
+
+    @media screen and (min-width: 1024px){
+        #factor, #conversion{
+          width: 100%;
+        }
+    }
+}

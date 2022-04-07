@@ -1,0 +1,21 @@
+<p-dialog header="Generar barra" (onShow)="ngOnInit()" (onHide)="hideDialog()" [(visible)]="showDialog"  [modal]="true" [style]="{width: '20vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+    <div class="p-grid p-fluid">
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-3">
+            <p-dropdown [(ngModel)]="IdTypeGenerationBar" [options]="typeGenerateBarList" appendTo="body" [disabled]="IdTypeGenerationBar>0">
+            </p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="BarCode" name="barcode" id="barcode" type="text" pInputText disabled>
+                    <label>Barra</label>
+                </span>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton *ngIf="BarCode == ''" (click)="GenerateBarCode()" pRipple label="Generar" icon="pi pi-circle-off" class="p-button-info p-mr-2"></button>
+        <button pButton *ngIf="BarCode != ''" (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times" class="p-button-info p-mr-2"></button>
+    </ng-template>
+</p-dialog>

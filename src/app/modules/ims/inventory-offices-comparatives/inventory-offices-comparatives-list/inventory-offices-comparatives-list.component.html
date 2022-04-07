@@ -1,0 +1,154 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_OFFICE_COMPARATIVES_REPORT_ID)" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"></button>
+        </div>
+    </div>
+    <app-inventory-offices-comparatives-filters *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_OFFICE_COMPARATIVES_REPORT_ID)" 
+    (search)="search()"  
+    (exportExcel)="exportExcel()" 
+    [(filters)]="filters" 
+    [expanded]="showFilters" 
+    [loading]="loading"  
+    [dataUnavailable]="dataUnavailable" 
+    [haveCostPermission]="checkPermission"
+    class="p-mt-3"></app-inventory-offices-comparatives-filters>
+</div>
+<div class="card p-m-0">
+    <p-table #dt 
+        [globalFilterFields]="['productName','barcode','category']"
+        [value]="inventoryProductByOffice" 
+        [paginator]="true" 
+        [rows]="10" 
+        [showCurrentPageReport]="true" 
+        [scrollable]="true"  
+        currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" 
+        [rowsPerPageOptions]="[10,25,50]"
+        dataKey="barcode"
+        [expandedRowKeys]="expandedRows" > 
+
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                {{ 'ims.inventory_offices_comparative.inventory_Products' | translate }}: 
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" >
+            <tr>
+               
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product  let-expanded="expanded">
+            <tr>
+                <td colspan="7">
+                     <!-- <img [alt]="item.representative.name" src="assets/showcase/images/demo/avatar/{{item.representative.image}}" width="32" style="vertical-align: middle" />-->
+                    
+                    <div class="timeline-row box">
+                        <div class="p-grid p-nogutter">
+                            <div class="p-col-1" style="text-align: center;">
+                                <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain p-mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </div>
+                            <div class="p-col-11">
+                                <div class="p-grid p-nogutter ">
+                                    <div class="p-col-8 timeline-content">  
+                                        <span class=" status-badge status-active" 
+                                            pTooltip=" {{ 'ims.inventory_offices_comparative.barCode_field' | translate }}"> {{product.barcode}}
+                                        </span> 
+
+                                        <span class=" p-ml-2 box-value">{{product.productName}}</span> 
+                                        
+                                        <span class="p-ml-2 status-badge status-standBy" *ngIf="product.scaleCode.length > 0" 
+                                             pTooltip="{{ 'ims.inventory_offices_comparative.scaleCode_field' | translate }}"> {{product.scaleCode}}
+                                        </span>
+
+                                        <div class=" title box-tittle">
+                                            <h6 pTooltip="{{ 'ims.inventory_offices_comparative.category_field' | translate }}" tooltipPosition="left">{{product.category}}</h6>
+                                        </div> 
+                                    </div>
+                                    <div class="p-col-4 timeline-time" style="text-align: end;" *ngIf="!expanded">
+                                        <span class="box-tittle">{{ 'ims.inventory_offices_comparative.inventory_Total' | translate }}: </span>
+                                        <span  class="status-badge " 
+                                        [ngClass]="{'cero-option': getTotalInventory(product) === 0,'positive-option': getTotalInventory(product) >0, 'negative-option': getTotalInventory(product) < 0}">{{ getTotalInventory(product)|number:'1.2-2'}} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-product>
+            <tr>
+                <td colspan="7">
+                    <div class="p-p-2">
+                        <p-table [value]="product.offices" dataKey="branchOfficeId" [columns]="_selectedColumns"  >
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <ng-container *ngFor="let col of columns" >
+                                        <th [ngStyle]="{'display': col.display, 'text-align': col.dataType === 'number' ? 'right': 'left'}" [pSortableColumn]="col.field" >
+                                            {{ col.header | translate }}
+                                         <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+                                        </th>
+                    
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-office  let-columns="columns">
+                                <tr>
+                                    <ng-container *ngFor="let col of columns">
+                                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word', 'text-align': col.dataType === 'number' ? 'right': 'left'}" >
+                    
+                                            <div *ngIf="col.field === 'branchOffice'; else inventoryCell" >
+                                                <span  class="status-badge office-option">{{(office[col.field])}}</span>
+                                            </div>
+                                            
+                                            <ng-template #inventoryCell >
+                                                <span  class="status-badge"  
+                                                [ngClass]="{'cero-option': (office[col.field]) === 0,'positive-option': (office[col.field]) > 0, 'negative-option':(office[col.field]) < 0}"
+                                                *ngIf="col.field === 'inventory'|| col.field === 'unitNumbers'; else numberCell">{{(office[col.field]) |number:'1.2-2'}} </span>
+                                            </ng-template>
+
+                                            <ng-template #numberCell >
+                                                <span *ngIf="col.dataType === 'number'; else textCell">{{(office[col.field]) |number:'1.2-2'}} </span>
+                                            </ng-template>
+                    
+                                            <ng-template #textCell >
+                                                <span>{{(office[col.field])}}</span>
+                                            </ng-template>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">{{ 'result_not_found' | translate }}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div>
+                                     {{ 'ims.inventory_offices_comparative.inventory_Total' | translate }}: 
+                                     <span  class="status-badge " 
+                                     [ngClass]="{'cero-option': getTotalInventory(product) === 0,'positive-option': getTotalInventory(product) > 0, 'negative-option': getTotalInventory(product) < 0}">{{ getTotalInventory(product)|number:'1.2-2'}} </span>
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [ngStyle]="{'text-align': 'center', 'font-weight': '600'}" [attr.colspan]="1"> {{ 'result_not_found' | translate }}</td>
+            </tr>
+            </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+</div>

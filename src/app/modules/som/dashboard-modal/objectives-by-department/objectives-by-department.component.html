@@ -1,0 +1,34 @@
+<p-table [value]="dataDepartament" styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines" responsiveLayout="scroll">
+
+    <ng-template pTemplate="header">
+        <tr [ngStyle]="{'text-align': 'right'}">
+            <th>Departamento</th>
+            <th>Ventas</th>
+            <!-- <th>Comparador</th> -->
+            <th>Objetivo</th>
+            <th>Alcance </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-InventoryProductInfo ; let-ri ="rowIndex" >
+        <tr >
+            <td>{{InventoryProductInfo.departamento}}</td>
+            <td [ngStyle]="{'text-align': 'right'}">$ {{formatAmount1(InventoryProductInfo.venta)}}</td>
+            <!-- <td>{{InventoryProductInfo.comparador}}</td> -->
+            <td [ngStyle]="{'text-align': 'right'}">$ {{formatAmount1(InventoryProductInfo.meta)}}</td>
+            <td [ngStyle]="{'text-align': 'right'}"><p-tag styleClass="p-mr-2" severity={{InventoryProductInfo.direccion}} [rounded]="true" value="{{ formatAmount1(InventoryProductInfo.porcentaje)}}%"></p-tag></td>         
+        </tr>
+
+        <tr *ngIf="ri == dataDepartament.length - 1" class="p-rowgroup-footer">
+            <td [ngStyle]="{'text-align':  'left', 'border-top': '2px solid black','overflow-wrap': 'break-word'}"><h3>Total:</h3></td>
+            <td [ngStyle]="{'text-align':  'right', 'border-top': '2px solid black','overflow-wrap': 'break-word'}"><h3>$ {{formatAmount1(totalVenta)}}</h3></td>
+            <!-- <td [ngStyle]="{'text-align':  'right','color':'#5E81AC', 'border-top': '2px solid black','overflow-wrap': 'break-word'}"></td> -->
+            <td [ngStyle]="{'text-align':  'right', 'border-top': '2px solid black','overflow-wrap': 'break-word'}"><h3>$ {{formatAmount1(totalObjetivo)}}</h3></td>
+            <td [ngStyle]="{'text-align':  'right', 'border-top': '2px solid black','overflow-wrap': 'break-word'}"></td>
+          
+        </tr>
+          
+
+        
+    </ng-template>
+</p-table>
+

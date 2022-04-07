@@ -1,0 +1,44 @@
+
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+  <h5 class="p-m-0">Países</h5>
+<hr/>
+<div class="p-grid">
+  <div class="p-col-12"> 
+      <div class="card">       
+          <div class="p-fluid p-grid p-formgrid">
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="active">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <input id="float-input"  [(ngModel)]="_dataCountry.name" lettersOnly [class]="submitted && (!_dataCountry.name || !_dataCountry.name.trim()) ? 'ng-dirty ng-invalid' : ''"  lettersOnly type="text" pInputText  (input)="_validations.toCapitalizeSimbology($event)"  maxlength="50" (keyup.enter)="saveCountry()" (paste)="_validations.noPaste($event)" required >                   
+                  <small class="p-invalid" *ngIf="submitted && (!_dataCountry.name || !_dataCountry.name.trim())">El nombre es requerido</small>
+              </div>             
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="float-input">Código telefónico <span [ngStyle]="{'color':'red'}">*</span></label> 
+                <!-- pattern="^[0-9]+" -->
+                <p-inputNumber id="ac-input"  [(ngModel)]="_dataCountry.areaCode" maxlength="4" min="0" max="9999" (keyup.enter)="saveCountry()" (paste)="_validations.noPaste($event)" required></p-inputNumber>
+                <small class="p-invalid" *ngIf="submitted && _dataCountry.areaCode <= 0">El código telefónico es requerido</small>
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="abbreviation">Abreviatura <span [ngStyle]="{'color':'red'}">*</span></label>               
+                  <input id="ab-input" [(ngModel)]="_dataCountry.abbreviation" type="text" [class]="submitted && (!_dataCountry.abbreviation || !_dataCountry.abbreviation.trim()) ? 'ng-dirty ng-invalid' : ''" lettersOnly pInputText (input)="_validations.toUppercaseString($event)" maxlength="3" (keyup.enter)="saveCountry()" (paste)="_validations.noPaste($event)" required>
+                  <small class="p-invalid" *ngIf="submitted &&( !_dataCountry.abbreviation || !_dataCountry.abbreviation.trim())">La abreviatura es requerida.</small>
+                  <small class="p-invalid" *ngIf="(submitted &&( _dataCountry.name.trim() && _dataCountry.name.trim().toLocaleUpperCase() == _dataCountry.abbreviation.trim().toLocaleUpperCase()))|| ( _dataCountry.name.trim() && _dataCountry.name.trim().toLocaleUpperCase() == _dataCountry.abbreviation.trim().toLocaleUpperCase())">La abreviatura debe ser diferente al nombre</small>
+              </div>
+   
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                  <!-- <p-checkbox  name="active" [(ngModel)]="_coin.active" [binary]="true" [disabled]="_coin.id<=0"></p-checkbox> -->
+                  <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_dataCountry.active" placeholder="Estatus" [disabled]="_dataCountry.id<=0" (keyup.enter)="saveCountry()"></p-dropdown>
+              </div>
+              <div class="p-field p-col-12 p-md-12 p-sm-12">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+              </div> 
+              <div class="p-field p-col-12 p-md-12">
+                      <button pButton pRipple label="Guardar" (click)="saveCountry()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+              </div> 
+          </div>
+      </div>
+  </div>
+</div>
+</p-sidebar>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

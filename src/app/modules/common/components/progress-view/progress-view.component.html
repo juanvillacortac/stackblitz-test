@@ -1,0 +1,4 @@
+<div class="progress-view p-progressbar-determinate" [ngStyle]="{'width.%': width }">
+    <div class="progress-view-value" [ngStyle]="{'width.%': progress, 'display': 'block', 'background': backgroundColor  }"></div>
+    <div class="progress-view-text" [ngStyle]="{ 'text-align': align, 'margin-left': align == 'center' ? '0%' : '4%' }">{{ textToShow }}</div>
+</div>

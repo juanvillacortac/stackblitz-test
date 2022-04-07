@@ -1,0 +1,55 @@
+<p-panel header="Estructura organizativa" [toggleable]="true" class="readOnlyCard">
+  <div class="p-panel-content" style="overflow:scroll;" *ngIf="data2">
+    <p-organizationChart [value]="data2" selectionMode="single" [(selection)]="selectedNode"
+      (onNodeSelect)="onNodeSelect($event)" styleClass="company">
+      <ng-template let-node pTemplate="person">
+        <div class="node-content p-shadow-3">
+          <img *ngIf="node.FotoURL" src="{{node.FotoURL}}" width="45" height="45" style="border-radius:50px;">
+          <img *ngIf="!node.FotoURL && node.data.name" src="https://ui-avatars.com/api/?name={{node.data.name}}&background=fff&color=7247bc&rounded=true&bold=true&size=44">
+          <div *ngIf="node.data.name">{{node.data.name}}</div>
+          <div *ngIf="node.label" class="p-cargo">{{node.label}}</div>
+        </div>
+      </ng-template>
+      <ng-template let-node pTemplate="department">
+        {{node.label}}
+      </ng-template>
+    </p-organizationChart>
+  </div>
+  <div *ngIf="!data2">
+    <div class="p-grid">
+      <div class="p-col-12 p-fluid">
+        <p-messages severity="info">
+          <ng-template pTemplate>
+            <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+            <div class="p-ml-2">No existen datos asociados al registro actual</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+  <p-dialog header="{{Cargo}}" [(visible)]="displayPosition" [position]="position" [modal]="false"
+    [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-text-center">
+      <img *ngIf="FotoURL" src="{{FotoURL}}" width="45" height="45" style="border-radius: 50px;">
+      <img *ngIf="!FotoURL && PlazasFijas==1 && Nombre" src="https://ui-avatars.com/api/?name={{Nombre}}&background=fff&color=7247bc&rounded=true&bold=true&size=44">
+      <div *ngIf="PlazasFijas==1">{{Nombre}}</div>
+      <div *ngIf="Cargo" class="p-cargo">{{Cargo}}</div>
+      <h5>Plazas y ocupación</h5>
+      <div class="p-grid">
+          <div class="p-col-12 p-md-6 p-lg-6">
+              <div class="box">Ocupacion Fija: {{OcupacionFija}} </div>
+          </div>
+          <div class="p-col-12 p-md-6 p-lg-6">
+              <div class="box">Ocupacion Temporal: {{OcupacionTemporal}} </div>
+          </div>
+          <div class="p-col-12 p-md-6 p-lg-6">
+              <div class="box">Plazas Fijas: {{PlazasFijas}} </div>
+          </div>
+          <div class="p-col-12 p-md-6 p-lg-6">
+            <div class="box">Plazas Temporales: {{PlazasTemporales}} </div>
+          </div>
+      </div>
+
+    </div>
+  </p-dialog>
+  </p-panel>

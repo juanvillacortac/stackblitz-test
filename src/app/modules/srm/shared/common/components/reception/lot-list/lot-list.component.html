@@ -1,0 +1,213 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Lotes por empaques" [(visible)]="showDialog"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'80vw'}" [modal]="true" class="address-dialog"
+    [draggable]="false" [resizable]="false">
+    <p-tabView id="ChildTab" [(activeIndex)]="activeIndexsu" (onChange)="handleChange($event)">
+        <p-tabPanel header="Búsqueda" [selected]="tabdefault" #bsearch>
+            <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Buscar..." />
+                </span>
+            </div>
+            <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+                <div class="p-col-12 p-md-4 p-lg-3">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input [(ngModel)]="lotFilter.internalNumberLot" name="numloteinterno" id="numloteinterno"
+                                type="text" pInputText (keyup.enter)="search()" maxlength="64">
+                            <label>Número de lote interno</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input [(ngModel)]="lotFilter.numberLot" name="numlote" id="numlote" type="text" pInputText
+                                (keyup.enter)="search()" maxlength="4000">
+                            <label>Número de lote</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha inicio de vencimiento" tooltipPosition="right" life="500">
+                    <p-calendar id="ToD" [(ngModel)]="iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+                        [showIcon]="true" appendTo="body">
+                    </p-calendar>
+                </div>
+
+                <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha fin de vencimiento" tooltipPosition="right" life="500">
+                    <p-calendar id="ToF" [minDate]="iDate" [(ngModel)]="fDate" dateFormat="dd/mm/yy"
+                        (keyup.enter)="search()" [showIcon]="true" appendTo="body">
+                    </p-calendar>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+                    <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+                        class="p-button-info p-mr-2"></button>
+                    <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+                        class="p-button-secondary p-mr-2"></button>
+                </div>
+            </div>
+
+
+            <div class="card p-m-0">
+                <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="lotProduct"
+                    [(selection)]="selectionLot" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <ng-container *ngFor="let col of columns">
+
+                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-lot let-columns="columns">
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="lot"></p-tableCheckbox>
+                            </td>
+                            <ng-container *ngFor="let col of columns">
+                                <td [ngStyle]="{'display': col.display }">
+                                    <app-active-label *ngIf="col.field === 'active'; else textCell"
+                                        [active]="lot[col.field]"></app-active-label>
+                                    <ng-template #textCell>
+                                        <span>{{col.template(lot)}} </span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="paginatorleft">
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                    </ng-template>
+                </p-table>
+                <div class="p-field p-col-12 p-md-12 p-d-flex p-jc-end">
+                    <button pButton pRipple label="Continuar" (click)="add()" pTooltip="Agregar seleccionados"
+                         class="p-button-info p-mr-2"></button>
+                    <button icon="pi pi-ban" (click)="showDialog=false" pButton pRipple label="Cancelar"
+                        class="p-button-secondary p-mr-2">
+                    </button>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Seleccionados" [disabled]="lotselected.length <=0" [selected]="tabselected">
+            <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Buscar..." />
+                </span>
+            </div>
+            <div class="card p-m-0">
+                <div class="p-grid">
+                    <div class="p-md-8">
+                        <p-table #dtsele [columns]="displayedColumns2" [rowHover]="true" [value]="lotselected"
+                            [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+                            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo"
+                            (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                            selectionMode="single" [(selection)]="selecteditem">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <!-- <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>  -->
+                                    <ng-container *ngFor="let col of columns">
+
+                                        <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                            {{col.header}}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-lot let-columns="columns">
+                                <tr [pSelectableRow]="lot">
+                                    <!-- <td>
+                                <p-tableCheckbox [value]="lot"></p-tableCheckbox>
+                            </td> -->
+                                    <ng-container *ngFor="let col of columns">
+                                        <td [ngStyle]="{'display': col.display }">
+                                            <app-active-label *ngIf="col.field === 'active'; else textCell"
+                                                [active]="lot[col.field]"></app-active-label>
+                                            <ng-template #textCell>
+                                                <span>{{col.template(lot)}} </span>
+                                            </ng-template>
+                                        </td>
+                                    </ng-container>
+                                    <td>
+                                        <button (click)="removeselected(lot)" pButton pRipple icon="pi pi-times"
+                                            class="p-button-rounded p-button-danger p-mr-2"
+                                            pTooltip="Eliminar"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="paginatorleft">
+                            </ng-template>
+                            <ng-template pTemplate="paginatorright">
+                            </ng-template>
+
+                            <ng-template pTemplate="summary">
+                                <div class="p-d-flex p-ai-center p-jc-between">
+                                     Total : {{sumpackaging.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) }}.
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-md-4">
+                        <p-fieldset>
+                            <ng-template pTemplate="header">Empaques</ng-template>
+                            <div class="p-d-flex">
+                                <div class="p-grid">
+                                    <p-divider layout="vertical"></p-divider>
+                                    <div class="p-grid">
+
+                                        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+                                            <b>Presentacion: </b>
+                                            {{selecteditem.presentacionPackagin}}
+                                        </div>
+                                        <div class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+                                            <b>Recibidos en factura: </b>
+                                            {{this.ProductLot.detail.receivedPackaging}}
+                                        </div>
+                                        <div class="p-col-12 p-md-12 p-sm-12 p-lg-12">
+                                            <label><b>Numero de lote interno:</b>
+                                                {{selecteditem.internalNumberLot}}</label>
+                                        </div>
+                                        <div class="p-field p-col-12 p-sm-6 p-md-6 p-lg-6">
+                                            <label>Cantidad</label>
+                                            <p-inputNumber mode="decimal" [minFractionDigits]="0"
+                                                [(ngModel)]="selecteditem.cantPackaging" (keypress)="calculate($event.target.value)" ></p-inputNumber>
+                                            <small class="p-invalid"
+                                                *ngIf="load && (selecteditem.cantPackaging==0)">Número
+                                                de emapque debe ser mayor a 0.</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-d-flex p-jc-end">
+                    <button pButton pRipple label="Agregar" (click)="submitLot()" icon="pi pi-save"
+                        class="p-button-info p-mr-2"></button>
+                    <button icon="pi pi-ban" (click)="showDialog=false" pButton pRipple label="Cancelar"
+                        class="p-button-secondary p-mr-2">
+                    </button>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>

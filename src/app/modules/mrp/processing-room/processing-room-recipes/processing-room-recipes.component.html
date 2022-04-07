@@ -1,0 +1,108 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-6 ">
+            <div class="p-col-12 p-d-flex p-ai-center p-flex-column p-flex-md-row" >
+                <div class="p-grid p-formgroup-inline">
+                    <div class="p-field p-col" style="margin-bottom:0px;">
+                        <h3>{{processingRoom.name}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12  p-md-6">
+            <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+                <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                </span>
+                <div>
+                    <button pButton pRipple type="button" *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PROCESSINGROOMRECIPE_PERMISSION_ID)" 
+                    pTooltip=" {{ 'add' | translate }}"[disabled]="loading" (click)="search()" icon="pi pi-plus" class="p-button-success"></button>
+                    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PROCESSINGROOM_PERMISSION_ID)"   
+                    pTooltip= "{{ 'filters' | translate }}" pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="margin-top:0px;"/>
+    <app-processing-room-filters *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PROCESSINGROOM_PERMISSION_ID)" (searchRecipe)="loadRecipes()"
+    [(recipeFilters)]="filter" [roomRecipesFilter]="true" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-processing-room-filters>
+
+    <div class="card widget-support-request">
+      <div class="card">
+        <div class="p-grid  p-formgrid p-text-center">
+           <div class="p-col-12  p-md-6 p-d-flex p-ai-center p-jc-center">
+                <div class="p-field p-col-12">
+                <p-knob [(ngModel)]="processingRoom.laborCost" [size]="140" [max]="processingRoom.laborCost > 100 ? processingRoom.laborCost:100" [readonly]="true" valueTemplate="{value}%" valueColor="darkslateblue"></p-knob>
+                <h5>Mano de obra</h5>
+                </div>
+            </div>
+        <div class="p-col-12  p-md-6 p-d-flex p-ai-center p-jc-center">
+          <div class="p-field p-col-12">   
+            <p-knob [(ngModel)]="processingRoom.factoryCost" [size]="140" [max]="processingRoom.factoryCost > 100 ? processingRoom.factoryCost:100" [readonly]="true" valueTemplate="{value}%"  valueColor="darkolivegreen"></p-knob>
+            <h5>Costo fabril</h5>
+            </div>
+        </div>
+        </div>
+      </div>    
+    </div>
+    
+</div>
+<div class="card p-m-0">
+    <p-table #dt [value]="roomRecipes" 
+    [columns]="cols"
+    [rowHover]="true" 
+    [paginator]="true" 
+    [showCurrentPageReport]="true" 
+    [rows]="10" 
+    [rowsPerPageOptions]="[10,25,50]"
+    currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th [ngStyle]="{'display': col.display }" *ngFor="let col of cols" pSortableColumn={{col.field}}>
+                    {{ col.header }}
+                    <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-roomRecipe>
+            <tr>
+                <td [ngStyle]="{'display': col.display }" *ngFor="let col of cols">
+                    
+                    <app-active-label *ngIf="isBooleanColumn(col.field); else numberCell" [active]="roomRecipe[col.field]" [isYesOrNoMode]="false"></app-active-label>
+
+                    <ng-template #numberCell>
+                        <div *ngIf="col.field === 'recipeCost'; else textCell">
+                            {{(roomRecipe.recipeCost)|number:'1.2-2'}}
+                        </div>
+                    </ng-template>
+                    
+                    <ng-template #textCell >
+                        <div *ngIf="col.field !== 'edit'; else editCell">
+                            {{roomRecipe[col.field]}}
+                        </div>
+                    </ng-template>
+
+                    <ng-template #editCell  >
+                        <ng-container  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PROCESSINGROOMRECIPE_PERMISSION_ID)" >
+                            <button (click)="edit(roomRecipe)"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="{{'edit' | translate }}"></button>                          
+                        </ng-container>
+                        <ng-container  >
+                            <button   pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" pTooltip=" {{ 'view_detail' | translate }}" (click)="openRecipeDetails(roomRecipe.idRecipe)"></button>
+                        </ng-container>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="p-fluid p-grid p-formgrid p-jc-end p-mr-4">
+        <div class="p-field">
+            <button pButton type="button" pRipple  class="p-button-danger" icon="pi pi-times" pTooltip="{{'cancel' | translate }}" tooltipPosition="left" (click)="cancel()" label="{{ 'primeng.cancel' | translate}}"></button>
+        </div> 
+    </div>
+</div>
+
+
+<span *ngIf="searchRecipeShowing">
+    <app-room-recipes-search [(showPanel)]="searchRecipeShowing" [addedRoomRecipes]="roomRecipes"  [roomRecipe]="roomRecipe" (hideDialogForm)="childCallBack($event)"></app-room-recipes-search>
+</span>

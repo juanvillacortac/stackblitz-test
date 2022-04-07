@@ -1,0 +1,86 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Atributo</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Agrupación de atributo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyMessage="Sin resultados." [disabled]="editDisabled" emptyFilterMessage="Sin resultados." [filter]="true" [options]="_attributeagrupation" (onChange)="listarAtributos()" (keyup.enter)="saveSpecification()" [(ngModel)]="_specification.attributeagrupation.id" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_specification.attributeagrupation.id == -1 || _specification.attributeagrupation.id == undefined)">La agrupación de atributo es requerida</small>
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Atributo <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown emptyMessage="Sin resultados." [disabled]="editDisabled" emptyFilterMessage="Sin resultados." [filter]="true" [options]="_attribute" (onChange)="evaluarVisileOption()" (keyup.enter)="saveSpecification()" [(ngModel)]="_specification.attributes.id" placeholder="Seleccione...">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_specification.attributes.id == -1 || _specification.attributes.id == undefined)">El atributo es requerido</small>
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="_typeAttribute==typeatribute.Option">
+                    <label for="active">Opción <span [ngStyle]="{'color':'red'}">*</span></label>
+                   <!--  <p-dropdown emptyMessage="Sin resultados." *ngIf="_typeAttribute==typeatribute.Option" emptyFilterMessage="Sin resultados." [filter]="true" [options]="_attributeoption"  (keyup.enter)="saveSpecification()" [(ngModel)]="_specification.attributeoption.id" placeholder="Seleccione...">
+                    </p-dropdown> -->
+                    <p-multiSelect [options]="_attributeoption" *ngIf="_typeAttribute==typeatribute.Option" [(ngModel)]="_attributeoptionSelected" placeholder="Opciones" (onChange)="ValidateChecksAttributes()" display="chip" (keyup.enter)="saveSpecification()" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+                    <small class="p-invalid" *ngIf="submitted && _attributeoptionSelected.length == 0">La opción de atributo es requerida</small>
+                </div> 
+               
+
+                <div class="p-field p-col-12 " *ngIf="_typeAttribute==typeatribute.Text">
+                    <label for="name">Texto <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input *ngIf="_typeAttribute==typeatribute.Text" type="text" pInputText id="tex" (keyup.enter)="saveSpecification()" [(ngModel)]="value" [class]="submitted && value.trim() == '' ? 'ng-dirty ng-invalid' :''" pInputText id="name" maxlength="256" />
+                    <small class="p-invalid" *ngIf="submitted && (!value || !value.trim())">El texto es requerido.</small>
+                  </div>
+
+                  <div class="p-field p-col-12 " *ngIf="_typeAttribute==typeatribute.NumberDecimal">
+                    <label for="name">Números decimales <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p>
+                        <p-inputNumber *ngIf="_typeAttribute==typeatribute.NumberDecimal" mode="decimal" [minFractionDigits]="4" (keyup.enter)="saveSpecification()" [(ngModel)]="value" (keypress)="_validations.keyPressForDecimal4NegativeandPositive($event);"  (paste)="_validations.noPaste($event)" (onFocus)="clear($event)"></p-inputNumber>
+                      <!-- <input *ngIf="_typeAttribute==typeatribute.NumberDecimal" type="text" pInputText id="nd" (keyup.enter)="saveSpecification()" [(ngModel)]="_specification.valor" [class]="submitted && (!_specification.valor || _specification.valor.trim()) ? 'ng-dirty ng-invalid' : ''" (keypress)="_validations.keyPressForDecimal4NegativeandPositive($event);"  (paste)="_validations.noPaste($event)" /> -->
+                    <!--  <small class="p-invalid" *ngIf="submitted && value == ''">El campo es requerido.</small> -->
+                    <!-- <small class="p-invalid" *ngIf="submitted && (_publication.page==0)">El número de página debe ser mayor a 0.</small> -->
+                  </div>
+
+                  <div class="p-field p-col-12 " *ngIf="_typeAttribute==typeatribute.NumberInteger">
+                    <label for="name">Números enteros <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <!-- <input *ngIf="_typeAttribute==typeatribute.NumberInteger" type="text" pInputText id="ne" (keyup.enter)="saveSpecification()" [(ngModel)]="_specification.valor" [class]="submitted && (!_specification.valor || _specification.valor.trim()) ? 'ng-dirty ng-invalid' : ''" (keypress)="_validations.keyPressOnlyNumbersNegativeandPositive($event);" (paste)="_validations.noPaste($event)" /> -->
+                    <p-inputNumber *ngIf="_typeAttribute==typeatribute.NumberInteger" mode="decimal" [minFractionDigits]="0" (keyup.enter)="saveSpecification()" [(ngModel)]="value" (keypress)="_validations.keyPressOnlyNumbersNegativeandPositive($event);"  (paste)="_validations.noPaste($event)" (onFocus)="clear($event)"></p-inputNumber> 
+                   <!--  <small class="p-invalid" *ngIf="submitted && value == ''">El campo es requerido.</small> -->
+                    <!-- <small class="p-invalid" *ngIf="submitted && (_publication.page==0)">El número de página debe ser mayor a 0.</small>  -->
+                  </div>
+                  <div class="p-field p-col-12 p-md-12" *ngIf="_typeAttribute==typeatribute.Date">
+                    <label for="icon" *ngIf="_typeAttribute==typeatribute.Date">Fecha <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar *ngIf="_typeAttribute==typeatribute.Date" [(ngModel)]="_date" [monthNavigator]="true" yearRange="1900:2050" [yearNavigator]="true" dateFormat="dd/mm/yy" [showIcon]="true" inputId="icon" [readonlyInput]="true"></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _date == null">El campo es requerido.</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12" *ngIf="_typeAttribute==typeatribute.DateTime">
+                    <label for="time">Fecha y hora <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar *ngIf="_typeAttribute==typeatribute.DateTime" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2050" [(ngModel)]="_date" dateFormat="dd/mm/yy" [showTime]="true" inputId="time"></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _date == null">El campo es requerido.</small>
+                </div>
+            
+                <div class="p-field p-col-12 p-md-12" *ngIf="_typeAttribute==typeatribute.Time">
+                    <label for="timeonly">Hora <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar *ngIf="_typeAttribute==typeatribute.Time" [(ngModel)]="_date" [timeOnly]="true" inputId="timeonly"></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _date == null">El campo es requerido.</small>
+                </div>
+                 <div class="p-d-flex p-ai-lg-center p-col-12 p-md-12" *ngIf="_typeAttribute==typeatribute.Binary">
+                    <label class="p-mr-4" *ngIf="_typeAttribute==typeatribute.Binary" for="binario">Binario</label>
+                    <p-inputSwitch class="p-mr-4" *ngIf="_typeAttribute==typeatribute.Binary" [(ngModel)]="_check"></p-inputSwitch>
+                </div>
+                 
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="saveSpecification()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog id="Inactivarspecification" [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

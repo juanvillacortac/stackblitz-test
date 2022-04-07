@@ -1,0 +1,76 @@
+<div *ngIf="expanded">
+    <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">
+            
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.vehicleCode" name="vehicleCode" id="vehicleCode" type="text" pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="search()">
+                    <label>Código vehículo</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.vehicleRegistrationPlate" name="vehicleCode" id="vehicleCode" type="text" pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="search()">
+                    <label>Placa vehículo</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="VehicleTypeList" [(ngModel)]="filters.vehicleTypeID" placeholder="Uso del vehículo" (keyup.enter)="search()"></p-dropdown>
+        </div>
+      
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="VehicleModelList" [(ngModel)]="filters.vehicleModelID" placeholder="Marca del vehículo" (keyup.enter)="search()"></p-dropdown>
+        </div>
+
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+              <span class="p-float-label">
+                <input type="text" pInputText placeholder="Conductor principal" [(ngModel)]="filters.driverName" readonly="true" class="responsible">
+                <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=false)" class="btresponsible"></p-button>
+              </span>
+            </div>
+        </div>
+
+        
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="typeDriverList" [(ngModel)]="filters.driverTypeID" placeholder="Tipo conductor" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown  [options]="Indicators" [(ngModel)]="filters.indDriverLicense"  placeholder="Licencia" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="levellicenseList" [(ngModel)]="filters.LicenseLevelID" placeholder="Grado lincencia" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="Indicators" [(ngModel)]="filters.IndMedicalCertificate" placeholder="Certificado" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown [options]="Indicators"  [(ngModel)]="filters.IndVehicleActive" placeholder="Vehículo activo" (keyup.enter)="search()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <p-dropdown  [options]="Indicators" [(ngModel)]="filters.IndDriverActive"  placeholder="Conductor activo" (keyup.enter)="search()"></p-dropdown>
+        </div>
+       
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'ims.product_existence.start_date'}}" tooltipPosition="right" class="p-float-label">
+                <p-calendar  inputId="calendar" [(ngModel)]="startDateFilter" [maxDate]="finalDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <span pTooltip="{{ 'ims.product_existence.end_date'}}" tooltipPosition="right" class="p-float-label ">
+                <p-calendar inputId="endCalendar" [(ngModel)]="finalDateFilter" [maxDate]="maxDate" [minDate]="startDateFilter" readonlyInput="true" [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="onSearch()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [_status]="true" [multiples]="multiples"></operator-modal-list>

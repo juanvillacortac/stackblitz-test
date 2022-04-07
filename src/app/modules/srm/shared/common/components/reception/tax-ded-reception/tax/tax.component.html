@@ -1,0 +1,173 @@
+<div class="p-grid p-mt-2">
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <label>Tipo de imponible <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="countryList" appendTo="body" [(ngModel)]="supplierFilters.idCountry" -->
+        <p-dropdown [options]="typeTaxableList" appendTo="body" (keyup.enter)="AddTxable()"
+            [(ngModel)]="taxables.idTaxableType" placeholder="Seleccione..."
+            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (onChange)="ResetForm()">
+        </p-dropdown>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.idTaxableType==-1)">Tipo de imponible es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="taxables.idTaxableType==1">
+        <label>Impuesto <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-dropdown (keyup.enter)="AddTxable()" [options]="TaxList" appendTo="body" [(ngModel)]="taxables.idTax"
+            (onChange)="GetTaxableRate(taxables.idTax)" placeholder="Seleccione..." [filter]="true"
+            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.idTax==-1)">Impuesto requerido.</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="taxables.idTaxableType!=1">
+        <label>Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+        <input name="newimpuesto" id="newimpuesto" type="text" [(ngModel)]="this.taxables.taxableDeductibleBase"
+            pInputText (keyup.enter)="save()" (input)="_validations.toCapitalizeString($event)"
+            (keypress)="_validations.keyPressForValor($event);" maxlength="50"
+            (paste)="_validations.noPaste($event)" />
+            <small class="p-invalid"
+            *ngIf="submitted && (taxables.taxableDeductibleBase=='')">Descripción requerida.</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="taxables.idTaxableType!=1">
+        <label>Tipo de valor <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-dropdown (keyup.enter)="AddTxable()" [options]="typelist" [(ngModel)]="taxables.idTypeValue"
+            placeholder="Seleccione..."  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."  (onChange)="resetRate(taxables.idTypeValue)">
+        </p-dropdown>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.idTypeValue==-1)">Tipo de valor es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="taxables.idTaxableType==1">
+        <label>Tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-dropdown (keyup.enter)="AddTxable()" [options]="rateList" [(ngModel)]="taxables.idRate"
+            (onChange)="asigvalue()" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados."
+            emptyMessage="Sin resultados.">
+        </p-dropdown>
+        <small class="p-invalid"
+            *ngIf="submitted && (taxables.idRate==-1)">La tasa es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="this.taxables.idTypeValue==1 && taxables.idTaxableType!=1 ">
+        <label>Valor de tasa <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" prefix="%" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-inputNumber (onFocus)="clearinput($event)" mode="decimal" [minFractionDigits]="2" [max]="100" maxlength="6"
+            (keyup.enter)="AddTxable()" [(ngModel)]="taxables.rate" (focusout)="reset($event)"></p-inputNumber>
+            <small class="p-invalid"
+            *ngIf="submitted && (taxables.rate==0)">El valor de tasa es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="taxables.idTaxableType!=1 && this.taxables.idTypeValue==0">
+        <label>Monto <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-inputNumber (onFocus)="clearinput($event)" mode="decimal" [minFractionDigits]="4"
+        [maxFractionDigits]="4" maxlength="23" [(ngModel)]="taxables.amount" (focusout)="reset($event)" (keyup.enter)="save()"></p-inputNumber>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.amount==0)">El monto es requerido.</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid" *ngIf="this.ProductOrder == undefined">
+        <label>Distribución<span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-dropdown (keyup.enter)="AddTxable()" [options]="DistributionCostList"
+            [(ngModel)]="taxables.distributionCalculationId" (onChange)="chanAply()" placeholder="Seleccione..."
+            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.distributionCalculationId==-1)">La distribución es requerida.</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <label>Aplica a <span [ngStyle]="{'color':'red'}">*</span></label>
+        <!-- [options]="classificationlist" appendTo="body" [(ngModel)]="supplierFilters.classificationId" -->
+        <p-dropdown [options]="ApplyCostList" [(ngModel)]="taxables.idApply" placeholder="Seleccione..."
+            (keyup.enter)="AddTxable()" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+        <small class="p-invalid"
+        *ngIf="submitted && (taxables.idApply==-1)">Aplica a es requerido.</small>
+    </div>
+  
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Agregar"  (click)="AddTxable()" icon="pi pi-plus-circle"
+            class="p-button-secondary p-mr-2"></button>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+        <small class="p-invalid">(*) Campos obligatorios</small>
+    </div>
+</div>
+<div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <span class="p-input-icon-left p-ml-auto p-mr-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar" />
+      </span>
+      
+    </div>
+  </div>
+
+<div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="txablesListTemp"
+        [(selection)]="selectedTaxable" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    <!-- <p-tableRadioButton *ngIf="!this.multiple"></p-tableRadioButton> -->
+                </th>
+                <ng-container *ngFor="let col of columns">
+
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+                <th [ngStyle]="{'width': '130px'}"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-taxable let-columns="columns">
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="taxable"></p-tableCheckbox>
+                </td>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <!-- <app-active-label *ngIf="col.field === 'idProducTax' else textCell" [active]="taxable[col.field]">
+                        </app-active-label> -->
+                        <span class="p-column-title">{{col.header}}</span>
+                        <div class="p-inputgroup" *ngIf="col.field =='idProducTax'; else textCell">
+                            <span *ngIf="taxable.idProducTax==-1" class="status-badge status-active p-mr-1">Si</span>
+                            <span *ngIf="taxable.idProducTax>0" class="status-badge status-inactive p-mr-1"
+                                pTooltip="Impuesto nuevo" style="font-size: xx-small;">No</span>
+                            <!-- <i *ngIf="product.indConsignment==0 && this.PucharseOrderHeader.purchase.idTypeNegotiation==this.typenegotiationIDs.consignment_ID" pTooltip="No posee el indicador de consignacion" class="pi pi-times-circle" style="color: #C63737;"></i> -->
+                        </div>
+                        <ng-template #textCell>
+                            <span>{{col.template(taxable)}} </span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <td>
+                    <!-- (click)="onRemoveSpecification(specification.id)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                    <button pButton pRipple icon="pi pi-trash" (click)="onRemove(taxable.idProducTax)"
+                        *ngIf="taxable.idProducTax>0" class="p-button-rounded p-button-danger p-mr-2"
+                        pTooltip="Eliminar"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+
+</div>
+<div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Aplicar" (click)="saveTaxable()" icon="pi pi-check-square"
+        class="p-button-info p-mr-2" [disabled]="load"></button>
+    <!-- <button pButton (click)="hideDialog()" pRipple label="Cerrar" icon="pi pi-times"
+        class="p-button-secondary p-mr-2"></button> -->
+</div>

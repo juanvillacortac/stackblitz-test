@@ -1,0 +1,16 @@
+
+<div class="p-mt-4 p-mb-4 p-ml-4 p-pt-2 p-pb-2 p-pl-2 p-expression">
+    <p-dropdown [options]="expressionList" [(ngModel)]="expression" placeholder="Expresión*" 
+    optionLabel="name" (onChange)="changeExpression()" [class]=" expression.value != 0 ? 'p-col-11 p-d-inline' : 'p-col-11 p-d-inline ng-dirty ng-invalid'"></p-dropdown>
+    <input [(ngModel)]="literal" style="vertical-align: bottom;" type="text" pInputText *ngIf="expression.value == 9" (input)="literalValue()" placeholder="Literal*" [class]="literal == undefined || literal == ''? 'ng-dirty ng-invalid' : ''">
+    <p-dropdown [options]="variables" [(ngModel)]="selectVar" (onChange)="varSelected()"
+        placeholder="Variable*" optionLabel="label" *ngIf="expression.value == 11" [class]=" selectVar.value != 0 ? 'p-col-11 p-d-inline' : 'p-col-11 p-d-inline ng-dirty ng-invalid'">
+    </p-dropdown>
+    <ng-container *ngIf="expression.value == 8">
+        (<app-companies-concept-payroll-expression [variables]="variables" [edit]="jsonLeft" (returnJson)="buildJsonLeft($event)"></app-companies-concept-payroll-expression> 
+        <p-dropdown [options]="operatorMathList" [(ngModel)]="operatorMath" placeholder="Operador*" 
+            optionLabel="name" (onChange)="operatorSelected()" [class]=" operatorMath.value != 0 ? 'p-col-11 p-d-inline p-ml-4 p-pl-3' : 'p-col-11 p-d-inline p-ml-4 p-pl-3 ng-dirty ng-invalid'"></p-dropdown>
+        <app-companies-concept-payroll-expression [variables]="variables" [edit]="jsonRight" (returnJson)="buildJsonRight($event)"></app-companies-concept-payroll-expression> ) 
+    </ng-container>
+</div>
+

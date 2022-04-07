@@ -1,0 +1,32 @@
+<div class="flex space-x-4 m-1 shadow card items-center print:border print:shadow-none">
+  <i class="p-text-bold pi pi-book"></i>
+  <span class="font-bold text-lg">Balance General</span>
+</div>
+
+<app-general-balance-filters></app-general-balance-filters>
+
+<ng-container *ngIf="!loadingService.loading && (data$ | async) as data">
+  <app-general-balance-table
+    name="Activos"
+    [accounts]="data.activeRoot"
+  ></app-general-balance-table>
+
+  <app-general-balance-table
+    name="Pasivos"
+    [accounts]="data.pasiveRoot"
+  ></app-general-balance-table>
+
+  <app-general-balance-table
+    name="Patrimonios"
+    [accounts]="data.equityRoot"
+  ></app-general-balance-table>
+
+  <div
+    class="flex space-x-4 m-1 shadow mt-4 text-right card items-center justify-end print:border print:shadow-none"
+  >
+    <span class="font-bold text-lg"
+      >Total pasivo y patrimonio:
+      <span class="rounded bg-green-100 ml-4 py-1 px-2">{{ total }}</span></span
+    >
+  </div>
+</ng-container>

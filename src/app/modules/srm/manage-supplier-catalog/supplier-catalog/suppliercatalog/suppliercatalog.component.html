@@ -1,0 +1,120 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <!-- pTooltip="Crear nuevo" -->
+            <p-splitButton  label="Nuevo"  (onClick)="addnew()" icon="pi pi-plus" [model]="items" class="p-button-success" styleClass="p-button-success" *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_PERMISSION_ID) || this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_LOT_PERMISSION_ID)"></p-splitButton>
+          
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"></button>
+        </div>
+    </div>
+    <suppliercatalog-filter-panel (onSearch)="search()" [(filters)]="suppliercatalogFilters" [expanded]="showFilters" [loading]="loading" [(productsuppliercataloglist)]="_suppliercatalogservice._SupplierCatalogList" [(_selectedColumns)]="_selectedColumns" class="p-mt-3"></suppliercatalog-filter-panel>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="_suppliercatalogservice._SupplierCatalogList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true" scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [autoLayout]="true">      
+    <!-- <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        </div>
+    </ng-template>       -->
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+            <col style="width:150px">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="caption">
+        <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+            selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}" placeholder="Elija las columnas"></p-multiSelect>
+    </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngIf="selectedColumns.length>0"></th>
+            <th *ngIf="selectedColumns.length>0" style="display: none;" pSortableColumn="Id">Id</th>
+            <th *ngIf="selectedColumns.length>0"></th>
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }" [pSortableColumn]="col.field" >
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                        <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                    </div>
+              </th>
+            </ng-container>
+            
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+          <tr>
+            <td>
+               
+                  <button pButton pRipple icon="pi pi-pencil"  class="p-button-rounded p-button-success p-mr-2" *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_PRODUCT_SUPPLIER_PERMISSION_ID) && product.active==true" (click)="onEdit(product)" pTooltip="Editar"></button>
+                  <!-- <button pButton pRipple icon="pi pi-briefcase" class="p-button-rounded p-button-success p-mr-2" pTooltip="Crear SKU"></button> -->
+                  <button pButton pRipple icon="pi pi-exclamation-circle" class="p-button-rounded p-button-primary p-mr-2" (click)="OnLinetime(product)" pTooltip="Últimos cambios"></button>
+                  
+                  <button  pButton pRipple [icon]="product.active == true ? 'pi pi-minus-circle' : 'pi pi-check'" [ngClass]="product.active == false ? 'p-button-rounded p-mr-2 p-button-success' : 'p-button-rounded p-mr-2 p-button-danger'" *ngIf="this.userPermissions.allowed(this.permissionsIDs.INACTIVE_PRODUCT_SUPPLIER_PERMISSION_ID)" (click)="onInactive(product, product.active)" [pTooltip]="product.active == true ? 'Inactivar' : 'Activar'"></button>
+            </td>
+                <td style="display: none;">{{product.id}}</td>
+                <td>
+                    <div class="p-col-12 p-md-12 p-sm-12 container-img">
+                        <!-- <img *ngIf="_supplierxproduct.products.idProduct>0"
+                            [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'"
+                            [alt]="_supplierxproduct.products.name" width="75" class="p-shadow-4 imgcatalog" /> -->
+                        <img [src]="product.image == null || product.image == ''  ? defectImage.defectImage
+                                : product.image" [alt]="product.name" class="imgcatalog"
+                                    alt="Product" />
+                    </div>
+                    <!-- <img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" [alt]="product.nameProduct" width="75" class="p-shadow-4 imgcatalog" /> -->
+                </td>
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="product[col.field]"></app-active-label>
+                    <ng-template #textCell>
+                        <span>{{col.template(product)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+          </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer" let-columns>
+        <ng-container *ngIf="_suppliercatalogservice._SupplierCatalogList==null || _suppliercatalogservice._SupplierCatalogList?.length == 0">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="16">
+            <span>No existen resultados.</span>
+          </td>
+        </tr>
+        </ng-container>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>
+<addacquaintance-dialog [(showDialogadd)]="productSupplierDialog" [(_supplierxprod)]="productxsupplierModel"  [(filters)]="suppliercatalogFilters"></addacquaintance-dialog>
+<app-supplierreason-dialog  [(showDialog)]="reasonDialog" [(_idproductxsupplier)]="productxsupplierModel" [(filters)]="suppliercatalogFilters"></app-supplierreason-dialog>
+<app-timeline-list  [(showDialogLine)]="lineDialog" [(idsupplierproduct)]="productxsupplierModel"></app-timeline-list>
+<app-wizardproductcomp [(showDialogWizard)]="wizardDialog" [(filters)]="suppliercatalogFilters" [(ProdxSuppliersEditTemp)]="ProdxSuppliersEditTemp"></app-wizardproductcomp>
+<!-- <app-supplier-products [(showDialogWizard)]="wizardDialog"></app-supplier-products> -->

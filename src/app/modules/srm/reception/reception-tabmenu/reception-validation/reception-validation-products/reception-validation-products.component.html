@@ -1,0 +1,227 @@
+<div class="p-grid area-padding">
+  <div class="card-body my-2 p-col-12 p-sm-7 p-md-12 p-lg-7" #product>
+    <div class="p-grid">
+<p-card class="card p-m-0" class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+
+  <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-d-flex p-jc-end" >
+    <!-- <button pButton pRipple icon="pi pi-refresh" class="p-button-rounded p-button-info p-mr-2"
+        pTooltip="{{ 'srm.reception.header.reassign_task' | translate }}" [disabled]="taskButtonsDisabled()"></button> -->
+        <!-- [disabled]="taskButtonsDisabled() -->
+        <!-- <button pButton pRipple label=" {{ 'start' | translate }}" *ngIf="this.userPermissions.allowed(this.permissionsIDs.START_RECEPTION_VDR_PERMISSION_ID)" icon="pi pi-check" 
+            class="p-button-success p-mr-2" (click)="start()" *ngIf="this.userPermissions.allowed(this.permissionsIDs.START_RECEPTION_VDR_PERMISSION_ID)" [disabled]="btnStartIsDisabled()"></button> -->
+       <button pButton pRipple label="Iniciar"  icon="pi pi-play" 
+            class="p-button-success p-mr-2"></button>     
+        <!-- <button pButton pRipple label="Finalizar" *ngIf="this.userPermissions.allowed(this.permissionsIDs.FINALIZE_RECEPTION_VDR_PERMISSION_ID)" (click)="finalized()" [disabled]="btnfinalized()" icon="pi pi-check" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Rechazar"  *ngIf="this.userPermissions.allowed(this.permissionsIDs.REJECT_RECEPTION_VDR_PERMISSION_ID)"   (click)="rejectaux()" [disabled]="btnreject()" icon="pi pi-id-card" class="p-button-secondary p-mr-2"></button>
+        <p-button type="button" class="p-mr-2"  [disabled]="btnTimeLineDisabled()" (click)="showDialog=true"  pTooltip="Línea de tiempo"  pTooltipPosition="top" icon="pi pi-clock"></p-button> -->
+        <button pButton pRipple label="Finalizar"  icon="pi pi-check" class="p-button-info p-mr-2"></button>
+
+    <!-- <button pButton pRipple icon="pi pi-pause" *ngIf="showStopButton()"
+        class="p-button-rounded p-button-success p-mr-2" (click)="PauseTask()"
+         pTooltip="{{ 'srm.reception.header.pause_task' | translate }}" [disabled]="taskButtonsDisabled()"></button>
+    <cd-timer #basicTimer format="hms" style="font-size: x-large;" [autoStart]="false"></cd-timer> -->
+</div>
+</p-card>
+</div>
+</div>
+</div>
+
+
+<div class="p-grid area-padding">
+  <div class="card-body my-2 p-col-12 p-sm-7 p-md-12 p-lg-7" #product>
+    <div class="p-grid">
+      <p-card class="card p-m-0" id="tableproduct" class="p-col-12 p-sm-12 p-md-12 p-lg-12">
+        <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mt-3">
+        <b class="font-small p-mr-1">Subtotal
+          base:</b>{{totalGridBase | currency: 'Bfs'}}
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+          <b class="font-small p-mr-1">Subtotal
+            conversión:</b> {{totalGridConvertion | currency: 'USD'}}
+            </div>
+        <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="this.products" [paginator]="true"
+          [rows]="10" [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+          scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]"  styleClass="p-datatable-responsive-demo p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+
+          <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              <div>
+                <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+                  id="multiselectstyle" selectedItemsLabel="{0} columnas seleccionadas" class="no-min-width"
+                  [style]="{minWidth: '223px', width:'120px'}" placeholder="Elija las columnas">
+                </p-multiSelect>
+                Total de ítems: {{ products ? products.length : 0 }}.
+              </div>
+              <app-updater-button (updateMethod)="getProducts()"></app-updater-button>
+            </div>
+
+          </ng-template>
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" style="min-width:150px">
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:60px;"></th>
+              <ng-container *ngFor="let col of columns">
+                <th
+                [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field =='wasWeighed' || col.field =='status') ? '60px' : '120px','font-size':'small'}"
+                [pSortableColumn]="col.field">
+                   {{ col.header | translate }}
+                 <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+              </ng-container>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-validationProduct let-columns="columns">
+            <tr>
+              <td style="width:60px;">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success"
+                pTooltip="Editar" (click)="viewDetail(validationProduct.id)"></button>
+              </td>
+              <ng-container *ngFor="let col of columns">
+                <td 
+                [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width': (col.field == 'wasWeighed') ? '60px' : '120px' }">
+                <span class="p-column-title">{{col.header}}</span>
+                <div class="p-inputgroup" *ngIf="col.field =='factorSell'; else textheavy">
+                  <span class="p-mr-1">{{validationProduct.factorSell.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}}</span> 
+                  <!-- <span *ngIf="product.status==1" class="status-badge status-active p-mr-1">Si</span> -->
+                  <i *ngIf="validationProduct.factorSell==0" class="pi pi-exclamation-triangle p-mr-1"
+                    pTooltip="Sin rango de validación configurado" style="color: #eec408;"></i>
+                  <!-- <i *ngIf="product.indconsigment==0 && this.PucharseOrderHeader.purchase.idTypeNegotiation==this.typenegotiationIDs.consignment_ID"
+                    pTooltip="No posee el indicador de consignación" class="pi pi-times-circle"
+                    style="color: #C63737;"></i> -->
+                </div>
+                <app-indheavy-label *ngIf="col.field =='wasWeighed'; else textCell" [indHeavy]="validationProduct[col.field]"
+                      #textheavy> 
+                </app-indheavy-label>
+                  <ng-template #textCell>
+                    <span *ngIf="col.field!='factorSell'">{{ col.template(validationProduct) }} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+                existen resultados</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="footer" let-columns>
+            <tr>
+                <td class="text-right" [attr.colspan]="columns.length">Subtotal:</td>
+                <td colspan="5">{{totalGridBase | currency: 'Bfs'}}</td>
+                <td>{{totalGridConvertion | currency: 'USD'}}</td>
+            </tr>
+        </ng-template>
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+
+  <div class="card-body p-col-12 p-sm-5 p-md-12 p-lg-5" #Detail>
+    <div class="p-grid">
+     <div class="p-col-12">
+    <p-card id="ChildTab" styleClass="p-card-shadow">
+      <p-tabView id="ChildTab" class="p-col-12 p-md-12 p-lg-12" [(activeIndex)]="activeIndex"
+        (onChange)="handleChange($event)" #tabchange>
+        <p-tabPanel #btnTotalc header="Totales">
+          <app-total-products [(ProductsValidation)]="products" [(Purchase)]="purchaseValidateHeader" [(subtotal)]="subtotal" [reception]="reception"
+          [(totaltaxableproduct)]="totaltaxableproduct" [(totaldeductiblesproduct)]="totaldeductiblesproduct" [(taxableTotal)]="taxableTotal" (_sendTaxablesMasivo)="CalculateMasivo($event)" 
+          [(deductibleTotal)]="deductibleTotal" [(taxableTotalcab)]="taxableTotalcab" [(deductibleTotalcab)]="deductibleTotalcab" (issavechange)="getProducts()" >
+          </app-total-products> 
+        </p-tabPanel>
+        <p-tabPanel header="Detalles" [selected]="tabselected" [disabled]="_product.idProduct<0" >
+          <div class="p-grid">
+            <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-d-flex p-jc-end">
+              <p-message *ngIf="!isSave" severity="warn" text="Cambios sin guardar" styleClass="p-mr-2"></p-message>
+            </div>
+          </div>
+          <div class="p-grid">
+          
+            <div class="p-col-12 p-sm-4 p-md-4 p-lg-4 container-img"> 
+              <img [src]="_product.image == null || _product.image == ''  ? defectImage.defectImage
+                    : _product.image" [alt]="_product.name"class="imgcatalog" alt="Product" />   
+                </div>    
+            <div class="p-col-8 p-md-8 p-sm-8" *ngIf="_product.idProduct>0">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label> <b>Nombre:</b> {{_product.name}}</label>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Referencia:</b> {{_product.internalReference
+                        }}</label>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Tipo empaque:</b> {{typePackaging}}</label>
+                    </div>
+
+                    <div class="p-col-12 p-md-12 p-sm-12">
+                        <label><b>Barra: </b> {{bar}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-sm-12 p-mb-1">
+            <div class="p-grid">
+              <p-button (onClick)="onChangeDetailPage(menuTabValidation.prices)"
+                [styleClass]=" showTabPrice ? 'p-button-text p-ml-0 styleActive' : 'p-button-text p-ml-0'"
+                label="Precio"></p-button>
+              <ng-container *ngIf="_product.master.indAdded; then caseA; else caseB">
+              </ng-container>
+              <ng-template #caseA>
+                <p-button (onClick)="onChangeDetailPage(menuTabValidation.imponible)"
+                  [disabled]="_product.master.baseCost == 0"
+                  [styleClass]="showtaxable ? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'"
+                  label="Imponibles y deducibles"></p-button>
+              </ng-template>
+              <ng-template #caseB>
+                <div *ngIf="_product.individual.indAdded">
+                  <p-button (onClick)="onChangeDetailPage(menuTabValidation.imponible)"
+                    [disabled]="_product.individual.baseCost == 0"
+                    [styleClass]="showtaxable ? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'"
+                    label="Imponibles y deducibles"></p-button>
+                </div>
+              </ng-template>
+
+              
+
+            </div>
+          </div>
+          <app-product-panel-prices [showTabPrice]="showTabPrice" [(_ProductDetail)]="_product" [showPrice]="showPrice" (_RecalculateTotals)="RecalculateTotals($event,this.purchaseValidate.exchangeRateNegotiation)" [(PucharseValidation)]="this.purchaseValidateHeader" [(isSave)]="isSave" ></app-product-panel-prices>
+          <app-taxable-deductible-validation [(_product)]="_product" [showtaxable]="showtaxable" [(_purchaseheader)]="purchaseValidateHeader" (_sendNewCostProd)="onChangeTaxablesDeductibles($event)"></app-taxable-deductible-validation>
+          <!-- <app-purchase-order-product-edit [(_product)]="_viewModel" [(_productcopy)]="_viewModelcopy"
+                [show]="showDetail" [(isSave)]="isSave" (change)="onchangeQuatity($event)"  (clickNext)="nextPage()"
+                [(PucharseOrderHeader)]="PucharseOrderHeader"></app-purchase-order-product-edit>
+              <app-purchase-order-price [(_PurchaseOrderProduct)]="_viewModel" (saveChange)="SaveProductPrice($event)"
+                (_RecalculateTotals)="RecalculateTotals($event)" [(_PurchaseOrderProductCopy)]="detailCopy"
+                [showPrice]="showPrice" [(isSave)]="isSave" (_sendTaxablescost)="EmitTaxable($event)" [showTabPrice]="showTabPrice"
+                [(PucharseOrderHeader)]="PucharseOrderHeader"></app-purchase-order-price>
+              <app-taxable-deductible-product [(_product)]="_viewModel" [showtaxable]="showtaxable"
+                [(_purchaseheader)]="PucharseOrderHeader" (_sendNewCost)="onChangeTaxablesDeductibles($event)"
+                [(isSave)]="isSave" (_sendProductAll)="onChangeTaxablesDeductiblesHeaderProducAll($event)"></app-taxable-deductible-product> -->
+        </p-tabPanel>
+
+      </p-tabView>
+      <div class="p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-d-flex p-jc-end">
+        <!-- *ngIf="this.reception.estatus <= statusreception.started && this.userPermissions.allowed(this.permissionsIDs.EDIT_RECEPTION_VDR_PERMISSION_ID ) && iduserlogin==this.reception.receivingOperator.id" -->
+        <button *ngIf="tabselected"
+          pButton type="button" pRipple label="Guardar" (click)="saveDetail()" icon="pi pi-save"
+          class="p-button-info p-mr-2" ></button>
+        <!-- <button pButton n-submit type="button" pRipple label="Limpiar" (click)="clearmodel()" icon="pi pi-ban"
+          class="p-button-secondary p-mr-2"></button> -->
+      </div>
+    
+    </p-card>
+  </div>
+  </div>
+  </div>
+</div>

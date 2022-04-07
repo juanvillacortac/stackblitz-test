@@ -1,0 +1,126 @@
+<div class="card p-shadow-4">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+    <div>
+      <!--  <button pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" (click)="openNew()"></button> -->
+
+      <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help"
+        [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"></button>
+    </div>
+  </div>
+
+  <app-merchandise-transfers-filter (onSearch)="clickSearch()" [(filters)]="merchandiseTransferFilters"
+    [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-merchandise-transfers-filter>
+</div>
+<div class="card p-shadow-4">
+  <p-table #dt [columns]="displayedColumnsTransfers" [value]="merchandiseTransfersService.merchandiseTransfersList"
+    dataKey="idTransfer" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col style="width:50px">
+        <col style="width:50px">
+        <col style="width:50px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+        <col style="width:150px">
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th></th>
+        <th></th>
+        <ng-container *ngFor="let col of columns">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transfer let-expanded="expanded">
+      <tr>
+        <td>
+          <button type="button" pButton pRipple [pRowToggler]="transfer"
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td><button *ngIf="idBranchOfficeLogged == transfer.originBranch.id" pButton pRipple icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(transfer)" pTooltip="Editar"
+            tooltipPosition="top"></button>
+        </td>
+        <td style="overflow-wrap: break-word"><b>{{transfer.idTransfer}}</b></td>
+        <td style="overflow-wrap: break-word"><b>{{transfer.originBranch.branchOfficeName}}</b></td>
+        <td style="overflow-wrap: break-word">{{transfer.originArea.name}}</td>
+        <td style="overflow-wrap: break-word">{{transfer.createByUser}}</td>
+        <td style="overflow-wrap: break-word">{{transfer.createDate | date: "dd/MM/yyyy"}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-transfer>
+      <tr>
+        <td colspan="7" style="padding: 0;">
+          <div>
+            <p-table [columns]="displayedColumnsBranchTransfers" [value]="transfer.branchTransfer"
+              dataKey="idBranchTransfer">
+              <ng-template pTemplate="header" let-columnsp>
+      <tr>
+        <th style="width: 100px;"></th>
+        <th style="width: 50px;"></th>
+        <th style="width: 50px;"></th>
+        <ng-container *ngFor="let col of columnsp">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-branchTransfer let-columnsp="columns">
+      <tr>
+        <td style="width: 100px;"></td>
+        <td style="width: 50px;">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            *ngIf="idBranchOfficeLogged == branchTransfer.destinationBranch.id && transfer.edit"
+            (click)="onEditBranchTransfer(branchTransfer, transfer.idTransfer)" pTooltip="Editar"
+            tooltipPosition="top"></button>
+        </td>
+        <td style="overflow-wrap: break-word">
+          <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-info p-mr-2"
+          (click)="printMerchadiseTransfer(branchTransfer.idBranchTransfer)" pTooltip="Imprimir"
+          tooltipPosition="top"
+          *ngIf="branchTransfer.idBranchTransfer > 0 && branchTransfer.status.id != StatusTransfer.ERASER && branchTransfer.status.id != StatusTransfer.EXECUTION && branchTransfer.status.id != StatusTransfer.CANCELED"></button>
+        </td>
+        <ng-container *ngFor="let col of columnsp">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+            <!-- <span *ngIf="col.field === 'status.name' && branchTransfer.status.id == 1"
+              class="status-badge status-active">Activo</span>
+            <span *ngIf="col.field === 'status.name' && branchTransfer.status.id == 2"
+              class="status-badge status-inactive">Desincorporado</span> -->
+            <span>{{col.template(branchTransfer)}} </span>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+<ng-template pTemplate="emptymessage" let-columns>
+  <tr>
+    <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="6"><b>No existen resultados</b></td>
+  </tr>
+</ng-template>
+</p-table>
+</div>

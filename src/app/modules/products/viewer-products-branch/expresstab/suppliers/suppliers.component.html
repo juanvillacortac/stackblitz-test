@@ -1,0 +1,53 @@
+<div class="p-grid">
+  <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;">
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dtDc.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+  </div>
+  <div class="p-fluid p-col-12 p-md-12 p-lg-12">
+    <p-table #dtDc [columns]="displayedColumnsSuppliers" [value]="suppliersList"
+      [showCurrentPageReport]="true" styleClass="p-datatable-responsive-demo" [paginator]="true" [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-supplier let-columns="columns">
+        <tr [pSelectableRow]="supplier">
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+
+
+              <span>{{col.template(supplier)}} </span>
+
+            </td>
+          </ng-container>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer" let-columns>
+        <ng-container *ngIf="suppliersList==null || suppliersList?.length == 0">
+          <tr>
+            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="6">
+              <span>No existen registros</span>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+  </div>
+</div>

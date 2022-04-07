@@ -1,0 +1,135 @@
+<div class="p-grid">
+    <div class="p-col-12" style="padding-left: 0; padding-right: 0;">
+        <p-card header="Domicilio fiscal" id="domicilioFiscal" class="p-card-shadow p-col-12 p-md-6 readOnlyCard">
+        
+            <div class="p-col-12 p-md-12 p-lg-12">
+
+                <ng-container *ngFor="let address of _company.addresses">
+                    <div *ngIf="address.idAddressType === 1">
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Avenida:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.avenue}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Calle:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.street}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Edificio:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.edifice}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Piso:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.floor}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Referencia:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.references}}" />
+                                <!-- <textarea id="companyAddressReference" type="text" pInputText disabled value="{{address.references}}" ></textarea> -->
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>País:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.country}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Estado:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.state}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Municipio:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.municipality}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Ciudad:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.city}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Código postal:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.postalCode}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Latitud:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.latitude}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-mt-2 p-fluid">
+                                <label>Longitud:</label>
+                            </div>
+                            <div class="p-col-12 p-md-8 p-fluid">
+                                <input type="text" pInputText disabled value="{{address.length}}" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid p-mt-3">
+                            <h4 id="coord">Ubicación:</h4>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-mt-2 p-fluid" style="background-color: #eceff4; height: 215px; width: 100%;">
+                                 <p-gmap #gmap [options]="options" [overlays]="overlays" (onMapClick)="handleMapClick($event)" (onOverlayDragEnd)="handleDragEnd($event)" [style]="{'width':'100%','height':'200px'}" ></p-gmap>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </ng-container>
+            </div>
+
+        </p-card>
+    </div>
+</div>

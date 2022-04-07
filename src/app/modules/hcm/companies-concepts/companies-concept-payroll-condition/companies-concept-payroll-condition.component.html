@@ -1,0 +1,21 @@
+
+<div class="p-mt-4 p-mb-4 p-ml-4 p-pt-2 p-pb-2 p-pl-2 p-condition">
+    <p-dropdown [options]="conditionList" [(ngModel)]="condition" placeholder="Condición*" 
+    optionLabel="name" (onChange)="changeCondition()" [class]=" condition.value != 0 ? 'p-col-11 p-d-inline' : 'p-col-11 p-d-inline ng-dirty ng-invalid'"></p-dropdown>
+   
+    <ng-container *ngIf="condition.value == 5">
+        (<app-companies-concept-payroll-expression [variables]="variables" [edit]="jsonLeft" (returnJson)="buildJsonLeft($event)"></app-companies-concept-payroll-expression>
+        <p-dropdown [options]="operatorLogicalList1" [(ngModel)]="operatorLogical" placeholder="Operador*" 
+        optionLabel="name" (onChange)="operatorSelected()" [class]=" operatorLogical.value != 0 ? 'p-col-11 p-d-inline p-ml-4 p-pl-3' : 'p-col-11 p-d-inline p-ml-4 p-pl-3 ng-dirty ng-invalid'"></p-dropdown>
+        <app-companies-concept-payroll-expression [variables]="variables" [edit]="jsonRight" (returnJson)="buildJsonRight($event)"></app-companies-concept-payroll-expression>) 
+    </ng-container>
+    <ng-container *ngIf="condition.value == 6">
+        (<app-companies-concept-payroll-condition [variables]="variables" [edit]="jsonLeft" (returnJson)="buildJsonLeft($event)"></app-companies-concept-payroll-condition>
+        <p-dropdown [options]="operatorLogicalList2" [(ngModel)]="operatorLogical" placeholder="Operador*" 
+        optionLabel="name" (onChange)="operatorSelected()" [class]=" operatorLogical.value != 0 ? 'p-col-11 p-d-inline p-ml-4 p-pl-3' : 'p-col-11 p-d-inline p-ml-4 p-pl-3 ng-dirty ng-invalid'"></p-dropdown>
+        <app-companies-concept-payroll-condition [variables]="variables" [edit]="jsonRight" (returnJson)="buildJsonRight($event)"></app-companies-concept-payroll-condition>) 
+    </ng-container>
+    <ng-container *ngIf="condition.value == 7">
+        NOT(<app-companies-concept-payroll-condition [variables]="variables" [edit]="jsonRight" (returnJson)="buildJsonRight($event)"></app-companies-concept-payroll-condition>)
+    </ng-container>
+</div>

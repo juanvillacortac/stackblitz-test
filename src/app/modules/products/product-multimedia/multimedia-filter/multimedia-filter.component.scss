@@ -1,0 +1,24 @@
+/* :host ::ng-deep .p-dropdown {
+    width: 24rem;
+}
+ */
+img.flag {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.country-item{
+    display: flex;
+    align-items: center;
+}
+.p-calendar{
+    width: 24rem;
+}
+
+:host ::ng-deep { 
+    .p-multiselect-token-icon{
+        margin-left: 0.1rem;
+        margin-right: 0.5rem;
+        margin-top: 0.1rem;
+    }
+
+}

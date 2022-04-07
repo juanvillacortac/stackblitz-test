@@ -1,0 +1,23 @@
+
+:host ::ng-deep {
+
+    @media screen and (max-width: 992px){
+       
+    }
+
+    
+    @media screen and (min-width: 992px){
+        .button-search{
+            float: left;
+            margin-top: 19px;
+        }
+        .button-clear{
+            float: left;
+            margin-top: 19px;
+        }
+    }
+    
+    @media screen and (max-width: 1024px){
+
+    }
+  }

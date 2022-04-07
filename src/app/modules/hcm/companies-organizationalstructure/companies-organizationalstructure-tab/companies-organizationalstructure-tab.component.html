@@ -1,0 +1,36 @@
+<div class="p-grid nested-grid p-justify-center">
+  <div class="p-col-12">
+    <div class="p-grid">
+      
+      <div class="p-col-12 p-lg-5">
+        <div class="box">
+          <p-card class="p-card-shadow box">
+            <app-companies-organizationalstructure-levels [(levels)]="levels" (save)="editlevel($event)" (delete)="deletelevel($event)"></app-companies-organizationalstructure-levels>
+            <app-companies-levels-panel [(showDialog)]="leveldialog" [(levelin)]="_levelpass" [(levelins)]="levels" (showDialogChange)="resetValues($event)" (saveData)="saveLevel($event)"></app-companies-levels-panel>
+          </p-card>
+        </div>
+      </div>
+      
+      <div class="p-col-12 p-lg-7">
+        <div class="box">
+          <p-card class="p-card-shadow box">
+              <app-companies-organizationalstructure-jobpositions [(levels)]="levels" [(jobs)]="jobsViewModel" (save)="editJobPosition($event)" (delete)="deleteJob($event)"></app-companies-organizationalstructure-jobpositions>
+              <app-companies-jobpositions-panel [(showDialog)]="jobPositiondialog" [(jobin)]="_jobpass" [jobins]="jobins" [(mTJobs)]="mTJobs" [(levelins)]="levelsDropdown" [showObligatory]="conditional" (onUpdate)="saveJob($event)" (showDialogChange)="resetValues($event)"></app-companies-jobpositions-panel>
+          </p-card>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="p-col-12">
+    <div class="box box-stretched"> 
+
+      <p-card class="p-card-shadow box">
+          <app-companies-organizationalstructure-chart #companiesChart></app-companies-organizationalstructure-chart>
+      </p-card>
+
+    </div>
+  </div>
+</div>
+<p-dialog [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}" [modal]="true" [maximizable]="false" [resizable]="false" class="p-md-10">
+</p-dialog>

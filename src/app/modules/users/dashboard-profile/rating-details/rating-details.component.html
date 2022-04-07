@@ -1,0 +1,49 @@
+
+<div class="p-ml-3">
+<p-fieldset legend="Ranking y evolución" [toggleable]="true">
+    <div class="p-grid ">
+
+        <div class="p-col-12">
+            <div class="card">
+                <div class="p-d-flex  p-flex-column">
+                    <p-chart type="line" [data]="lineData"></p-chart> 
+                </div>
+            </div>
+        </div>
+        <div class="p-col-6">
+            <div class="box">
+                <div class="p-d-flex  p-flex-column">
+                    <div class="p-as-center" ><p-rating [(ngModel)]="val" [cancel]="false" readonly="true"></p-rating></div>
+                    <div class="p-as-center p-text-light">Calidad de servicio</div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-6">
+                <div class="box">
+                    <div class="p-d-flex  p-flex-column">
+                        <div class="p-text-center" style="font-size: xx-large;">1500</div>
+                    <div class="p-text-center p-text-light" >Puntos por rendimiento</div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-6">
+                <div class="box">
+                    <div class="p-d-fle p-flex-column">
+                        <div class="p-text-center p-mt-6" style="font-size: xx-large;">52</div>
+                        <div class="p-text-center p-text-light ">Tareas finalizadas por el mes</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-6">
+            <div class="box">
+                <div class="p-d-fle p-flex-column">
+                    <div class="p-text-center p-mt-6" style="font-size: xx-large;">4</div>
+                    <div class="p-text-center p-text-light ">Objetivos en curso</div>
+            </div>
+        </div>
+    </div>
+    </div>
+</p-fieldset>
+
+</div>

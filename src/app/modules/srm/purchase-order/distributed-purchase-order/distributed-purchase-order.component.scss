@@ -1,0 +1,77 @@
+:host ::ng-deep
+{
+    //Estilo de los botones del tab
+    .styleActive {
+        border-bottom: 2px solid #5E81AC;
+        border-radius: 0px;
+        font-weight: bold;
+        padding: 10px;
+      }
+
+      .generic-card-title
+      {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-left: 2rem;
+        margin-top: 2rem;
+      }
+
+      .ui-chips-token-icon { display: none!important; }
+
+      .imgcatalog{
+        max-width: 100%;
+        max-height: 100%;
+       }
+
+       .container-img{
+        border-radius: 50%;
+        height: 75px;
+        display: flex;
+        width: 75px;
+        justify-content: center;
+        overflow: hidden;
+        align-items: center;
+       }
+
+       @media only screen and (max-width: 767px) {
+        :host ::ng-deep{
+            .hidden-mobile {
+                display: none;
+              }
+        }
+
+      
+}
+
+
+.status-badge {
+  border-radius: 2px;
+  padding: .25em .5rem; 
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+
+  &.status-active {
+      background: #C8E6C9;
+      color: #256029;
+      font-size: xx-small;
+  }
+
+  &.status-inactive {
+      background: #FFCDD2;
+      color: #C63737;
+      font-size: xx-small;
+  }
+}
+.linkStyle
+{
+  color:blue;
+  cursor: pointer;
+}
+
+.row-isActive {
+  background-color: rgba(0,0,0,.15) !important;
+}
+
+}

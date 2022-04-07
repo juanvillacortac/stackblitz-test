@@ -1,0 +1,33 @@
+
+<div class="p-col-12 p-md-12 p-grid p-jc-left ng-tns-c70-3" id="formTabsDiv">
+    <div class="p-col-10" style="padding: .5em 0 1em 0">
+        <p-button (click)="activeIndex = 0" [styleClass]="activeIndex == 0? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Parámetros"></p-button>
+        <p-button (click)="activeIndex = 1" [styleClass]="activeIndex == 1? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Programación individual"></p-button>
+        <p-button (click)="activeIndex = 2" [styleClass]="activeIndex == 2? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Programación masiva"></p-button>
+        <p-button (click)="activeIndex = 3" [styleClass]="activeIndex == 3? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Programación colectiva"></p-button>
+        <p-button (click)="activeIndex = 4" [styleClass]="activeIndex == 4? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Saldos"></p-button>
+        
+    </div>
+    <div class="p-col-2 p-md-2 p-mb-0 p-text-right" *ngIf="!(activeIndex > 0)">
+        <button pButton pRipple [icon]="checked ? 'pi pi-times':'pi pi-pencil'" class="p-button-rounded p-button-info" [ngClass]="{'p-button-secondary':!checked}" (click)="checked = !checked" 
+        [pTooltip]="checked? 'Cancelar':'Editar'" tooltipPosition="left" [(ngModel)]="checked" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)"></button>
+    </div>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 0">
+    <app-holiday-parameters [(activeIndex)]="activeIndex" [(checked)]="checked"></app-holiday-parameters>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 1">
+    <app-holiday-individual-programming></app-holiday-individual-programming>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 2">
+    <app-holiday-massive-programming [idProgramationType]="2"></app-holiday-massive-programming>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 3">
+    <app-holiday-massive-programming [idProgramationType]="3"></app-holiday-massive-programming>
+</div>
+<div class="p-col-12" *ngIf="activeIndex == 4">
+   <app-holiday-amounts-list [idProgramationType]="4"></app-holiday-amounts-list>
+</div>
+
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+

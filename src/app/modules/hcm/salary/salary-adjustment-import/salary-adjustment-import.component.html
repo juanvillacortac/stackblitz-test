@@ -1,0 +1,63 @@
+<div class="card ">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4 p-mb-3 p-mb-lg-0">
+            <h4 id="filterTitle">Ajustes por importación</h4>
+        </div>
+        <div class="p-col-12 p-md-8 p-lg-8 p-mb-3 p-mb-lg-0 p-d-flex p-jc-end p-pr-0">
+            <button pButton pRipple label="Importar" (click)="showDialog=true" icon="pi pi-paperclip" class="p-mr-2" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_IMPORT_ADJUSTMENT_PERMISSION_ID)"></button>
+            <button *ngIf="showPreview" pButton pRipple label="Cargar" (click)="saveEmployeeExcelImport(salaryAdjustmentImport)" icon="pi pi-upload" class="p-mr-2"></button>
+            <button pButton pRipple label="Exportar" (click)="ExportExcel()" icon="pi pi-file-o"></button>
+        </div>
+    </div>
+
+</div>
+
+<div class="card" *ngIf="salaryAdjustmentImport && salaryAdjustmentImport.length > 0">
+    <div class="p-col-12">
+        <p-table [value]="salaryAdjustmentImport" dataKey="idFamilyBurden" #dt [globalFilterFields]="['salaryType','amount','adjustmentAmount','adjustmentPercentage','validityDate','salaryReason']"
+            sortField="idLaborRelationshipxFamilyBurden" sortMode="single" [responsive]="true" [showCurrentPageReport]="true" [paginator]="false" [rows]="10" [rowHover]="true" 
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" autoLayout="true" editMode="row" [rowsPerPageOptions]="[10,25,50]" 
+            styleClass="p-datatable-responsive-demo">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="p-text-center" pSortableColumn="employmentCode">Número del trabajador <p-sortIcon field="employmentCode"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="employeeFirstName">Nombre <p-sortIcon field="employeeFirstName"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="typeSalary">Tipo de sueldo <p-sortIcon field="typeSalary"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="amount">Monto <p-sortIcon field="amount"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="adjustmentAmount">Monto ajuste<p-sortIcon field="adjustmentAmount"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="motive">Motivo <p-sortIcon field="motive"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="validityDate">Vigencia <p-sortIcon field="validityDate"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-adjustmentImport let-index="rowIndex">
+                <tr *ngIf="adjustmentImport != []">
+                    <td class="p-text-center"><p>{{adjustmentImport.employmentCode}}</p></td>
+                    <td class="p-text-center">{{adjustmentImport.employeeFirstName}} {{adjustmentImport.employeeLastName}}</td>
+                    <td class="p-text-center"><p>{{adjustmentImport.typeSalary}}</p></td>
+                    <td class="p-text-center">{{adjustmentImport.amount}}</td>
+                    <td class="p-text-center"><p>{{adjustmentImport.adjustmentAmount == 0 ? "-" : adjustmentImport.adjustmentAmount}}</p></td>
+                    <td class="p-text-center"><p>{{adjustmentImport.motive}}</p></td>
+                    <td class="p-text-center"><p>{{adjustmentImport.validityDate == undefined ? '-' : adjustmentImport.validityDate| date: "dd/MM/yyyy"}}</p></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="card" *ngIf="showPreview && salaryAdjustmentImport.length == 0">
+    <p-messages severity="info"  >
+        <ng-template pTemplate>
+            <div class="p-ml-2">Ninguno de los registros en el archivo excel coinciden con los trabajadores existentes.</div>
+        </ng-template>
+    </p-messages>
+</div>
+
+<p-dialog header="Importación" (onHide)="showDialog=false" [(visible)]="showDialog" [modal]="true" [style]="{width: '70vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <p-fileUpload styleClass="p-button-success p-ml-2 p-fileupload-choose" chooseIcon="pi pi-paperclip" name="myfile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+           id="fileUpload" chooseLabel="Seleccionar archivo" (onBeforeUpload)="UploaderFile($event)" (onSelect)="UploaderFile($event)" (onClear)="resetFile($event)" (onRemove)="resetFile($event)"></p-fileUpload>
+        </div>  
+      </div>
+    </div>
+  </p-dialog>

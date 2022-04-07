@@ -1,0 +1,142 @@
+<p-sidebar [(visible)]="showSidebar" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+  <div class="p-grid" style="height: 30px;">
+    <div  id="header" class="p-col-11" style="margin-top: 5px;">
+        <h5>Carga familiar</h5>
+    </div>
+    <div class="p-col-1">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+    </div>
+  </div>    
+  <hr />
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          
+          <div class="p-field p-grid p-col-12" style="display: none;">
+            <input type="number" [(ngModel)]="record.idLaborRelationshipxFamilyBurden">
+            <input type="number" [(ngModel)]="record.idLaborRelationship">
+            <input type="number" [(ngModel)]="record.idEmployee">
+            <input type="text" [(ngModel)]="record.observation">
+          </div>
+          
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Nombre<span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" [(ngModel)]="record.firstName" pInputText maxlength="70" [class]="submitted && record.firstName == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (input)="_validations.toCapitalizeSimbology($event)"/> 
+              <small class="p-invalid" *ngIf="submitted && record.firstName == ''"> El nombre es requerido</small>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Apellido<span [ngStyle]="{'color':'red'}">*</span></label>
+              <input type="text" [(ngModel)]="record.lastName" pInputText maxlength="70" [class]="submitted && record.lastName == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" (input)="_validations.toCapitalizeString($event)"/> 
+              <small class="p-invalid" *ngIf="submitted && record.lastName == ''"> El apellido es requerido</small>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6 inside">
+              <label for="active">Tipo de documento<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-dropdown [options]="_entityTypeDropdown" [(ngModel)]="record.idDocumentType" placeholder="Seleccione..."  [class]="submitted && record.idDocumentType == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && record.idDocumentType == -1"> La entidad del documento es requerida</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-6">
+              <label for="active">Número de documento<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <input type="text" [(ngModel)]="record.documentNumber" pInputText maxlength="70" [class]="submitted && record.documentNumber == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"/> 
+                <small class="p-invalid" *ngIf="submitted && record.documentNumber == ''"> El número de documento es requerido</small>
+              </div>
+            </div>
+            
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6 inside">
+              <label for="active">Género<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-dropdown inputId="gender" [options]="genderDropdown" [(ngModel)]="record.gender"
+                 placeholder="Seleccione..." [class]="submitted && genderText != '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()" >
+                </p-dropdown>
+                <!-- <input type="text" [(ngModel)]="record.gender" pInputText maxlength="1"  (input)="_validations.toUppercaseString($event)" (keydown)="genderText=''"/>  -->
+                <small class="p-invalid" *ngIf="submitted && genderText != ''">{{genderText}}</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-6">
+              <label for="active">Parentesco<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-dropdown [options]="_kinshipDropdown" [(ngModel)]="record.idKinship" placeholder="Seleccione..." [class]="submitted && record.idKinship == -1 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="submit()"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && record.idKinship == -1"> El parentesco es requerido</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6 inside">
+              <label for="active">Fecha de nacimiento<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-calendar [(ngModel)]="birthDate" dateFormat="dd/mm/yy" readonlyInput="true" [yearRange]="yearRange"
+                [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" (onSelect)="dateSelected(1)"
+                [class]="submitted && birthDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                </p-calendar>
+                <small class="p-invalid" *ngIf="submitted && birthDateText != ''">{{birthDateText}}</small>
+              </div>
+            </div>
+            <div class="p-col-12 p-lg-6">
+              <label for="active">Fecha de registro<span [ngStyle]="{'color':'red'}">*</span></label>
+              <div class="p-col-12 p-pl-0 p-pr-0">
+                <p-calendar yearRange="1970:2030" [(ngModel)]="registrationDate" dateFormat="dd/mm/yy" readonlyInput="true" [disabled]="true"
+                [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true"  (onSelect)="dateSelected(2)"
+                [class]="submitted && registrationDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                </p-calendar>
+                <small class="p-invalid" *ngIf="submitted && registrationDateText != ''">{{registrationDateText}}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12 p-lg-6">
+            <div class="p-col-12">
+              <p-checkbox [(ngModel)]="record.declaredFlag" binary="true" inputId="binary" (keyup.enter)="submit()"></p-checkbox>
+              <label for="active">   ISLR</label>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12 p-lg-6">
+            <div class="p-col-12">
+              <p-checkbox [(ngModel)]="record.workFlag" binary="true" inputId="binary" (keyup.enter)="submit()"></p-checkbox>
+              <label for="active">   Trabaja</label>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12 p-lg-6">
+            <div class="p-col-12">
+              <p-checkbox [(ngModel)]="record.impairmentFlag" binary="true" inputId="binary" (keyup.enter)="submit()"></p-checkbox>
+              <label for="active">   Discapacidad</label>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12 p-lg-6">
+            <div class="p-col-12">
+              <p-checkbox [(ngModel)]="record.studyFlag" binary="true" inputId="binary" (keyup.enter)="submit()"></p-checkbox>
+              <label for="active">   Estudia</label>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <label for="active">Estatus<span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [(ngModel)]="active" [options]="status"  placeholder="Seleccione..." [disabled]="!isEdit" (keyup.enter)="submit()">
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </p-sidebar>

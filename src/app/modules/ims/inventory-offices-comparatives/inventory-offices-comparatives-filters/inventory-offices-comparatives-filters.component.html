@@ -1,0 +1,135 @@
+<div *ngIf="expanded" >
+    <div class="p-grid">
+        <div class="p-col-12 p-lg-8 ">
+            <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input  [(ngModel)]="filters.barcode" name="Barra" id="bar" type="text"  pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="search()">
+                            <label>{{ 'ims.inventory_offices_comparative.barCode_filters' | translate }}</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input id="float-input" [(ngModel)]="filters.productName" type="text" maxlength="300" pInputText (keyup.enter)="search()">
+                            <label for="float-input">{{ 'ims.inventory_offices_comparative.productName_filters' | translate }}</label>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input id="float-input" [(ngModel)]="filters.scaleCode" type="text" maxlength="25" numbersOnly pInputText noneSpecialCharacters  (keyup.enter)="search()">
+                            <label for="float-input">{{ 'ims.inventory_offices_comparative.scaleCode_filters' | translate }}</label>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input id="float-input" [(ngModel)]="filters.reference" type="text" maxlength="100" pInputText (keyup.enter)="search()">
+                            <label for="float-input">{{ 'ims.inventory_offices_comparative.reference_filters' | translate }}</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input id="float-input" [(ngModel)]="filters.factoryReference" type="text" maxlength="100" pInputText (keyup.enter)="search()">
+                            <label for="float-input">{{ 'ims.inventory_offices_comparative.factory_references_filters' | translate }}</label>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <span class="p-float-label">
+                        <p-dropdown  id="status" [options]="statuslist.value" optionLabel="name" [autoDisplayFirst]="false" optionValue="id" [(ngModel)]="filters.idProductEstatus" (keyup.enter)="search()"
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                        placeholder="{{ 'ims.inventory_offices_comparative.status_filters' | translate }}"></p-dropdown>
+                    </span> 
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input type="text" pInputText id="supplier" [(ngModel)]="supplierBrandFilters.supplierstring" (keyup.enter)="search()" 
+                            placeholder="{{ 'ims.inventory_offices_comparative.supplier_filters' | translate }}" disabled>
+                            <p-button icon="pi pi-search" (click)="supplierDialogVisible=true"></p-button>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input type="text" pInputText id="brands" [(ngModel)]="brandsString" (keyup.enter)="search()" 
+                            placeholder="{{ 'ims.inventory_offices_comparative.brands_filters' | translate }}" disabled>
+                            <p-button icon="pi pi-search" (click)="brandDialogVisible=true"></p-button>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-float-label">
+                            <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="search()" 
+                            placeholder="{{ 'ims.inventory_offices_comparative.category_filters' | translate }}" disabled>
+                            <app-dropdown-tree [treeData]='_categoryservice._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                             [isDisabled]='false' 
+                            (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+                        </span>
+                    </div>
+                
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <span class="p-float-label">
+                        <p-dropdown  id="area" [options]="areaList.value" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="inventoryAreaSelected" [filter]="true" (keyup.enter)="search()"
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                        placeholder="{{ 'ims.inventory_offices_comparative.area_filter' | translate }}"></p-dropdown>
+                    </span>     
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2 ">
+                    <span class="p-float-label"> 
+                        <p-dropdown  id="existence" [options]="existenceList"  appendTo="body" [(ngModel)]="filters.existence" (keyup.enter)="search()" 
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                        placeholder="{{ 'ims.inventory_offices_comparative.existence_filter' | translate }}"></p-dropdown>
+                    </span>  
+                </div>
+        
+                <div class="p-col-12 p-md-4 p-lg-3 p-field p-mt-2">
+                    <span class="p-float-label">
+                        <p-dropdown  id="heavy" [options]="heavylist" [(ngModel)]="filters.indHeavyProduct" (keyup.enter)="search()" 
+                        emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                        placeholder="{{ 'ims.inventory_offices_comparative.heavy_filter' | translate }}"></p-dropdown>
+                    </span>            
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-3  p-d-flex p-ai-lg-center">        
+                        <label class="p-mr-2" for="name">{{ 'ims.inventory_offices_comparative.simple_report_filter' | translate }}</label>
+                        <p-inputSwitch id="simple" class="p-mr-2" [disabled]="!haveCostPermission" [(ngModel)]="simpleReport"></p-inputSwitch>
+                </div>
+                
+        
+            </div>
+        </div>
+        <div class="p-col-12 p-lg-4">
+            <app-checkbox-table-selector [options]="userOffices" title="Sucursales" (setSelection)="onOfficeSelected($event)" ></app-checkbox-table-selector>
+            <div *ngIf="!validateOfficesSelection" class="p-invalid">
+                <span>{{ 'ims.inventory_offices_comparative.office_required' | translate }}</span>
+          </div>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="onSearch()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+<app-brand-modal-list  (onToggle)="onToggleBrand($event)" [(BrandsString)]="brandsString" [(filters)]="supplierBrandFilters" [singleSelection]="true" [visible]="brandDialogVisible"></app-brand-modal-list>
+<app-supplier-modal-list  (onToggle)="onToggleSupplier($event)" (supplierinput)="supplierstring" [(filters)]="supplierBrandFilters" [singleSelection]="true" [visible]="supplierDialogVisible"></app-supplier-modal-list>

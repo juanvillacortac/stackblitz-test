@@ -1,0 +1,46 @@
+<div class="card ">   
+    <div class="p-col-12">
+        <p-table #dt [rowHover]="true" [value]="holidayProgramationList" [paginator]="true" [rows]="10" 
+            [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" 
+            [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" *ngIf="holidayProgramationList && holidayProgramationList.length > 0">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th class="p-text-center" pSortableColumn="cycleHolidays">Periodo <p-sortIcon field="cycleHolidays"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="startDate">Inicio <p-sortIcon field="startDate"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="endDate">Fin<p-sortIcon field="endDate"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="payDate">Pago<p-sortIcon field="payDate"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="holidayType">Tipo <p-sortIcon field="holidayType"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="status">Estatus <p-sortIcon field="status"></p-sortIcon></th>
+                    <th style="width: 8em;"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-holidayProgramationList >
+                <tr *ngIf="holidayProgramationList != []">
+                    <td class="p-text-center"><p>{{holidayProgramationList.cycleHolidays}}</p></td>
+                    <td class="p-text-center"><p>{{holidayProgramationList.startDate| date: "dd/MM/yyyy"}}</p></td>
+                    <td class="p-text-center"><p>{{holidayProgramationList.endDate| date: "dd/MM/yyyy"}}</p></td>
+                    <td class="p-text-center"><p>{{holidayProgramationList.payDate| date: "dd/MM/yyyy"}}</p></td>
+                    <td class="p-text-center"><p>{{holidayProgramationList.holidayType}}</p></td>
+                    <td class="p-text-center"><p>{{holidayProgramationList.status}}</p></td>
+                    <td class="p-text-center">
+                        <button pButton pRipple type="button" icon="pi pi-pencil" (click)="onEdit(index)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top"
+                                 placeholder="Top" *ngIf="holidayProgramationList.idStatus == 83 && this.userPermissions.allowed(this.permissionsIDs. MANAGE_HOLIDAY_HCM_PERMISSION_ID)"></button>
+                        <button pButton pRipple icon="pi pi-trash" (click)="deleted(index)" class="p-button-rounded p-button-danger" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top" 
+                                *ngIf="holidayProgramationList.idStatus == 83 && this.userPermissions.allowed(this.permissionsIDs. MANAGE_HOLIDAY_HCM_PERMISSION_ID)"></button>
+                    </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="paginatorleft"></ng-template>
+              <ng-template pTemplate="paginatorright"></ng-template>
+            </p-table>
+        <p-messages severity="info" *ngIf="!(holidayProgramationList  && holidayProgramationList.length > 0)" >
+            <ng-template pTemplate>
+                <div class="p-ml-2">No existen resultados que coincidan con la búsqueda.</div>
+            </ng-template>
+        </p-messages>
+    </div>
+    <!-- <div class="p-col-12" align="right">
+        <button id="saving" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info saving p-mt-2" (click)="saveAdjustment()" [disabled]="holidayProgramationList.length == 0"></button>
+    </div> -->
+</div>
+

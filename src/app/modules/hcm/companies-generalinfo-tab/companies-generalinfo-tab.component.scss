@@ -1,0 +1,17 @@
+
+:host ::ng-deep {
+    .p-fluid .p-inputtext {
+        padding: 6px 0px 0px 0px;
+        border: unset;
+    }
+
+    .p-col-12.p-md-9.p-lg-9.p-fluid,
+    .p-col-12.p-md-3.p-lg-3.p-mt-2.p-fluid {
+        padding: 0.1rem 0.5rem;
+    }
+
+    #tlf {
+        width: 80%;
+    }
+  
+}

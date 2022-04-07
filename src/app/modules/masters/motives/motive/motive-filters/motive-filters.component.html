@@ -1,0 +1,75 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+    
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" sentenceType (keyup.enter)="search()" name="name" id="name" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="100" pInputText>
+                <label for="float-input">Nombre</label>
+            </span>
+        </div>        
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="status" id="status" (keyup.enter)="search()" appendTo="body" [(ngModel)]="filters.active" [showClear]="false"
+                ></p-dropdown>
+                <label for="status">Estatus</label>
+            </span>
+        </div>  
+    </div>  
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown inputId="system" [(ngModel)]="systemId" (keyup.enter)="search()" [autoDisplayFirst]="false" [options]="systems.value"  optionLabel="name"   
+                (onChange)="onSystemSelected($event.value)"
+                [showClear]="true" ></p-dropdown>
+    
+                <label for="status">Sistema</label>
+            </span>
+        </div>  
+    </div>  
+
+    
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown inputId="app" [(ngModel)]="appId" [autoDisplayFirst]="false" (keyup.enter)="search()" [options]="apps.value"  optionLabel="name" 
+                (onChange)="onAppSelected($event.value)"
+                [disabled]="!systemSelected" [showClear]="true" ></p-dropdown>
+    
+                <label for="status">Aplicación</label>
+            </span>
+        </div>  
+    </div>  
+    
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">    
+            <div class="p-inputgroup">   
+                <span class="p-float-label">                 
+                        <input inputId="module"  (keyup.enter)="search()" [value]="modulesTreeSelected ? modulesTreeSelected.label : null" type="text" [readOnly]="true" pInputText> 
+                        <app-dropdown-tree [treeData]='modulesTree' [(selection)]='modulesTreeSelected'
+                        [isDisabled]='isDisabled' (selectionChange)="onModuleSelected($event)"></app-dropdown-tree>         
+                    <label for="module">Módulo</label>
+                </span>
+            </div>
+        </div>  
+    </div>  
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown inputId="motiveType" [(ngModel)]="motivesTypeId"  (keyup.enter)="search()" [autoDisplayFirst]="false" [options]="motivesTypes.value"  optionLabel="name" 
+                (onChange)="onMotiveTypeSelected($event.value)"
+                [disabled]="!moduleSelected" [showClear]="true"></p-dropdown>
+    
+                <label for="status">Tipo de motivo</label>
+            </span>
+        </div>  
+    </div> 
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

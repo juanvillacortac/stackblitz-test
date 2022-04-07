@@ -1,0 +1,20 @@
+:host ::ng-deep { 
+    .p-sidebar-content {
+      
+        // overflow-x: auto;
+        // position: relative;
+        overflow: unset;
+    }
+
+    .p-inputgroup-addon:first-child, .p-inputgroup button:first-child {
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+  
+    }
+
+    .p-multiselect-token-icon {
+        margin: 0.1rem .5rem 0 .1rem !important;
+    }
+
+    
+}

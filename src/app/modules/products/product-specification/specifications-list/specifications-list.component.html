@@ -1,0 +1,64 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="panelheader">Atributos</span>
+    </ng-template>
+    <div class="card p-m-0 p-pb-0">
+        <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+            <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+            </span>
+            <div>
+                <button  pButton pRipple icon="pi pi-plus" class="p-button-success" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID)" (click)="newSpecification()" pTooltip="Crear nuevo"></button>
+               
+            </div>
+        </div>
+    </div>
+    <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_specificationservice._specificationList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" [globalFilterFields]="['attributeagrupation.name','attributes.name','value','unitsmeasurement.name','createdByUser']">      
+        <ng-template pTemplate="header" let-columns>
+              <tr>
+                <ng-container *ngFor="let col of columns">  
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                </ng-container>
+                <th [ngStyle]="{'width': '180px'}" ></th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-specification let-columns="columns">
+              <tr>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="specification[col.field]"></app-active-label>
+                        <ng-template #textCell>
+                            <span>{{col.template(specification)}} </span>
+                        </ng-template>
+                    </td>
+                    
+                </ng-container>
+                <td>
+                    <button pButton pRipple  icon="pi pi-pencil" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID)" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(specification)"></button><!---->
+                    <button pButton pRipple icon="pi pi-trash" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID)" class="p-button-rounded p-button-danger p-mr-2" (click)="onRemoveSpecification(specification)" pTooltip="Eliminar"></button>
+                </td>
+                  
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+        </p-table>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12" style="text-align: center;">
+            <button pButton pRipple label="Regresar" (click)="back()" icon="pi pi-arrow-left" class="p-button-secondary"></button>
+        </div>
+    </div>
+    </p-panel>
+     <specification-dialog [(showDialog)]="specificationDialog" [(_specification)]="specificationModel" [(idproduct)]="idproduct" [(specificationList)]="_specificationservice._specificationList" (refreshcompleted)="voidrefreshcompleted()"></specification-dialog>
+
+    
+    

@@ -1,0 +1,83 @@
+<p-sidebar  styleClass="p-sidebar-md" [style]="{'overflow-y': 'auto'}"
+        [(visible)]="showPanel"
+        (onShow)="ngOnInit()" 
+        (onHide)="hideDialog()" 
+        [blockScroll]="false" 
+        [showCloseIcon]="true"  
+        [dismissible]="false" 
+        position="right" >
+        <h2 class="p-m-0">{{ 'srm.weight_instrument.title' | translate }}</h2>
+        <hr/>
+        <div class="p-grid">
+            <div class="p-col-12"> 
+                <div class="card">       
+                    <div class="p-fluid p-grid p-formgrid">
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label for="input">{{ 'name' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <input pInputText [(ngModel)]="weightInstrument.name" #name maxlength="150" noneSpecialCharacters firstLetterUpperCase
+                             [class]="submitted && (!weightInstrument.name || !weightInstrument.name.trim()) ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()" /> 
+                            <small class="p-invalid" *ngIf="!validateForm('name').isValid">{{ validateForm('name').error | translate }}</small>                    
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">  
+                            <label>{{ 'srm.weight_instrument.fields.tb_weight_instrument_type' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <p-multiSelect [options]="weightInstrumentTypes" optionLabel="name" [(ngModel)]="weightInstrumentTypesSelected" placeholder="Seleccione..."
+                             display="chip" [selectionLimit]="5" [filter]="true" [class]="submitted && weightInstrumentTypesSelected.length <= 0 ? 'ng-dirty ng-invalid' : ''"
+                              emptyFilterMessage="Sin resultados." (keyup.enter)="save()"></p-multiSelect>
+                              <small class="p-invalid" *ngIf="!validateForm('instrumentType').isValid">{{ validateForm('instrumentType').error | translate }}</small>                    
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label>{{ 'srm.weight_instrument.fields.tb_weight' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <p-inputNumber [(ngModel)]="weightInstrument.weight" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" 
+                            maxlength="17" suffix=" {{meassureUnit}}" [class]="submitted && weightInstrument.weight <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()"></p-inputNumber>                        
+                            <small class="p-invalid" *ngIf="!validateForm('weight').isValid">{{ validateForm('weight').error | translate }}</small>                    
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label for="input">{{ 'srm.weight_instrument.height' | translate }} </label>
+                            <p-inputNumber suffix= "cm" [(ngModel)]="weightInstrument.height"  
+                            (ngModelChange)='getCubic()' mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" maxlength="12" (keyup.enter)="save()"></p-inputNumber>                                            
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label for="input">{{ 'srm.weight_instrument.width' | translate }} </label>
+                            <p-inputNumber suffix= "cm" [(ngModel)]="weightInstrument.width" (ngModelChange)='getCubic()'
+                             mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" maxlength="12" (keyup.enter)="save()"></p-inputNumber>                                            
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label for="input">{{ 'srm.weight_instrument.depth' | translate }} </label>
+                            <p-inputNumber suffix= "cm" [(ngModel)]="weightInstrument.depth" (ngModelChange)='getCubic()'
+                             mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" maxlength="12" (keyup.enter)="save()"></p-inputNumber>                                            
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                            <label for="input">{{ 'srm.weight_instrument.cubic' | translate }} </label>
+                            <p-inputNumber suffix= "cm3" [(ngModel)]="cubic" mode="decimal" [disabled] = "true" 
+                            [minFractionDigits]="2" [maxFractionDigits]="2" maxlength="12"></p-inputNumber>                                            
+                        </div>
+                        <div class="p-field p-col-12 p-md-12 p-sm-12">
+                            <label for="dropdown">{{ 'status' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="weightInstrument.active" [options]="status" 
+                             placeholder="Seleccione..." [disabled]="!isEdit" [showClear]="false" (keyup.enter)="save()">
+                            </p-dropdown>
+                        </div>  
+                        <div class="p-field p-col-6 p-md-6 p-sm-6">                
+                            <label>{{ 'srm.weight_instrument.fields.tb_transport' | translate }}</label>
+                        </div>
+                        <div class="p-field p-col-6 p-md-6 p-sm-6">                
+                            <p-inputSwitch [(ngModel)]="isTransport"></p-inputSwitch>
+                        </div> 
+                    </div>
+        
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <span class="p-invalid">{{ 'required_fields' | translate }}</span>
+                    </div> 
+                    <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2"(click)="save()" label="{{ 'save' | translate }}"></button>
+                    </div> 
+                </div>
+            </div>
+            </div>
+            <p-toast position="top-right" key="weight_instrument"></p-toast>
+        </div>
+        
+        
+</p-sidebar>

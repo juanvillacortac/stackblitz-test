@@ -1,0 +1,37 @@
+<div style="margin-bottom: 1rem">
+  <button pButton type="button" label="Expandir todos" (click)="toggleExpanded(true)"
+    style="margin-right: .5rem"></button>
+  <button pButton type="button" label="Contraer todos" (click)="toggleExpanded(false)"></button>
+</div>
+
+<p-treeTable [value]="tree"  [columns]="cols" styleClass="p-treetable-sm" [autoLayout]="true" >
+  <ng-template pTemplate="caption">
+    Plan de cuentas resultado.
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [ngStyle]="{'text-align': col.field === 'itemName' ? 'left' : 'center'}">
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-node let-rowNode let-rowData="rowData" let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns; let i = index" [ngStyle]="{'text-align': col.field === 'itemName' ? 'left' : 'center'}">
+        <div [ngStyle]="{'display': col.field === 'itemName' ? 'flex' : ''}">
+          <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+          <div  *ngIf="col.field === 'applyAuxiliary'; else textCell" style="margin: auto;">
+            
+            <p-checkbox [(ngModel)]="nodes[rowData.id].applyAux" [binary]="true" inputId="applyAuxiliary" disabled>
+            </p-checkbox>
+          </div>
+          
+          <p>
+              {{col?.template(rowData)}}
+          </p>
+        </div>
+      </td>
+
+    </tr>
+  </ng-template>
+</p-treeTable>

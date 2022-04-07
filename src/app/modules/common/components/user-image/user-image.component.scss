@@ -1,0 +1,29 @@
+:host ::ng-deep {    
+    .container:hover{
+        cursor: pointer; 
+    }
+
+    .circle {
+        border-radius: 50%;
+        overflow: hidden;
+    }
+  }
+.user-image {
+    vertical-align: middle; 
+    margin-right: 4px;
+    margin-left: 4px!important;
+}
+.title {
+    margin-left: 8px;
+}
+@media only screen and (max-width: 1140px ) and (min-width: 999px )
+{
+    .user-image {
+        margin-right: 0px!important;     
+        margin-left: 8px!important;     
+    }
+
+    .title{
+        margin-left: 0px !important;     
+    }
+}

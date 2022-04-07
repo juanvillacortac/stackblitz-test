@@ -1,0 +1,17 @@
+:host ::ng-deep{
+    .p-field{
+        margin-bottom: 2rem;
+        
+    }
+     
+    .p-sidebar-content{
+        overflow: unset;
+    }
+     
+    @media screen and (max-width: 992px){
+        #identifier{
+            margin-bottom: 2rem;
+        }
+    }
+
+}

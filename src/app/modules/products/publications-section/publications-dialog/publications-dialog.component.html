@@ -1,0 +1,45 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Publicación</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Tipo de encarte <span [ngStyle]="{'color':'red'}">*</span></label>
+
+                    <p-dropdown (keyup.enter)="savePublication()" [options]="inserttypelist" [(ngModel)]="_publication.insertId" [filter]="true" [showClear]="true" appendTo="body"  emptyFilterMessage="Sin resultados." placeholder="Seleccione..."  [class]="submitted && (!_publication.insertId || _publication.insertId<0) ? 'ng-dirty ng-invalid' : ''">
+                        
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _publication.insertId <= 0">El tipo de encarte es requerido.</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" (keyup.enter)="savePublication()" [class]="submitted && (!_publication.name || !_publication.name.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText id="name" [(ngModel)]="_publication.name" (input)="_validations.toCapitalizeSimbology($event)" maxlength="300" />
+                    <small class="p-invalid" *ngIf="submitted && (!_publication.name || !_publication.name.trim())">El nombre es requerido.</small>
+                </div>
+                <div class="p-field p-col-12 ">
+                    <label for="name">Página<span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="number" pInputText id="page" (keyup.enter)="savePublication()" [(ngModel)]="_publication.page" [class]="submitted && (!_publication.page || _publication.page<=0) ? 'ng-dirty ng-invalid' : ''" oninput="this.value = this.value.length == 1 ? this.value.charAt(0) == 0 ? '' : this.value.charAt(0) : this.value" (keypress)="_validations.keyPressOnlyNumbers($event);" maxlength="3" (paste)="_validations.noPaste($event)" min="0"/>
+                    <small class="p-invalid" *ngIf="submitted && (_publication.page == null || !_publication.page == undefined)">El número de página es requerido.</small>
+                    <small class="p-invalid" *ngIf="submitted && (_publication.page==0)">El número de página debe ser mayor a 0.</small>
+                  </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown [options]="status" [disabled]="_publication.id <= 0" appendTo="body" [(ngModel)]="_publication.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" [disabled]="submitted" (click)="savePublication()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

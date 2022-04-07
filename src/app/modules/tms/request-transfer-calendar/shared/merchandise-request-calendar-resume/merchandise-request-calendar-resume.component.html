@@ -1,0 +1,35 @@
+<div class="resume-container">
+    
+    <label class="p-text-bold p-md-0 p-pd-0" style="width: 100%; display: block;">Número de la solicitud</label>
+    <label class="p-mt-2" style="width: 100%; display: block;">{{ merchandiseRequest.requestNumber }}</label>
+    <label class="p-text-bold p-mt-2" style="width: 100%; display: block;">Sucursal Demanda</label>
+    <label class="p-mt-2" style="width: 100%; display: block;">{{ merchandiseRequest.demandBranch.branchOfficeName }}</label>
+    <label class="p-text-bold p-mt-2" style="width: 100%; display: block;">Documento Asociado</label>
+    <label class="p-mt-2" style="width: 100%; display: block;">{{ merchandiseRequest.associatedDocument == "" ? "Sin asociación" : merchandiseRequest.associatedDocument }}</label>
+    <label class="p-text-bold p-mt-2" style="width: 100%; display: block;">Cant. Items</label>
+    <label class="p-mt-2" style="width: 100%;">{{ merchandiseRequest.quantityItems }}</label>
+    <label class="p-text-bold p-mt-2" style="width: 100%; display: block;">Responsable</label>
+    <div>
+        <img  (click)="prueba(merchandiseRequest.updateByEmploymentRelationshipId)"
+                  pTooltip="{{merchandiseRequest.updateByUser}}"             
+                  style="border-radius:50%; width: 50px; margin-left: 5px;"
+                  src="{{merchandiseRequest.imageUpdateByUser}}"
+                  />
+    </div>    
+    <!-- <label>{{ inventoryCount.responsibleUser }}</label> -->
+    <div *ngIf="isCountFinalized()">
+    <p class="p-text-bold p-mt-2">Fecha de finalización:</p>
+    <label>{{ merchandiseRequest.finalDate | date: 'dd/MM/yyyy'}}</label>
+    </div>
+
+    <!-- <p class="p-text-bold p-mt-2 p-mb-4">Operadores:</p>
+    <div class="p-d-flex p-ai-center p-chips-multiple-container" style="max-width: 400px !important;">        
+            <img
+                  #userImage
+                  id="userImage"  
+                  pTooltip="{{merchandiseRequest.updateByUser}}"             
+                  style="border-radius:50%; width: 50px; margin-left: 5px;"
+                  src="{{merchandiseRequest.imageUpdateByUser}}"
+                  alt="profile"/>            
+    </div> -->
+</div>

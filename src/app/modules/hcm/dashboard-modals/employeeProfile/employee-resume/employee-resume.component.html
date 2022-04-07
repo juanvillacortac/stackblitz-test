@@ -1,0 +1,94 @@
+<div class="user-card card">
+    <div class="user-card-header">
+        <img src="assets/demo/images/nature/los-roques.jpg" alt="prestige-layout">
+    </div>
+    <div class="user-card-content">
+        <img src="{{_dataEmployee.imagePath}}" alt="prestige-layout">
+        <!-- <div class="user-card-name"><span>{{_laborRelationship.employee.employeeFirstName}} {{_laborRelationship.employee.employeeLastName}}</span></div> -->
+        <div class="user-card-name">
+            <span>{{_dataEmployee.name}}</span>
+        </div>
+        <div class="user-card-status">
+            <span>{{_laborRelationship.payrollData.jobPosition}}</span>
+        </div>
+        <div class="user-detail p-mt-1 p-ml-3">
+            <div class="p-grid">
+                <h5 class="p-xs-4 p-mr-2">Empresa: </h5>
+                <div class="p-xs-8">
+                    {{_laborRelationship.socialCompanyName}}
+                </div>
+            </div>
+            <div class="p-grid">
+                <h5 class="p-xs-4 p-mr-2 p-mt-1">Sucursal: </h5>
+                <div class="p-xs-8">
+                    {{_laborRelationship.branchOffice}}</div>
+            </div>
+            <div class="p-grid"> 
+                <h5 class="p-xs-4 p-mr-2 p-mt-1">Supervisor: </h5>
+                <div class="p-xs-8">
+                    {{_laborRelationship.payrollData.supervisorOperative}}</div>
+            </div>
+            <div class="p-grid">
+                <h5 class="p-xs-4 p-mr-2 p-mt-1">Plaza: </h5>
+                <div class="p-xs-8">
+                    {{_laborRelationship.payrollData.fixedPositionInd == true ? "Fijo" : "Rotativo"}}</div>
+            </div>
+            <br>
+            <p-divider align="center">
+                <p-tag severity="info" id="tagAlta" class="p-m-4 tagAlta" value="Información de contacto"></p-tag>
+            </p-divider>
+            <br>
+            <div class="p-grid p-mt-1">
+                <h5 class="p-xs-4 p-mr-2 p-mt-1">Móvil: </h5>
+                <div class="p-xs-8">{{prefixPhone}}
+                    {{_laborRelationship.employee.phoneNumbers[0]?.number}}</div>
+            </div>
+            <div class="p-grid p-mt-1">
+                <h5 class="p-xs-4 p-mr-2 p-mt-1">Email: </h5>
+                <div class="p-xs-8">
+                    {{_laborRelationship.payrollData.corporateEmail}}</div>
+            </div>
+        </div>
+        <!-- <div class="user-detail"> -->
+            <!-- <div class="p-grid p-pl-2 p-pt-2">
+                <h5 class="p-col-12 p-md-4 p-sm-4 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Empresa: </h5>
+                <div class="p-col-12 p-md-8 p-sm-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                    {{_laborRelationship.socialCompanyName}}</div>
+            </div>
+            <div class="p-grid p-pl-2 p-pt-1">
+                <h5 class="p-col-12 p-md-4 p-sm-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Sucursal: </h5>
+                <div class="p-col-12 p-md-4 p-sm-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                    {{_laborRelationship.branchOffice}}</div>
+            </div>
+            <div class="p-grid p-pl-2 p-pt-1">
+                <h5 class="p-col-12 p-md-4 p-sm-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Supervisor: </h5>
+                <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                    {{_laborRelationship.payrollData.supervisorOperative}}</div>
+            </div> -->
+            <!-- <div class="p-grid p-pl-2 p-pt-1">
+                <h5 class="p-col-12 p-md-4 p-sm-4 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">Plaza: </h5>
+                <div class="p-col-12 p-md-4 p-sm-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                    {{_laborRelationship.payrollData.fixedPositionInd == true ? "Fijo" : "Rotativo"}}</div>
+            </div>
+            <br>
+            <p-divider align="center">
+                <p-tag severity="info" id="tagAlta" class="p-m-4 tagAlta" value="Información de contacto"></p-tag>
+            </p-divider>
+            <br>
+            <div class="p-grid p-pl-2 p-pt-1">
+                <h5 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">Móvil: </h5>
+                <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{prefixPhone}}
+                    {{_laborRelationship.employee.phoneNumbers[0]?.number}}</div>
+            </div>
+            <div class="p-grid p-pl-2 p-pt-1">
+                <h5 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">Email: </h5>
+                <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                    {{_laborRelationship.payrollData.corporateEmail}}</div>
+            </div> -->
+        <!-- </div> -->
+    </div>
+    <div class="user-card-footer timeline-footer">
+        <button (click)="onEdit(_laborRelationship.employee.idEmployee)" pButton label="Ver más..."
+            class="p-button-text p-md-12 footer"></button>
+    </div>
+</div>

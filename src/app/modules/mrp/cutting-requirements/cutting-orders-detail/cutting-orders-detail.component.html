@@ -1,0 +1,92 @@
+<p-sidebar  styleClass="p-sidebar-md" [style]="{'overflow-y': 'auto'}"
+        [(visible)]="showPanel"
+        (onShow)="ngOnInit()" 
+        (onHide)="hideDialog()" 
+        [blockScroll]="false" 
+        [showCloseIcon]="true"  
+        [dismissible]="false" 
+        position="right" >
+    <h5 class="p-m-0"> {{ 'mrp.cutting_order.cutting_of' | translate }}{{ processingRoom?.animalType}}</h5>
+    <hr/>
+    <div class="p-grid">
+        <div class="p-col-12"> 
+            <div class="card">       
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">   
+                    <label for="dropdown">{{ 'mrp.cutting_order.fields.raw_material' |  translate }} <span *ngIf="!isEdit" [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [disabled]="isEdit" (onChange)="onRawMaterialChanged()" [(ngModel)]="selectedRawMaterial" [options]="rawMaterials" optionLabel="name" placeholder="{{ 'mrp.cutting_order.placeholders.select_raw_material' | translate }}" [showClear]="true" [autoDisplayFirst]="false">
+                    </p-dropdown> 
+                    <small class="p-invalid" *ngIf="submitted && (!selectedRawMaterial)">{{ 'mrp.cutting_order.validations.raw_material_required' | translate }}</small>  
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.cutting_order.fields.expected_performance' | translate}}</label>
+                        <p-inputNumber suffix= "%" [(ngModel)]="cuttingOrder.expectedPerformance" mode="decimal" [minFractionDigits]="2" maxlength='7' [disabled]="true"></p-inputNumber>                        
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.cutting_order.fields.piece_quantity' | translate }} <span *ngIf="!isEdit" [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber [(ngModel)]="cuttingOrder.pieceQuantity" [disabled]="isEdit"  mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="0" maxlength='4'></p-inputNumber>                        
+                        <small class="p-invalid" *ngIf="!validateForm('quantity').isValid">{{ 'mrp.cutting_order.validations.piece_quantity_required' | translate }}</small>                    
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.cutting_order.fields.labeled_weight' | translate }} <span *ngIf="!isEdit" [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber suffix= "gr" [(ngModel)]="cuttingOrder.labeledWeight" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [disabled]="isEdit" maxlength="12"></p-inputNumber>                        
+                        <small class="p-invalid" *ngIf="!validateForm('labeled_weight').isValid">{{ validateForm('labeled_weight').error | translate }}</small>                    
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                        <label for="input">{{ 'mrp.cutting_order.fields.real_weight' | translate }} <span *ngIf="!isEdit" [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-inputNumber suffix= "gr" [(ngModel)]="cuttingOrder.realWeight" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"[maxFractionDigits]="2" [disabled]="isEdit" maxlength="12"></p-inputNumber>                        
+                        <small class="p-invalid" *ngIf="!validateForm('real_weight')?.isValid">{{ validateForm('real_weight')?.error | translate }}</small>                    
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label>{{ 'mrp.cutting_order.departure_estimate' | translate }}</label>
+                    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="cuttingOrder.cuttings" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+                    currentPageReportTemplate="{{ 'primeng.footerShort' | translate }}" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+                      <ng-template pTemplate="header" let-columns>
+                          <tr>
+                            <ng-container *ngFor="let col of columns">  
+                                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                                  {{ col.header | translate }}
+                                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-cuttingDetail let-columns="columns">
+                        <tr>
+                          <ng-container *ngFor="let col of columns">
+                              <td [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }">
+                                    <div *ngIf="col.field === 'realWeight' || col.field === 'performance'; else textCell">
+                                        {{(cuttingDetail[col.field])|number:'1.2-2'}}
+                                    </div>
+                                  <ng-template #textCell>
+                                  {{cuttingDetail[col.field]}}
+                                  </ng-template>
+                              </td>
+                          </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                           {{ 'mrp.cutting_order.realWeight_total' | translate }} {{ getTotalPerformance()|number:'1.2-2'}}gr
+                        </div>
+                    </ng-template>
+                      <ng-template pTemplate="paginatorleft">
+                            </ng-template>
+                            <ng-template pTemplate="paginatorright">
+                            </ng-template>
+                    </p-table>
+                </div>
+
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="!isEdit">
+                        <span class="p-invalid">{{ 'required_fields' | translate}}</span>
+                    </div> 
+                    <div class="p-field p-col-12 p-md-12">
+                            <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" (click)="save()" label="{{ 'save' | translate }}" [disabled]="cuttingOrder.id > 0"></button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>

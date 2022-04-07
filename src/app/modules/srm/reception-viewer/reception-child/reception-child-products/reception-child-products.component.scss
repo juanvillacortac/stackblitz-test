@@ -1,0 +1,38 @@
+#tabview {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 100%;
+}
+
+:host ::ng-deep {
+    #tabview .p-tabview .p-tabview-panels {
+        background: #eceff4 !important ;
+    }
+
+    .tabview-custom {
+        i, span {
+            vertical-align: middle;
+        }
+    }
+
+    .p-tabview p {
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    #tabview div ul li a
+    {
+        background: #eceff4;
+        border-color: #eceff4;
+        color: #5E81AC;
+    }
+
+
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+         
+        border-bottom-color: #5E81AC !important;
+        border-radius: 3px;
+        border-bottom-width: 3px;
+    }
+}

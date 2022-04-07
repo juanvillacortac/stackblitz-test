@@ -1,0 +1,51 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <label for="range">Creado por</label>
+        <p-dropdown emptyMessage="Sin resultados." [showClear]="true" emptyFilterMessage="Sin resultados." [(ngModel)]="selectedUser" [filter]="true" [options]="users" [virtualScroll]="true" itemSize="10" placeholder="Seleccione...">
+            <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value"  *ngIf="selectedUser.id >= 0 ">
+                    <img src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-user-icon-symbol-design-user-icon-isolated-design-png-image_1746919.jpg" class="flag" />
+                    <div style="margin-left: 10px;">{{selectedUser.person.name+" "+selectedUser.person.lastName}}</div>
+                </div>
+            </ng-template> 
+            <ng-template let-user pTemplate="item">
+                <div class="country-item">
+                    <img src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-user-icon-symbol-design-user-icon-isolated-design-png-image_1746919.jpg" class="flag" />
+                    <div>{{user.person.name+" "+user.person.lastName}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+            <label for="range">Rango de creación</label>
+            <p-calendar [(ngModel)]="rangeDates" placeholder="Indique rango" [showIcon]="true" [maxDate]="today" selectionMode="range" [readonlyInput]="true" inputId="range"></p-calendar>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <label for="range">Formato multimedia</label>
+        <p-dropdown [showClear]="true" emptyMessage="Sin resultados." emptyFilterMessage="Sin resultados." [options]="activeTab==1 ? formatsVid : formatsPic" placeholder="Seleccione..." [(ngModel)]="format" display="chip"></p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-3 p-fluid">
+        <label for="range">Uso multimedia</label>
+        <p-multiSelect [resetFilterOnHide]="true" emptyMessage="Sin resultados." (onChange)="ValidateChecksUseMultimedia()" emptyFilterMessage="Sin resultados." [filter]="true" display="chip" appendTo="body" [options]="multimediaUseList" [(ngModel)]="multimediaUsesSelecteds" placeholder="Seleccione...">
+        </p-multiSelect >
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12 p-d-flex p-jc-end" style="margin: inherit;">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info"></button>
+                
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+                
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <button pButton pRipple label="Nuevo" [disabled]="loading" (click)="openNew()" icon="pi pi-plus" class="p-button-success"></button>
+                
+            </div>
+        </div>
+    </div>
+        
+        
+</div>

@@ -1,0 +1,199 @@
+<div class="card p-m-0">
+    <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="dataProductoReturn"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+        scrollHeight="50vh" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <!-- <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        </div>
+    </ng-template>       -->
+<!--         <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                
+                <col style="width:80px">
+                <col style="width:200px">
+                <col style="width:280px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:140px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+                <col style="width:200px">
+            </colgroup>
+        </ng-template> -->
+
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col style="width:100px"> 
+                <ng-container *ngFor="let col of columns"> 
+                       <col style="min-width:200px">
+                    </ng-container>
+            </colgroup>
+        </ng-template>
+
+
+
+        <ng-template pTemplate="caption">
+            <p-multiSelect [options]="colsMicro" [(ngModel)]="selectedColumns" optionLabel="header"
+                selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}"
+                placeholder="Elija las columnas"></p-multiSelect>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th></th>
+                <!-- <th style="display: none;" pSortableColumn="Id">Id</th> -->
+                <!-- <th></th> -->
+                <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }"
+                        [pSortableColumn]="col.field">
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                            <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                        </div>
+                    </th>
+                </ng-container>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-return let-columns="columns">
+            <tr>
+                <td>
+<!--                     <ng-container *ngIf="checkOrderStatus(order)">
+                        <button #btn3 type="button" pButton icon="pi pi-list" class="p-button-rounded p-button-success p-mr-2"
+                                pTooltip="Crear tarea de recepción" (click)="toggleMenu(receptionOptions, $event, order)"></button>
+                    </ng-container>
+                    
+                     -->
+                    
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        pTooltip="Editar"></button>
+
+                </td>
+                <!-- <td style="display: none;">{{product.id}}</td> -->
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="return[col.field]">
+                        </app-active-label>
+                        <ng-container *ngIf="col.field === 'numeroDevolucion'" #textCell>
+                    
+                                <h6>{{col.template(return)}} </h6>
+
+                        </ng-container>
+                        <ng-container *ngIf="col.field != 'numeroDevolucion'" #textCell>
+                    
+                            <span>{{col.template(return)}} </span>
+
+                    </ng-container>
+                        
+                    <!--     <ng-template #textCell>
+                            <span>{{col.template(return)}} </span>
+                        </ng-template -->
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="17">No existen
+                resultados</td>
+              <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+                existen resultados</td>
+            </tr>
+          </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+
+</div>
+
+
+
+
+
+<!-- <p-table #dt [columns]="colsMicro" [rowHover]="true" [value]="dataProductoReturn"
+[paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                 
+                    
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th></th>
+            
+                    <ng-container *ngFor="let col of columns">
+                        <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }"
+                            [pSortableColumn]="col.field">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            
+                            </div>
+                        </th>
+                    </ng-container>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order let-columns="columns">
+                <tr>
+
+                    
+                    <ng-container *ngFor="let col of columns">
+                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+                            </app-active-label>
+                            <ng-template #textCell>
+                                <span>{{col.template(order)}} </span>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">No existen
+                    resultados</td>
+                <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+                    existen resultados</td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+</p-table>
+ -->

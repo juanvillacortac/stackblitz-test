@@ -1,0 +1,109 @@
+
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid"  [formGroup]="cityForm">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText #name maxlength="100" firstLetterUpperCase (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        formControlName="name" required 
+                        [ngClass]="{'p-invalid':(cityForm.controls.name.invalid && (cityForm.controls.name.dirty || cityForm.controls.name.touched || submitted))}"/>                     
+                    <div *ngIf="cityForm.controls.name.invalid && (cityForm.controls.name.dirty || cityForm.controls.name.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="cityForm.controls.name.errors?.required">
+                            El nombre es requerida.
+                        </div>
+                    </div> 
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input">Abreviatura </label>
+                        <input pInputText #name maxlength="3" onlyUpperCase
+                        (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        formControlName="abbreviation"/>                     
+             
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">  
+                    <label for="input">Latitud </label>              
+                    <p-inputNumber #latitude  mode="decimal" [minFractionDigits]="3" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="latitude"></p-inputNumber>  
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                  <label for="input">Longitud </label>
+                  <p-inputNumber #longitude mode="decimal" [minFractionDigits]="3" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                  formControlName="longitude"></p-inputNumber>     
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="status" appendTo="body" [autoDisplayFirst]="false" [disabled]="!isEdit" formControlName="statusValue"
+                        [class]="{'ng-dirty':(cityForm.controls.statusValue.invalid && (cityForm.controls.statusValue.dirty || cityForm.controls.statusValue.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="cityForm.controls.statusValue.invalid && (cityForm.controls.statusValue.dirty || cityForm.controls.statusValue.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="cityForm.controls.statusValue.errors?.required">
+                                El estatus es requerido.
+                            </div>
+                        </div>  
+                </div>      
+                             
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">País <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="countries.value" appendTo="body" [showClear]="true" optionLabel="name"
+                        (onChange)="onCountrySelected($event.value)" [autoDisplayFirst]="false" formControlName="selectedCountry"
+                        [class]="{'ng-dirty':(cityForm.controls.selectedCountry.invalid && (cityForm.controls.selectedCountry.dirty || cityForm.controls.selectedCountry.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="cityForm.controls.selectedCountry.invalid && (cityForm.controls.selectedCountry.dirty || cityForm.controls.selectedCountry.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="cityForm.controls.selectedCountry.errors?.required">
+                                El país es requerido.
+                            </div>
+                        </div>  
+                </div>  
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estado <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="states.value" [disabled]="!countrySelected" appendTo="body" [showClear]="true" optionLabel="name"
+                         (onChange)="onStateSelected($event.value)"
+                         [autoDisplayFirst]="false" formControlName="selectedStates"
+                         [class]="{'ng-dirty':(cityForm.controls.selectedStates.invalid && (cityForm.controls.selectedStates.dirty || cityForm.controls.selectedStates.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="cityForm.controls.selectedStates.invalid && (cityForm.controls.selectedStates.dirty || cityForm.controls.selectedStates.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="cityForm.controls.selectedStates.errors?.required">
+                                El estado es requerido.
+                            </div>
+                        </div>  
+                </div>  
+                                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Municipio <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="district.value" [disabled]="!stateSelected" appendTo="body" [showClear]="true" optionLabel="name"
+                         [autoDisplayFirst]="false" formControlName="selectedDistrict"
+                         [class]="{'ng-dirty':(cityForm.controls.selectedDistrict.invalid && (cityForm.controls.selectedDistrict.dirty || cityForm.controls.selectedDistrict.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="cityForm.controls.selectedDistrict.invalid && (cityForm.controls.selectedDistrict.dirty || cityForm.controls.selectedDistrict.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="cityForm.controls.selectedDistrict.errors?.required">
+                                El municipio es requerido.
+                            </div>
+                        </div>  
+                </div>  
+
+            </div>
+
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" (click)="onSave()"label="Guardar"></button>
+            </div> 
+        </div>
+    </div>
+    </div>
+    <p-toast position="top-right" key="city"></p-toast>
+</div>

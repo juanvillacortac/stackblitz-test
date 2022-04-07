@@ -1,0 +1,57 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.name" sentenceType name="name" id="name" (keyup.enter)="search()" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="100" pInputText>
+                <label for="float-input">Nombre</label>
+            </span>
+        </div>        
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.abbreviation" onlyUpperCase
+                 name="abbreviation" id="abbreviation"  (keyup.enter)="search()" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" type="text" maxlength="5" pInputText>
+                <label for="float-input">Abreviatura</label>
+            </span>
+        </div>        
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="status" id="status" appendTo="body" [(ngModel)]="filters.active" (keyup.enter)="search()" [showClear]="false"
+                ></p-dropdown>
+                <label for="status">Estatus</label>
+            </span>
+        </div>  
+    </div>  
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="countries.value" id="country" appendTo="body" optionLabel="name"  
+                [(ngModel)]="idCountry" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onCountrySelected($event.value)" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="country">País</label>
+
+            </span>
+        </div>   
+    </div> 
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+        <div class="p-field">
+            <span class="p-float-label">
+                <p-dropdown [options]="taxeTypeApplication.value" id="taxeTypeApplication" appendTo="body" optionLabel="name"
+                [(ngModel)]="idTaxeTypeApplication" [showClear]="true" [autoDisplayFirst]="false"
+                (onChange)="onTaxeTypeApplicatioSelected($event.value)" (keyup.enter)="search()"
+                ></p-dropdown>
+                <label for="taxeTypeApplication">Tipo de aplicación</label>
+            </span>
+        </div>  
+    </div>  
+
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary"></button>
+    </div>
+</div>

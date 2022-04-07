@@ -1,0 +1,79 @@
+<div class="card p-shadow-4">
+  <p-card [style]="{'width': '100%', 'margin-bottom': '0.5em'}" styleClass="p-shadow-0" header="Producto">
+    <div style="text-align:right;">
+      <button pButton pRipple icon="pi pi-search" *ngIf="merchandiseRequest.requestType.id != 1"
+        class="p-button-rounded p-button-success p-mr-2" (click)="onAdvancedProductSearch()"
+        pTooltip="Búsqueda avanzada de productos" tooltipPosition="top"></button>
+    </div>
+    <div class="p-grid p-align-center vertical-container p-p-3">
+      <div class="p-col-12 p-md-12 p-lg-12">
+        <div class="p-grid">
+          <div class="p-col-12 p-md-4">
+            <div>
+              <div class="container-img-viewer" style="margin: auto">
+                <img [src]="product.product.image == null || product.product.image == ''  ? defectImage.defectImage
+                      : product.product.image" [alt]="product.product.name" width="75" class="p-shadow-4" />
+              </div>
+            </div>
+          </div>
+          <div class="p-col-12 p-md-8">
+            <h6 style="margin: 0;">{{product != undefined ? product.product.name : "Producto"}}</h6>
+            <h6 style="margin: 0;">{{product != undefined ? product.product.barcode : ""}}</h6>
+            <h6 style="margin: 0;">{{product != undefined ? product.product.referent : ""}}</h6>
+            <h6 style="margin: 0;">
+              {{product != undefined && product.product.category != null ? product.product.category.name : ""}}</h6>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-fluid">
+            <label>Barra <span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-inputgroup">
+              <input name="barCode" [disabled]="merchandiseRequest.requestType.id == 1" id="barCode" type="text"
+                pInputText maxlength="100" [(ngModel)]="barProduct" (keyup.enter)="searchProduct()">
+              <button [disabled]="merchandiseRequest.requestType.id == 1" pButton pRipple icon="pi pi-search"
+                class="p-button-primary p-mr-2" (click)="searchProduct()"></button>
+              <!-- <button type="button" pButton pRipple icon="pi pi-search" styleClass="p-button-warn"></button> -->
+            </div>
+            <small class="p-invalid" *ngIf="searchBarCode && barProduct == ''">Ingrese un código de barra</small>
+            <small class="p-invalid"
+              *ngIf="submittedAdd && (product == undefined || product.idProductBranchOfficePacking == -1)">Ingrese un código de barra</small>
+            <small class="p-invalid"
+              *ngIf="showProductNotFound">Producto no encontrado</small>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-4">
+            <label>Detalle tipo de uso <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown appendTo="body" [disabled]="merchandiseRequest.requestType.id == 1"
+              [options]="detailUseTypeList" [(ngModel)]="productMerchandiseRequest.detailUseType.id"
+              placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedAdd && (productMerchandiseRequest == undefined || productMerchandiseRequest.detailUseType.id == -1)">El
+              detalle tipo de uso es requerido</small>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-fluid p-mt-4">
+            <label>Cantidad solicitada <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-inputNumber [(ngModel)]="productMerchandiseRequest.requestedAmount" *ngIf="product.product.heavyInd"
+              inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" maxlength="20">
+            </p-inputNumber>
+            <input [disabled]="merchandiseRequest.requestType.id == 1"  *ngIf="!product.product.heavyInd" name="barCode" id="barCode" type="number"
+              [(ngModel)]="productMerchandiseRequest.requestedAmount" pInputText [maxlength]="14"
+              onKeyPress="if(this.value.length==14) return false;">
+            <small class="p-invalid"
+              *ngIf="submittedAdd && (productMerchandiseRequest == undefined || productMerchandiseRequest.requestedAmount <= 0)">La
+              cantidad solicitada debe ser mayor a 0</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <small [ngStyle]="{'color':'red'}">(*) Campos obligatorios</small>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12 p-mt-4" style="text-align: right;">
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && showButtonSave" pButton pRipple label="Guardar"
+              icon="pi pi-save" class="p-button-success p-mr-2" (click)="saveproduct()"></button>
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && showButtonAdd" pButton pRipple label="Agregar"
+              icon="pi pi-plus" class="p-button-primary p-mr-2" (click)="addproduct()"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<app-advanced-product-search [(showDialogAddProduct)]="showDialogAdvanceProductSearch" [(productList)]="productList" [(listProductsRequest)]="listProducts"
+  (addproductslist)="addproductslist()"  [(originBranchOfficeId)]="originBranchOfficeId" [(indModule)]="indModule"></app-advanced-product-search>

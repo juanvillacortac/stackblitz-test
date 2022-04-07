@@ -1,0 +1,55 @@
+<div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <span class="p-input-icon-left p-ml-auto p-mr-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+          placeholder="Buscar" />
+      </span>
+      
+    </div>
+  </div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="txablesList"
+         [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <ng-container *ngFor="let col of columns">
+
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+                <th [ngStyle]="{'width': '130px'}"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-taxable let-columns="columns">
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        <span class="p-column-title">{{col.header}}</span>
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="taxable[col.field]"></app-active-label>
+                        <ng-template #textCell>
+                            <span>{{col.template(taxable)}} </span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <td>
+                    <!-- (click)="onRemoveSpecification(specification.id)"  (click)="editTaxableDeductible(order)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+                    <button pButton pRipple icon="pi pi-trash" (click)="onRemove(taxable)"
+                         class="p-button-rounded p-button-danger p-mr-2"
+                        pTooltip="Eliminar"></button>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                  pTooltip="Editar"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+    </p-table>
+
+</div>

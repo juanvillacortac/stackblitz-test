@@ -1,0 +1,71 @@
+:host ::ng-deep {
+
+    #search-employee{
+        padding-bottom: 1.3rem;
+    }
+    #search-employee .p-button{
+        width: auto;
+    }
+    
+    #quota-form{
+        padding: 0px;
+    }
+    
+    #quota-form .p-button{
+        width: 2.357rem;
+        padding: 0.5rem 0;
+    
+    }
+            ///conversionInterestRateAmount
+    #loanAmount, #loanAmount .p-inputnumber-input,
+    #conversionLoanAmount, #conversionLoanAmount .p-inputnumber-input,
+    #interesRate, #interesRate .p-inputnumber-input,
+    #neto, #neto .p-inputnumber-input,
+    #conversionNeto, #conversionNeto .p-inputnumber-input,
+    #amount, #amount .p-inputnumber-input,
+    #conversionAmount, #conversionAmount .p-inputnumber-input,
+    #conversion, #conversion .p-inputnumber-input,
+    #conversionInterestRateAmount, #conversionInterestRateAmount .p-inputnumber-input,
+    #interestRateAmount, #interestRateAmount .p-inputnumber-input{
+        width: 100%;
+    }
+    
+    #loanAmount input:first-child,
+    #conversionLoanAmount input:first-child,
+    #neto input:first-child,
+    #conversionNeto input:first-child,
+    #amount input:first-child,
+    #conversionAmount input:first-child,
+    #interestRateAmount input:first-child,
+    #conversionInterestRateAmount input:first-child,
+    #conversion input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    
+    #interesRate input:last-child{
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    #regresarDiv {
+        position: fixed;
+        padding: 5px 20px;
+        z-index: 1000;
+        bottom: 0;
+        right: 0;
+      }
+
+      #formButtonsDiv {
+        height: 5.5rem;
+        margin: 0 auto !important;
+    }
+    
+    @media screen and (max-width: 768px){
+    
+        #currency, #rate {
+         margin-bottom: 2rem;
+        }
+    }
+
+}

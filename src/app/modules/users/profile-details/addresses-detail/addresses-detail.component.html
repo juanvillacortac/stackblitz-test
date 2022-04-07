@@ -1,0 +1,96 @@
+<h2 class="p-m-0">{{formTittle}}</h2>
+<hr/>
+<div class="card p-mb-0">
+    <div class="p-fluid p-grid" [formGroup]="addressForm">
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="addressType" [autoDisplayFirst]="false" [options]="addressType.value"
+                            formControlName="idAddressType" optionLabel="name"></p-dropdown>
+                <label for="dropdown">Tipo de Dirección</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="places" [autoDisplayFirst]="false" [options]="places.value"
+                            formControlName="idPlaceType" optionLabel="name"></p-dropdown>
+                <label for="dropdown">Tipo de Lugar</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="countries" [autoDisplayFirst]="false" [options]="countries.value"
+                            formControlName="idCountry" optionLabel="name"
+                            (onChange)="onCountrySelected($event.value)"></p-dropdown>
+                <label for="dropdown">País</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="provinces" [autoDisplayFirst]="false" [(options)]="provinces.value"
+                            formControlName="idProvince" optionLabel="name"
+                            (onChange)="onProvinceSelected($event.value)"></p-dropdown>
+                <label for="dropdown">Provincia/Estado</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="districts" [autoDisplayFirst]="false" [options]="districts.value"
+                            (onChange)="onDistrictSelected($event.value)"
+                            formControlName="idDistrict" optionLabel="name"></p-dropdown>
+                <label for="dropdown">Distrito</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <p-dropdown inputId="cities" [autoDisplayFirst]="false" [options]="cities.value"
+                            formControlName="idCity" optionLabel="name"></p-dropdown>
+                <label for="dropdown">Ciudad</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText noneSpecialCharacters id="avenue" formControlName="avenue" maxlength="40"/>
+                <label for="name">Avenida</label>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-sm-12 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText noneSpecialCharacters id="street" formControlName="street" maxlength="40"/>
+                <label for="name">Calle</label>
+            </span>
+        </div>
+        <div class="p-field  p-md-4 p-sm-12 p-mt-2 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText noneSpecialCharacters id="building" formControlName="building" maxlength="40"/>
+                <label for="name">Edificio/Casa</label>
+            </span>
+        </div>
+        <div class="p-field  p-md-4 p-sm-12 p-mt-2 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText numbersOnly id="floor" formControlName="floor" maxlength="3"/>
+                <label for="name">Piso</label>
+            </span>
+        </div>
+        <div class="p-field p-md-4 p-sm-12 p-mt-2 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText noneSpecialCharacters id="apartment" formControlName="apartment" maxlength="3"/>
+                <label for="name">Departamento</label>
+            </span>
+        </div>
+
+        <div class="p-field p-md-12 p-sm-12 p-mt-2 p-mt-2">
+            <span class="p-float-label">
+                <input pInputText noneSpecialCharacters id="reference" lettersOnly formControlName="reference"
+                       maxlength="150"/>
+                <label for="name">Referencia</label>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="p-fluid">
+    <app-footer-form-buttons [disableSave]="!addressForm.valid"
+                             (acceptPressed)="onSubmitProfile()"
+                             (cancelPressed)="onCloseDialog()">
+    </app-footer-form-buttons>
+</div>

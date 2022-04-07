@@ -1,0 +1,30 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <barproduct [(idproduct)]="idproduct" [(_statusproduct)]="_statusproduct" [(_product)]="_product" [(complete)]="completedata"></barproduct>
+    </div>
+    <div class="p-col-12" *ngIf="!mobile">
+        <button type="button" pButton icon="pi pi-bars" label="Menú" (click)="menu.toggle($event)"></button>
+        <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="p-col-12" *ngIf="mobile">
+        <p-tabMenu [model]="items" [activeItem]="items[0]" class="p-fluid" ></p-tabMenu>
+        <!-- <menu-mpc [(idproduct)]="idproduct"></menu-mpc> -->
+    </div>
+    <div class="p-col-12">
+     <!--    <app-product-dashboard *ngIf="indmenu==menuproduct.Dashboard"> </app-product-dashboard> -->
+        <general-section [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.General" (refreshchanges)="refreshchanges()" (refreshproduct)= "refreshproduct($event)"></general-section>
+        <product-complementary [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Complementary" (refreshchanges)="refreshchanges()" (clearchanges)="clearchanges()"></product-complementary>
+        <app-product-association-detail [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Associated"></app-product-association-detail>
+        <app-product-branch-office-tabpanel [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.BranchOffices"></app-product-branch-office-tabpanel>
+        <publications-list [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Publications"></publications-list>
+        <logisticdata-main [(heavyInd)]="_product.heavyInd" [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.LogisticData" (refreshchanges)="refreshchanges()" (clearchanges)="clearchanges()" (refreshcompleted)="refreshcompleted()"></logisticdata-main>
+        <specifications-list [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Specifications" (refreshcompleted)="refreshcompleted()"></specifications-list>
+        <qa-list [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Quality"></qa-list>
+        <multimedia-main [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Multimedia" (refreshproduct)= "refreshproduct($event)" (refreshchanges)="refreshchanges()" (clearchanges)="clearchanges()" (refreshcompleted)="refreshcompleted()"></multimedia-main>
+        <producttaxes-main [(idproduct)]="idproduct" *ngIf="indmenu==menuproduct.Taxes" (refreshcompleted)="refreshcompleted()"></producttaxes-main>
+    </div>
+    
+</div>
+

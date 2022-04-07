@@ -1,0 +1,79 @@
+<div *ngIf="expanded" >
+    <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input  [(ngModel)]="filters.adjustmentNumber" #adjustmentNumber (keyup.enter)="onSearch()" type="text" pInputText [pKeyFilter]="valid" maxlength="50">
+                    <label>{{ 'ims.inventory_adjustment_report.document_number' | translate }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+                <p-dropdown  [options]="groupMotives" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.adjustmentMotiveGroupId" (keyup.enter)="onSearch()" emptyMessage="Sin resultados" placeholder="{{ 'ims.inventory_adjustment_report.group_motive' | translate }}" (onChange)="loadMotives()"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+                <p-dropdown  [options]="motives" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.adjustmentMotiveId" (keyup.enter)="onSearch()" emptyMessage="Sin resultados" placeholder="{{ 'ims.inventory_adjustment_report.motive' | translate }}"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input  [(ngModel)]="filters.barcode" #barcode type="text" noneSpecialCharacters pInputText maxlength="20" (keyup.enter)="onSearch()">
+                    <label for="float-input">{{ 'ims.inventory_adjustment_report.barcode' | translate }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.productName" type="text" maxlength="100" pInputText maxlength="50" [pKeyFilter]="valid" (keyup.enter)="onSearch()">
+                    <label for="float-input">{{ 'ims.inventory_adjustment_report.product_name' | translate }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+                <p-dropdown  [options]="statuslist" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.statusId" (keyup.enter)="onSearch()" emptyFilterMessage="Sin resultados" placeholder="{{ 'ims.inventory_adjustment_report.status' | translate }}"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span class="p-float-label">
+                <p-dropdown  [options]="areaList" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.areaId" [filter]="true" (keyup.enter)="onSearch()" emptyFilterMessage="Sin resultados"  placeholder="{{ 'ims.inventory_adjustment_report.area' | translate }}"></p-dropdown>
+            </span>     
+        </div>
+
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+                <p-dropdown  [options]="adjustmentTypes" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.adjustmentTypeId" [filter]="true" (keyup.enter)="onSearch()" emptyFilterMessage="Sin resultados"  placeholder="{{ 'ims.inventory_adjustment_report.adjustment_type' | translate }}"></p-dropdown>
+        </div>
+
+        <!-- categories -->
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <div class="p-inputgroup">
+                <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="onSearch()" placeholder="Categorías" readonly="true">
+                <app-dropdown-tree [treeData]='categoryService._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                [isDisabled]='false' 
+                (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+            </div>
+        </div>
+        <!--End categories-->
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="{{ 'ims.inventory_adjustment_report.responsible' | translate }}" [(ngModel)]="responsibleSelected" readonly="true">
+                <button icon="pi pi-search" pButton pRipple (click)="showOperatorModal()"></button>          
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span pTooltip="Fecha inicio" tooltipPosition="right" class="p-float-label">
+                <p-calendar  inputId="calendar" [(ngModel)]="startDateFilter" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2050" [maxDate]="endDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-field">
+            <span pTooltip="Fecha fin" tooltipPosition="right" class="p-float-label">
+                <p-calendar inputId="endCalendar" [(ngModel)]="endDateFilter" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2050" [maxDate]="maxDate" [minDate]="startDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label=" {{ 'ims.inventory_adjustment_report.btn_search' | translate }}" [disabled]="loading" (click)="onSearch()" icon="pi pi-onSearch" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label=" {{ 'ims.inventory_adjustment_report.btn_clear' | translate }}"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+<operator-modal-list [showDialog]="showOperatorDialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [multiples]="false"></operator-modal-list>

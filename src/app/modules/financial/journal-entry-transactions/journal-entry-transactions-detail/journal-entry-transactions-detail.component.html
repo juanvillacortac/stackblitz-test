@@ -1,0 +1,289 @@
+<ng-container>
+  <div class="menorMargen card p-grid">
+    <div class="p-col-6 p-md-6 p-sm-6 p-lg-6">
+      <h5>Movimiento diario</h5>
+    </div>
+    <div class="p-col-6 p-md-6 p-sm-6 p-lg-6" style="text-align: right;">
+      <span style="margin-right: 20px;"><label style="font-weight: bold;">Estatus: </label>{{journalEntryTransaction.id == -1 ? "Borrador" :journalEntryTransaction.status}}</span> 
+      <span style="margin-right: 20px;" *ngIf="getPostingDate()"><label style="font-weight: bold;">Fecha de contabilización: </label>{{toDate(journalEntryTransaction.postingDate)}}</span>
+    </div>
+    <!-- <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+        <h6>Fecha:</h6>
+    </div>
+    <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+        <h6>Fecha contabilización:</h6>
+    </div> -->
+    <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+      <div class="p-grid">
+        <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+          <label for="documentNumber">Número de comprobante</label>
+          <input type="text" [(ngModel)]="journalEntryTransaction.documentNumber" inputId="documentNumber" [disabled]="true" maxlength="255" pInputText>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+          <label for="transactionDate">Lote <span [ngStyle]="{'color':'red'}">*</span></label>
+          <div class="p-inputgroup">
+            <input type="text" pInputText pKeyFilter="int" [value]="journalEntryTransaction.lot"
+              [class]="false && !journalEntryTransaction.lot ? 'ng-dirty ng-invalid' : ''" disabled>
+            <button pButton icon="pi pi-times" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER" style="border-radius: 0;" (click)="journalEntryTransaction.idLot = -1;journalEntryTransaction.lot = ''"></button>
+            <button pButton icon="pi pi-search" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER" (click)="lotModal = true"
+              style="border-top-left-radius: 0; border-bottom-left-radius: 0;"></button>
+          </div>
+          <small class="p-invalid" *ngIf="submitted && journalEntryTransaction.idLot<=-1">El lote es requerido</small>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-4 p-mt-4">
+          <label for="documentNumber">Fecha del documento</label>
+          <p-calendar [(ngModel)]="journalEntryTransaction.transactionDate" dateFormat="dd/mm/yy" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" [showIcon]="true" inputId="icon"></p-calendar>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3">
+          <label for="referent">Referencia</label>
+          <input type="text" [(ngModel)]="journalEntryTransaction.referent" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" inputId="referent" maxlength="255" pInputText>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3">
+          <label for="concept">Concepto</label>
+          <input type="text" [(ngModel)]="journalEntryTransaction.concept" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" inputId="referent" maxlength="255" pInputText>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3">
+          <label for="transactionDate">Tipo</label>
+          <p-dropdown [options]="typeEntryTransaction" [disabled]="true" [filter]="true" emptyMessage="Sin resultados." placeholder="Seleccione..."
+            [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+            [(ngModel)]="journalEntryTransaction.idType">
+          </p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && journalEntryTransaction.idType<=-1">El tipo es requerido</small>
+        </div>
+        <div class="p-col-12 p-md-3 p-lg-3">
+          <label for="transactionDate">Moneda <span [ngStyle]="{'color':'red'}">*</span></label>
+          <p-dropdown [filter]="true" emptyMessage="Sin resultados." placeholder="Seleccione..."
+            [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+            [options]="filterData.currencies" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" [(ngModel)]="journalEntryTransaction.idCoin" (onChange)="changeCoin($event.value)">
+          </p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && journalEntryTransaction.idCoin<=-1">La moneda es requerida</small>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-12 p-sm-12 p-lg-12">
+      <div class="p-grid">
+        <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+          <label for="documentNumber">Tipo de cambio base</label>
+          <p-dropdown [filter]="true" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" emptyMessage="Sin resultados." placeholder="Seleccione..."
+            [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+            [options]="filterData.typeExchangeRates" [(ngModel)]="idTypeExchangeRate1"
+            (onChange)="changeExchangeRateBaseType($event.value)">
+          </p-dropdown>
+        </div>
+        <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+          <label for="exchangeRate1">Tasa base</label>
+          <input type="text" inputId="exchangeRate1" [disabled]="true" [(ngModel)]="exchangeRateBaseString" maxlength="255"
+            pInputText>
+        </div>
+        <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+          <label for="transactionDate">Tipo de cambio conversión</label>
+          <p-dropdown [filter]="true" [disabled]="journalEntryTransaction.idStatus != statusEntryTransaction.ERASER" emptyMessage="Sin resultados." placeholder="Seleccione..."
+            [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+            [options]="filterData.typeExchangeRates" [(ngModel)]="idTypeExchangeRate2"
+            (onChange)="changeExchangeRateConvertionType($event.value)">
+          </p-dropdown>
+        </div>
+        <div class="p-fluid p-col-12 p-md-3 p-lg-3">
+          <label for="exchangeRate2">Tasa conversión</label>
+          <input type="text" inputId="exchangeRate2" [disabled]="true" [(ngModel)]="exchangeRateConvertionString"
+            maxlength="255" pInputText>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-12" style="text-align: right;">
+          <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-success"
+            (click)="addEntryTransaction()" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER"></button>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 p-mt-12">
+          <p-table dataKey="id" responsiveLayout="scroll" [value]="journalEntryTransaction.details">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Sucursal</th>
+                <th>Centro de costo</th>
+                <th>Cuenta</th>
+                <th>Auxiliar</th>
+                <th>Nombre de la cuenta</th>
+                <th>Descripción</th>
+                <th>Referencia</th>
+                <th style="text-align: right;">Debe</th>
+                <th style="text-align: right;">Haber</th>
+                <th style="width:8rem"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transaction let-ri="rowIndex">
+              <tr>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <p-dropdown [filter]="true" class="pdropdown" emptyMessage="Sin resultados." placeholder="Seleccione..." [options]="filterData.branchoffice"
+                      [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [(ngModel)]="transaction.idBranchOffice"
+                      (onChange)="changeBranchOffice($event, transaction)">
+                    </p-dropdown>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{transaction.branchOffice}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <p-dropdown [filter]="true" class="pdropdown" emptyMessage="Sin resultados." placeholder="Seleccione..." [options]="filterData.costCenter"
+                      [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [(ngModel)]="transaction.idCostCenter"
+                      (onChange)="changeCostCenter($event, transaction)">
+                    </p-dropdown>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{transaction.costCenter}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <div class="p-inputgroup">
+                      <input type="text" pInputText style="border-right: 0px" (keyup.enter)="searchCodeAccountingAccount($event, transaction)" [value]="formatCode(transaction.codeAccountingAccount)">
+                      <button pButton icon="pi pi-times" style="border-radius: 0; background: transparent; color: black; border: 1px solid #ced4da; border-left: 0px;" (click)="clearAccountingAccount(transaction)"></button>
+                      <button pButton icon="pi pi-search" (click)="showModalAccountingAccount(transaction)"
+                        style="border-top-left-radius: 0; border-bottom-left-radius: 0;"></button>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{formatCode(transaction.codeAccountingAccount)}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <p-dropdown [filter]="true" class="pdropdown" emptyMessage="Sin resultados." placeholder="Seleccione..." [options]="transaction.auxiliaries"
+                      [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [(ngModel)]="transaction.idAuxiliary"
+                      (onChange)="changeAuxiliary($event, transaction)">
+                    </p-dropdown>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{transaction.auxiliary}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container>
+                    {{transaction.accountingAccount}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <input pInputText type="text" [(ngModel)]="transaction.description">
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{transaction.description}}
+                  </ng-container>
+                </td>
+                <td>
+                  <ng-container *ngIf="transaction.isModified">
+                    <input pInputText type="text" [(ngModel)]="transaction.referent">
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified">
+                    {{transaction.referent}}
+                  </ng-container>
+                </td>
+                <td style="text-align: right;">
+                  <ng-container *ngIf="transaction.isModified && transaction.assets <= 0">
+                    <p-inputNumber #in6 [(ngModel)]="transaction.debit" [minFractionDigits]="2" [prefix]="getSymbology()" [class]="transaction.indDebit ? 'ng-dirty ng-invalid' : ''" mode="decimal" [maxFractionDigits]="2" min="0" locale="es-ES"></p-inputNumber>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified || transaction.assets > 0">
+                    <div><b>{{ getPrice(transaction.debit, 0) }}</b></div>
+                    <div>{{ getPrice(transaction.debit, 1) }}</div>
+                    <div>{{ getPrice(transaction.debit, 2) }}</div>
+                  </ng-container>
+                </td>
+                <td style="text-align: right;">
+                  <ng-container *ngIf="transaction.isModified && transaction.debit <= 0">
+                    <p-inputNumber #in6 [(ngModel)]="transaction.assets" [minFractionDigits]="2" [prefix]="getSymbology()" [class]="transaction.indAssets ? 'ng-dirty ng-invalid' : ''" mode="decimal" [maxFractionDigits]="2" min="0" locale="es-ES"></p-inputNumber>
+                  </ng-container>
+                  <ng-container *ngIf="!transaction.isModified || transaction.debit > 0">
+                    <div><b>{{ getPrice(transaction.assets, 0) }}</b></div>
+                    <div>{{ getPrice(transaction.assets, 1) }}</div>
+                    <div>{{ getPrice(transaction.assets, 2) }}</div>
+                  </ng-container>
+                </td>
+                <td style="text-align:center" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER">
+                  <button pButton pRipple type="button" icon="pi pi-pencil"
+                    (click)="onRowEdit(transaction)" class="p-button-rounded p-button-text"
+                    *ngIf="!transaction.isModified"></button>
+                  <button pButton pRipple type="button" icon="pi pi-check"
+                    (click)="onRowSave(transaction)" *ngIf="transaction.isModified"
+                    class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                  <button pButton pRipple type="button" icon="pi pi-times"
+                    (click)="onRowDelete(transaction)"
+                    class="p-button-rounded p-button-text p-button-danger"></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <ng-container *ngIf="journalEntryTransaction.details.length">
+                  <tr>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}" [attr.colspan]="10 - 3">
+                          Total:
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}">
+                          {{getDistTotals().debit}}
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}">
+                          {{getDistTotals().assets}}
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border-bottom': 0}">
+                      </td>
+                  </tr>
+                  <tr>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border': 0}" [attr.colspan]="10 - 3">
+                          Saldo:
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border': 0, 'color': getDistTotals().color}"  colspan="2">
+                          {{getDistTotals().diff}}
+                      </td>
+                      <td [ngStyle]="{'text-align': 'right', 'font-weight': 'bold', 'border': 0}">
+                      </td>
+                  </tr>
+              </ng-container>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="10">
+                      <p-message severity="info" text="Sin movimientos"
+                          styleClass="p-col-12 p-mr-2">
+                      </p-message>
+                  </td>
+              </tr>
+          </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12">
+      <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+    </div>
+  </div>
+  <router-outlet>
+    <div style="justify-content: space-between; display: flex; flex-wrap: wrap; width: 100%; gap: 0.5rem">
+      <div style="gap: 0.5rem; display: flex; flex-wrap: wrap;">
+        <button pButton pRipple label="Duplicar" (click)="duplicate()" *ngIf="journalEntryTransaction.id > 0 && journalEntryTransaction.idStatus == statusEntryTransaction.ACCOUNTED" class="p-button-secondary"></button>
+        <button pButton type="button" class="p-button-secondary" (click)="reverse()" *ngIf="journalEntryTransaction.id > 0 && journalEntryTransaction.idStatus == statusEntryTransaction.ACCOUNTED" label="Reversar"></button>
+      </div>
+      <div style="gap: 0.5rem; display: flex; flex-wrap: wrap;">
+        <!-- (click)="ToRecord()" -->
+        
+        <button pButton type="button" class="p-button-secondary" icon="pi pi-arrow-left" label="Regresar" (click)="back()"></button>
+        <button pButton type="button" class="p-button-secondary" icon="pi pi-ban" label="Limpiar" (click)="clear()" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER"></button>
+        <button pButton pRipple label="Anular" icon="pi pi-times" class="p-button-danger"
+          (click)="anulledEntryTransaction()" *ngIf="journalEntryTransaction.id > 0 && journalEntryTransaction.idStatus == statusEntryTransaction.ACCOUNTED"></button>
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger"
+          (click)="cancelEntryTransaction()" *ngIf="journalEntryTransaction.id > 0 && journalEntryTransaction.idStatus == statusEntryTransaction.ERASER"></button>
+        <button pButton pRipple label="Contabilizar" class="p-button-primary" icon="pi pi-check" (click)="assessEntryTransaction()"
+        *ngIf="journalEntryTransaction.id > 0 && journalEntryTransaction.idStatus == statusEntryTransaction.ERASER"></button>
+        <button pButton type="button" class="p-button-info" (click)="saveEntryTransaction()" *ngIf="journalEntryTransaction.idStatus == statusEntryTransaction.ERASER" icon="pi pi-save"
+          label="Guardar"></button>
+      </div>
+    </div>
+  </router-outlet>
+</ng-container>
+
+<app-sale-transactions-lot-modal [(displayModal)]="lotModal" [lots]="filterData.lots" (onSelect)="selectLot($event)">
+</app-sale-transactions-lot-modal>
+
+<app-select-accounting-account-modal [(displayModal)]="accountingAccountModal" [viewMode]="viewMode"
+    [(NombreCuenta)]="journalEntryTransactionDetail.accountingAccount" [(Ncuenta)]="journalEntryTransactionDetail.codeAccountingAccount"
+    [planCuentaContableDetalleId]="journalEntryTransactionDetail.idPlanCuentaContableDetalle"
+    (planCuentaContableDetalleIdChange)="journalEntryTransactionDetail.idPlanCuentaContableDetalle = $event; foo()" [(indAuxiliar)]="journalEntryTransactionDetail.indAuxiliary" 
+    [filtrarCuenta]="false" [(indClasificacionArticulo)]="accountingAccountModal">
+</app-select-accounting-account-modal>

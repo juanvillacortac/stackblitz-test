@@ -1,0 +1,19 @@
+.rounded{
+    border-radius: 50%!important;
+}
+
+:host ::ng-deep {
+  #regresarDiv {
+    position: fixed;
+    bottom: 0;
+  }
+
+  .styleActive {
+    border-bottom: 2px solid #5E81AC;
+    border-radius: 0px;
+    font-weight: bold;
+    //padding: 10px;
+  }
+}
+
+

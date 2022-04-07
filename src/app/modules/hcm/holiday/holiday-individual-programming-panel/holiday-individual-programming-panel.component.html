@@ -1,0 +1,107 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000" >
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>Programación individual</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>   
+          <hr/>
+          <div class="p-col-12">
+            <div class="card">
+              <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-6">
+                        <label for="">Documento:</label>
+                        <span style="font-weight: bolder;"> {{model.identifier}}-{{model.documentNumber}}</span>
+                    </div>
+                    <div class="p-col-6">
+                      <label for="">Trabajador:</label>
+                      <span style="font-weight: bolder;" > {{model.employeeFirstName}} {{model.employeeLastName}}</span>
+                  </div>    
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                      <label for="dropdown">Tipo<span [ngStyle]="{'color':'red'}">* </span></label>
+                      <p-dropdown inputId="typeHolidaysOption" [(ngModel)]="typeHolidaysSelect" (onChange)='GetDataCalculateEndDate()'  [options]="typeHolidaysOption" [disabled]="showAnticipated"  [filter]="true" emptyFilterMessage="Sin resultados" optionLabel="name" 
+                      placeholder="Seleccionar..." [filter]="true" emptyMessage="Sin resultados" [class]="submitted && typeHolidaysOption == null ? 'ng-invalid ng-dirty' : '' " life="500">
+                      </p-dropdown>
+                     <small class="p-invalid" *ngIf="submitted && typeHolidaysSelect == null">Tipo es requerido</small>
+                    </div>
+                </div>
+                
+                <div class="p-field p-grid p-col-12"> 
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label  for="dateformat">Fecha inicio<span [ngStyle]="{'color':'red'}">* </span></label>
+                    <p-calendar #formStarDate dateFormat="dd-mm-yy" [(ngModel)]="startDate" [minDate]="dateMin" [disabled]="activeInputs" placeholder="Fecha de Inicio"  
+                    yearRange="2000:2030" dateFormat="dd/mm/yy" (onSelect)='CalculateEndDate()' readonlyInput="true" [showIcon]="true"  [monthNavigator]="true" appendTo="body"
+                    [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [baseZIndex]="10000000000"></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && startDate == null ">Fecha inicio es requerido</small>
+                  </div>
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label for="dateformat">Fecha fin</label>
+                    <p-calendar #formDateEnd [(ngModel)]="endDate" placeholder="Fecha Final" appendTo="body" [baseZIndex]="10000000000" 
+                    yearRange="1970:2050" dateFormat="dd/mm/yy"
+                    readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                    [readonlyInput]="true" showButtonBar="true" disabled="disabled" [yearNavigator]="true"></p-calendar>
+                  </div>
+                </div>
+                <div class="p-field p-grid p-col-12">                   
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label for="">Periodo</label>
+                    <input [(ngModel)]="calculateHolidayCycleModel.cycleHolidays" id="cycleHolidays" name="cycleHolidays" type="text" maxlength="15"
+                      pInputText  disabled="disabled">    
+                  </div>
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label for="">Días de Disfrute<span [ngStyle]="{'color':'red'}">* </span> </label>
+                    <p-inputNumber id="enjoymentDay" class="p-col-10 p-mr-0" [(ngModel)]="enjoymentDay" style="padding-right: 0; padding-left: 0;" (onBlur)="CalculateEndDate1()" 
+                      maxlength="18"[min]="0" [max]="maxEnjoyDay" [disabled]="activeInputs">
+                    </p-inputNumber>
+                    <small class="p-invalid" *ngIf="submitted && enjoymentDay == 0 " >Días de disfrute es requerido</small>   
+                  </div>               
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-6">
+                    <label for="">Días no programados</label>
+                    <input [(ngModel)]="noProgrammed" id="noProgrammed" name="noProgrammed" type="text" maxlength="15"
+                      pInputText  disabled="disabled" >
+                  </div>     
+                </div>
+                <h6>Información para el pago</h6> 
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label for="dropdown">Tipo de nómina<span [ngStyle]="{'color':'red'}">* </span></label>
+                    <p-dropdown [(ngModel)]="selectPayrollType" [options]="payrollTypelist" (onChange)="loadPayDates(2)"  placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+                    [class]="submitted && selectPayrollType == 0 ? 'ng-dirty ng-invalid' : ''" [disabled]="activeInputs"> 
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && selectPayrollType == 0 " >Tipo nómina es requerido</small>
+                  </div>
+                  <div class="p-fluid p-col-12 p-lg-6">
+                    <label for="dropdown">Fecha pago<span [ngStyle]="{'color':'red'}">* </span></label>
+                    <p-dropdown [(ngModel)]="paymentDate" [options]="payDateList"  placeholder="Seleccionar..." optionLabel="name" [filter]="true" emptyFilterMessage="Sin resultados" 
+                    emptyMessage="Sin resultados" [class]="submitted && paymentDate == null ? 'ng-dirty ng-invalid' : ''" life="500" [disabled]="activeInputs">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && paymentDate == null ">Fecha pago es requerido</small>
+                  </div>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                    <div class="p-col-12">
+                      <label for="dropdown">Estatus</label>
+                      <p-dropdown inputId="statusHolidaysOption" [(ngModel)]="statusHolidaysSelect" [disabled]="showStatus"  [options]="statusHolidaysOption"  optionLabel="name" [filter]="true" emptyFilterMessage="Sin resultados" 
+                      placeholder="Seleccionar..." emptyMessage="Sin resultados" [class]="submitted && statusHolidaysSelect.value == 0 ? 'ng-dirty ng-invalid' : ''" life="500"></p-dropdown>
+                      <small class="p-invalid" *ngIf="submitted && statusHolidaysSelect == null ">Estatus es requerido</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-grid p-col-12">
+                  <div class="p-col-12">
+                    <button id="Guardar" pButton pRipple label="Guardar" (click)="sumit()"  icon="pi pi-plus-circle" class="p-button-info p-mr-2"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </p-sidebar>

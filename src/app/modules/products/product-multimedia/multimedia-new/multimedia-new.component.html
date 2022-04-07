@@ -1,0 +1,65 @@
+<p-dialog header="Añadir archivos" [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [draggable]="false" [closable]="true" [modal]="true" [maximizable]="false" [baseZIndex]="1000" [style]="{'overflow': 'auto', 'width': '60vw'}"
+[breakpoints]="{'960px': '75vw', '640px': '100vw'}">
+   <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-grid p-formgrid">
+            <div class="p-fluid p-field p-col-12 ">
+              <label>Tipo de multimedia<span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown emptyMessage="Sin resultados."  emptyFilterMessage="Sin resultados." [disabled]="uploadedFiles.length > 1" (onChange)="onClear()" [options]="multimediaTypeSelect" [(ngModel)]="multimediaType" placeholder="Seleccione...">
+              </p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && (multimediaType == -1 || multimediaType == undefined)">El tipo multimedia es requerido</small>
+          </div>
+            <div *ngIf="multimediaType > 0" class="p-fluid p-field p-col-12 p-md-12 p-sm-12">
+              <div>
+                <h5>Archivos a subir</h5>
+                <p-fileUpload #fileupload [showUploadButton]="false" [class]="multimediaType == 1 ? '' : 'image-video'" [mode]="'advanced'" [fileLimit]="multimediaType == 1 ? 30-imgCount : 5-vidCount" cancelLabel="Borrar sin procesar" chooseLabel="Buscar archivos" (onClear)="onClear()" (uploadHandler)="uploadHandler($event)" [files]="files" [customUpload]="true" (onUpload)="onUpload($event)" multiple="multiple" [accept]="multimediaType == 1 ? '.jpg,.jpeg,.png,.svg,.gif' : '.mp4,.mpeg,.avi'" maxFileSize="1000000" invalidFileTypeMessageSummary="{0}: Tipo de archivo inválido, " [invalidFileTypeMessageDetail]="multimediaType==1 ? 'solo se permiten archivos de tipo JPG, JPEG, PNG, SVG, GIF.' : 'solo se permiten archivos de tipo MP4, MPEG, AVI.'" invalidFileSizeMessageDetail="el tamaño máximo por archivo es: {0}." invalidFileSizeMessageSummary="{0}: Tamaño de archivo inválido, " [invalidFileLimitMessageSummary]="multimediaType==1 ? 'Número máximo de archivos excedidos (30), ' : 'Número máximo de archivos excedidos (2), '" invalidFileLimitMessageDetail="solo se pueden agregar {0} mas." [maxFileSize]="multimediaType==1 ? 2097152 : 4194304">
+                 <!--  <ng-template pTemplate="content">
+                    <p-table *ngIf="uploadedFiles.length" dataKey="id" [value]="uploadedFiles">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Peso</th> 
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-file>
+                        <tr>
+                          <td pEditableColumn>
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input pInputText (paste)="_validations.noPaste($event)" type="text" maxlength="50" [(ngModel)]="file.name">
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{file.name}}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+                          <td style="text-align: end;">
+                            {{file.weight}} KB
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>                             
+                  </ng-template> -->
+                </p-fileUpload>
+              </div> 
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <small [ngStyle]="{'color':'red'}">{{multimediaType == 1 ? 'Formatos permitidos: JPG, JPEG, PNG, SVG, GIF.' : 'Formatos permitidos: MP4, MPEG, AVI.'}}</small>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <small [ngStyle]="{'color':'red'}">{{multimediaType == 1 ? 30-imgCount == 0 ? "Superó el límite de 30 imagenes guardadas." : "" : 5-vidCount == 0 ? "Superó el límite de 5 videos guardadas." : ""}}</small>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+                <button pButton pRipple label="Guardar" [disabled]="disabledButtonSave" (click)="saveMultimediaProduct()" icon="pi pi-save" class="p-button-info"></button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+  

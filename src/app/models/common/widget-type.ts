@@ -1,0 +1,25 @@
+export enum widgetType {
+    knob = 'knob',
+    chart = 'chart',
+    number = 'number',
+    stat = 'stat',
+    circleNumber = 'circleNumber',
+    listTeam = 'listTeam',
+    doughnut= 'doughnut',
+    cardGraph= 'cardGraph',
+    table = 'table',
+    genericTable = 'genericTable',
+    sliderList = 'sliderList',
+    rankingTable = 'rankingTable',
+    rankingStat = 'rankingStat',
+    listnumberindicator = 'listnumberindicator',
+    dataviewList = 'dataviewList',
+    percentInd = 'percentInd',
+    targetInd = 'targetInd',
+    tableInd = 'tableInd',
+    percentIndCond= 'percentIndCond',
+    dataviewListProduct= 'dataviewListProduct',
+    profileDetails= 'profileDetails',
+    tablesales='tablesales'
+}
+

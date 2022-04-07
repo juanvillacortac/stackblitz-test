@@ -1,0 +1,32 @@
+<div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+    <div class="p-col-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.internal_use.conversion_currency' | translate }}</label>
+        <p-dropdown (keyup.enter)="save()" [options]="currenciesBase"
+            placeholder="{{ 'srm.reception.document.internal_use.conversion_currency' | translate }}" [disabled]="true" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+            (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="calculationBasis.exchangeConvCunrrencyId"
+            emptyMessage="{{ 'not_found' | translate }}" optionLabel= "name" optionValue="id">
+        </p-dropdown >
+    </div>
+
+    <div class="p-col-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.internal_use.exchange_rate_type' | translate }}</label>
+        <p-dropdown [disabled]="true" placeholder="{{ 'selection_default' | translate }}" [showClear]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="calculationBasis.exchangeRateTypeId"
+        emptyMessage="{{ 'not_found' | translate }}" [disabled]="true" [options]="ratePaymentTypes" optionLabel= "name" optionValue="id">
+        </p-dropdown>
+    </div>
+
+    <div class="p-col-4 p-mb-2 p-fluid">
+        <label>{{ 'srm.reception.document.internal_use.rate_value' | translate }}</label>
+        <p-dropdown placeholder="{{ 'selection_default' | translate }}" [showClear]="true" [autoDisplayFirst]="true"
+        (keyup.enter)="save()" [filter]="true" emptyFilterMessage="{{ 'not_found' | translate }}" [(ngModel)]="calculationBasis.rateValue"
+        emptyMessage="{{ 'not_found' | translate }}" [disabled]="true" [options]="exchangeRatesSystem" optionLabel= "conversionFactor" optionValue="conversionFactor"> 
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4 p-mb-2 p-fluid">
+        <label class="p-mr-4" for="binario">Base de cálculo moneda base</label>
+        <p-inputSwitch class="p-mr-4" 
+            [(ngModel)]="calculationBasis.currencyBaseCalculate" ></p-inputSwitch>
+    </div>
+
+</div>

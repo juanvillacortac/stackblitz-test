@@ -1,0 +1,73 @@
+<div class="card p-m-0 p-pb-0">
+    <app-table-header 
+        [idAddPermission]="this.permissionsIDs.UPDATE_WEIGHT_INSTRUMENT_ID" 
+        [idFilterPermission]="this.permissionsIDs.CHECK_WEIGHT_INSTRUMENT_ID" 
+        (addPressed)="newWeightIngredient()" 
+        (filterPressed)="showFilters=!showFilters" 
+        (editFilterField)="dt.filterGlobal($event.target.value, 'contains')">
+    </app-table-header>
+
+    <app-weight-instrument-filters class="p-col-12" (onSearch)="search()" [(filters)]="filters" [expanded]="showFilters"></app-weight-instrument-filters>
+</div>
+
+<div class="card p-m-0">
+    <p-table #dt 
+    [columns]="cols"
+    [value]="weightInstruments" 
+    [rowHover]="true" 
+    [paginator]="true" 
+    [showCurrentPageReport]="true" 
+    [rows]="10" 
+    [rowsPerPageOptions]="[10,25,50]"
+    currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+        <ng-template pTemplate="header">
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <th [ngStyle]="{'display': col.display}" pSortableColumn={{col.field}}>
+                        {{ col.header | translate }}
+                        <p-sortIcon field={{col.field}} *ngIf="col.field !== 'edit'"></p-sortIcon>
+                    </th>
+                </ng-container>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-weightInstrument>
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                        
+                        <app-active-label *ngIf="col.field == 'active'; else transport" [active]="weightInstrument[col.field] === 1 ? true : false" [isYesOrNoMode]="false"></app-active-label>
+
+    
+                        <ng-template #transport>
+                            <app-active-label *ngIf="col.field == 'isTransport'; else weight" [active]="weightInstrument[col.field] === 1 ? true : false" [isYesOrNoMode]="true"></app-active-label>
+                        </ng-template>
+
+                        <ng-template #weight>
+                            <div *ngIf="col.field === 'weight'; else dimensions">
+                                {{this.decimalPipe.transform(weightInstrument.weight,'.2')}} {{ weightInstrument.measurementUnit}}
+                            </div>
+                        </ng-template>
+
+                        <ng-template #dimensions>
+                            <div *ngIf="col.field === 'dimensions'; else textCell">
+                                x: {{ this.decimalPipe.transform(weightInstrument.height,'.2') }} cm; y: {{ this.decimalPipe.transform(weightInstrument.width,'.2') }} cm; z: {{ this.decimalPipe.transform(weightInstrument.depth,'.2') }} cm;
+                            </div>
+                        </ng-template>
+                        
+                        <ng-template #textCell >
+                            <div *ngIf="col.field !== 'detail'; else detailCell">
+                                {{weightInstrument[col.field]}}
+                            </div>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="detail(weightInstrument)" pTooltip="Editar" tooltipPosition="rigth"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-weight-instrument-add [(showPanel)]='showDialog' [(weightInstrument)]='weightInstrument' (hideDialogEvent)="onHideDialog($event)"></app-weight-instrument-add>

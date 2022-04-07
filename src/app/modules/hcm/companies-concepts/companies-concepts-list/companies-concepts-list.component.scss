@@ -1,0 +1,23 @@
+
+ :host ::ng-deep {
+
+    .time {
+        border-radius: 20px;
+        background-color: #00D0DE;
+        color: #ffffff;
+        font-size: 10px;
+        padding: 3px 10px;
+        text-align: center;
+        min-width: 55px;
+        margin-right: 4px;
+        //display: inline-block;
+        &.later {
+            background-color: #9199a9;
+        }
+    }
+
+    #filterTitle {
+        font-size: 17px;
+        font-weight: 700;
+    }
+}

@@ -1,0 +1,106 @@
+<div class="card p-m-0 p-pb-0">
+
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Tipo de partes</h5> -->
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+        placeholder="Buscar..." />
+    </span>
+    <div>
+      <button #btn type="button" pButton icon="pi pi-plus" class="p-button-success p-ml-2" pTooltip="Agregar"
+        tooltipPosition="top" (click)="menu.toggle($event)"
+        *ngIf="this.userPermissions.allowed(this.permissionsIDs.CREATE_CONSIGNMENT_INVOICE_PERMISSION_ID)"></button>
+      <p-tieredMenu #menu [model]="items" [popup]="true"></p-tieredMenu>
+      <button pButton pRipple icon="pi pi-filter" class="p-ml-2  p-button-help"
+        [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"
+        tooltipPosition="top"></button>
+
+    </div>
+
+  </div>
+  <app-consingment-invoice-filter (onSearch)="clickSearch()" [(filters)]="filters" [expanded]="showFilters"
+    [loading]="loading" class="p-mt-3" [(fClist)]="_service._list" [(_selectedColumns)]="_selectedColumns">
+  </app-consingment-invoice-filter>
+  <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!-- <button #btn1 type="button" pButton icon="pi pi-bars" class="p-button-secondary"
+                (click)="menu1.toggle($event)"></button>
+            <p-tieredMenu #menu1 [model]="items1" [popup]="true"></p-tieredMenu> -->
+    </div>
+  </div>
+</div>
+
+<div class="card p-m-0">
+  <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="_service._list" [paginator]="true" [rows]="10"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+    scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <!-- <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        </div>
+    </ng-template>       -->
+    <ng-template pTemplate="caption">
+      <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+        selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}" placeholder="Elija las columnas">
+      </p-multiSelect>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th
+            [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word','width':(col.field == 'edit') ? '100px' :'150px' ,'font-size':'small' }"
+            [pSortableColumn]="col.field">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              {{col.header}}
+              <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+              <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+            </div>
+          </th>
+        </ng-container>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order let-columns="columns">
+      <tr>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"
+            *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_CONSIGNMENT_INVOICE_PERMISSION_ID)"
+            (click)="edit(order.id)"></button>
+        </td>
+        <!-- <td style="display: none;">{{product.id}}</td> -->
+        <ng-container *ngFor="let col of columns">
+          <td
+            [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word','width':(col.field == 'edit') ? '100px' : '150px' }">
+            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="order[col.field]">
+            </app-active-label>
+            <ng-template #textCell>
+              <span *ngIf="col.field != 'edit'">{{col.template(order)}} </span>
+            </ng-template>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td *ngIf="columns==undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">No existen
+          resultados</td>
+        <td *ngIf="columns!=undefined" [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length ">No
+          existen resultados</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+    </ng-template>
+  </p-table>
+</div>
+<ng-container *ngIf='modalShow'>
+  <app-modal-consignmentinvoice [visible]="modalShow" [status]="invoiceStatus"
+    (hideDialogForm)="childCallBack($event)">
+  </app-modal-consignmentinvoice>
+</ng-container>

@@ -1,0 +1,52 @@
+@media screen and (min-width: 768px){
+
+    .container-button{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 767px){
+
+    .container-button{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .container-button > .p-mr-2{
+        margin-bottom: 0.5rem;
+    }
+}
+
+:host ::ng-deep {
+    .p-chips { 
+        white-space: normal;
+        display: inline-grid;
+    }
+    
+    .p-chips .p-chips-multiple-container .p-chips-token {
+        padding: 0.25rem 0.75rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        background: #fff2e2;
+        border: solid #cc8925;
+        border-width: 0 0 0 4px;
+        color: #cc8925;
+        border-radius: 4px;
+        display: break-word;
+    }
+    .p-chips { 
+        white-space: normal;
+        display: inline-grid;
+    }
+    .p-inputtext {
+        font-size: 1.25rem;
+        border: 0.5px  #ced4da;
+    }
+    .p-button {
+        color: #ffffff;
+        background: #17a2b8;
+        border: 1px solid #17a2b8;
+    }
+    }

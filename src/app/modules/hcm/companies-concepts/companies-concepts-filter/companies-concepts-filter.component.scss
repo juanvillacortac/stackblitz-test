@@ -1,0 +1,28 @@
+:host ::ng-deep {
+    
+    .p-dropdown{
+        width: 100% !important;
+    }
+
+    @media screen and (max-width: 768px){
+
+        .p-col{
+            margin-top: 1rem;
+        }
+    }
+
+    @media screen and (min-width: 769px){
+
+        .p-grid{
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .p-col{
+            flex-grow: 1;
+            flex-basis: 0;
+            padding: 0.5rem;
+        }
+    }
+    
+  }

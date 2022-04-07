@@ -1,0 +1,54 @@
+<div class="p-mt-4 p-align-center vertical-container p-p-3">
+    <div class="p-grid p-fluid">
+        
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input [(ngModel)]="filters.employmentCode" name="employmentCode" id="employmentCode" type="text" maxlength="10" pInputText (keyup.enter)="search()">
+                    <label>Código</label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="employeeName" [(ngModel)]="filters.employeeName" type="text" maxlength="250" pInputText (keyup.enter)="search()">
+                    <label for="employeeName">Nombre</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4" tooltipPosition="left" life="500">
+            <!-- <label for="companiesList">Empresas</label> -->
+            <p-dropdown [(ngModel)]="filters.idCurrency" name="companiesList" [options]="coinDropdown" placeholder="Divisa" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" (keyup.enter)="search()"></p-dropdown>
+        </div>
+    </div>
+    
+
+    <div class="p-grid p-fluid container-date">
+
+        <div class="p-col-12 p-md-4 p-lg-4"life="500">
+            <p-calendar #formIngresoCalendar yearRange="1970:2030" [(ngModel)]="fecha" dateFormat="dd/mm/yyyy" 
+                readonlyInput="true" [showIcon]="true" [monthNavigator]="true" (keyup.enter)="search()"
+                [readonlyInput]="true" [yearNavigator]="true" placeholder="Fecha de emisión">
+            </p-calendar>
+        </div>
+
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4" life="500">
+            <!-- <label for="statuslist">Estatus</label> -->
+            <p-dropdown id="statuslist" name="cboactive" [options]="loanTypeDropdown" [(ngModel)]="filters.idLoanType" placeholder="Tipo" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+        </div>
+        
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4" life="500">
+            <!-- <label for="statuslist">Estatus</label> -->
+            <p-dropdown id="statuslist" name="cboactive" [options]="statusDropdown" [(ngModel)]="filters.idStatus" placeholder="Estatus" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+        </div>
+    </div>
+    <div class="p-col-12 p-d-flex p-jc-end p-pr-0">
+        <button pButton pRipple label="Buscar" (click)="search()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>

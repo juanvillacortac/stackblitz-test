@@ -1,0 +1,22 @@
+:host ::ng-deep {
+
+    .amount, .amount .p-inputnumber-input{
+        width: 100%;
+    }
+
+    .amount input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    #factor input:first-child,
+    #conversion input:first-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    @media screen and (min-width: 1024px){
+        #minAmount, #conversionMin, #maxAmount, #conversionMax {
+          width: 100%;
+        }
+    }
+}

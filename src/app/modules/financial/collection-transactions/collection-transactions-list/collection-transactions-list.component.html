@@ -1,0 +1,7 @@
+<div class="p-m-0" *ngIf="loaded">
+  <app-collection-transactions-tree [currencies]="currencies" [(currentPage)]="currentPage" [(elementsPerPage)]="elementsPerPage"
+    [totalPaginatorElements]="totalPaginatorElements" [transactions]="transactions"  [isFiltered]="isFiltered" #treeComp
+    (onEdit)="edit($event)" (onRefresh)="fetchData()">
+    <app-collection-transactions-filters [filterData]="filterData" [loading]="loading" (onSearch)="fetchData($event, true)"></app-collection-transactions-filters>
+  </app-collection-transactions-tree>
+</div>

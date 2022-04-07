@@ -1,0 +1,47 @@
+<p-panel header="Sucursales" [toggleable]="true" class="readOnlyCard" id="sucursalesPanel">
+    <!-- SI HAY SOLO UNA SUCURSAL, NO SE MUESTRA ESTE CONTENEDOR -->
+
+    <div class="p-col-12 p-md-12 p-lg-12 p-d-flex p-jc-end">
+        <!-- <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_COMPANIES_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editOrNewCompany()"></button> -->
+        <!-- <button pButton pRipple icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editOrNewCompanyGovernmentalAgency()"></button> -->
+        <button pButton pRipple icon="pi pi-plus" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPANY_HCM_PERMISSION_ID)" 
+        class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editOrNew()"></button>
+        
+        <button pButton pRipple icon="pi pi-save" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_COMPANY_HCM_PERMISSION_ID)" 
+        class="p-button-info p-mr-2 p-ml-2" label="Guardar" (click)="save(companyGovernmentalAgencies)" [disabled]="companyGovernmentalAgencies.length==0" ></button>
+    </div>
+
+    <div class="p-col-12 p-md-12 p-lg-12">
+        <p-table [columns]="cols" [value]="companyGovernmentalAgencies" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let col of cols">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-company let-columns="columns" let-i="rowIndex">
+                <tr>
+                  <ng-container *ngFor="let col of columns;" >
+                      <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}">
+                            <ng-template [ngIf]="col.field != 'accion'">
+                                <span style="white-space: pre-wrap;">{{col.template(company)}} </span>
+                            </ng-template>
+                            <ng-template #textCell [ngIf]="col.field == 'accion'" >
+                                <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="inMemoryEditOpen(company, i)" pTooltip="Editar"></button> -->
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editOrNew(company, i)" pTooltip="Editar" tooltipPosition="top"></button>
+                            </ng-template>
+                      </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+</p-panel>
+
+<!-- <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog> -->
+<app-company-govAgency-edit (_parentSave)="editAndSave($event)" [(inputCompanyGovernmentalAgency)]="filters" [(idCountry)]="idCountry" [(idCompany)]="idCompany"
+ [companyGovernmentalAgencies]="companyGovernmentalAgencies" (_companyGovernmentalAgenciesListItem)="agregarLista($event)"
+ [registros]="registros" ></app-company-govAgency-edit>

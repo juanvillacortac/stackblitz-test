@@ -1,0 +1,103 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Pesos tara" [(visible)]="visible" [style]="{width:'50%'}"
+  [modal]="true" class="address-dialog">
+  <div class="p-grid p-mt-2">
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+      <label>Instrumento <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-dropdown (keyup.enter)="add()" [options]="weightInstrumentslist" appendTo="body" [(ngModel)]="weightInstrument.id"
+        (onChange)="GetWeigth(weightInstrument.id)" placeholder="Seleccione..." [filter]="true"
+        emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+      </p-dropdown>
+      <small class="p-invalid" *ngIf="submitted && (weightInstrument.id)">El instrumento es requerido.</small>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-sm-4 p-fluid">
+      <label>Peso</label>
+      <p-inputNumber [(ngModel)]="weightInstrument.weight"  mode="decimal" [minFractionDigits]="3" [maxFractionDigits]="3" [disabled]="isdisabled"> 
+    </p-inputNumber>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+      <label>Cantidad <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-inputNumber [(ngModel)]="weightInstrument.quantity" [maxFractionDigits]="0" (onInput)="changequantity($event)" (onFocus)="clear($event)"> 
+      </p-inputNumber>
+      <small class="p-invalid" *ngIf="submitted && (weightInstrument.quantity==0)">la Cantidad es requerido.</small>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+      <label>Total <span [ngStyle]="{'color':'red'}">*</span></label>
+      <p-inputNumber [(ngModel)]="weightInstrument.total" mode="decimal" [maxFractionDigits]="3" [disabled]="isdisabled"> 
+    </p-inputNumber>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+      <button pButton pRipple label="Agregar" (click)="add()" icon="pi pi-plus-circle"
+        class="p-button-secondary p-mr-2"></button>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+      <small class="p-invalid">(*) Campos obligatorios</small>
+    </div>
+  </div>
+  <div class="card p-grid p-col-12 p-md-12 p-sm-12 p-lg-12 p-m-0 p-pb-0 p-jc-end">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <span class="p-input-icon-left p-ml-auto p-mr-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar" />
+      </span>
+
+    </div>
+  </div>
+
+  <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_DetailListTemp"
+      [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th [ngStyle]="{'width': '130px'}"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-instrument let-columns="columns">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+              <span class="p-column-title">{{col.header}}</span>
+              <div class="p-inputgroup" *ngIf="col.field =='idProduc'; else textCell">      
+              </div>
+              <ng-template #textCell>
+                <span>{{col.template(instrument)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td>
+            <!-- (click)="onRemoveSpecification(specification.id)" *ngIf="this.userPermissions.allowed(this.permissionsIDs.DELETE_SPECIFICATION_PRODUCT_SECTION_PERMISSION_ID) -->
+            <button pButton pRipple icon="pi pi-trash" (click)="onRemove(instrument)" class="p-button-rounded p-button-danger p-mr-2"
+              pTooltip="Eliminar"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+             Total peso tara: {{quantitytotal.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3}) }}.
+        </div>
+    </ng-template>
+    </p-table>
+
+  </div>
+  <div class="p-col-12 p-md-8 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Aplicar" (click)="AddInstrument()" icon="pi pi-check" class="p-button-info p-mr-2"
+      [disabled]="load"></button>
+    <p-button icon="pi pi-ban" (click)="visible=false" label="Cancelar" styleClass="p-button-secondary p-mt-1">
+    </p-button>
+  </div>
+</p-dialog>

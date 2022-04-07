@@ -1,0 +1,125 @@
+
+
+<div
+      style="
+        display: flex;
+        margin-top: 2rem;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        padding: 0.5rem;
+      "
+    >
+      <strong style="font-size:medium;"><i class="p-text-bold pi pi-book"></i> Documentos a aplicar</strong>
+
+      <button
+      pButton
+      pRipple
+      icon="pi pi-plus"
+      class="p-button-success"
+      pTooltip="Agregar"
+      tooltipPosition="top"
+      (click)="displayModal = true"      
+    ></button>
+</div>
+
+
+
+<p-table
+  #dt
+  dataKey="id"
+  [value]="data"
+  [columns]="cols"
+  [resizableColumns]="false"
+  #treeRef
+  styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows"
+>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th
+        *ngFor="let col of cols; let i = index"
+        [ngStyle]="{
+          display: col.display,
+          'overflow-wrap': 'break-word',
+          'text-align': i == 0 ? 'left' : 'center'
+        }"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+      >
+        {{ col.header }}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+      <th [ngStyle]="{ 'text-align': 'center' }"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-data let-columns="cols" let-i="rowIndex">
+    <tr>
+      <ng-container *ngFor="let col of cols">
+        <td
+          [ngStyle]="{
+            display: col.display,
+            'overflow-wrap': 'break-word',
+            'text-align': 'left' 
+          }"
+          class="ui-resizable-column"
+        >
+          <div>
+            <span
+              style="overflow-wrap: break-word"
+              *ngIf="col.field != 'amountToApply'"
+              >{{ col.template(data) }}</span
+            >
+            <ng-container *ngIf="col.field  == 'amountToApply'">
+              <p-inputNumber
+                mode="decimal"
+                prefix="$"
+                [showButtons]="true"
+                [inputStyle]="{ width: '100%' }"
+                [min]="0"
+                [max]="999999999"
+                [(ngModel)]= "data.amountToApply"
+              >
+              </p-inputNumber>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+      <td [ngStyle]="{ 'text-align': 'center' }">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-rounded p-button-danger p-mr-2"
+          pTooltip="Quitar"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <ng-container>
+      <tr>
+        <td
+          [ngStyle]="{ 'text-align': 'center'}"
+        >
+          <p-message
+            severity="info"
+            [text]="
+              isFiltered
+                ? 'No existen resultados que coincidan con la búsqueda.'
+                : 'No existen registros.'
+            "
+            styleClass="p-col-12 p-mr-2"        
+          ></p-message>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorleft"> </ng-template>
+  <ng-template pTemplate="paginatorright"> </ng-template>
+</p-table>
+
+<app-payments-document-select-modal
+  [(displayModal)]="displayModal"
+>
+</app-payments-document-select-modal>

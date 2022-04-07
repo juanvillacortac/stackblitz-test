@@ -1,0 +1,33 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Agrupación de atributos</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="text" [class]="submitted && (!_attributeagrupation.name || !_attributeagrupation.name.trim()) ? 'ng-dirty ng-invalid' : ''" pInputText id="name" [(ngModel)]="_attributeagrupation.name" (input)="_validations.toCapitalizeSimbology($event)" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" maxlength="100" autofocus (keyup.enter)="saveAttributeAgrupation()"/>
+                    <small class="p-invalid" *ngIf="submitted && (!_attributeagrupation.name || !_attributeagrupation.name.trim())">El nombre es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" pInputTextarea style="resize: none;" [(ngModel)]="_attributeagrupation.description" rows="3" cols="20" maxlength="100" (keyup.enter)="saveAttributeAgrupation()"></textarea>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>
+                    <p-dropdown emptyFilterMessage="Sin resultados." [filter]="true" [options]="status" [disabled]="(_attributeagrupation.id < 0 || (_attributeagrupation.active && (_attributeagrupation.attributeOptionsChilds > 0 || _attributeagrupation.attributesChilds > 0)))" appendTo="body" [(ngModel)]="_attributeagrupation.active" placeholder="Estatus">
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="saveAttributeAgrupation()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

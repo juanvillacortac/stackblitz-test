@@ -1,0 +1,7 @@
+<div class="p-m-0" *ngIf="loaded">
+  <app-sale-transactions-tree [currencies]="currencies" [(currentPage)]="currentPage" [(elementsPerPage)]="elementsPerPage"
+    [totalPaginatorElements]="totalPaginatorElements" [transactions]="transactions"  [isFiltered]="isFiltered" #treeComp
+    (onEdit)="edit($event)" (onRefresh)="fetchData()" [isDirect]="isDirect" >
+    <app-sale-transactions-filters [filterData]="filterData" [loading]="loading" (onSearch)="fetchData($event, true)"></app-sale-transactions-filters>
+  </app-sale-transactions-tree>
+</div>

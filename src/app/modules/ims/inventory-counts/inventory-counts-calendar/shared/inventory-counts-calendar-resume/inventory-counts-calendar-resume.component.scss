@@ -1,0 +1,23 @@
+:host ::ng-deep .p-chip.custom-chip {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    display: inline-block;
+    padding: 0 15px;
+    margin-top: 10px;
+    height: 22px;
+    border-radius: 15px;
+  }
+  
+  .resume-container p{
+      height: 5px !important;
+  }
+
+  .p-chips-multiple-container {
+    flex-wrap: wrap;
+    align-content: space-between;
+    padding-bottom: 0;
+  }
+  
+  .p-chips-token, .p-chips-input-token {
+    margin-bottom: 0.8rem;
+  }

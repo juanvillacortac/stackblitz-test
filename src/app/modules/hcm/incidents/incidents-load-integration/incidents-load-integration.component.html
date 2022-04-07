@@ -1,0 +1,137 @@
+<!-- Start Form Incedents Massive -->
+<div class="card">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+          <h4 id="filterTitle">Incidencias por integración</h4>
+        </div>
+        <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row">
+            <div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Start Input Group -->
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-lg-3">
+            <label for="dropdown">Sucursal</label>
+            <p-dropdown id="TypesVarying"
+            placeholder="Seleccionar..." [filter]="true" (onChange)="loadEmployment()" [(ngModel)]="branchOfficeId" [options]="userOffices" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados">
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label>Tipo de nómina<span class="p-invalid">*</span></label>
+            <p-dropdown [(ngModel)]="selectPayrollType" [options]="payrollTypelist" (onChange)="loadPayDates()"  placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+                [class]="submitted && selectPayrollType == 0 ? 'ng-dirty ng-invalid' : ''" > 
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && selectPayrollType == 0 " >Tipo nómina es requerido</small>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label for="">Calendario<span class="p-invalid">*</span></label>
+            <p-dropdown [(ngModel)]="paymentDate" [options]="payDateList" [disabled]="showCalendarPayroll" placeholder="Seleccionar..." optionLabel="name" [filter]="true" emptyFilterMessage="Sin resultados" 
+                emptyMessage="Sin resultados" [class]="submitted && paymentDate == null ? 'ng-dirty ng-invalid' : ''" life="500" >
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && paymentDate == null " >Calendario es requerido</small>
+        </div>
+        <div class="p-field p-col-12 p-lg-3">
+            <label for="dropdown">Trabajador</label>
+            <p-dropdown id="TypesVarying"
+            placeholder="Seleccionar..." [filter]="true" [disabled]="enableEmploymentList" [(ngModel)]="employmentSelect"  [options]="employmentList" emptyFilterMessage="Sin resultados" life="500"
+            emptyMessage="Sin resultados">
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label for="">Incidencias<span class="p-invalid">*</span></label>
+            <p-dropdown id="TypesVarying"
+                placeholder="Seleccionar..." [(ngModel)]="selectConceptsIncidents" [options]="incidentsList" [filter]="true" (onChange)="getDataConceptsIncidents()" emptyFilterMessage="Sin resultados"
+                emptyMessage="Sin resultados" >
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label for="">Fecha<span class="p-invalid">*</span></label>
+            <p-calendar dateFormat="dd/mm/yy" inputId="basic" placeholder="Seleccionar..."
+                readonlyInput="true" [showIcon]="true" [(ngModel)]="dateIncidents" [maxDate]="maxDate" [monthNavigator]="true" [readonlyInput]="true" yearRange="1900:2200"
+                [yearNavigator]="true" life="500" [baseZIndex]="1000000000" overlay="" appendTo="body" >
+            </p-calendar>
+        </div>
+        <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+        </div>  
+    </div>
+    <!-- End Input Group -->
+    <div class="p-col-12 p-pl-0 p-pr-0" align="right">
+        <button pButton pRipple label="Buscar" (click)="search()" icon="pi pi-plus" class="p-button-info"></button>
+        <!-- <button pButton pRipple label="Agregar Trabajadores"  icon="pi pi-external-link" (click)="showModalEmployeeList()"  class="p-button-info p-ml-2"></button> -->
+        <!-- <button pButton pRipple label="Elimnar"  icon="pi pi-trash"  class="p-button-danger p-ml-2"></button> -->
+    </div>
+</div>
+<!-- End Form Incedents Massive -->
+
+<!-- Start List Incedents integration -->
+<div class="card" *ngIf="showList">
+    <p-table [value]="incidentsModel" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10"
+    [rowHover]="true" dataKey="idEmploymentRelationship" [scrollable]="true" scrollHeight="500px" [globalFilterFields]="['idEmploymentRelationship','concepts','dateIncident','valueIncident','idUnit','payrollType']"
+    currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true" #dt2 editMode="row" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idEmploymentRelationship" class="p-text-center">Trabajador<p-sortIcon field="idEmploymentRelationship"></p-sortIcon></th>
+                <th pSortableColumn="concepts" class="p-text-center">Concepto <p-sortIcon field="concepts"></p-sortIcon></th>
+                <th pSortableColumn="dateIncident" class="p-text-center">Fecha <p-sortIcon field="dateIncident"></p-sortIcon></th>
+                <th pSortableColumn="valueIncident" class="p-text-center">Valor <p-sortIcon field="valueIncident"></p-sortIcon></th>
+                <th pSortableColumn="payrollType" class="p-text-center">Nómina <p-sortIcon field="payrollType"></p-sortIcon></th>
+                <th style="width:8rem"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-incidentsModel let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="incidentsModel">
+                <td class="p-text-center">
+                    {{incidentsModel.numEmployees}} - {{incidentsModel.employeeFirstName}}
+                </td>
+                <td class="p-text-center">
+                    {{incidentsModel.codConcepts}} - {{incidentsModel.concepts}}
+                </td>
+                <td class="p-text-center">
+                    {{incidentsModel.dateIncident == null ? '' : incidentsModel.dateIncident.split('-').reverse().join('/')}}
+                </td>
+                <td class="p-text-center" style="overflow-wrap: break-word">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber id="valueIncidents" [(ngModel)]="incidentsModel.valueIncident" [min]="0" [max]="1000" [minFractionDigits]="1" [maxFractionDigits]="1" 
+                            mode="decimal" maxlength="6" locale="en-US">
+                            </p-inputNumber>
+                        </ng-template>
+                        <ng-template pTemplate="output" >
+                           {{incidentsModel.valueIncident}}({{incidentsModel.unit}})
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td class="p-text-center">
+                    {{incidentsModel.abbreviation}}-{{incidentsModel.idCalendar}}
+                </td>
+                <td style="text-align:center" style="width:8rem">
+                    <button *ngIf="!editing && incidentsModel.idStatus == 99" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" (click)="onRowEditInit(incidentsModel)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" pTooltip="Guardar" class="p-button-rounded p-button-success p-button-text p-mr-2" (click)="onRowEditSave(incidentsModel,ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" pTooltip="Cancelar" class="p-button-rounded p-button-danger p-button-text" (click)="onRowEditCancel(incidentsModel, ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <button *ngIf="!editing && incidentsModel.idStatus == 99" pButton pRipple type="button" icon="pi pi-trash" pTooltip="Eliminar" class="p-button-rounded p-button-danger" (click)="deleteIncidents(ri)" tooltipPosition="top" placeholder="Top"></button>
+                    <!-- <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(recordList)" pTooltip="Guardar" class="p-button-rounded p-button-success p-mr-2" tooltipPosition="top" placeholder="Top"></button> -->
+                    <!-- <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(recordList, ri)" pTooltip="Regresar" class="p-button-rounded p-button-danger" tooltipPosition="top" placeholder="Top"></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer" let-columns>
+            <ng-container>
+              <tr *ngIf="incidentsModel && incidentsModel.length == 0 && showMenssage" >
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+                  <p-message severity="info"  text="No existen incidencias registradas para este el empleado" styleClass="p-col-12 p-mr-2"></p-message>
+                </td>
+              </tr>
+            </ng-container>
+        </ng-template>
+    </p-table>
+    <!-- End Table -->
+    <div class="p-col-12 p-pl-0 p-pr-0 p-field" align="right">
+        <button  pButton pRipple label="Guardar" (click)="save()" icon="pi pi-save" class="p-button-success"></button>
+    </div>
+</div>
+<!-- End List Incedents integration -->

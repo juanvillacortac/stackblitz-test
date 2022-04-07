@@ -1,0 +1,39 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Agregar producto" [(visible)]="showDialogNew" [style]="{width:'30%'}" [modal]="true" class="address-dialog">
+    <div class="p-grid">
+        <div class="p-col-12">             
+            <div class="p-fluid p-grid p-formgrid">
+        
+                <div class="p-field p-col-12 p-sm-12 p-md-12">
+                    <b>Barra:</b>
+                    <input type="text" pInputText>
+                    <p-button icon="pi pi-search"></p-button>
+                    <small class="p-invalid" *ngIf="submitted && (_cont.idProduct <=0)">Ingrese un producto</small>
+                </div> 
+                <div class="p-field p-col-12 p-sm-12 p-md-12">
+                    <b>Producto:</b>                    
+                    <label style="margin-left:20px;">{{_cont.idProduct <=0 ? " " : _cont.product}}</label>   
+                </div>      
+                <div class="p-field p-col-12 p-sm-12 p-md-12">
+                    <b>Empaque:</b>
+                    <label style="margin-left:20px;" >{{_cont.idProduct <=0 ? " ": _cont.packet}}</label> 
+                </div>
+                <div class="p-field p-col-12 p-sm-12 p-md-12">
+                    <b>Cantidad:</b>                        
+                    <p-inputNumber  *ngIf="_cont.indHeavy==true" [(ngModel)]="_cont.quatityCount" min="0" mode="decimal" [minFractionDigits]="3"></p-inputNumber>
+                    <p-inputNumber  *ngIf="_cont.indHeavy==false"[(ngModel)]="_cont.quatityCount" min="0"></p-inputNumber>
+                </div>             
+                <div class="p-field p-col-12 p-sm-12 p-md-12">
+                    <b>Cantidad contada:</b>                        
+                    <div style="text-align: center;">
+                        <h4 *ngIf="_cont.indHeavy==true">{{_cont.quatityCount.toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 3})}}</h4>
+                        <h4 *ngIf="_cont.indHeavy==false">{{_cont.quatityCount}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="submit()" label="Aceptar" styleClass="p-button-info p-mr-2" ></p-button>
+        <p-button icon="pi pi-ban" (click)="showDialogNew=false" label="Cancelar" styleClass="p-button-secondary"></p-button>
+    </ng-template>
+</p-dialog>

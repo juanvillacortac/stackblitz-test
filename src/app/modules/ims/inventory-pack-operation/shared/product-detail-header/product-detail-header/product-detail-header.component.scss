@@ -1,0 +1,43 @@
+:host ::ng-deep .product-avatar{
+    background-color: #6c757d !important;
+    text-align: center !important;;
+    color: white;
+}
+
+.recipe-price-box-value{
+    color: #868e96;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.material-icons.avatar{ 
+    color: #868e96; 
+    font-size: 25;
+    display: inline-flex !important;
+    vertical-align: middle;
+    font-weight: 400;
+}
+.material-icons.negative-option{ 
+    color: #C63737; 
+}
+.title{
+    color: #696969;
+    font-weight: 700;
+
+}
+.negative-option {
+    color: #C63737;
+}
+.product-img {
+
+
+    img {
+        width: 75%;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        margin: 2rem 0;
+    }
+
+    
+}

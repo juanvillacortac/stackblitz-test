@@ -1,0 +1,111 @@
+<div class="card">
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+      <!--<label *ngIf="!showFilters" id="filterTitle">Empresas</label>-->
+      <h4 *ngIf="!showFilters" id="filterTitle">Bandas salariales</h4>
+    </div>
+    <div class="p-d-flex p-ai-center p-jc-end p-flex-column p-flex-md-row">
+        <div>
+          <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_SALARY_BANDS_PERMISSION_ID) && showList" icon="pi pi-plus" class="p-button-success boton-crear p-ml-3"  
+          pTooltip="Crear nuevo" tooltipPosition="top" (click)="newSalaryBands()" id="add"></button>
+          <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+          (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+    </div>
+  </div>
+    <app-salary-bands-filter (onSearch)="search($event)" (clearList)="clearList()" [(filters)]="salaryRangeViewFilter" [showList]="showList"  [jobPositionSelect]="jobPositionSelect" 
+    [coinModelOpction]="coinModelOpction" [salaryTypeSelect]="salaryTypeSelect" [expanded]="showFilters" [loading]="loading" class="p-mt-3">
+  </app-salary-bands-filter>
+</div>
+
+<div class="card" *ngIf="showList">
+    <p-table #table  [resizableColumns]="false" styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" responsiveLayout="scroll" 
+      #dt [columns]="displayedColumns" [rowHover]="true" dataKey="idSalaryRange" [value]="salaryRangeList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+      currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" *ngIf="salaryRangeList.length > 0 && showList ">
+      <ng-template pTemplate="header" let-columns>
+        <tr >
+          <th  style="width: 3rem"></th>
+          <ng-container *ngFor="let col of columns">
+            <th class="p-text-center" [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }" pResizableColumn [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>  
+          <th></th>    
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-salaryRangeList let-columns="columns" let-expanded="expanded" let-index="rowIndex"> 
+        <tr>
+          <td>
+            <button  type="button" pButton pRipple [pRowToggler]="salaryRangeList" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td> 
+          <ng-container *ngFor="let col of columns">                   
+            <td class="p-text-center" [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}" >
+              <div class="p-text-center" *ngIf="col.field == 'abbreviation'; else textCell" style="text-align: left;">
+                <div [class]="salaryRangeList.abbreviation == 'USD' ? 'status-badge status-delayed' : 'status-badge status-finalize'">{{salaryRangeList.abbreviation}}</div>
+              </div>
+              <ng-template #textCell>
+                <span>{{col.template(salaryRangeList)}} </span>
+              </ng-template>
+            </td>
+          </ng-container>
+          <td class="button-right"> 
+            <button   pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_SALARY_BANDS_PERMISSION_ID)" type="button" icon="pi pi-pencil" (click)="onEdit(index)" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar" tooltipPosition="top" placeholder="Top"></button>
+            <!-- <button   pButton pRipple type="button" icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button> -->
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-salaryRangeList>
+        <tr style="background-color: #e9ecef; height: 40px;" class="md: col-12">
+          <th></th>
+          <th></th>
+          <th class="p-text-center" style="width: 25%; text-decoration-color: black;" pResizableColumn>Fecha creación<p-sortIcon field="dateCreate" ></p-sortIcon></th>
+          <th class="p-text-center" style="width: 25%; text-decoration-color: black;" pResizableColumn>Fecha modificación<p-sortIcon field="dateUpdate" ></p-sortIcon></th>
+          <th class="p-text-center" style="width: 25%; text-decoration-color: black;" pResizableColumn>Creado por<p-sortIcon field="userCreate" ></p-sortIcon></th>
+          <th class="p-text-center" style="width: 25%; text-decoration-color: black;" pResizableColumn>Modificado por <p-sortIcon field="userUpdate" ></p-sortIcon></th>
+          <th></th>
+        </tr>
+        <tr class="md: col-12">
+          <td></td>
+          <td></td>
+          <td class="p-text-center" style="width: 25%;" pResizableColumn>{{salaryRangeList.dateCreate | date:'dd/MM/yyyy h:mm a'}}</td>
+          <td class="p-text-center" style="width: 25%;" pResizableColumn>{{salaryRangeList.dateUpdate == '1900-01-01T00:00:00'? '': salaryRangeList.dateUpdate | date:'dd/MM/yyyy h:mm a'}}</td>
+          <td class="p-text-center" style="width: 25%;" pResizableColumn>{{salaryRangeList.userCreate}}</td>
+          <td class="p-text-center" style="width: 25%;" pResizableColumn>{{salaryRangeList.userUpdate}}</td>
+          <td></td>
+        </tr>     
+      </ng-template> 
+      <ng-template pTemplate="footer" let-columns>
+        <ng-container>
+          <tr *ngIf="salaryRangeList.length == 0" >
+            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+1">
+            
+            </td>
+          </tr>
+        </ng-container>
+        
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+
+
+    <p-messages severity="info" *ngIf="salaryRangeList && salaryRangeList.length == 0 ">
+
+    <ng-template pTemplate>
+
+
+        <div class="p-ml-2">No existen resultados que coincidan con la búsqueda.</div>
+
+      </ng-template>
+
+    </p-messages>
+ 
+</div>
+
+<app-salary-bands-panel *ngIf="showModal" [showDialog]="showModal" [record]="salaryRangeObject" [data]="salaryRangeModel" [jobPositionSelect]="jobPositionSelect" 
+ [salaryTypeSelect]="salaryTypeSelect" [(salaryRangeView)]="salaryRangeViewFilter" [index]="index"  (backUnChange)="resetValues()" (saveData)="processSalaryRange($event)"></app-salary-bands-panel>
+ 

@@ -1,0 +1,44 @@
+<p-sidebar styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}"
+    [(visible)]="showPanel" 
+    (onShow)="ngOnInit()" 
+    (onHide)="hideDialog()" 
+    [blockScroll]="false" 
+    [showCloseIcon]="true"  
+    [dismissible]="false" 
+    position="right" >
+    <h5 class="p-m-0">{{title}}</h5>
+<hr/>
+
+<div class="p-col-12" *ngIf="!isEdit">
+     <app-search-mrp-recipes  [(showSearching)]="showSearching"  (getResult)="onRecipeSelected($event)"  [(exceptions)]="addedRecipes" ></app-search-mrp-recipes>
+            <div *ngIf="(recipeSelected === null && submitted)" class="card">   
+                    <div class="p-invalid">
+                        <span>Debe elegir una receta.</span>
+                    </div> 
+            </div> 
+</div>
+
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">   
+            <div class="p-fluid p-grid p-formgrid">
+                <div *ngIf="isEdit" class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre</label>
+                        <input id="name" pInputText #name [(ngModel)]="roomRecipe.name" disabled >  
+                </div>                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="isActive" [options]="status"  placeholder="Seleccionar estatus" [showClear]="false" [disabled]="!isEdit">
+                    </p-dropdown>
+                    
+                </div>   
+
+                <br/>
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple label="Guardar" (click)="verifySave()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

@@ -1,0 +1,56 @@
+<div class="card ">
+    <div class="p-col-12">
+        <p-table [value]="salaryAdjustmentList" dataKey="idFamilyBurden" #dt [globalFilterFields]="['salaryType','amount','adjustmentAmount','adjustmentPercentage','validityDate','salaryReason']"
+            sortField="idLaborRelationshipxFamilyBurden" sortMode="single" [responsive]="true" [showCurrentPageReport]="true" [paginator]="false" [rows]="10" [rowHover]="true" 
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" autoLayout="true" editMode="row" [rowsPerPageOptions]="[10,25,50]" 
+            styleClass="p-datatable-responsive-demo" *ngIf="salaryAdjustmentList && salaryAdjustmentList.length > 0">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="p-text-center" pSortableColumn="salaryType">Tipo de sueldo <p-sortIcon field="salaryType"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="amount">Monto <p-sortIcon field="amount"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="adjustmentAmount">Monto del ajuste<p-sortIcon field="adjustmentAmount"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="adjustmentPercentage">Porcentaje del ajuste<p-sortIcon field="adjustmentPercentage"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="validityDate">Vigencia <p-sortIcon field="validityDate"></p-sortIcon></th>
+                    <th class="p-text-center" pSortableColumn="salaryReason">Motivo <p-sortIcon field="salaryReason"></p-sortIcon></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-adjustmentList let-index="rowIndex">
+                <tr *ngIf="adjustmentList != []">
+                    <td class="p-text-center"><p>{{adjustmentList.salaryType}}</p></td>
+                    <td class="p-text-center">
+                        <p *ngIf="adjustmentList.amount == 0">-</p>
+                        <p *ngIf="adjustmentList.amount != 0">{{adjustmentList.amount| number}}</p>
+                    </td>
+                    <td class="p-text-center">
+                        <p *ngIf="adjustmentList.adjustmentAmount == 0">-</p>
+                        <p *ngIf="adjustmentList.adjustmentAmount != 0">{{adjustmentList.adjustmentAmount| number}}</p>
+                    </td>
+                    <td class="p-text-center">
+                        <p *ngIf="adjustmentList.adjustmentPercentage == 0">-</p>
+                        <p *ngIf="adjustmentList.adjustmentPercentage != 0">{{adjustmentList.adjustmentPercentage| number}}</p>
+                    </td>
+                    <td class="p-text-center">
+                        <p *ngIf="adjustmentList.validityDate == undefined">-</p>
+                        <p *ngIf="adjustmentList.validityDate != undefined">{{adjustmentList.validityDate| date: "dd/MM/yyyy"}}</p>
+                    </td>
+                    <td class="p-text-center"><p>{{adjustmentList.salaryReason}}</p></td>
+                    <td class="p-text-center">
+                        <button pButton pRipple  type="button" icon="pi pi-pencil" (click)="onEdit(index)" class="p-button-rounded p-button-success p-mr-2" 
+                                pTooltip="Editar" tooltipPosition="top" placeholder="Top" 
+                                *ngIf="adjustmentList.access"></button>
+                        <!-- <button *ngIf="globalVar.idTypeVarying == 3" pButton pRipple icon="pi pi-trash"  (click)="deleted(globalVar)" class="p-button-rounded p-button-danger" pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button> -->
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <p-messages severity="info" *ngIf="!(salaryAdjustmentList  && salaryAdjustmentList.length > 0)" >
+            <ng-template pTemplate>
+                <div class="p-ml-2">No existen resultados que coincidan con la búsqueda.</div>
+            </ng-template>
+        </p-messages>
+    </div>
+    <div class="p-col-12" align="right" *ngIf="access && salaryAdjustmentList  && salaryAdjustmentList.length > 0">
+        <button id="saving" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info saving p-mt-2" (click)="saveAdjustment()" [disabled]="salaryAdjustmentList.length == 0"></button>
+    </div>
+</div>

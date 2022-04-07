@@ -1,0 +1,113 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+      <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Puertos <span *ngIf="showFilters">> Filtrar</span></h5> -->
+      <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+      </span>
+      <div>
+        <!-- <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DIVICE_TYPES_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success" [ngClass]="{'p-button-danger':showDialog}" (click)="DeviceTypeshowDialog=!DeviceshowDialog"></button> -->
+        <!-- <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DIVICES_PERMISSION_ID)"  pButton pRipple icon="pi pi-plus" class="p-button-success" [ngClass]="{'p-button-danger':showDialog}" (click)="InventoryExistenceshowDialog=!showDialog"  pTooltip="Crear nuevo" tooltipPosition="top"></button> -->
+
+        <button  pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters"  pTooltip="Filtros" tooltipPosition="top"></button>
+      </div>
+    </div>
+    
+    <app-inventory-existence-filters-panel (onSearch)="search()" [(filters)]="inventoryExistenceFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></app-inventory-existence-filters-panel>
+  
+  </div>
+  
+  <div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" selectionMode="single" [(selection)]="selectedProduct" [rowHover]="true" [value]="_inventoryExistenceService._inventoryExistenceList" [scrollable]="true" scrollHeight="100%" scrollWidth="100%" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+             <ng-template pTemplate="colgroup" let-columns>
+              <colgroup>                  
+                  <col style="width:110px">                  
+                  <col style="width:150px">                  
+                  <col style="width:150px">                  
+                  <col style="width:150px">                  
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+                  <col style="width:150px">
+              </colgroup>          
+            </ng-template>      
+            <ng-template pTemplate="header" let-columns>
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon *ngIf="col.field !== 'edit'" [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-inventoryExistence let-columns="columns">
+        <tr [pSelectableRow]="inventoryExistence" (dblclick)="onShowProductDetail(inventoryExistence)">
+          <ng-container *ngFor="let col of columns">
+            <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">
+              <span *ngIf="col.field === 'indheavyproduct' && inventoryExistence[col.field] == true; else second" [class]="'status-badge status-active'">Pesado</span>
+              <ng-template #second>
+                <span *ngIf="col.field === 'indheavyproduct' && inventoryExistence[col.field] == false; else textCell" [class]="'status-badge status-inactive'">No pesado</span>
+              </ng-template>
+              <ng-template #textCell>
+                <span *ngIf="col.field !== 'edit'; else editCell">{{col.template(inventoryExistence)}} </span>
+              </ng-template>
+              <ng-template #editCell>
+                <ng-container>
+                    <button pButton pRipple icon="pi pi-eye" pTooltip=" {{ 'view_detail' | translate }}"  class="p-button-rounded p-button-secondary p-mr-2" (click)="onShowProductDetail(inventoryExistence)"></button>
+                    <button pTooltip=" {{ 'operation' | translate }}" pButton pRipple icon="pi pi-bars" class="p-button-rounded p-button-secondary p-mr-2" (click)="toggleMenu(packOptions, $event, inventoryExistence)" tooltipPosition="top"></button>
+                    
+                  </ng-container>
+            </ng-template>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-6">No existen resultados</td>
+        </tr>
+      </ng-template>
+      <!-- <ng-template pTemplate="footer" let-columns>
+        <ng-container *ngIf=" _inventoryExistenceService._inventoryExistenceList==null || _inventoryExistenceService._inventoryExistenceList?.length == 0">
+        <tr>
+          <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length-6">
+            <span>No existen resultados</span>
+          </td>
+        </tr>
+        </ng-container>
+      </ng-template> -->
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+    </p-table>
+    <p-tieredMenu #packOptions [model]="packOperationOptions" [popup]="true"></p-tieredMenu>
+  </div>
+  <app-inventory-lot-and-expiration-date-modal></app-inventory-lot-and-expiration-date-modal>
+
+  <p-sidebar [(visible)]="packOperationSidebarShow" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="packOperationSidebarShow" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}" >
+    <app-inventory-pack-operation-detail [(productSelected)]="selectedProduct"  [packOperationType]="packOperationType" (hideDialogForm)="childCallBack($event)" ></app-inventory-pack-operation-detail> 
+   </p-sidebar>

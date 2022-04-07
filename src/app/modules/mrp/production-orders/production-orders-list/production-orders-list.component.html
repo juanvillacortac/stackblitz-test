@@ -1,0 +1,92 @@
+<div class="card p-m-0 p-pb-0">
+    <h5>{{ 'mrp.production_order.production_rooms' | translate }}</h5>
+    <div class="p-d-flex">
+        <p-dropdown class="p-mr-2 p-dropdown-wide"
+                    [options]="processingRooms"
+                    [showClear]="false"
+                    [(ngModel)]="selectedRoom"
+                    (onChange)="processingRoomSelected($event)"
+                    [filter]="true"
+                    filterBy="name"
+                    emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate }}"
+                    placeholder="{{ 'selection_default' | translate }}"
+                    optionLabel="name">
+        </p-dropdown>
+        <p-progressSpinner *ngIf="loadingRooms" class="p-mr-2" [style]="{width: '32px', height: '32px'}"></p-progressSpinner>
+    </div>
+</div>
+
+<div class="card p-m-0">
+    <p-table #dt
+    [columns]="cols"
+    [value]="productionOrders"
+    [rowHover]="true"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10,25,50]"
+    currentPageReportTemplate="{{ 'primeng.footerDescription' | translate }}">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                {{ 'mrp.production_order.productions_orders' | translate }}
+                <p-button [disabled]='!selectedRoom' icon="pi pi-refresh" (click)="refresh()"></p-button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <th [ngStyle]="{'display': col.display, 'width': (col.field === 'id') ? '6rem' : ''}" pSortableColumn={{col.field}}>
+                        {{ col.header | translate }}
+                        <p-sortIcon field={{col.field}} *ngIf="col.field !== 'detail'"></p-sortIcon>
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order >
+            <tr>
+                <ng-container *ngFor="let col of cols">
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+
+                        <app-active-label *ngIf="col.field == 'Active'; else statusCell" [active]="order[col.field]" [isYesOrNoMode]="true"></app-active-label>
+
+                        <ng-template #statusCell >
+                            <div *ngIf="col.field === 'status'; else numberCell">
+                                <app-status-label [status]="productionOrdersStatus(order[col.field])"></app-status-label>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #numberCell>
+                            <div *ngIf="col.field === 'progress'; else dateCell">
+                                {{(order.progress)|number:'1.1-2'}}%
+                            </div>
+                        </ng-template>
+
+                        <ng-template #dateCell>
+                            <div *ngIf="isDateCell(col.field); else textCell" >
+                                <span style="font-weight: 600;">{{getValidDate(order[col.field]) | date: 'dd/MM/yyyy' }}</span>
+                                <br>
+                                {{getValidDate(order[col.field]) | date: 'hh:mm aaa' : "" : "en_US" }}
+                            </div>
+                        </ng-template>
+
+                        <ng-template #textCell >
+                            <div *ngIf="col.field !== 'detail'; else detailCell">
+                                {{order[col.field]}}
+                            </div>
+                        </ng-template>
+
+                        <ng-template #detailCell  >
+                            <ng-container  *ngIf="userPermissions.allowed(this.permissionsIDs.CHECK_PRODUCTION_ORDER_PERMISSION_ID)">
+                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" (click)="orderDetail(order)"></button>
+                            </ng-container>
+                        </ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-sidebar [(visible)]="showDialog" [blockScroll]="true" [showCloseIcon]="true"  [dismissible]="false" position="right"  *ngIf="showDialog" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}" >
+    <app-production-orders-detail [productionOrder]="selectedOrder" [processingRoom]="selectedRoom" (itemsChange)="refresh()"></app-production-orders-detail>
+</p-sidebar>

@@ -1,0 +1,140 @@
+<p-dialog (onShow)="onShow()" (onHide)="onEmitHideForm(0)" header="Crear recepción" [(visible)]="visible" 
+[breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width:'60vw','overflow': 'overlay'}" 
+[modal]="true" class="address-dialog" [draggable]="false" [resizable]="false" >
+
+    <div class="p-fluid p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Operador responsable</label>
+            <div class="p-fluid">
+                <div class="p-inputgroup">  
+                    <input type="text" id="receivingOperator" name="receivingOperator" #receivingOperator="ngModel" 
+                        pInputText placeholder="Seleccione el operador responsable" 
+                        [(ngModel)]="this.operator.namesoperators" 
+                        [ngClass]="{'p-invalid':(!validateReceivingOperatorId && (receivingOperator.dirty || receivingOperator.touched || submitted))}"
+                        disabled>
+                    <p-button icon="pi pi-search" (click)="operatorDialogVisible=true" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+            </div>
+            <div *ngIf="!validateReceivingOperatorId && (receivingOperator.dirty || receivingOperator.touched || submitted)" class="p-invalid">
+                Debe seleccionar un operador responsable.
+            </div>  
+        </div>
+        </div>
+
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+                <label>Operador de validación<span [ngStyle]="{'color':'red'}">*</span></label>
+                <div class="p-fluid">
+                    <div class="p-inputgroup">             
+                        <input type="text" id="authOperator" name="authOperator" #authOperator="ngModel" 
+                            pInputText placeholder="Seleccione el operador de validación"
+                            [(ngModel)]="this.operatorAuthmodal.namesoperators" 
+                            [ngClass]="{'p-invalid':(!validateValidatorOperatorId && (authOperator.dirty || authOperator.touched || submitted))}"
+                            disabled>
+                        <p-button icon="pi pi-search" (click)="operatorAuthDialogVisible=true"  class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+                </div>
+                <div *ngIf="!validateValidatorOperatorId && (authOperator.dirty || authOperator.touched || submitted)" class="p-invalid">
+                    Debe seleccionar un operador de validación.
+                </div>  
+            </div>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Proveedor<span [ngStyle]="{'color':'red'}">*</span></label>
+            <div class="p-fluid">
+            <div class="p-inputgroup">
+              <span class="p-float-label">
+                <input type="text" id="supplier" name="supplier" #supplier="ngModel" 
+                    pInputText placeholder="Seleccione el proveedor" 
+                    [(ngModel)]="supplierString"
+                    [ngClass]="{'p-invalid':(!validateSupplierId && (supplier.dirty || supplier.touched || submitted))}"
+                    disabled>
+                <p-button *ngIf="documentTypeSelected !== 2" icon="pi pi-search" (click)="supplierDialogVisible=true" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+              </span>
+            </div>
+            <div *ngIf="!validateSupplierId && (supplier.dirty || supplier.touched || submitted)" class="p-invalid">
+                Debe seleccionar un proveedor.
+            </div> 
+           </div>
+        </div>
+        <!-- <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Fecha de inicio</label>
+            <span pTooltip="Fecha de inicio" tooltipPosition="right" class="p-float-label">
+                <p-calendar inputId="calendar" 
+                    [(ngModel)]="startDateFilter" 
+                    [minDate]="maxDate"  
+                    readonlyInput="true" 
+                    [showIcon]="true" 
+                    type="text" 
+                    appendTo="body"
+                    datePattern="dd/mm/yy"
+                    dateFormat="dd/mm/yy"
+                    [disabled]="receptionToStart">
+                   
+                </p-calendar>
+            </span>
+        
+        </div> -->
+        
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Tipo de factura <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown  id="receptionTypes2" name="receptionTypes2" #receptionTypes2="ngModel" 
+                    [options]="fctype.value" optionLabel="name" optionValue="id" [autoDisplayFirst]="false"
+                    emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                    emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}" 
+                    placeholder="{{ 'srm.reception.document.general_data.documentType' | translate}}" 
+                    [(ngModel)]="fCTypeSelected"
+                          [ngClass]="{'ng-invalid':(!validateFcType && (receptionTypes2.dirty || receptionTypes2.touched || submitted))}">
+                </p-dropdown>
+                <div *ngIf="!validateFcType && (receptionTypes2.dirty || receptionTypes2.touched || submitted)" class="p-invalid">
+                    Debe seleccionar un tipo de factura.
+                </div> 
+        </div>
+<!-- 
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Número de factura</label>
+                <input  [(ngModel)]="invoiceNumber" 
+                name="invoiceNumber" 
+                id="invoiceNumber" 
+                type="text"
+                pInputText maxlength="130" 
+                (keypress)="validations.keyPressFroLettersNumbersPointanddash($event);">
+        </div>
+
+        <div class="p-col-12 p-md-6 p-lg-6 p-field p-mt-2">
+            <label>Número de documento externo</label>
+                <input  [(ngModel)]="externalDocumentNumberRelated" 
+                name="externalDocumentNumberRelated" 
+                id="externalDocumentNumberRelated" 
+                type="text"
+                pInputText maxlength="130" 
+                (keypress)="validations.keyPressFroLettersNumbersPointanddash($event);">
+        </div> -->
+
+        <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label>Observaciones</label>
+                <textarea 
+                    rows="5" 
+                    cols="30" 
+                    maxlength="220" 
+                    pInputTextarea 
+                    [(ngModel)]="observation" 
+                    autoResize="autoResize">
+                </textarea>
+        </div>  
+    </div>
+    <app-footer-form-buttons (acceptPressed)="onSave()" (cancelPressed)="onEmitHideForm(0)"></app-footer-form-buttons>
+
+    <app-modal-suppliergenerico 
+            (onToggle)="onToggleSupplier($event)"
+            (suppliers)="getSuppliersId($event)"
+            [visible]="supplierDialogVisible" 
+            [(selectedSuppliers)]="selectedSuppliers" 
+            [multiple]="false" 
+            [getSelected]='true'>
+    </app-modal-suppliergenerico>    
+    <operator-modal-list 
+            [showDialog]="operatorDialogVisible || operatorAuthDialogVisible" 
+            (onSubmit)="onSubmitOperator($event)"
+            (onToggle)="onToggleOperator($event,operatorAuthDialogVisible)"
+            [multiples]="false"
+            [usertype]="this.userType">
+    </operator-modal-list>
+</p-dialog>

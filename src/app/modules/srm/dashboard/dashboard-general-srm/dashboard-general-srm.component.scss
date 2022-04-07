@@ -1,0 +1,125 @@
+:host ::ng-deep
+{
+    .ui-panel-title{
+        vertical-align: middle !important;
+    }
+    
+    .panelheader{
+        width: 100%; 
+        text-align: center; 
+        font-weight: bold;
+    }
+
+    .box-total-shadow
+    {
+        //  box-shadow:0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+    } 
+    // .widget-overview-box.overview-box-1 {
+    //     background: linear-gradient(256deg, #87CEEB 0%, #88c0d0 100) !important; 
+    // }
+    
+    // .widget-overview-box.overview-box-2 {
+    //     background: linear-gradient( 256deg, #ADD8E6 0%, #76a9b7 100%) !important;
+    // }
+    // .widget-overview-box.overview-box-1 .overview-box-status {
+    //     background-color: #a24223 !important;
+    // }
+    // .widget-overview-box.overview-box-2 .overview-box-status {
+    //     background-color: #a24223 !important;
+    // }
+    // .widget-overview-box.overview-box-4 {
+    //     background: linear-gradient(256deg, #87CEFA 0%, #6C99AB 100%) !important;
+    // }
+    // .widget-overview-box.overview-box-4 .overview-box-status {
+    //     background-color: #a24223 !important;
+    // }
+    
+}
+:host ::ng-deep .chartSize.p-chart{
+    .canvas{
+        width: 90% !important;
+        height: 90%!important;
+        margin-top:2%!important;
+        margin-left: 5%!important;
+    }
+
+}
+
+:host ::ng-deep .dark-card.p-card {
+    background-color: #ffffff 4%;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff 4%), to(#71B5C8 214%));
+    background-image: -webkit-linear-gradient(to bottom, #ffffff 4%, #71B5C8 214%);
+    background-image: -moz-linear-gradient(to bottom, #ffffff 4%, #71B5C8 214%);
+    background-image: -ms-linear-gradient(to bottom, #ffffff 4%, #71B5C8 214%);
+    background-image: -o-linear-gradient(to bottom, #ffffff 4%, #71B5C8 214%);
+    background-image: linear-gradient(to bottom, #ffffff 4%, #71B5C8 214%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff 4%", endColorstr="#71B5C8 214%");
+    background-color: #ffffff;
+    
+}
+:host ::ng-deep .dark-card2.p-card {
+    background-color: #ffffff 4%;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff 4%), to(#5ea77c 214%));
+    background-image: -webkit-linear-gradient(to bottom, #ffffff 4%, #5ea77c 214%);
+    background-image: -moz-linear-gradient(to bottom, #ffffff 4%, #5ea77c 214%);
+    background-image: -ms-linear-gradient(to bottom, #ffffff 4%, #5ea77c 214%);
+    background-image: -o-linear-gradient(to bottom, #ffffff 4%, #5ea77c 214%);
+    background-image: linear-gradient(to bottom, #ffffff 4%, #5ea77c 214%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff 4%", endColorstr="#5ea77c 214%");
+    background-color: #ffffff;
+    
+}
+:host ::ng-deep .red-card.p-card {
+    background: rgb(55,52,52);
+    background: -moz-radial-gradient(circle, rgba(55,52,52,1) 12%, rgba(120,119,115,0.8074580173866421) 57%);
+    background: -webkit-radial-gradient(circle, rgba(55,52,52,1) 12%, rgba(120,119,115,0.8074580173866421) 57%);
+    background: radial-gradient(circle, rgba(55,52,52,1) 12%, rgba(120,119,115,0.8074580173866421) 57%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#373434",endColorstr="#787773",GradientType=1);
+}
+:host ::ng-deep .red-card2.p-card {
+    background: rgb(238,174,202);
+    background: -moz-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(228,233,148,1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(228,233,148,1) 100%);
+    background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(228,233,148,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eeaeca",endColorstr="#e4e994",GradientType=1);
+}
+:host ::ng-deep .claroBackground.p-card {
+background: rgb(238,174,202);
+background: -moz-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+background: -webkit-radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eeaeca",endColorstr="#94bbe9",GradientType=1);
+}
+
+.demo-container {
+    border: 1px solid var(--surface-d);
+}
+:host ::ng-deep {
+
+    
+      
+    .p-selectbutton .p-button {
+
+      background: #ffffff;
+
+      border: 1px solid #5E81AC;
+
+      color: #5E81AC;
+
+      transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+  }
+
+   
+
+    .p-selectbutton .p-button.p-highlight {
+
+        background: #5E81AC;
+
+        border-color: #5E81AC;
+
+        color: #ffffff;
+
+    }
+
+    }

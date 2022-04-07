@@ -1,0 +1,34 @@
+export class ReceptionViewer {
+    id: number;
+    purchaseId: number;
+    receptionNumber: string;
+    branchOffice: string;
+    area: string;
+    negotiationType: string;
+    invoice: string;
+    documentNumber: string;
+    receptionType: string;
+    receptionTypeId: number;
+    statusId: number;
+    status: string;
+    receptionNumberRelated: string;
+    documentType: string;
+    ocNumber: string;
+    documentTypeRelated: string;
+    itemsQty: number;
+    itemsReceived: number;
+    receivingOperator: string;
+    validatorOperator: string;
+    creatorOperator: string;
+    baseInvoiceAmount: number;
+    baseTotalAmount: number;
+    baseDifference: number;
+    convertionInvoiceAmount: number;
+    convertionTotalAmount: number;
+    convertionDifference: number;
+    receptionDate: Date;
+    startDate: Date;
+    endDate: Date;
+    validationDate: Date;
+    isCentralizedInvoice: boolean;
+}

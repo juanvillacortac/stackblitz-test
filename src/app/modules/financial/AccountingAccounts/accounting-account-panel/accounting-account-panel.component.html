@@ -1,0 +1,130 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="true"
+[showCloseIcon]="!saving" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+   
+
+<h5 class="p-m-0">Cuenta contable</h5>
+    <hr />
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="p-fluid p-grid p-formgrid">
+         
+            <!-- <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="_data.accountingAccountId >0" >
+              <label for="name">Código </label>
+              <input  [disabled]="true" id="float-input" [ngModel]="_data.accountingAccountId" type="text" pInputText
+                 maxlength="9" [class]="submitted && (_data.accountingAccountId !=-1) ? '' : ''">
+             
+            </div> -->
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="name">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+              <input  #name  [(ngModel)]="_data.accountingAccountName" type="text" pInputText
+               (input)="_validations.toCapitalizeSimbology($event)" maxlength="50" [class]="this.nomString || submitted && (!_data.accountingAccountName || !_data.accountingAccountName.trim()) ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="save()">
+               <small class="p-invalid" *ngIf="this.nomString || submitted && (!_data.accountingAccountName|| !_data.accountingAccountName.trim())">El nombre es requerido</small>            
+            </div>
+
+         
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Categoría"> Categoría: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-dropdown [options]="ledgeraccountcategorylist"  [filter]="true" [(ngModel)]="_data.accountingAccountCategoryId" 
+                  [class]="submitted && _data.accountingAccountCategoryId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                  [resetFilterOnHide]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && _data.accountingAccountCategoryId<=-1">La categoría es requerida</small>
+              
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Categoría"> Tipo de contabilización: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-dropdown [options]="typeofaccountinglist" [(ngModel)]="_data.typeOfAccountingId" 
+                  [class]="submitted && _data.typeOfAccountingId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                    emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." ></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && _data.typeOfAccountingId<=-1">El tipo de contabilización es requerido</small>
+      
+            </div>
+
+  
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label > Saldo típico: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-dropdown [options]="typicalbalancelist"  [(ngModel)]="_data.tipoSaldoTipicoId" 
+                  [class]="submitted && _data.tipoSaldoTipicoId <= -1 ? 'ng-dirty ng-invalid' : ''" placeholder="Seleccione..."
+                    emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && _data.tipoSaldoTipicoId<=-1">El saldo típico es requerido</small>
+                
+            </div>
+            <!-- <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Cuenta">Cuenta contable: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                    <div class="p-inputgroup">
+                    <input type="text" pInputText  pKeyFilter="int" placeholder="Cuenta" [ngModel]="_data.accountingAccountCode" (ngModelChange)="_data.accountingAccountCode = rawCode($event)" [class]="submitted && (!_data.accountingAccountCode || !_data.accountingAccountCode.trim()) ? 'ng-dirty ng-invalid' : ''"  disabled>
+                    <p-button icon="pi pi-cog" (click)="showModalDialog()" [disabled]="_data.accountingAccountId >0"></p-button>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && (!_data.accountingAccountCode|| !_data.accountingAccountCode.trim())">La cuenta es requerida</small>            
+                
+            </div> -->
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Cuenta">Número de cuenta: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                    <div class="p-inputgroup">
+                    <input pInputText [value]="formatCode(_data.accountingAccountCode)" [class]="submitted && (!_data.accountingAccountCode || !_data.accountingAccountCode.trim()) ? 'ng-dirty ng-invalid' : ''"  disabled>
+                    <p-button icon="pi pi-cog" (click)="showModalDialog()"></p-button>
+                </div>
+                <small class="p-invalid" *ngIf="submitted && (!_data.accountingAccountCode|| !_data.accountingAccountCode.trim())">El número de la cuenta es requerido</small>            
+                
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label> Auxiliares:  </label>
+                <p-multiSelect [options]="auxiliarylist2" [resetFilterOnHide]="true" [disabled]="!_data.indPermiteAuxiliar" [(ngModel)]="selectedAuxiliary"  placeholder="Seleccione..."
+                 display="chip"   [filter]="true"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." ></p-multiSelect>               
+            </div>
+
+            <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities" optionLabel="auxiliar" (onChange)="ValidateChecksAuxiliarie($event)"></p-multiSelect> -->
+
+            <!-- <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Modulos"> Modulos: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-multiSelect [options]="modulelist" [(ngModel)]="selectedModule" (onChange)="ValidateChecksModules($event)" placeholder="Modulos" 
+                 display="chip" [selectionLimit]="5"  [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+                
+      
+            </div> -->
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="Modulos"> Módulos: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <p-multiSelect [options]="modulelist2" [(ngModel)]="selectedModule" placeholder="Seleccione..."
+                 display="chip"  [class]="submitted && _data.module.length==0 ? 'ng-dirty ng-invalid' : ''"
+                   [filter]="true" [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+                 <small class="p-invalid" *ngIf="submitted && _data.module.length==0">El módulo es requerido</small>
+      
+            </div>
+
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <label for="name">Descripción</label>
+                <input id="float-input" [(ngModel)]="_data.descripcion" type="text" pInputText
+                 (input)="_validations.toCapitalizeSimbology($event)"  maxlength="255"  (keyup.enter)="save()">
+                
+              </div>
+  
+         
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown name="cboactive" [options]="statuslist"  [(ngModel)]="_data.active" placeholder="Estatus"
+                  [disabled]="_data.accountingAccountId <= -1" (keyup.enter)="save()"></p-dropdown>
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+              <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+             
+              <button [disabled]="saving" pButton pRipple label="Guardar" (keyup.enter)="save()" (click)="save()" icon="pi pi-save"
+                class="p-button-info p-mr-2">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</p-sidebar>
+<app-select-accounting-account-modal [(displayModal)]="displayModal" [viewMode]="viewMode" [(Ncuenta)]="_data.accountingAccountCode" [(indClasificacionArticulo)]="!displayModal" [(planCuentaContableDetalleId)]="_data.planCuentaContableDetalleId" [(indAuxiliar)]="_data.indPermiteAuxiliar" [(filtrarCuenta)]="filtrarCuenta">
+</app-select-accounting-account-modal>
+
+
+

@@ -1,0 +1,133 @@
+
+<ng-container *ngIf="searchType==1">
+    <div  class="p-grid p-text-center">
+        <div class="p-col">
+          <h5 class="p-mt-3">Autorizadas</h5>
+          <p-knob [(ngModel)]="value1" valueColor="SlateGray"  [size]="100" [readonly]="true"></p-knob>
+        </div>
+        <div class="p-col"> 
+          <h5 class="p-mt-3">Planificadas</h5>
+          <p-knob [(ngModel)]="value2" [size]="100"  valueColor="SlateGray" [readonly]="true"></p-knob></div>
+        <div class="p-col">
+          <h5 class="p-mt-3">Recibidas</h5>
+          <p-knob [(ngModel)]="value3" [size]="100"  valueColor="SlateGray" [readonly]="true"></p-knob></div>
+        <div class="p-col">
+          <h5 class="p-mt-3">Elaboradas</h5>
+          <p-knob [(ngModel)]="value4" [size]="100"   valueColor="SlateGray" [readonly]="true"></p-knob></div>
+      </div>
+
+</ng-container>
+
+<ng-container *ngIf="searchType==2">
+<div  class="p-grid p-text-center">
+    <div class="p-col">
+      <h5 class="p-mt-3">Autorizadas</h5>
+      <p-knob [(ngModel)]="value1" valueColor="SlateGray"  [size]="100" [readonly]="true"></p-knob>
+    </div>
+    <div class="p-col"> 
+      <h5 class="p-mt-3">Revisadas</h5>
+      <p-knob [(ngModel)]="value2" [size]="100"  valueColor="SlateGray" [readonly]="true"></p-knob></div>
+    <div class="p-col">
+      <h5 class="p-mt-3">En revision</h5>
+      <p-knob [(ngModel)]="value3" [size]="100"  valueColor="SlateGray" [readonly]="true"></p-knob></div>
+    <div class="p-col">
+      <h5 class="p-mt-3">Pendientes por revision</h5>
+      <p-knob [(ngModel)]="value4" [size]="100"   valueColor="SlateGray" [readonly]="true"></p-knob></div>
+  </div>
+</ng-container>
+
+<div class="p-grid text-align-center">
+
+  
+  <div class="p-col-12">
+    <p-table #dt [columns]="selectedColumns" [rowHover]="true" [value]="_purchaseorderService._PurchaseOrderList"
+  [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+  currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true"
+  scrollHeight="750px" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+ 
+  <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+          <!-- <col style="width:150px"> -->
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+          <col style="width:150px">
+         
+      </colgroup>
+  </ng-template>
+  <ng-template pTemplate="caption">
+      <p-multiSelect [options]="displayedColumns" [(ngModel)]="selectedColumns" optionLabel="header"
+          selectedItemsLabel="{0} columnas seleccionadas" [style]="{minWidth: '200px'}"
+          placeholder="Elija las columnas"></p-multiSelect>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+      <tr>
+
+       
+          <!-- <th></th> -->
+          <!-- <th style="display: none;" pSortableColumn="Id">Id</th> -->
+          <!-- <th></th> -->
+          <ng-container *ngFor="let col of columns">
+              <th [ngStyle]="{'display': col.display , 'overflow-wrap': 'break-word' }"
+                  [pSortableColumn]="col.field">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                      {{col.header}}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                      <!-- <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter> -->
+                  </div>
+              </th>
+          </ng-container>
+
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-order let-columns="columns">
+      <tr>
+        <!-- <td>
+            <p-button [label]=order.numOC styleClass="p-button-link" (click)="Open(order.idOrderPurchase)"></p-button> -->
+
+            <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            pTooltip="Editar" (click)="Open(order.idOrderPurchase)"></button> -->
+           <!--  <button pButton pRipple icon="pi pi-pencil"
+              *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PRODUCT_PERMISSION_ID)"
+              class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(product.productId)"
+              pTooltip="Editar"></button> -->
+     <!-- </td> -->
+          <ng-container *ngFor="let col of columns">
+         
+
+              <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                  <p-button *ngIf="col.field == 'numOC'; else textCell"  [label]=order.numOC styleClass="p-button-link" (click)="Open(order.idOrderPurchase)"></p-button>
+              
+                  <ng-template #textCell>
+                      <span>{{col.template(order)}} </span>
+                  </ng-template>
+              </td>
+          </ng-container>
+      </tr>
+  </ng-template>
+
+  <ng-template pTemplate="footer" let-columns>
+      <ng-container
+          *ngIf="_purchaseorderService._PurchaseOrderList==null || _purchaseorderService._PurchaseOrderList?.length == 0">
+          <tr>
+              <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="7">
+                  <span>No existen resultados.</span>
+              </td>
+          </tr>
+      </ng-container>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+  </ng-template>
+</p-table>
+  
+  </div>
+</div>
+
+
+  

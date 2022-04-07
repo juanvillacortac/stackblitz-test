@@ -1,0 +1,68 @@
+<div class="p-grid" [hidden]="!show">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <div class="card">
+              <div class="row align-items-center justify-content-center">
+                <div class="p-grid">
+                  <!-- <div class="p-col-12 p-sm-4 p-md-4 p-lg-4 container-img"> 
+                  <img [src]="_product.image == null || _product.image == ''  ? defectImage.defectImage
+                        : _product.image" [alt]="_product.productName" class="imgcatalog" alt="Product" />
+                  </div>  -->
+                  <div class="p-col-12 p-sm-7 p-md-7 p-lg-7">
+                    <div class="p-grid p-mt-4">
+                      <b class="p-col-12 p-sm-12 p-md-12 p-lg-12 cart-item-product-title p-mr-2" style="font-size:small;">{{_product.productName}}</b>
+                      <span  class="p-col-12 p-sm-12 p-md-12 p-lg-12" style="font-size: small;">{{_product.barcode}}</span>
+                      <span  class="p-col-12 p-sm-12 p-md-12 p-lg-12" style="font-size: small;">{{_product.category}}</span>
+                      <span  class="p-col-12 p-sm-12 p-md-12 p-lg-12" style="font-size: small;">{{_product.internalReference}}</span>
+                      <span  class="p-col-12 p-sm-12 p-md-12 p-lg-12" style="font-size: small;">{{_product.unitmedition}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <div class="p-grid">
+              <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                <label for="active">Empaque </label>
+                <!-- (onChange)="changepackage($event)"
+                  placeholder="Seleccione..." (onFocus)="clear($event)" -->
+                <p-dropdown name="active" [options]="packaginglist" appendTo="body" [(ngModel)]="_product.idPackaging"  [disabled]="_product.id >0" emptyMessage="Sin resultados"></p-dropdown>
+              </div>
+              <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                <label for="active">Unidades por empaque</label>
+                <input id="bar" [(ngModel)]="_product.unitByPackage" type="text" pInputText
+                  [disabled]="true">    
+              </div>
+              <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                <label for="active">Cantidad <span [ngStyle]="{'color':'red'}">*</span></label>
+                <p-inputNumber *ngIf="_product.wasWeighed == true" [(ngModel)]="_product.packagingQuantity" min="0" maxlength='18'
+                [disabled]="true"
+                  mode="decimal" [minFractionDigits]="3">
+                </p-inputNumber>
+  
+                <p-inputNumber *ngIf="_product.wasWeighed == false" [(ngModel)]="_product.packagingQuantity" min="0" maxlength='14'
+                [disabled]="true">
+                </p-inputNumber>
+                <small class="p-invalid" *ngIf="submitted && _product.packagingQuantity<=0">La cantidad es requerida.</small>
+              </div>
+              <div class="p-field p-col-12 p-md-6 p-sm-6 p-lg-6">
+                <label for="active">Total de unidades</label>
+                <p-inputNumber *ngIf="_product.wasWeighed == true" [(ngModel)]="_product.totalUnits" min="0" mode="decimal" maxlength='18' [disabled]="isdisabled"
+                  [minFractionDigits]="3" (onInput)="Calculatepackage($event)" (onFocus)="clear($event)">
+                </p-inputNumber>
+  
+                <p-inputNumber *ngIf="_product.wasWeighed == false" [(ngModel)]="_product.totalUnits" [disabled]="isdisabled" min="0" maxlength='14' (onInput)="Calculatepackage($event)" >
+                </p-inputNumber>
+              </div>          
+            </div>
+          </div>
+          <!-- <div class="p-field p-col-12 p-md-12 p-sm-12 p-lg-12">
+            <button pButton n-submit type="button" pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>

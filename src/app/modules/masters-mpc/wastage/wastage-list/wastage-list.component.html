@@ -1,0 +1,52 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <!-- <h5 class="p-mb-3 p-mb-md-0 p-mb-lg-0">Mermas</h5> -->
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+        </span>
+        <div>
+            <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DECREASE_TYPES_PERMISSION_ID)" -->
+            <button  pButton *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_DECREASE_TYPES_PERMISSION_ID)" pRipple icon="pi pi-plus" class="p-button-success" (click)="wastagesDialog=!wastagesDialog" pTooltip="Crear nuevo"></button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"></button>
+        </div>
+    </div>
+
+    <wastage-filter (onSearch)="search()" [(filters)]="wastageFilters" [expanded]="showFilters" [loading]="loading" class="p-mt-3"></wastage-filter>
+</div>
+<div class="card p-m-0">
+    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_wastageservice._wastageList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let col of columns">  
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+            </ng-container>
+            <th></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-wastage let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                    <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="wastage[col.field]"></app-active-label>
+                    <ng-template #textCell>
+                        <span>{{col.template(wastage)}} </span>
+                    </ng-template>
+                </td>
+            </ng-container>
+              <td>
+                  <button pButton pRipple *ngIf="!wastage.indInitialConfiguration && this.userPermissions.allowed(this.permissionsIDs.UPDATE_DECREASE_TYPES_PERMISSION_ID)" icon="pi pi-pencil"  pTooltip="Editar" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(wastage.id, wastage.name, wastage.abbreviation, wastage.active)"></button><!---->
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+            </ng-template>
+    </p-table>
+</div>
+<wastage-dialog [(showDialog)]="wastagesDialog" [(_wastage)]="wastageModel" [(filters)]="wastageFilters" [(_wastageId)]="wastageId" [(activeReg)]="activeRegister"></wastage-dialog>

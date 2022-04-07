@@ -1,0 +1,114 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.barcode" name="barcode" id="barcode" type="text" (keyup.enter)="search()" (keypress)="_validations.keyPressForGtin($event);" (paste)="_validations.PasteOnlyNumbers($event)" pInputText maxlength="130">
+                <label>Barra/empaque</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.supplierRef" name="supplierRef" id="supplierRef" type="text" pInputText (keyup.enter)="search()" maxlength="100" [pKeyFilter]="_validations.LettersNumberandDash">
+                <label>Referencia proveedor</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.internalRef" name="internalRef" id="internalRef" type="text" pInputText (keyup.enter)="search()" [pKeyFilter]="_validations.LettersNumberandDash" pInputText maxlength="100" >
+                <label>Referencia interna</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <!-- <span class="p-float-label">               -->
+                <input type="text" pInputText placeholder="Proveedor" [(ngModel)]="this.supplierstring" (keyup.enter)="search()" disabled>
+                <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="SupplierDialogVisible=true"></p-button>
+            <!-- </span> -->
+        </div>
+        <!-- <small class="p-invalid" *ngIf="submitted && (!this.supplierstring || !this.supplierstring.trim())">El proveedor es requerido.</small> -->
+    </div>
+
+    <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="classificationlist" appendTo="body" [(ngModel)]="filters.classificationId" (keyup.enter)="search()" placeholder="Tipo empaque" [filter]="true" emptyFilterMessage="Sin resultados.">
+        </p-dropdown>
+    </div> -->
+
+      <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="packingTypeslist" appendTo="body" [(ngModel)]="filters.idTypePacking" (keyup.enter)="search()" placeholder="Tipo de empaque" emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-multiSelect [options]="brandslist" #marca [(ngModel)]="brandsselected" placeholder="Marca" (onChange)="ValidateChecksBrands()" display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+        <!-- <p-dropdown [options]="brandslist" appendTo="body" [(ngModel)]="filters.classificationId" placeholder="Marca">
+        </p-dropdown> -->
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="status" appendTo="body" [(ngModel)]="filters.active" (keyup.enter)="search()" placeholder="Estatus">
+        </p-dropdown>
+   </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="search()" disabled>
+            <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="op.toggle($event)"></p-button>
+        </div>
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" [showCloseIcon]="false">
+            <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex">
+                        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    
+                    <tr>
+                        <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                            {{col.header}}
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                            <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                            <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)"></p-treeTableCheckbox>
+                            <ng-template #textCell>
+                                {{rowData[col.field]}}
+                            </ng-template>
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>        
+                        <td [attr.colspan]="cols.length">Sin resultados.</td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </p-overlayPanel>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+        <small class="p-invalid">(*) Seleccione al menos un filtro</small>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="btn p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="btn p-button-secondary p-mr-2"></button>
+        <p-splitButton label="Exportar" (onClick)="exportExcel()" icon="pi pi-file-o" [model]="items" class="btn p-button-info"></p-splitButton>
+    </div>
+</div>
+
+<!-- <app-supplier-modal-list  (onToggle)="onToggleSupplier($event)" [(supplierinput)]="supplierstring"  [(filters)]="filters"  [visible]="SupplierDialogVisible"></app-supplier-modal-list> -->
+<app-modalsupplier-list  (onToggle)="onToggleSupplier($event)" [(supplierinput)]="this.supplierstring"  [(filters)]="filters"  [visible]="SupplierDialogVisible" [multiple]="true"></app-modalsupplier-list>

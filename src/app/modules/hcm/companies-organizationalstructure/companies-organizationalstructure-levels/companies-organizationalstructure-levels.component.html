@@ -1,0 +1,57 @@
+
+<p-panel header="Niveles" [toggleable]="true" class="readOnlyCard">
+  <div class="p-text-right p-mb-3">
+    <span class="p-input-icon-left p-mr-2" *ngIf="levels && levels.length > 0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..."/>
+    </span>
+    <button *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_ATTRIBUTES_PERMISSION_ID) && this.userPermissions.allowed(this.permissionsIDs.MANAGE_HOLIDAY_HCM_PERMISSION_ID)" pButton pRipple icon="pi pi-plus" class="p-button-success p-mr-2" pTooltip="Crear nuevo" tooltipPosition="top" (click)="editlevel()"></button>
+
+  </div>
+  <p-table #dt [value]="levels" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10" [paginator]="true" [globalFilterFields]="['description','level']"
+           [rowHover]="true" dataKey="id" [scrollable]="true" scrollHeight="250px" *ngIf="levels && levels.length > 0"
+           currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="false">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="description">Nombre <p-sortIcon field="description"></p-sortIcon></th>
+        <th class="p-text-center" pSortableColumn="level">Nivel <p-sortIcon field="level"></p-sortIcon></th>
+        <th class="p-text-center"> 
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-level>
+      <tr>
+        <td style="overflow-wrap: break-word">{{level.description}}</td>
+        <td class="p-text-center">{{level.level}}</td>
+        <td class="p-text-center">
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editlevel(level)" pTooltip="Editar" tooltipPosition="top"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deletelevel(level)" pTooltip="Eliminar" tooltipPosition="top" [disabled]="level.level == 1"></button>
+
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        Total {{levels ? levels.length : 0 }} registros.
+      </div>
+    </ng-template>
+  </p-table>
+
+  <div *ngIf="levels == null || levels.length == 0">
+    <div class="p-grid">
+      <div class="p-col-12 p-fluid">
+        <p-messages severity="info">
+          <ng-template pTemplate>
+            <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+            <div class="p-ml-2">No existen niveles asociados a esta empresa.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+
+</p-panel>
+
+
+
+

@@ -1,0 +1,90 @@
+<p-dialog header="Agregar cobro" (onShow)="ngOnInit()" [(visible)]="displayModal" (onHide)="hideDialog()" [modal]="true"  [style]="{width: '30vw'}"
+    [draggable]="false" [resizable]="false">
+  <div class="card p-m-0">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="bank-box">Banco/Caja: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" [(ngModel)]="_payment.bankId" (onChange)="onChangeBankBox($event)" [filter]="true" [options]="banksBoxes" placeholder="Seleccione..."
+        [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !_payment.bankId">El banco es requerido</small>
+      </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="bank-account">Cuenta bancaria: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" [(ngModel)]="_payment.bankAccountId" (onChange)="onChangebankAccount($event)" [options]="bankAccountList" placeholder="Seleccione..." [resetFilterOnHide]="true"
+        emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."  [baseZIndex]="10000000000" appendTo="body" > 
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !_payment.bankAccountId">La cuenta bancaria es requerida</small>
+      </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="payment-form">Forma de pago: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" [(ngModel)]="_payment.paymentMethodByCurrency"
+          placeholder="Seleccione..." [options]="paymentMethods" [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !_payment.paymentMethodByCurrency">La forma de pago es requerida</small>
+      </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="reference">Referencia: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <input type="text" [(ngModel)]="_payment.reference" minlength="1" maxlength="50" pInputText>
+        <small class="p-invalid" *ngIf="submitted && _payment.reference.trim() === '' ">La referencia es requerida</small>
+      </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="amount">Monto: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+          <p-inputNumber mode="decimal" [(ngModel)]="_payment.amount" [showButtons]="true" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="2" [maxlength]="23 "prefix="$">
+          </p-inputNumber>
+          <small class="p-invalid" *ngIf="submitted && !_payment.amount">El monto es requerido</small>
+      </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="type">Tipo de tasa de cambio: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" (onChange)="onChangeExchangeRateByCurrency($event)"
+          placeholder="Seleccione..." [(ngModel)]="_payment.exchangeRateId" [options]="typeExchangeRate" [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+          emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !_payment.exchangeRateId">La tasa de cambio es requerida</small>
+      </div>
+      <div class="p-field p-col">
+        <label for="value">Tasa: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" [(ngModel)]="_payment.exchangeRateId" placeholder="Seleccione..." [options]="bankAccountExchangeRate" [resetFilterOnHide]="true"
+          emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+      </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="type">Tipo de tasa de cambio de conversión: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true"  (onChange)="onChangeExchangeRateByCurrencyConver($event)"
+          placeholder="Seleccione..." [(ngModel)]="_payment.exchangeRateConvertionId"  [options]="typeExchangeRate" [resetFilterOnHide]="true" emptyFilterMessage="Sin resultados."
+          emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+        <small class="p-invalid" *ngIf="submitted && !_payment.exchangeRateId ">El tipo de tasa de cambio de conversión es requerido</small>
+      </div>
+      <div class="p-field p-col">
+        <label for="value">Tasa de conversión: <span [ngStyle]="{'color':'red'}">{{requiredd}}</span></label>
+        <p-dropdown [filter]="true" [(ngModel)]="_payment.exchangeRateConvertionId" placeholder="Seleccione..." [options]="bankAccountExchangeRateConver" [resetFilterOnHide]="true"
+          emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [baseZIndex]="10000000000" appendTo="body">
+        </p-dropdown>
+      </div>
+    </div>
+ 
+    
+      <div style="text-align:right" class="">
+          <button pButton type="button"  class="p-button-info" 
+              icon="pi pi-check" label="Aceptar" (click)="AddSaleTransactionPayment()"></button>
+      </div>
+  </div>
+
+
+</p-dialog>

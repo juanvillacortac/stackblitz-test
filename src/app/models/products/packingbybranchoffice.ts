@@ -1,0 +1,41 @@
+import { Packingtype } from "../masters-mpc/common/packingtype";
+import { Packagingpresentation } from "../masters-mpc/packagingpresentation";
+import { Product } from "./product";
+
+export class PackingByBranchOffice{
+    idProductBranchOfficePacking = -1;
+    idProduct: number = -1;
+    idPacking: number = -1;
+    idBranchOffice: number = -1;
+    idStatus: number = -1;
+    idSuplier: number = -1;
+    idReason: number = -1;
+    baseCost: number = 0;
+    conversionCost: number = 0;
+    baseNetCost: number = 0;
+    conversionNetCost: number = 0;
+    netSellingCostBase: number = 0;
+    netSellingCostConversion: number = 0;
+    basePVP: number = 0;
+    conversionPVP: number = 0;
+    netFactor: number = 0;
+    netSalesFactor: number = 0;
+    sellingFactor: number = 0;
+    indActiveSale: boolean = false;
+    indActiveBuy: boolean = false;
+    indIVA: boolean = false;
+    indConsignment: boolean = false;
+    indOnline: boolean = false;
+    indShelf: boolean = false;
+    indTower: boolean = false;
+    createDate: Date = new Date();
+    updateDate: Date = new Date();
+    packingPresentation: Packagingpresentation = new Packagingpresentation();
+    packingType: Packingtype = new Packingtype();
+    description: string = "";
+    product: Product = new Product();
+    units: number = 0;
+    available: number = 0;
+    totalUnits: number = 0;
+    totalavailable: number = 0;
+}

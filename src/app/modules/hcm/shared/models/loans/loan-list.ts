@@ -1,0 +1,29 @@
+export class LoanList{
+    idLoan: number = -1;
+    idLaborRelationship: number = -1;
+    idLoanType: number = -1;
+    idCurrency: number = -1;
+    idStatus: number = -1;
+    idJobPosition: number = -1;
+    createUser: string = "";
+    updateUser: string = "";
+    employmentCode: string = "";
+    status: string = "";
+    employeeFirstName: string = "";
+    employeeLastName: string = "";
+    employeeSecondName: string = "";
+    employeeSecondLastName: string = "";
+    jobPosition: string = "";
+    currency: string = "";
+    createDate: string = "";
+    discountStartDate: string = "";
+    loanPayDate: string = "";
+    loanType: string = "";
+    amount: number = 0;
+    interestRateAmount: number = 0;
+    loanAmount: number = 0;
+    quotasAmount: number = 0;
+    conversionFactor: number = 0;
+    interestRate: number = 0;
+    paid: number = 0;
+}

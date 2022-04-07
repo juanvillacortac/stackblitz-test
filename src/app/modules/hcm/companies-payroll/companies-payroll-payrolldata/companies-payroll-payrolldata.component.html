@@ -1,0 +1,1397 @@
+  <div class="p-grid">
+    <div class="p-col-12 p-md-3" id="primaryInfoDiv">
+        <div class="box box-stretched" id="primaryInfo">
+            <p-card header="{{_laborRelationship.employmentCode != null ? _laborRelationship.employmentCode : ''}}" styleClass="p-card-shadow p-text-center readOnlyCard">
+                <div class="product-image content p-text-center">
+                    <div class="p-grid">
+                        <img id="employeePicture" *ngIf="_laborRelationship.employee.pictureSource && _laborRelationship.employee.pictureSource != 'X'" class="p-offset-1 p-col-10" style="border-radius:50%;"
+                        [src]="_laborRelationship.employee.pictureSource" alt="Foto trabajador" />
+                        <img id="employeePicture" *ngIf="!_laborRelationship.employee.pictureSource || _laborRelationship.employee.pictureSource == 'X'" class="p-offset-1 p-col-10" src="https://ui-avatars.com/api/?name={{_laborRelationship.employee.employeeFirstName + ' ' + _laborRelationship.employee.employeeLastName}}&background=17a2b8&color=fff&rounded=true&bold=true&size=200"/>
+                    </div>
+                    <p-fileUpload id="fileUpload" styleClass="p-button-rounded p-button-info" chooseIcon="pi pi-pencil" name="myfile[]" accept=".jpg,.jpeg,.png,.gif,.webp" [auto]="true" #fileUpload customUpload="true" mode="basic"
+                    (uploadHandler)="UploaderFile($event)" (onSelect)="validateFile($event)" invalidFileTypeMessageSummary="" invalidFileTypeMessageDetail="Formato de archivo no permitido" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && checked"></p-fileUpload>  
+
+                    <!-- <input type="file" class="p-button-rounded p-button-info" pTooltip="CÃ¡lculo de antigÃ¼edad" life="500" onChange="UploaderFile($event)"> -->
+
+                    <div class="p-grid">
+                        <h5 class="p-col-12 p-nogutter team-member p-mb-0">
+                            <span *ngIf="!_laborRelationship.employee.employeeFirstName" style="color: #989ea4;">Nombre  </span> 
+                            <span *ngIf="_laborRelationship.employee.employeeFirstName">{{_laborRelationship.employee.employeeFirstName}}  </span>  
+                            <span *ngIf="!_laborRelationship.employee.employeeLastName" style="color: #989ea4;">Apellido</span>
+                            <span *ngIf="_laborRelationship.employee.employeeLastName">{{_laborRelationship.employee.employeeLastName}}</span>   
+                        </h5>
+                        
+                        <div class="p-col-12 p-text-center p-nogutter p-p-0" id="corporateEmailLabel" *ngIf="_laborRelationship.payrollData.corporateEmail">
+                            {{_laborRelationship.payrollData.corporateEmail}}
+                        </div>
+
+                        <div *ngIf="_laborRelationship.idEstatus == 35" class="p-col-12">
+                            <p-divider align="center">
+                                <p-tag severity="success" id="tagAlta" class="p-m-4" value="ALTA"></p-tag>
+                            </p-divider>
+                            <div severity="success" style="font-size:1rem;" value="ALTA"></div>
+                        </div>
+                        
+                        <div *ngIf="_laborRelationship.idEstatus == 38" class="p-col-12">
+                            <p-divider align="center">
+                                <p-tag id="tagBorrador" severity="success" class="p-m-4" value="BORRADOR"></p-tag>
+                            </p-divider>
+                            <div severity="success" style="font-size:1rem;" value="BORRADOR"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-grid p-pl-2 p-pt-2" *ngIf="_laborRelationship.company">
+                        <h6 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Empresa: </h6>
+                        <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{_laborRelationship.socialCompanyName}}</div>
+                    </div>
+                    <div class="p-grid p-pl-2 p-pt-1" *ngIf="_laborRelationship.branchOffice">
+                        <h6 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Sucursal: </h6>
+                        <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{_laborRelationship.branchOffice}}</div>
+                    </div>
+                    <div class="p-grid p-pl-2 p-pt-1" *ngIf="_laborRelationship.payrollData.jobPosition">
+                        <h6 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Cargo: </h6>
+                        <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{_laborRelationship.payrollData.jobPosition}}</div>
+                    </div>
+                    <div class="p-grid p-pl-2 p-pt-1" *ngIf="_laborRelationship.payrollData.supervisorOperative">
+                        <h6 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Supervisor: </h6>
+                        <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{_laborRelationship.payrollData.supervisorOperative}}</div>
+                    </div>
+                    <div class="p-grid p-pl-2 p-pt-1" *ngIf="fixedPosition">
+                        <h6 class="p-col-12 p-md-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Plaza: </h6>
+                        <div class="p-col-12 p-md-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">{{fixedPosition}}</div>
+                    </div>
+                        
+                </div>
+
+            <div class="p-divider-content p-mb-0 p-mt-2">
+                <div class="p-grid">
+
+                        <div class="p-col-12 p-pt-2 p-pb-0">
+                            <div class="p-grid p-pl-2">
+                                <h6 class="p-col-4 p-pr-0 p-pt-0 p-pb-0 p-mb-1 p-nogutter p-text-left">Email: </h6>
+                                <div class="p-col-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left" id="personalEmailLabel" *ngIf="_laborRelationship.employee.email">{{_laborRelationship.employee.email}}</div>
+                                <div class="p-col-8 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left" 
+                                *ngIf="!_laborRelationship.employee.email" style="color: #989ea4;">usuario@dominio.com</div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-pt-2 p-pb-0">
+                            <div class="p-grid p-pl-2">
+                                <h6 class="p-col-3 p-pr-0 p-pt-0 p-pb-0 p-mb-0 p-nogutter p-text-left">Teléfonos: </h6>
+                                <div class="p-col-9 p-pl-2 p-pr-0 p-pt-0 p-pb-0 p-nogutter p-text-left">
+                                    <table>
+                                        <tr>
+                                           <!--  <td> <i class="pi pi-mobile p-mr-2 p-mt-0 p-text-right" style="font-size: 1rem"></i> </td> -->
+                                            <td id="personalEmailLabel" *ngIf="formMobilePhonePrefix"> <i class="pi pi-phone p-mr-2 p-mt-0 p-text-right" style="font-size: 1rem"></i> {{showPrefix}}</td>
+                                            <td *ngIf="!formMobilePhonePrefix" style="color: #989ea4;">+00</td>
+                                            <td id="personalEmailLabel" *ngIf="mobilePhone.number">{{mobilePhone.number}}</td>
+                                            <td *ngIf="!mobilePhone.number" style="color: #989ea4;">000-0000</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+<div class="p-col-12 p-md-9" id="allFormsDiv">
+    
+    <!-- //////////  TABS Y TOGGLE -->
+    <div class="p-grid" id="formTabsDiv">
+        <div class="p-col-12 p-md-10">
+            <div style="padding: .5em 0 1em 0">
+                <p-button (click)="activeIndex = 0" [styleClass]="activeIndex == 0? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Datos personales"></p-button>
+                <p-button (click)="activeIndex = 1" [styleClass]="activeIndex == 1? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Nómina"></p-button>
+                <p-button (click)="activeIndex = 2" [styleClass]="activeIndex == 2? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Información socioeconómica"></p-button>
+                <p-button (click)="activeIndex = 3" [styleClass]="activeIndex == 3? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Agrupaciones"></p-button>
+                <p-button (click)="activeIndex = 4" [styleClass]="activeIndex == 4? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Historial"></p-button>
+                <p-button (click)="activeIndex = 5" [styleClass]="activeIndex == 5? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Formación"></p-button>
+                <!-- <p-toggleButton *ngIf="!(activeIndex > 1)" [(ngModel)]="checked" onIcon="pi pi-times" offIcon="pi pi-pencil" styleClass="p-button-rounded p-button-info"></p-toggleButton> -->
+            </div>
+          </div>
+          <div class="p-col-12 p-md-2 p-mb-0 p-text-right" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && !(activeIndex > 1)">
+              <!--  *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_DATA_PERMISSION_ID) && activeIndex == 1 || this.userPermissions.allowed(this.permissionsIDs.MANAGE_PERSONAL_DATA_PERMISSION_ID) && activeIndex == 0" -->
+            <button pButton pRipple [icon]="checked ? 'pi pi-times':'pi pi-pencil'" class="p-button-rounded p-button-info" [ngClass]="{'p-button-secondary':!checked}" (click)="checked = !checked" 
+            [pTooltip]="checked? '':'Editar'" *ngIf="_laborRelationship.idLaborRelationship > -1" [(ngModel)]="checked"></button>
+          </div>
+    </div>
+
+            
+            <!-- //////////  FORMULARIO !this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 0-->
+            <div class="p-grid" id="formDiv">
+                
+                <!-- SECCION DE SOLO LECTURA -->
+                <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PERSONAL_DATA_PERMISSION_ID) && activeIndex == 0 && !checked" -->
+                <div class="p-col-12" *ngIf="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 0 || 
+                this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 0 && !checked">
+                    <!-- Se comenta de manera temporal por pase a producción (Pendiente objetos de BD) -->
+                    <!-- <app-employee-profile-analytics class="custom"></app-employee-profile-analytics> -->
+                    <div class="p-grid">
+                        <p-card header="Datos personales" class="p-card-shadow box p-col-12 p-md-6 miniCardDatosP">
+                            <!-- <div class="p-divider-content">
+                                <h4>Datos personales</h4>
+                            </div> -->
+                            
+                            <div class="p-fluid p-formgrid p-mt-2 p-grid">
+
+                            
+                                <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-9 p-mb-1 ">
+                                            <label class="p-d-inline user-card-maintext">{{_laborRelationship.employee.employeeFirstName}}</label>
+                                            <label class="user-card-maintext" *ngIf="_laborRelationship.employee.employeeSecondName"> {{_laborRelationship.employee.employeeSecondName}}</label>
+                                            <label class="p-d-inline user-card-maintext"> {{_laborRelationship.employee.employeeLastName}}</label>
+                                            <label class="user-card-maintext" *ngIf="_laborRelationship.employee.employeeSecondName"> {{_laborRelationship.employee.employeeSecondLastName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-9 p-mb-1 ">
+                                            <label class="p-d-inline user-card-secondtext" *ngIf="_laborRelationship.employee.gender == 'M'" for="gender">Masculino |</label>
+                                            <label class="p-d-inline user-card-secondtext" *ngIf="_laborRelationship.employee.gender == 'F'" for="gender">Femenino |</label>
+                                            <label class="p-d-inline user-card-secondtext" for="maritalState"> {{_laborRelationship.employee.maritalState}} |</label>
+                                            <label class="p-d-inline user-card-secondtext" for="age"> {{age}} años</label>
+                                        </div>
+                                    </div>
+                                </div>
+    
+
+                            <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-3 p-mb-1">
+                                        <br>
+                                        <!-- <h6 class="p-d-inline p-mr-2">Documento de identificación:</h6> -->
+                                        <h6 class="p-d-inline p-mr-2 user-card-secondtext">Documentos</h6>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol" *ngIf="_laborRelationship.employee.taxDocumentNumber">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-9 p-mb-1">
+                                        <label class="p-d-inline readOnlyInfo">Identidad  {{_laborRelationship.employee.identifier}}-{{_laborRelationship.employee.documentNumber}}  |  </label>
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo"> Fiscal  {{_laborRelationship.employee.taxIdentifier}}-{{_laborRelationship.employee.taxDocumentNumber}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+  
+
+                        </div>
+                    </p-card>
+
+                <div class="box p-col-12 p-md-6 miniDividedCard">
+                    <p-card header="Datos de procedencia" class="p-card-shadow box innerCard">
+                        <!-- <div class="p-divider-content">
+                            <h4>Datos de procedencia</h4>
+                        </div> -->
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.citizenshipName">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline user-card-maintext" for="citizenshipName">{{_laborRelationship.employee.citizenshipName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-9 p-mb-1 ">
+                                        <label class="p-d-inline user-card-secondtext" for="birthCity">{{_laborRelationship.employee.birthCity}}</label>
+                                        <label class="p-d-inline user-card-secondtext" for="birthDate"> {{_laborRelationship.employee.birthDate | date:'dd/MM/yyyy'}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </p-card>
+
+                    <p-card id="datosDeProfesionMiniCard" header="Datos de profesión" class="p-card-shadow box innerCard">
+                       
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.jobPosition">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline user-card-maintext" for="jobPosition">{{_laborRelationship.payrollData.jobPosition}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-9 p-mb-1 ">
+                                        <label class="p-d-inline user-card-secondtext" for="instructionDegree">{{_laborRelationship.employee.instructionDegree}} |</label>
+                                        <label class="p-d-inline user-card-secondtext" for="professionalArea"> {{_laborRelationship.employee.professionalArea}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </div>
+
+                <p-card header="Dirección" class="p-card-shadow box p-col-12 p-md-6 miniCardDatosP">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.country">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-12 p-mb-1">
+                                    <label class="p-d-inline user-card-maintext" for="country">{{_laborRelationship.employee.addresses.country}} - </label>
+                                    <label class="p-d-inline user-card-maintext" for="city"> {{_laborRelationship.employee.addresses.city}},</label>
+                                    <label class="p-d-inline user-card-maintext" for="state"> {{_laborRelationship.employee.addresses.state}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-9 p-mb-1 ">
+                                    <label class="p-d-inline user-card-secondtext" for="parish">{{_laborRelationship.employee.addresses.parish}}</label>
+                                    <label class="p-d-inline user-card-secondtext" for="postalCode"> {{_laborRelationship.employee.addresses.postalCode}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.avenueName">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-4 p-mb-1">
+                                    <br>
+                                    <h6 class="p-d-inline p-mr-2">Avenida:</h6>
+                                </div>
+                                <div class="p-col-12 p-md-8 p-mb-1">
+                                    <br>
+                                    <label class="p-d-inline readOnlyInfo" for="avenueName">{{_laborRelationship.employee.addresses.avenueName}} </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.streetName">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-4 p-mb-1">
+                                    <h6 class="p-d-inline p-mr-2">Calle:</h6>
+                                </div>
+                                <div class="p-col-12 p-md-8 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="streetName">{{_laborRelationship.employee.addresses.streetName}} </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.housingType">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-4 p-mb-1">
+                                    <h6 class="p-d-inline p-mr-2">Vivienda:</h6>
+                                </div>
+                                <div class="p-col-12 p-md-8 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="housingType">{{_laborRelationship.employee.addresses.housingType}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.housingNumber">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-4 p-mb-1">
+                                    <h6 class="p-d-inline p-mr-2">Número:</h6>
+                                </div>
+                                <div class="p-col-12 p-md-8 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="housingNumber">{{_laborRelationship.employee.addresses.housingNumber}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                                <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.buildingName">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-4 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Edificio:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-8 p-mb-1">
+                                            <label class="p-d-inline readOnlyInfo" for="buildingName">{{_laborRelationship.employee.addresses.buildingName}}, apto: {{_laborRelationship.employee.addresses.apartment}}, piso: {{_laborRelationship.employee.addresses.floor}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.addresses.references">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-4 p-mb-1">
+                                    <h6 class="p-d-inline p-mr-2">Referencia:</h6>
+                                </div>
+
+                                <div class="p-col-12 p-md-8 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="references">{{_laborRelationship.employee.addresses.references}}</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </p-card>
+
+                <p-card header="Información complementaria" class="p-card-shadow box p-col-12 p-md-6 miniCardDatosP miniCardAdditionalD" *ngIf="_laborRelationship.employee.additionalData">
+                   
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol" *ngIf="_laborRelationship.employee.additionalData.laterality">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-12 p-mb-1">
+                                    <label class="p-d-inline user-card-maintext" for="idHealthCenter">{{_laborRelationship.employee.additionalData.healthCenter}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-mb-1 readOnlyInfoCol">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-9 p-mb-1 ">
+                                    <label class="p-d-inline user-card-secondtext" for="laterality">{{_laborRelationship.employee.additionalData.laterality}} | </label>
+                                    <label class="p-d-inline user-card-secondtext" for="height"> {{_laborRelationship.employee.additionalData.height}}cm. |</label>
+                                    <label class="p-d-inline user-card-secondtext" for="weight"> {{_laborRelationship.employee.additionalData.weight}}kg. |</label>
+                                    <label class="p-d-inline user-card-secondtext" for="bloodType"> {{_laborRelationship.employee.additionalData.bloodType}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-3 p-mb-1">
+                                    <br>
+                                    <!-- <h6 class="p-d-inline p-mr-2">Documento de identificación:</h6> -->
+                                    <h6 class="p-d-inline p-mr-2 user-card-secondtext">Documentos</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol" *ngIf="_laborRelationship.employee.taxDocumentNumber">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-9 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="insuranceNumber">Seguro {{_laborRelationship.employee.insuranceNumber}} |</label>
+                                    <label class="p-d-inline readOnlyInfo" for="passportNumber"> Pasaporte {{_laborRelationship.employee.additionalData.passportNumber}} |</label>
+                                    <label class="p-d-inline readOnlyInfo" for="driverLicenseNumber"> Licencia de conducir {{_laborRelationship.employee.additionalData.driverLicenseNumber}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-3 p-mb-1">
+                                    <br>
+                                    <h6 class="p-d-inline p-mr-2 user-card-secondtext">Tallas</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-12 p-mb-1 readOnlyInfoCol" *ngIf="_laborRelationship.employee.taxDocumentNumber">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-9 p-mb-1">
+                                    <label class="p-d-inline readOnlyInfo" for="shirtSize">Camisa {{_laborRelationship.employee.additionalData.shirtSize | uppercase}} |</label>
+                                    <label class="p-d-inline readOnlyInfo" for="pantsSize"> Pantalón {{_laborRelationship.employee.additionalData.pantsSize}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </p-card>
+
+            </div>
+        </div>
+
+
+            <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.CHECK_PAYROLL_DATA_PERMISSION_ID) && activeIndex == 1 && !checked" -->
+            <div class="p-col-12" *ngIf="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 1 || 
+            this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 1 && !checked">
+                <div class="p-grid">
+
+                    <p-card header="Datos salariales" class="p-card-shadow box p-col-12 p-md-6 miniCardNomina" *ngIf="_laborRelationship.payrollData.salariesforPayrollData.length > 0 && _laborRelationship.payrollData.salariesforPayrollData[0].amount || _laborRelationship.payrollData.centralCost || _laborRelationship.payrollData.accountDenomination">
+                        
+                        <div  *ngIf="_laborRelationship.payrollData.salariesforPayrollData.length > 0 && _laborRelationship.payrollData.salariesforPayrollData[0].amount">
+               
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-5 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Tipo:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-7 p-mb-1">
+                                            <label class="p-d-inline readOnlyInfo">Sueldo base</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-5 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Monto:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-7 p-mb-1">
+                                            <label class="p-d-inline readOnlyInfo">{{mainCurrency}} {{_laborRelationship.payrollData.salariesforPayrollData[0].amount}}</label>
+                                        </div> 
+                                    </div> 
+                                </div>
+
+                                <div class="p-mb-1 p-col-12 p-md-12 readOnlyInfoCol">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-5 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Motivo:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-7 p-mb-1">
+                                            <label class="p-d-inline readOnlyInfo">Sueldo inicial</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div *ngIf="_laborRelationship.payrollData.centralCost || _laborRelationship.payrollData.accountDenomination">
+                            <div class="p-divider-content p-mt-2 p-mb-3">
+                                <h4 class="p-card-title" >Información contable</h4>
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.centralCost">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-5 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Centro de costo:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-7 p-mb-1">
+                                            <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.centralCost}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.accountDenomination">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-5 p-mb-1">
+                                            <h6 class="p-d-inline p-mr-2">Denom. Contable:</h6>
+                                        </div>
+                                        <div class="p-col-12 p-md-7 p-mb-1">
+                                            <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.accountDenomination}}</label>
+                                        </div>
+                                    </div>
+                                </div> 
+                                    
+                            </div>
+                        </div>
+                    </p-card>
+                    
+                    <p-card header="Datos de nómina" class="p-card-shadow box p-col-12 p-md-6 miniCardNomina" 
+                        *ngIf="_laborRelationship.payrollData.payrollClassName
+                        || _laborRelationship.payrollData.employmentDate && _laborRelationship.payrollData.employmentDate != '1900-01-01'
+                        || _laborRelationship.payrollData.seniorityDate && _laborRelationship.payrollData.seniorityDate != '1900-01-01'
+                        || _laborRelationship.payrollData.fixedPositionInd
+                        || _laborRelationship.payrollData.contractPeriod
+                        || _laborRelationship.payrollData.egressDate && _laborRelationship.payrollData.egressDate != '1900-01-01'
+                        || _laborRelationship.payrollData.islr || _laborRelationship.payrollData.workDay
+                        || _laborRelationship.payrollData.workShift">
+
+                        <!-- <div class="p-divider-content p-mt-2 p-mb-1">
+                            <h4 class="p-card-title">Datos de nómina</h4>
+                        </div> -->
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.payrollClassName">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Clase de nómina:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.payrollClassName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.employmentDate && _laborRelationship.payrollData.employmentDate != '1900-01-01'">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Fecha de ingreso:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.employmentDate}}</label>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.seniorityDate && _laborRelationship.payrollData.seniorityDate != '1900-01-01'">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Fecha de antigüedad:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.seniorityDate}}</label>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.fixedPositionInd">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Tipo de plaza:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.fixedPositionInd == true ? "Fijo" : "Rotativo"}}</label>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.contractPeriod">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+
+                                        <h6 class="p-d-inline p-mr-2">Periodo de contrato:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.contractPeriod}}</label>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.egressDate && _laborRelationship.payrollData.egressDate != '1900-01-01'">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Fecha de egreso:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.egressDate}}</label>
+                                    </div>
+                                </div>
+                            </div> 
+                            
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.islr">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">% Retención ISLR:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.islr}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.workDay">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Jornada:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.workDay}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-mb-1 p-col-12 readOnlyInfoCol" *ngIf="_laborRelationship.payrollData.workShift">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-5 p-mb-1">
+                                        <h6 class="p-d-inline p-mr-2">Turno:</h6>
+                                    </div>
+                                    <div class="p-col-12 p-md-7 p-mb-1">
+                                        <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.workShift}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                </p-card>
+
+                <p-card header="Forma de pago" *ngIf="_AccountforPayrollDataList.length > 0 || _laborRelationship.payrollData.paymentMethodId && _laborRelationship.payrollData.paymentMethod" class="p-card-shadow box p-col-12 miniCardNomina">
+                  
+                    <div class="p-col-12 p-md-6">
+                        <div class="p-grid" *ngIf="_laborRelationship.payrollData.paymentMethodId && _laborRelationship.payrollData.paymentMethod">
+                            <div class="p-col-12 p-md-3 p-mb-1">
+                                <h6 class="p-d-inline p-mr-2">Tipo:</h6>
+                            </div>
+                            <div class="p-col-12 p-md-9 p-mb-1">
+                                <label class="p-d-inline p-mb-2 readOnlyInfo">{{_laborRelationship.payrollData.paymentMethod}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-mb-2 p-mt-3" *ngIf="_AccountforPayrollDataList.length > 0">
+                        <p-table [value]="_AccountforPayrollDataList" styleClass="p-datatable-responsive-demo p-datatable-sm" [rows]="10"
+                            [rowHover]="true" dataKey="accountforPayrollDataId" [scrollable]="false" scrollHeight="240px"
+                            currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="p-text-center">Institución/Banco</th>
+                                    <th class="p-text-center">Tipo de cuenta</th>
+                                    <th class="p-text-center">Nro. de cuenta</th>
+                                    <th class="p-text-center"> </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-_AccountforPayrollDataList>
+                                <tr>
+                                    <td class="p-text-center">
+                                        {{_AccountforPayrollDataList.bank}}
+                                    </td>
+                                    <td class="p-text-center">
+                                        {{_AccountforPayrollDataList.typeAccount}}
+                                    </td>
+                                    <td class="p-text-center">
+                                        {{_AccountforPayrollDataList.accountNumber}}
+                                    </td>
+                                    <td class="p-text-center">
+                                        {{_AccountforPayrollDataList.indActive == true ? "Principal" : "Secundaria"}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-card>
+
+            </div>
+        </div>
+
+        <div class="p-col-12" *ngIf="activeIndex == 2">
+
+            <div *ngIf="_laborRelationship.idLaborRelationship > 0">
+                <p-panel header="Afecciones médicas" [toggleable]="true" styleClass="col-12 p-md-12">
+                    <app-medical-condition-list [(_medicalConditionList)]="_medicalConditionList" 
+                    (returnData1)="sendMedicalConditionPanel($event)" (deletedData1)="deletedMedicalCondition($event)">
+                    </app-medical-condition-list>
+
+                    <app-medical-condition-panel *ngIf="showSidebar1" [(record)]="medicalConditionModel"
+                    [(showSidebar)]="showSidebar1" (backUnChanged)="resetValues($event)" [medicalConditionList]="_medicalConditionList"
+                    (recordSave)="saveMedicalCondition($event)"></app-medical-condition-panel>
+                </p-panel>
+
+                <p-panel header="Cargas familiares" [toggleable]="true" styleClass=" p-col-12 p-md-12">
+                    <app-famili-burden-list [(familyBurdenList)]="_familyBurdenList" 
+                    (returnData2)="sendFamilyBurdenPanel($event)"></app-famili-burden-list>
+                    <app-famili-burden-panel *ngIf="showSidebar2" [(record)]="familyBurdenModel"
+                    [(showSidebar)]="showSidebar2" [(genderList)]="gender" (backUnChanged)="resetValues($event)" 
+                    (recordSave)="saveFamilyBurden($event)"></app-famili-burden-panel>
+                </p-panel>
+
+                <p-panel header="Pensiones alimentarias" [toggleable]="true" styleClass="p-col-12 p-md-12"> 
+                    <app-maintenance-claim-list [(maintenanceClaimList)]="maintenanceClaimList" 
+                    (returnData3)="sendMaintenanceClaimPanel($event)" (deletedData3)="deletedMaintenanceClaim($event)"
+                    (updateData3)="saveMaintenanceClaim($event)">
+                    </app-maintenance-claim-list>
+                    <app-maintenance-claim-panel *ngIf="showSidebar3" [(record)]="maintenanceClaimModel" 
+                    [(showSidebar)]="showSidebar3"  [(salary)]="salaryBasic" [(list)]="maintenanceClaimList" 
+                    (recordSave)="saveMaintenanceClaim($event)" (backUnChanged)="resetValues($event)" >
+                </app-maintenance-claim-panel>
+                </p-panel>
+            </div>
+
+            <div class="p-grid nested-grid" *ngIf="_laborRelationship.idLaborRelationship <= 0">
+                <div class="p-col-12">
+                    <div class="box box-stretched">
+                    <p-card header="" styleClass="p-card-shadow">
+                        <p-messages severity="info">
+                        <ng-template pTemplate>
+                            <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                            <div class="p-ml-2">Debe crear una relación laboral al trabajador actual para poder agregar los datos de esta sección</div>
+                        </ng-template>
+                        </p-messages>
+                    </p-card>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FIN SECCION DE SOLO LECTURA -->
+
+        <!-- SECCION DE EDICION -->
+        <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PERSONAL_DATA_PERMISSION_ID) && activeIndex == 0 && checked" -->
+        <div class="p-col-12" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 0 && checked">
+            <div class="p-grid">
+                <p-card header="Datos personales" class="p-card-shadow box p-col-12 p-md-12">
+                    <!-- <div class="p-divider-content p-mt-2 p-mb-2">
+                        <h4 class="p-card-title">Datos personales</h4>
+                    </div> -->
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Tipo de documento<span class="p-invalid">*</span></label>
+                            <p-dropdown inputId="idDocumentType" [filter]="true" [options]="documentType" [(ngModel)]="_laborRelationship.employee.idDocumentType" 
+                            [class]=" submitError && (_laborRelationship.employee.idDocumentType === undefined ) ? 'ng-invalid ng-dirty' : '' " 
+                            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." life="500" (onChange)="changesInMemory()">   
+                            <!-- anteriormente el onChange de tipo de documento y el input de numero de documento tenian esta asignacion: error1007 = false -->
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.idDocumentType === undefined )">El tipo de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Número de documento<span class="p-invalid">*</span></label>
+                            <input id="documentNumber" name="documentNumber" type="text" numbersOnly pInputText maxlength="25" [(ngModel)]="_laborRelationship.employee.documentNumber" (input)="changesInMemory()"
+                                [class]="error1007 || submitError && (_laborRelationship.employee.documentNumber == '' || _laborRelationship.employee.documentNumber === undefined ) ? 'ng-invalid ng-dirty' : '' "
+                                life="500">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.documentNumber == '' || _laborRelationship.employee.documentNumber === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Tipo de RIF<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idTaxDocumentType" [options]="taxdocumentType" [(ngModel)]="_laborRelationship.employee.idTaxDocumentType" 
+                            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [class]=" submitError && _laborRelationship.employee.idTaxDocumentType === undefined || _laborRelationship.employee.idTaxDocumentType === -1 ? 'ng-invalid ng-dirty' : '' "
+                            life="500" (onChange)="changesInMemory()"></p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && _laborRelationship.employee.idTaxDocumentType === undefined || _laborRelationship.employee.idTaxDocumentType === -1">El tipo de RIF es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Número de RIF<span class="p-invalid">*</span></label>
+                            <input id="taxDocumentNumber" name="taxDocumentNumber" type="text" numbersOnly pInputText maxlength="25" [(ngModel)]="_laborRelationship.employee.taxDocumentNumber" (input)="changesInMemory()"
+                            [class]=" submitError && (_laborRelationship.employee.taxDocumentNumber == '' || _laborRelationship.employee.taxDocumentNumber === undefined ) ? 'ng-invalid ng-dirty' : '' ">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.taxDocumentNumber == '' || _laborRelationship.employee.taxDocumentNumber === undefined )">El número de documento es requerido</small>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Fecha de nacimiento<span class="p-invalid">*</span></label>
+                            <p-calendar [(ngModel)]="fechaNacimiento" dateFormat="dd-mm-yy" inputId="birthDate" [yearRange]="birthYearRange" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                                        [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [maxDate]="maxDate" [class]=" submitError && (fechaNacimiento == null ) ? 'ng-invalid ng-dirty' : '' "
+                                        life="500" (onSelect)="changesInMemory()">
+                            </p-calendar>
+                            <small class="p-invalid" *ngIf="submitError && (fechaNacimiento == null )">El número de documento es requerido</small>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Género<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." inputId="gender" [options]="gender" [(ngModel)]="genderValue" (onChange)="cargar($event)" optionLabel="name" 
+                            emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [class]=" submitError && (_laborRelationship.employee.gender == '' || _laborRelationship.employee.gender === undefined ) ? 'ng-invalid ng-dirty' : '' "
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.gender == '' || _laborRelationship.employee.gender === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Estado civil<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." inputId="idMaritalState" [options]="maritalStates" [(ngModel)]="_laborRelationship.employee.idMaritalState" (onChange)="changesInMemory()"
+                            [class]=" submitError && (_laborRelationship.employee.idMaritalState === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.idMaritalState === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Nacionalidad<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idCitizenship" #formIdCitizenship [options]="citizenShips" [(ngModel)]="_laborRelationship.employee.idCitizenship" 
+                            [class]=" submitError && (_laborRelationship.employee.idCitizenship === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="filterCities($event.value, true)" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.idCitizenship === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Primer apellido<span class="p-invalid">*</span></label>
+                            <input id="Lastname" type="text" [(ngModel)]="_laborRelationship.employee.employeeLastName" [maxlength]="20"
+                            [class]=" submitError && (_laborRelationship.employee.employeeLastName == '' || _laborRelationship.employee.employeeLastName === undefined) ? 'ng-invalid ng-dirty' : '' " pInputText
+                            life="500" (input)="changesInMemory()">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.employeeLastName == '' || _laborRelationship.employee.employeeLastName === undefined)">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Segundo apellido</label>
+                            <input id="secondlastname" type="text" [(ngModel)]="_laborRelationship.employee.employeeSecondLastName" 
+                             pInputText [maxlength]="20"
+                            life="500" (input)="changesInMemory()">
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Primer nombre<span class="p-invalid">*</span></label>
+                            <input id="firstname" type="text" [(ngModel)]="_laborRelationship.employee.employeeFirstName" [maxlength]="20"
+                            [class]=" submitError && (_laborRelationship.employee.employeeFirstName == '' || _laborRelationship.employee.employeeFirstName === undefined) ? 'ng-invalid ng-dirty' : '' " pInputText
+                            life="500" (input)="changesInMemory()">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.employeeFirstName == '' || _laborRelationship.employee.employeeFirstName === undefined)">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Segundo nombre</label>
+                            <input id="secondname" type="text" [(ngModel)]="_laborRelationship.employee.employeeSecondName" 
+                             pInputText [maxlength]="20"
+                            life="500" (input)="changesInMemory()">
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Lugar de nacimiento<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idBirthCity" [options]="birthCities" [(ngModel)]="_laborRelationship.employee.idBirthCity" 
+                            [class]=" submitError && (_laborRelationship.employee.idBirthCity === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.idBirthCity === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Grado de instrucción<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." inputId="idInstructionDegree" [options]="instructionDegrees" [(ngModel)]="_laborRelationship.employee.idInstructionDegree" 
+                            [class]=" submitError && (_laborRelationship.employee.idInstructionDegree === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.idInstructionDegree === undefined )">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Área</label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idProfessionalArea" [options]="professionalAreas" [(ngModel)]="_laborRelationship.employee.idProfessionalArea"  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Email personal<span class="p-invalid">*</span></label>
+                            <input id="email" type="text" [(ngModel)]="_laborRelationship.employee.email" maxlength="40" (input)="validateEmail(_laborRelationship.employee.email, 1)"
+                            [class]=" (submitError && (_laborRelationship.employee.email == '' || _laborRelationship.employee.email === undefined )) || emailError ? 'ng-invalid ng-dirty' : '' " pInputText
+                            life="500">
+                            <small class="p-invalid" *ngIf="emailError"> El formato de email es incorrecto</small> 
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.email == '' || _laborRelationship.employee.email === undefined )"> El formato de email es incorrecto</small>
+                        </div>
+                    </div>
+
+                    <div class="p-divider-content p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Información complementaria</h4>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Centro asistencial<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idHealthCenter" [options]="careCenters" [(ngModel)]="_laborRelationship.employee.additionalData.idHealthCenter" 
+                            [class]=" submitError && (_laborRelationship.employee.additionalData.idHealthCenter === undefined || _laborRelationship.employee.additionalData.idHealthCenter == -1 ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.additionalData.idHealthCenter === undefined || _laborRelationship.employee.additionalData.idHealthCenter == -1 )">El centro asistencial es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Número de seguro social<span class="p-invalid">*</span></label>
+                            <input id="socialSecurityNumber" [(ngModel)]="_laborRelationship.employee.insuranceNumber" type="text" 
+                            pInputText [class]=" submitError && (_laborRelationship.employee.insuranceNumber == '' || _laborRelationship.employee.insuranceNumber === undefined ) ? 'ng-invalid ng-dirty' : '' " 
+                            life="500" (input)="changesInMemory()">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.insuranceNumber == '' || _laborRelationship.employee.insuranceNumber === undefined )">El número de seguro social es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Número de pasaporte</label>
+                            <input id="passportNumber" type="text" [(ngModel)]="_laborRelationship.employee.additionalData.passportNumber"  pInputText [maxlength]="20"
+                            life="500" (input)="changesInMemory()">
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Número de licencia de conducir</label>
+                            <input id="driverLicenseNumber" type="text" [(ngModel)]="_laborRelationship.employee.additionalData.driverLicenseNumber"  pInputText [maxlength]="15"
+                            life="500" (input)="changesInMemory()"/>
+
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Grupo sanguí­neo</label>
+                            <p-dropdown placeholder="Seleccione..." #formBloodType [(ngModel)]="bloodTypesValue" inputId="bloodType" [options]="bloodTypes" (onChange)="cargarTipoSangre($event)" placeholder="Grupo sanguíneo" 
+                            optionLabel="name" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Lateralidad</label>
+                            <p-dropdown placeholder="Seleccione..." #formLateralities [(ngModel)]="lateralitiesValue" inputId="laterality" [options]="lateralities" #lateralitiesList (onChange)="cargarLateralidad($event)"  optionLabel="name" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Estatura</label>
+                            <!-- <input type="text" [(ngModel)]="_laborRelationship.employee.additionalData.height" pInputText placeholder="Estatura" (keypress)="validateRealNumber($event, _laborRelationship.employee.additionalData.height)" maxlength="7">   [maxlength]="10" suffix=" cm." -->
+                            <div class="p-inputgroup">
+                                <p-inputNumber class="inputNumberIC" [(ngModel)]="_laborRelationship.employee.additionalData.height" inputId="minmaxfraction"
+                                 mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="4" [maxlength]="6"></p-inputNumber>
+                                <span class="p-inputgroup-addon span-input" (input)="changesInMemory()">cm.</span>      
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Peso</label>
+                            <!-- <input type="text" [(ngModel)]="_laborRelationship.employee.additionalData.weight" pInputText placeholder="Peso" (keypress)="validateRealNumber($event, _laborRelationship.employee.additionalData.weight)" maxlength="7">   suffix=" kg." [maxlength]="9" -->
+                            <div class="p-inputgroup">
+                                <p-inputNumber class="inputNumberIC" [(ngModel)]="_laborRelationship.employee.additionalData.weight" 
+                                inputId="minmaxfraction" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="4" [maxlength]="6"></p-inputNumber>
+                                <span class="p-inputgroup-addon span-input" (input)="changesInMemory()">kg.</span>  
+                            </div>
+                        </div>
+                        
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Talla de camisa</label>
+                            <input id="shirtSize" type="text" [(ngModel)]="_laborRelationship.employee.additionalData.shirtSize"  pInputText [maxlength]="2" (input)="_validations.toUppercaseString($event);changesInMemory()"
+                            life="500"  (keypress)="_validations.keyPressAbbreviation($event)"  (paste)="_validations.keyPressAbbreviation($event)"/>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Talla de pantalón</label>
+                            <p-inputNumber inputId="pantsSize" [(ngModel)]="_laborRelationship.employee.additionalData.pantsSize" placeholder="" [maxlength]="2"pTooltip="" (input)="changesInMemory()"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="p-divider-content p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Dirección</h4>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Avenida<span class="p-invalid">*</span></label>
+                            <input id="avenueName" type="text" [(ngModel)]="_laborRelationship.employee.addresses.avenueName" [maxlength]="30"
+                            [class]=" submitError && (_laborRelationship.employee.addresses.avenueName == '' || _laborRelationship.employee.addresses.avenueName === undefined ) ? 'ng-invalid ng-dirty' : '' "  pInputText
+                            life="500" (input)="changesInMemory()">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.avenueName == '' || _laborRelationship.employee.addresses.avenueName === undefined )">La avenida es requerida</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Calle<span class="p-invalid">*</span></label>
+                            <input id="streetName" type="text" [(ngModel)]="_laborRelationship.employee.addresses.streetName" [maxlength]="30"
+                            [class]=" submitError && (_laborRelationship.employee.addresses.streetName == '' || _laborRelationship.employee.addresses.streetName === undefined ) ? 'ng-invalid ng-dirty' : '' "  pInputText
+                            pTooltip="Calle" life="500" (input)="changesInMemory()">
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.streetName == '' || _laborRelationship.employee.addresses.streetName === undefined )">La calle es requerida</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Tipo de vivienda<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." inputId="idHousingType" [options]="housingTypes" [(ngModel)]="_laborRelationship.employee.addresses.idHousingType" (onChange)="validateAddresses()" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idHousingType === undefined ) ? 'ng-invalid ng-dirty' : '' "  emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idHousingType === undefined )">El tipo de vivienda es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Número de vivienda<span class="p-invalid">*</span></label>
+                            <input id="housingName" type="text" [(ngModel)]="_laborRelationship.employee.addresses.housingNumber" (input)="completeHousingName()" [disabled]="_laborRelationship.employee.addresses.idHousingType == 4 || _laborRelationship.employee.addresses.idHousingType == undefined"
+                             pInputText [class]=" housingError && (_laborRelationship.employee.addresses.housingNumber == '' || _laborRelationship.employee.addresses.housingNumber === undefined  ) ? 'ng-invalid ng-dirty' : '' " [maxlength]="10"
+                            life="500">
+                            <small class="p-invalid" *ngIf="housingError && (_laborRelationship.employee.addresses.housingNumber == '' || _laborRelationship.employee.addresses.housingNumber === undefined  )">El número de vivienda es requerido</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Edificio<span class="p-invalid">*</span></label>
+                            <input id="buildingName" type="text" [(ngModel)]="_laborRelationship.employee.addresses.buildingName" (input)="completebuildingData()" [disabled]="_laborRelationship.employee.addresses.idHousingType != 4 || _laborRelationship.employee.addresses.idHousingType == undefined"
+                             pInputText [class]=" apartmentError && (_laborRelationship.employee.addresses.buildingName == '' || _laborRelationship.employee.addresses.buildingName === undefined  ) ? 'ng-invalid ng-dirty' : '' " [maxlength]="30"
+                            life="500">
+                            <small class="p-invalid" *ngIf="apartmentError && (_laborRelationship.employee.addresses.buildingName == '' || _laborRelationship.employee.addresses.buildingName === undefined  )">El edificio es requerido</small>
+                        </div>
+                        <div class="p-field p-col-6 p-md-3">
+                            <label for="laterality">Apartamento<span class="p-invalid">*</span></label>
+                            <input id="apartment" type="text" [(ngModel)]="_laborRelationship.employee.addresses.apartment"  pInputText (input)="completebuildingData()" [disabled]="_laborRelationship.employee.addresses.idHousingType != 4 || _laborRelationship.employee.addresses.idHousingType == undefined"
+                            [class]=" apartmentError && (_laborRelationship.employee.addresses.apartment == '' || _laborRelationship.employee.addresses.apartment === undefined  ) ? 'ng-invalid ng-dirty' : '' " [maxlength]="10"
+                            life="500">
+                            <small class="p-invalid" *ngIf="apartmentError && (_laborRelationship.employee.addresses.apartment == '' || _laborRelationship.employee.addresses.apartment === undefined  )">El apartamento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-6 p-md-3">
+                            <label for="laterality">Piso<span class="p-invalid">*</span></label>
+                            <input id="floor" type="text" [(ngModel)]="_laborRelationship.employee.addresses.floor"  pInputText (input)="completebuildingData()" [disabled]="_laborRelationship.employee.addresses.idHousingType != 4 || _laborRelationship.employee.addresses.idHousingType == undefined"
+                            [class]=" apartmentError && (_laborRelationship.employee.addresses.floor == '' || _laborRelationship.employee.addresses.floor === undefined  ) ? 'ng-invalid ng-dirty' : '' " [maxlength]="10"
+                            life="500">
+                            <small class="p-invalid" *ngIf="apartmentError && (_laborRelationship.employee.addresses.floor == '' || _laborRelationship.employee.addresses.floor === undefined  )">El piso es requerido</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-12">
+                            <label for="laterality">Referencia<span class="p-invalid">*</span></label>
+                            <input id="references" type="text" [(ngModel)]="_laborRelationship.employee.addresses.references" (input)="changesInMemory()"
+                            [class]=" submitError && (_laborRelationship.employee.addresses.references == '' || _laborRelationship.employee.addresses.references === undefined  ) ? 'ng-invalid ng-dirty' : '' " pInputText [maxlength]="60"
+                            life="500"/>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.references == '' || _laborRelationship.employee.addresses.references === undefined  )">La referencia es requerida</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Paí­s<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="country" [options]="countries" [(ngModel)]="_laborRelationship.employee.addresses.idCountry" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idCountry === undefined ) ? 'ng-invalid ng-dirty' : '' " (onChange)="changeLoadStates($event, true)" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idCountry === undefined )">El paí­s es requerido</small>
+                        </div>
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Estado<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="state" [options]="states" [(ngModel)]="_laborRelationship.employee.addresses.idState" (onChange)="changeLoadMunicipalities($event, true)" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idState === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idState === undefined )">El estado es requerido</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Municipio<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="idMunicipality" [options]="municipalities" [(ngModel)]="_laborRelationship.employee.addresses.idMunicipality" (onChange)="changeLoadCities($event, true)" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idMunicipality === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idMunicipality === undefined )">El municipio es requerido</small>
+                        </div>
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Ciudad<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="city" [options]="cities" [(ngModel)]="_laborRelationship.employee.addresses.idCity" (onChange)="cargarCiudad($event)" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idCity === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idCity === undefined )">La ciudad es requerida</small>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Parroquia<span class="p-invalid">*</span></label>
+                            <p-dropdown placeholder="Seleccione..." [filter]="true" inputId="parish" [options]="parishes" [(ngModel)]="_laborRelationship.employee.addresses.idParish" 
+                            [class]=" submitError && (_laborRelationship.employee.addresses.idParish === undefined ) ? 'ng-invalid ng-dirty' : '' " emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                            <small class="p-invalid" *ngIf="submitError && (_laborRelationship.employee.addresses.idParish === undefined )">La parroquia es requerida</small>
+                        </div>
+                        <div class="p-field p-col-6 p-md-6">
+                            <label for="laterality">Código postal</label>
+                            <input inputId="postalCode" [(ngModel)]="_laborRelationship.employee.addresses.postalCode"  numbersOnly pInputText [maxlength]="6"
+                            life="500" (input)="changesInMemory()"/>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-12" *ngIf="addressMessage">
+                        <p [ngStyle]="{'color':'red'}">{{addressMessage}}</p>
+                    </div>
+
+                    <div class="p-divider-content p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Teléfonos</h4>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-2">
+                            <label>Móvil<span class="p-invalid">*</span>:</label>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span class="p-float-label">
+                                <p-dropdown (onChange)="validatePrefix(formMobilePhonePrefix)" [(ngModel)]="formMobilePhonePrefix" id="formMobilePhonePrefix" [options]="phonePrefixes.value" [autoDisplayFirst]="false" [showClear]="false" 
+                                emptyFilterMessage="Sin resultados." placeholder="Prefijo" emptyMessage="Sin resultados." optionLabel="codePrefix" [class]=" mobilePhoneError && (formMobilePhonePrefix == null || formMobilePhonePrefix === undefined) ? 'ng-invalid ng-dirty' : '' "></p-dropdown>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-7">
+                            <input (input)="validatePhone()" id="formMobilePhoneNumber" [(ngModel)]="mobilePhone.number" placeholder="Número"  numbersOnly type="text" maxlength="11" pInputText [class]="mobilePhoneError && (mobilePhone.number == '' || mobilePhone.number === undefined) ? 'ng-invalid ng-dirty' : '' ">
+                            <!-- <label for="phoneNumber">Número*</label> -->
+                        </div>
+                        <div class="p-field p-col-12 p-md-2">
+                            <label>Residencial:</label>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span class="p-float-label">
+                                <p-dropdown (onChange)="validatePhone()" id="formHomePhonePrefix" [(ngModel)]="formHomePhonePrefix" [options]="phonePrefixes.value" [autoDisplayFirst]="false" [showClear]="false" placeholder="Prefijo" 
+                                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." optionLabel="codePrefix" [class]=" homePhoneError && (formHomePhonePrefix == null || formHomePhonePrefix === undefined) ? 'ng-invalid ng-dirty' : '' "></p-dropdown>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-7">
+                            <input (input)="validatePhone()" id="formHomePhoneNumber" [(ngModel)]="homePhone.number" numbersOnly type="text" placeholder="Número" maxlength="11" pInputText [class]=" homePhoneError && (homePhone.number == '' || homePhone.number === undefined) ? 'ng-invalid ng-dirty' : '' ">
+                        </div>
+                        <div class="p-field p-col-12 p-md-2">
+                            <label>Trabajo:</label>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span class="p-float-label">
+                                <p-dropdown (onChange)="validatePhone()" id="formOfficePhonePrefix" [(ngModel)]="formOfficePhonePrefix" [options]="phonePrefixes.value" [autoDisplayFirst]="false" [showClear]="false" placeholder="Prefijo" 
+                                emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." optionLabel="codePrefix" [class]=" officePhoneError && (formOfficePhonePrefix == null || formOfficePhonePrefix === undefined) ? 'ng-invalid ng-dirty' : '' "></p-dropdown>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-7">
+                            <input (input)="validatePhone()" id="formOfficePhoneNumber" [(ngModel)]="officePhone.number" type="text" placeholder="Número" maxlength="11" pInputText [class]=" officePhoneError && (officePhone.number == '' || officePhone.number === undefined) ? 'ng-invalid ng-dirty' : '' ">
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-12" *ngIf="phoneMessage || officcePhoneMessage">
+                        <p [ngStyle]="{'color':'red'}">{{phoneMessage}}</p>
+                        <p [ngStyle]="{'color':'red'}">{{officcePhoneMessage}}</p>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12" align="right">
+                        <button id="saving2" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info saving"
+                                (click)="saveEmployee(_laborRelationship, 2)" [disabled]="actionButton"></button>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+
+        <!-- *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_PAYROLL_DATA_PERMISSION_ID) && activeIndex == 1 && checked" -->
+        <div class="p-col-12" *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID) && activeIndex == 1 && checked">
+            <div class="p-grid">
+                <p-card header="Datos generales" class="p-card-shadow box p-col-12 p-md-12">
+                    <!-- <div class="p-divider-content p-mt-2 p-mb-2">
+                        <h4>Datos generales</h4>
+                    </div> -->
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Empresa</label>
+                            <p-dropdown #formCompanies [disabled]="true" inputId="idCompany" [filter]="true" [options]="companies" [(ngModel)]="_laborRelationship.idCompany" placeholder="Empresa" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (onChange)="loadBranchOffices($event.value)"
+                             life="500">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Sucursal</label>
+                            <p-dropdown inputId="branchOfficeId" [filter]="true" [options]="branchOffices" [(ngModel)]="_laborRelationship.branchOfficeId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                             life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Cuenta corporativa</label>
+                            <input id="corporateEmail" type="text" [(ngModel)]="_laborRelationship.payrollData.corporateEmail" placeholder="usuario@dominio.com (Cuenta corporativa)" pInputText
+                             life="500" (input)="validateEmail(_laborRelationship.payrollData.corporateEmail, 2)" (input)="error1030 = false"
+                            [class]=" emailCorpError || error1030 ? 'ng-invalid ng-dirty' : '' "  maxlength="40" >
+                            <small class="p-invalid" *ngIf="emailCorpError"> El formato de email es incorrecto</small>
+                            <small class="p-invalid" *ngIf="submitError && _laborRelationship.employee.idTaxDocumentType === undefined">El número de documento es requerido</small>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Tipo de plaza</label>
+                            <p-dropdown [filter]="true" inputId="fixedPositionInd" [options]="fixedPositions" [(ngModel)]="formFixedPositionInd" placeholder="Seleccione..." optionLabel="name" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                             life="500" (onChange)="changeJobPosition(true)">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Cargo</label>
+                            <p-dropdown (onChange)="changesInMemory()" inputId="jobPositionId" [filter]="true" [options]="jobPositionDropdown" [(ngModel)]="_laborRelationship.payrollData.jobPositionId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                             life="500" (input)="error1030 = false" [class]="error1031 ? 'ng-invalid ng-dirty' : '' ">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="laterality">Supervisor</label>
+                            <p-dropdown (onChange)="changesInMemory()" inputId="supervisorPositionId" [filter]="true" [options]="supervisors" [(ngModel)]="_laborRelationship.payrollData.supervisorOperativeId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [group]="true"
+                             life="500">
+                            </p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="p-divider-content p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Información financiera</h4>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Centro de costo</label>
+                            <p-dropdown (onChange)="changesInMemory()" [filter]="true" inputId="centralCostId" [options]="costCenters" [(ngModel)]="_laborRelationship.payrollData.centralCostId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                             life="500">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="laterality">Denominación contable</label>
+                            <input id="accountDenomination" type="text" [(ngModel)]="_laborRelationship.payrollData.accountDenomination" pInputText maxlength="30"
+                             life="500" (input)="changesInMemory()">
+                        </div>
+                    </div>
+
+                    <div class="p-divider-content p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Datos de nómina</h4>
+                    </div>                
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Clase de nómina</label>
+                            <p-dropdown (onChange)="changesInMemory()" [filter]="true" inputId="idPayrollClass" [options]="payrollClasses" [(ngModel)]="_laborRelationship.payrollData.idPayrollClass"
+                                        placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                                         life="500">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Fecha de ingreso</label>
+                            <p-calendar [(ngModel)]="fechaIngreso" dateFormat="dd-mm-yy" inputId="initDate" placeholder=""
+                            [yearRange]="yearRange"  readonlyInput="true" [showIcon]="true" [monthNavigator]="true" (onSelect)="validatePayrollDate(true)"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [class]=" payrollError && (noAntig || noEgress) ? 'ng-invalid ng-dirty' : '' "
+                            life="500">
+                            </p-calendar>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Fecha de antigüedad</label>
+                            <p-calendar [(ngModel)]="fechaAntiguedad" dateFormat="dd-mm-yy" inputId="seniorityDate" placeholder=""
+                             [yearRange]="yearRange" [maxDate]="antiquityMaxDate" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [class]=" payrollError && (noIngress || noEgress) ? 'ng-invalid ng-dirty' : '' "
+                             life="500" (onSelect)="calculate(fechaAntiguedad)" (onSelect)="validatePayrollDate(true)">
+                            </p-calendar>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Fecha de antigüedad</label>
+                            <input pInputText disabled type="text" [(ngModel)]="seniorityCalc" placeholder="" life="500" >
+                        </div>
+                        
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Duración del contrato</label>
+                            <p-dropdown [filter]="true" inputId="contractPeriod" [options]="contractPeriods" [(ngModel)]="_laborRelationship.payrollData.contractPeriodId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="calculateFinishDate($event)" >
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Fecha de egreso</label>
+                            <p-calendar [(ngModel)]="fechaEgreso" dateFormat="dd-mm-yy" inputId="finishDate" placeholder=""
+                             [yearRange]="yearRange" disabled readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" (onSelect)="validatePayrollDate(true)"
+                            life="500" [class]=" payrollError && (noIngress || noAntig) ? 'ng-invalid ng-dirty' : '' ">
+                            </p-calendar>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Sistema de antigüedad</label>
+                            <p-dropdown [filter]="true" inputId="idAntiquitySystem" [options]="antiquitySystems" [(ngModel)]="_laborRelationship.payrollData.idAntiquitySystem" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">% Retención ISLR</label>
+                            <p-inputNumber id="islr" mode="decimal" [(ngModel)]="_laborRelationship.payrollData.islr" [maxlength]="5"  [minFractionDigits]="2" [maxFractionDigits]="2" placeholder=""life="500">
+                        </p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Jornada</label>
+                            <p-dropdown [filter]="true" inputId="idWorkDay" (onChange)="changeLoadWorkShifts($event.value)" [options]="workDays" [(ngModel)]="_laborRelationship.payrollData.idWorkDay" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Turno</label>
+                            <p-dropdown [filter]="true" inputId="idWorkShift" [options]="workShifts" [(ngModel)]="_laborRelationship.payrollData.idWorkShift" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12" *ngIf="noEgress || noAntig || noIngress">
+                            <p [ngStyle]="{'color':'red'}" *ngIf="noEgress">La fecha de antigüedad no puede ser mayor a la fecha de ingreso</p>
+                            <p [ngStyle]="{'color':'red'}" *ngIf="noAntig">La fecha de ingreso no puede ser mayor a la fecha de egreso</p>
+                            <p [ngStyle]="{'color':'red'}" *ngIf="noIngress">La fecha de antigüedad no puede ser mayor a la fecha de egreso</p>
+                        </div>
+                        
+                        
+                        <div class="p-divider-content p-field p-col-12 p-mt-3 p-mb-3">
+                            <h4 class="p-card-title">Sueldo</h4>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Tipo de sueldo</label>
+                            <p-dropdown [disabled]="true" #formTypeSalaryId inputId="typeSalaryId" [options]="salaryTypes" [(ngModel)]="auxTypeSalaryId" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Monto</label>
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon">{{mainCurrency}}</span>
+                                <!-- <p-inputNumber id="amount" mode="decimal" [(ngModel)]="_laborRelationship.payrollData.salariesforPayrollData[0].amount" placeholder="Monto" maxlength="19" [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber> -->
+                            <p-inputNumber id="amount" mode="decimal" [(ngModel)]="auxAmount" placeholder="Monto" maxlength="19" [minFractionDigits]="2" [maxFractionDigits]="2"
+                            life="500" (input)="changesInMemory()" [disabled]="_laborRelationship.idEstatus < 38">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Motivo</label>
+                            <p-dropdown [disabled]="true" #formIdMotive id="idMotive" [options]="motives" [(ngModel)]="auxIdmotive" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                            life="500" (onChange)="changesInMemory()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="laterality">Vigencia desde</label>
+                            <p-calendar [(ngModel)]="fechaVigencia" dateFormat="dd-mm-yy" inputId="validityDate" placeholder=""
+                             [yearRange]="yearRange"  readonlyInput="true" [showIcon]="true" [monthNavigator]="true"
+                            [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [disabled]="true"
+                            life="500" (onSelect)="changesInMemory()">
+                            </p-calendar>
+                        </div>
+                       
+                    </div>
+
+                    <div class="p-divider-content p-field p-col-12 p-mt-3 p-mb-3">
+                        <h4 class="p-card-title">Forma de pago</h4>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-mb-5">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class=" p-col-4">
+                                <label for="laterality">Forma de pago</label>
+                                <p-dropdown inputId="paymentMethodId" [filter]="true" [disabled]="false" [options]="paymentMethods" [(ngModel)]="_laborRelationship.payrollData.paymentMethodId"
+                                    placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."
+                                    life="500" (onChange)="changesInMemory()">
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-grid p-mt-3 p-mb-0">
+
+                            <div class="p-col-12">
+                                <app-accountfor-payroll-data [bankAccountsList]="_AccountforPayrollDataList" (returnData)="sendAccountforPayrollDataPanel($event)"></app-accountfor-payroll-data>
+                                <app-accountfor-payroll-data-panel [idCountry] = "idCountry" *ngIf="showSidebar5" [(showSidebar)]="showSidebar5" [(record)]="newAccountforPayrollData" (backUnChanged)="resetValues($event)" (recordSave)="saveAccountforPayrollData($event)"></app-accountfor-payroll-data-panel>
+                            </div>
+                        </div>
+                    </div>
+            <!-- ------------------------------------------------------------------------ -->
+            <!-- <app-accountfor-payroll-data  [(bankAccounts)]="_bankAccountList" (returnData)="sendAccountforPayrollDataPanel($event)" (saveData)="saveAccountforPayrollData($event)"></app-accountfor-payroll-data> -->
+
+                    <div class="p-field p-col-12 p-md-12" align="right">
+                        <button id="saving1" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2"
+                            (click)="saveEmployee(_laborRelationship, 1)" [disabled]="actionButton">
+                        </button>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+        <!-- FIN SECCION DE EDICION -->
+
+        <div class="p-col-12" *ngIf="activeIndex == 3">
+            <div class="p-grid nested-grid" *ngIf="_laborRelationship.idLaborRelationship <= 0">
+                <div class="p-col-12">
+                    <div class="box box-stretched">
+                        <p-card header="" styleClass="p-card-shadow">
+                            <p-messages severity="info">
+                                <ng-template pTemplate>
+                                    <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                                    <div class="p-ml-2">Debe crear una relación laboral al trabajador actual para poder agregar los datos de esta sección</div>
+                                </ng-template>
+                            </p-messages>
+                        </p-card>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="_laborRelationship.idLaborRelationship > 0">
+                <p-panel header="Agrupaciones" [toggleable]="true" styleClass="col-12 p-md-12">
+                    <app-labor-relationship-grouping-list [(recordList)]="_laborRelationshipxGroupingList" (returnData)="sendGroupingPanel($event)" (saveData)="saveGroupingLaborRelationship($event)" (dataInMemory)="groupingChange($event)"></app-labor-relationship-grouping-list>
+                    <app-labor-relationship-grouping-panel *ngIf="showSidebar4" [(showSidebar)]="showSidebar4" [(record)]="newGroupingModel" (backUnChanged)="resetValues($event)" (recordSave)="saveGrouping($event)"></app-labor-relationship-grouping-panel>
+                </p-panel>
+            </div>
+        </div>
+
+        <!-- Reportes -->
+        <div class="p-col-12" *ngIf="activeIndex == 4">
+            <complementary-info-main *ngIf="_laborRelationship.idLaborRelationship > 0"></complementary-info-main>
+
+            <div class="p-grid nested-grid" *ngIf="_laborRelationship.idLaborRelationship <= 0">
+                <div class="p-col-12">
+                    <div class="box box-stretched">
+                        <p-card header="" styleClass="p-card-shadow">
+                            <p-messages severity="info">
+                                <ng-template pTemplate>
+                                    <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                                    <div class="p-ml-2">Debe crear una relación laboral al trabajador actual para poder agregar los datos de esta sección</div>
+                                </ng-template>
+                            </p-messages>
+                        </p-card>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-col-12" *ngIf="activeIndex == 5">
+            <p-panel header="Cursos / Evaluaciones" [toggleable]="true" styleClass="col-12 p-md-12">
+                <app-employee-training-list *ngIf="_laborRelationship.idLaborRelationship > 0" [idLaborRelationship]="idLaborRelationship"></app-employee-training-list>
+            </p-panel>
+            <p-panel header="Habilidades / Conocimientos" [toggleable]="true" styleClass="col-12 p-md-12">
+                <app-employee-training-skills *ngIf="_laborRelationship.idLaborRelationship > 0" [idLaborRelationship]="idLaborRelationship"></app-employee-training-skills>
+            </p-panel>
+
+            <p-panel header="Focos de mejoras" [toggleable]="true" styleClass="col-12 p-md-12">
+                <app-employee-training-focus-improving *ngIf="_laborRelationship.idLaborRelationship > 0" [idLaborRelationship]="idLaborRelationship"></app-employee-training-focus-improving>
+            </p-panel>
+
+            <div class="p-grid nested-grid" *ngIf="_laborRelationship.idLaborRelationship <= 0">
+                <div class="p-col-12">
+                    <div class="box box-stretched">
+                        <p-card header="" styleClass="p-card-shadow">
+                            <p-messages severity="info">
+                                <ng-template pTemplate>
+                                    <span class="ng-tns-c52-3 p-message-icon pi pi-info-circle"></span>
+                                    <div class="p-ml-2">Debe crear una relación laboral al trabajador actual para poder agregar los datos de esta sección</div>
+                                </ng-template>
+                            </p-messages>
+                        </p-card>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    
+    <!-- //////////  BOTONERA -->
+    <div class="p-grid" id="formButtonsDiv">
+        <div id="regresarDiv">
+            <button id="regresar" pButton pRipple icon="pi pi-arrow-left" class="p-button-secondary" label="Regresar" (click)="regresar()" ></button>
+        </div>
+    </div>
+
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+</div>
+
+
+
+<!-- ///////////////////////////////////////////////////////////// -->

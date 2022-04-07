@@ -1,0 +1,83 @@
+
+<div class="card">
+
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+
+        <div class="p-text-left p-text-bold p-sm-12 p-md-6 p-lg-3 p-col-12">
+            <i class="pi pi-book p-text-bold"></i> Clasificaciones de artículos
+          </div>
+      
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Buscar..." />
+        </span>
+        <div>
+            <button pButton pRipple icon="pi pi-plus" class="p-button-success"
+                [ngClass]="{'p-button-danger':showDialog}" (click)="new()" pTooltip="Crear nuevo"
+                tooltipPosition="top">
+            </button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help"
+                [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros"
+                tooltipPosition="top"></button>
+        </div>
+    </div>
+    <app-article-classification-filters  (onSearch)="search()"
+        [(filters)]="articleClassificationFilter" [expanded]="showFilters" [loading]="loading" class="p-mt-3">
+    </app-article-classification-filters >
+</div>
+<div class="card p-m-0">
+    <p-table [resizableColumns]="false"
+        styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" #dt
+        [columns]="displayedColumns" [rowHover]="true" [value]="articleClassifications" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]">
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word','width': col.field === 'active' ? '110px' : '100%' }"
+                        pResizableColumn [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+                <th style="width:60px"></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-articleClassification let-columns="columns" let-rowData>
+            <tr>
+
+                <ng-container *ngFor="let col of columns">
+                   
+                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}" class="ui-resizable-column">
+                        <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="articleClassification.active">
+                        </app-active-label>
+                        <span>{{col.template(articleClassification)}} </span>
+                    </td>
+                </ng-container>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="edit(articleClassification)" pTooltip="Editar"></button>
+                </td>
+            </tr>
+
+
+        </ng-template>
+        <ng-template *ngIf="articleClassifications.length == 0"  pTemplate="footer" let-columns>
+            <ng-container>
+             
+              <tr *ngIf="articleClassifications.length == 0">
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+2">
+                
+                  <p-message severity="info"  *ngIf=" showFilters && ( articleClassifications.length == 0 && (articleClassificationFilter.articleClassificationName!='' || articleClassificationFilter.id > -1  || articleClassificationFilter.active >= -1))" text="No existen resultados que coincidan con la búsqueda." styleClass="p-col-12 p-mr-2"></p-message>
+                  <p-message severity="info" *ngIf="!showFilters && articleClassifications.length == 0" text="No existen registros." styleClass="p-col-12 p-mr-2"></p-message>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-template>
+   
+    </p-table>
+</div>

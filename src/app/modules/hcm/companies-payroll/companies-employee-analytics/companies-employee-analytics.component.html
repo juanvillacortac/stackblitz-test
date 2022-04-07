@@ -1,0 +1,39 @@
+<div class="p-grid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+        <ng-container *ngIf="dashboardDataJobPosition?.length">
+          <app-dashboard-layaout [(dashboardData)]="dashboardDataJobPosition" [minHeight]=30 [(titleout)]="titleout5">
+          </app-dashboard-layaout>
+        </ng-container>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4">
+        <ng-container *ngIf="dashboardDataHiring?.length">
+            <app-dashboard-layaout [(dashboardData)]="dashboardDataHiring" [minHeight]=30 [(titleout)]="titleout2">
+            </app-dashboard-layaout>
+        </ng-container>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4">
+        <ng-container *ngIf="dashboardDataEmployee?.length">
+            <app-dashboard-layaout [(dashboardData)]="dashboardDataEmployee" [minHeight]=30 [(titleout)]="titleout1">
+            </app-dashboard-layaout>
+        </ng-container>
+    </div>
+</div>
+<!-- 
+<div class="p-grid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+        <div class="card">
+            <p-dataView [value]="dashboardDataJobPosition" layout="list"></p-dataView>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4">
+        <div class="card">
+            <p-chart type="bar" [data]="dashboardDataEmployeeLevel" [options]="basicOptions"></p-chart>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-6 p-lg-4">
+
+        <div class="card">
+            <p-chart type="bar" [data]="dashboardDataEmployee" [options]="basicOptions"></p-chart>
+        </div>
+    </div>
+</div> -->

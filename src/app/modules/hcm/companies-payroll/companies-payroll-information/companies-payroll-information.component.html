@@ -1,0 +1,17 @@
+<div class="p-grid">
+  <div class="p-col-12 p-md-8">
+    <div style="padding: .5em 0 1em 0">
+        <p-button (click)="activeIndex = 0" [styleClass]="activeIndex == 0? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Datos ss personales"></p-button>
+        <p-button (click)="activeIndex = 1" [styleClass]="activeIndex == 1? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Nómina"></p-button>
+        <p-button (click)="activeIndex = 2" [styleClass]="activeIndex == 2? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Información socioeconómica"></p-button>
+        <p-button (click)="activeIndex = 3" [styleClass]="activeIndex == 3? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Agrupaciones"></p-button>
+        <p-button (click)="activeIndex = 4" [styleClass]="activeIndex == 4? 'p-button-text p-ml-2 styleActive' : 'p-button-text p-ml-2'" label="Historial"></p-button>
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-mb-0 p-text-right" *ngIf="!(activeIndex > 1)">
+    <p-toggleButton [(ngModel)]="checked" onIcon="pi pi-times" offIcon="pi pi-pencil" styleClass="p-button-rounded p-button-info"></p-toggleButton>
+  </div>
+  <div class="p-col-12">
+    <app-companies-payroll-payrolldata [activeIndex]="activeIndex" [checked]="checked" (dataGroupingSave)="restricction($event)"></app-companies-payroll-payrolldata>
+  </div>
+</div>

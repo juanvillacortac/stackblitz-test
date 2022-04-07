@@ -1,0 +1,45 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'scroll'}">
+    <h5 class="p-m-0">Durabilidad</h5>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Unidad de temperatura <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="measurementUnitList"[class]="submitted && _durability.measurementUnitId <= 0 ? 'ng-dirty ng-invalid' : ''" (onChange)="ValidateMeasurementUnit()" (keyup.enter)="addDurability()" appendTo="body" [(ngModel)]="_durability.measurementUnitId" placeholder="Seleccione..." [filter]="true" emptyFilterMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && (_durability.measurementUnitId <= 0)">La unidad de medida es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Grados <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText id="name" [class]="submitted && _durability.temperature.toString() == '' ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="addDurability()" [disabled]="_durability.measurementUnitId == 0" [(ngModel)]="_durability.temperature" [pKeyFilter]="_validations.DecimalNegativeandPositive" maxlength="3" autofocus />
+                    <small class="p-invalid" *ngIf="submitted && (_durability.temperature.toString() == '')">La temperatura es requerida</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Ambiente <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="ambientList" [class]="submitted && _durability.idAmbient <= 0 ? 'ng-dirty ng-invalid' : ''" (keyup.enter)="addDurability()" appendTo="body" [(ngModel)]="_durability.idAmbient" placeholder="Seleccione..." emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _durability.idAmbient <= 0">El ambiente es requerido</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="name">Días de durabilidad <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input type="number" [class]="submitted && _durability.duration <= 0 ? 'ng-dirty ng-invalid' : ''" pInputText (keyup.enter)="addDurability()" id="duraction" [(ngModel)]="_durability.duration" oninput="this.value = this.value.length > 4 ? this.value.substr(0,4) : this.value" (paste)="_validations.noPaste($event)" maxlength="100" min="1" autofocus />
+                    <small class="p-invalid" *ngIf="submitted && _durability.duration <= 0">Los días de durabilidad deben ser mayores a 0.</small>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="statusList" (keyup.enter)="addDurability()" [disabled]="_durability.id <= 0" appendTo="body" [(ngModel)]="_durability.active" placeholder="Seleccione...">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="addDurability()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>

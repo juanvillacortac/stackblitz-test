@@ -1,0 +1,179 @@
+<div class="p-grid">
+  <div class="p-md-12 p-lg-12">
+    <div class="card p-shadow-4">
+      <p-card styleClass="p-shadow-0">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <div class="p-grid">
+              <div class="p-md-4">
+                <h4 style="margin-top: 20px;">Solicitud de mercancía</h4>
+              </div>
+              <div class="p-md-4">
+                <!-- <button pButton pRipple icon="pi pi-refresh" class="p-button-rounded p-button-info p-mr-2"
+                  pTooltip="Reasignar tarea" tooltipPosition="top"></button>
+                <button pButton pRipple icon="pi pi-play" *ngIf="!this.indInitTime"
+                  class="p-button-rounded p-button-success p-mr-2" (click)="PlayTask()" pTooltip="Iniciar tarea"
+                  tooltipPosition="top"></button>
+                <button pButton pRipple icon="pi pi-play" *ngIf="this.indInitResu"
+                  class="p-button-rounded p-button-success p-mr-2" (click)="ResumeTask()" pTooltip="Continuar tarea"
+                  tooltipPosition="top"></button>
+                <button pButton pRipple icon="pi pi-pause" *ngIf="this.indInitPause"
+                  class="p-button-rounded p-button-success p-mr-2" (click)="PauseTask()" pTooltip="Pausar tarea"
+                  tooltipPosition="top"></button>
+                <cd-timer #basicTimer format="hms" style="font-size: x-large;" [startTime]="120" [autoStart]="false">
+                </cd-timer> -->
+              </div>
+              <div class="p-md-4">
+                <div class="p-grid">
+                  <div class="p-col-12">
+                    <span style="font-weight: 500;">Estatus:</span> {{idMerchadiseRequest == 0 ? "No asignado" : merchandiseRequest.status.name}}
+                  </div>
+                  <div class="p-col-12">
+                    <span style="font-weight: 500;">Fecha creación:</span>
+                    {{idMerchadiseRequest == 0 ? "No asignado" : merchandiseRequest.createDate | date: "dd/MM/yyyy"}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+  <div [class]="merchandiseRequest.requestType.id == 1 || merchandiseRequest.status.id == statusRequest.CANCELED || merchandiseRequest.status.id == statusRequest.FINALIZED || merchandiseRequest.status.id == statusRequest.DISPATCHED || merchandiseRequest.status.id == statusRequest.PROCESSED || merchandiseRequest.status.id == statusRequest.EXPIRED ? 'p-md-12 p-lg-12' : 'p-md-9 p-lg-9'">
+    <div class="card p-shadow-4" style="margin-bottom: 15px;">
+      <p-card styleClass="p-shadow-0" header="Solicitud de mercancía">
+        <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Número de solicitud</label>
+            <input name="name" id="name" type="text" pInputText maxlength="300" disabled="true"
+              [(ngModel)]="merchandiseRequest.requestNumber">
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Sucursal demanda <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [disabled]="merchandiseRequest.requestType.id == 1" [options]="branchOfficeList" appendTo="body"
+              placeholder="Seleccione..." [filter]="true" [(ngModel)]="merchandiseRequest.demandBranch.id"
+              emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [disabled]="true">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedSave && (merchandiseRequest.demandBranch.id == undefined || merchandiseRequest.demandBranch.id <= 0)">La
+              sucursal demanda es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Sucursal despacha <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [disabled]="merchandiseRequest.requestType.id == 1" [options]="branchOfficeList" appendTo="body"
+              placeholder="Seleccione..." [filter]="true" [(ngModel)]="merchandiseRequest.dispatchBranch.id"
+              emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." (onChange)="changeDispatchBranch()">
+            </p-dropdown>
+            <small class="p-invalid"
+              *ngIf="submittedSave && (merchandiseRequest.dispatchBranch.id == undefined || merchandiseRequest.dispatchBranch.id <= 0)">La
+              sucursal despacha es requerida</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Tipo de solicitud <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [disabled]="true" [options]="requestTypeList" appendTo="body"
+              placeholder="Seleccione..." [filter]="true" [(ngModel)]="merchandiseRequest.requestType.id"
+              emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submittedSave && merchandiseRequest.requestType.id <= 0">El tipo de
+              solicitud es requerido</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label>Tipo de uso <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [disabled]="merchandiseRequest.requestType.id == 1" [options]="useTypeList"
+              placeholder="Seleccione..." appendTo="body" (onChange)="onChangeUseType()"
+              [(ngModel)]="merchandiseRequest.useType.id" [filter]="true" emptyFilterMessage="Sin resultados."
+              emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submittedSave && merchandiseRequest.useType.id <= 0">El tipo de uso es
+              requerido</small>
+          </div>
+          <div class="p-col-12 p-md-4 p-lg-4 p-fluid">
+            <label for="active"> Categoría <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-dropdown [disabled]="merchandiseRequest.requestType.id == 1" [options]="CategoriesList" [(ngModel)]="merchandiseRequest.category.id" [filter]="true"
+              placeholder="Categoría" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submittedSave && merchandiseRequest.category.id <= 0">La categoría es
+              requerida</small>
+          </div>
+
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <small [ngStyle]="{'color':'red'}">(*) Campos obligatorios</small>
+          </div>
+          <div class="p-col-12 p-md-12 p-lg-12" style="text-align: right;">
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED" pButton pRipple label="Guardar" icon="pi pi-save"
+              class="p-button-success p-mr-2" (click)="updateMerchadiseRequest()"></button>
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED" pButton pRipple label="Limpiar" icon="pi pi-ban"
+              class="p-button-secondary p-mr-2" (click)="cleanHeaderMerchandiseRequest()"></button>
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.EXPIRED" pButton pRipple label="Anular" icon="pi pi-times"
+              class="p-button-danger p-mr-2" (click)="cancelMerchandiseRequest()"></button>
+            <button *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED && merchandiseRequest.status.id != statusRequest.CANCELED" pButton pRipple label="Finalizar" icon="pi pi-check"
+              class="p-button-primary p-mr-2" (click)="finishMerchandiseRequest()"></button>
+            <button pButton pRipple label="Regresar" icon="pi pi-arrow-left" class="p-button-secondary p-mr-2"
+              (click)="back()"></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <div class="card p-shadow-4">
+      <p-card styleClass="p-shadow-0">
+        <p-table #dt [columns]="displayedColumns" [value]="listProducts" [rowHover]="true" [paginator]="true"
+          [rows]="10" [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+           [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                  <div class="p-d-flex p-jc-between p-ai-center">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </div>
+                </th>
+              </ng-container>
+              <th *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product let-columns="columns">
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word' }">
+                  <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="product[col.field]">
+                  </app-active-label>
+                  <ng-template #textCell>
+                    <span>{{col.template(product)}} </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+              <td *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED">
+                <button pButton pRipple icon="pi pi-pencil"
+                  class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(product)" pTooltip="Editar"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="onDelete(product)"
+                  pTooltip="Eliminar"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="footer" let-columns>
+            <ng-container *ngIf="listProducts==null || listProducts?.length == 0">
+              <tr>
+                <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="10">
+                  <span>No existen registros asociados</span>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft">
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+  <div class="p-md-3 p-lg-3" *ngIf="merchandiseRequest.requestType.id != 1 && merchandiseRequest.status.id != statusRequest.CANCELED && merchandiseRequest.status.id != statusRequest.FINALIZED && merchandiseRequest.status.id != statusRequest.DISPATCHED && merchandiseRequest.status.id != statusRequest.PROCESSED && merchandiseRequest.status.id != statusRequest.EXPIRED">
+    <app-merchandise-request-product [merchandiseRequest]="merchandiseRequest" [(listProducts)]="listProducts"
+      [(productMerchandiseRequest)]="productMerchandiseRequest"></app-merchandise-request-product>
+  </div>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text" acceptLabel="Si">
+</p-confirmDialog>

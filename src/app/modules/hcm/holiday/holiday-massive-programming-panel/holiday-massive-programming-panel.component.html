@@ -1,0 +1,196 @@
+ <!-- Star Overlay Panel Banlance -->
+ <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true" [style]="{width: '450px'}">
+    <div class="widget-team">
+        <h5 style="padding-left: 0rem;">Saldo de vacaciones</h5>
+        <h6>Trabajador: <span class="customer-badge status-new">{{showBalance.employeeFirstName}} {{showBalance.employeeLastName}}</span></h6>
+        <ul>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Según antigüedad para año en curso: <span>{{showBalance.balance.holidaysTotal}} día(s) correspondiente(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Según antigüedad hasta ciclo anterior: <span>{{showBalance.balance.accumulatedCyclePrevious}} día(s) correspondiente(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Programadas: <span>{{showBalance.balance.programmed}} día(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">No programadas: <span>{{showBalance.balance.noProgrammed}} día(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Vencidas: <span>{{showBalance.balance.expired}} día(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Disfrutadas: <span>{{showBalance.balance.enjoyed}} día(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="p-grid member">
+              <div class="p-col-7 team-box">
+                <div>
+                  <h6 class="team-member">Días adicionales: <span>{{showBalance.balance.additionalDays}} día(s)</span></h6>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+    </div>
+  </p-overlayPanel>
+  <!-- End Overlay Panel Banlance -->
+<p-dialog header="{{dialogTitle}}" (onHide)="outForm()" [(visible)]="showDialog" [blockScroll]="true" [style]="{width: '70vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <label for="dropdown">Tipo de vacación<span [ngStyle]="{'color':'red'}">* </span></label>
+                <p-dropdown name="holidayType" [(ngModel)]="holidayType"  [options]="holidaysTypeList" [filter]="true" emptyFilterMessage="Sin resultados" [dropdownIcon]="holidaysTypeList.length == 1 || employeeList.length > 0 ? null : 'pi pi-chevron-down'"
+                placeholder="Seleccionar..." emptyMessage="Sin resultados" [class]="holidayType == -1 && (submitted || employee) ? 'ng-invalid ng-dirty' : '' " [disabled]="holidaysTypeList.length == 1 || employeeList.length > 0">
+                </p-dropdown>
+                <small class="p-invalid" *ngIf="holidayType == -1 && (submitted || employee)">El tipo de vacación es requerido</small>                 
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">                   
+              <label for="" class="p-col-12 p-mb-0">Periodo<span [ngStyle]="{'color':'red'}">* </span></label>
+              <div class="p-col-12 p-lg-6 ">
+                  <!-- <p-inputNumber [(ngModel)]="startCycleHoliday" disabled="disabled">
+                  </p-inputNumber> -->
+                  <p-inputNumber [(ngModel)]="startCycleHoliday" [min]="1900" [max]="2200" [maxlength]="5" (ngModelChange)="cycleHolidayChange(startCycleHoliday)">
+                </p-inputNumber>
+              </div>
+              <div class="p-col-12 p-lg-6 " disabled="disabled">
+                  <p-inputNumber [(ngModel)]="endCycleHoliday" disabled="disabled" >
+                  </p-inputNumber>
+              </div>                 
+          </div>
+
+          <div class="p-field p-grid p-col-12"> 
+              <div class="p-col-12 p-lg-6 inter-grid">
+                  <label  for="dateformat">Fecha de inicio<span [ngStyle]="{'color':'red'}">*</span></label>
+                  <p-calendar #formStarDate dateFormat="dd-mm-yy" [(ngModel)]="startDate" placeholder="Fecha de Inicio" [minDate]="tomorrow"
+                  (onSelect)="setEndDay(startDate)" yearRange="1900:2200" dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true"  [monthNavigator]="true" appendTo="body"
+                  [readonlyInput]="true" showButtonBar="true" [yearNavigator]="true" [baseZIndex]="10000000000" [class]="startDate == null && (submitted || employee ) ? 'ng-invalid ng-dirty' : '' "></p-calendar>
+                  <small class="p-invalid" *ngIf="startDate == null && (submitted || employee )">La fecha de inicio es requerida</small>                 
+              </div>
+              <div class="p-col-12 p-lg-6">
+                  <label for="dateformat">Fecha fin<span [ngStyle]="{'color':'red'}">* </span></label>
+                  <p-calendar #formDateEnd [(ngModel)]="endDate" placeholder="Fecha Final" appendTo="body" [baseZIndex]="10000000000" yearRange="1970:2030" 
+                  dateFormat="dd/mm/yy" readonlyInput="true" [showIcon]="true" [monthNavigator]="true"[readonlyInput]="true" showButtonBar="true" 
+                  disabled="disabled" [yearNavigator]="true" [class]="endDate == null && submitted ? 'ng-invalid ng-dirty' : '' "></p-calendar>
+                  <small class="p-invalid" *ngIf="endDate == null && submitted">La fecha fin es requerida</small>
+              </div>
+          </div>
+          
+          <div class="p-field p-grid p-col-12">
+                <div class="p-col-12 p-lg-6 inter-grid">
+                    <label for="dateformat">Tipo de nómina<span [ngStyle]="{'color':'red'}">* </span></label>
+                    <p-dropdown [(ngModel)]="selectPayrollType" name="payrollType" [options]="payrollTypelist" (onChange)="loadPayDates()"  
+                      placeholder="Seleccionar..." emptyMessage="Sin resultados" [class]="submitted && selectPayrollType == -1 ? 'ng-invalid ng-dirty' : '' ">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && selectPayrollType == -1">El tipo de nómina es requerido</small>
+                </div>
+                <div class="p-col-12 p-lg-6">
+                    <label for="dateformat">Fecha de pago<span [ngStyle]="{'color':'red'}">* </span></label>
+                    <p-dropdown name="payrollType" [options]="payDateList"  placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+                      [(ngModel)]="selectPayDate" [class]="submitted && selectPayDate == -1 ? 'ng-invalid ng-dirty' : '' ">
+                    </p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && selectPayDate == -1">La fecha pago es requerida</small>
+                </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <label for="dropdown">Estatus<span [ngStyle]="{'color':'red'}">* </span></label>
+                <p-dropdown name="status" [(ngModel)]="status"  [options]="statuslist" [filter]="true" emptyFilterMessage="Sin resultados" 
+                placeholder="Seleccionar..." emptyMessage="Sin resultados" [disabled]="true" [dropdownIcon]="false">
+                </p-dropdown>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <p-table #dt [rowHover]="true" [value]="employeeList" [paginator]="true" [rows]="10" 
+                  [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" 
+                  [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo" *ngIf="employeeList && employeeList.length > 0">
+                  <ng-template pTemplate="header" let-columns>
+                      <tr>
+                          <th class="p-text-center" pSortableColumn="cycleHolidays">Codigo <p-sortIcon field="cycleHolidays"></p-sortIcon></th>
+                          <th class="p-text-center" pSortableColumn="employeeFirstName">Nombre y apellido<p-sortIcon field="employeeFirstName"></p-sortIcon></th>
+                          <th class="p-text-center" pSortableColumn="endDate">Fecha fin<p-sortIcon field="endDate"></p-sortIcon></th>
+                          <th style="width: 8em;"></th>
+                          <th style="width: 8em;"></th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-columns="columns" let-index="rowIndex" let-employeeList >
+                    <tr *ngIf="employeeList != []">
+                        <td class="p-text-center"><p>{{employeeList.employmentCode}}</p></td>
+                        <td class="p-text-center"><p>{{employeeList.employeeFirstName}} {{employeeList.employeeLastName}}</p></td>
+                        <td class="p-text-center"><p>{{employeeList.endDate| date: "dd/MM/yyyy"}}</p></td>
+                        <!-- <td class="p-text-center"><p>{{employeeList.payDate| date: "dd/MM/yyyy"}}</p></td>
+                        <td class="p-text-center"><p>{{employeeList.holidayType}}</p></td>
+                        <td class="p-text-center"><p>{{employeeList.status}}</p></td> -->
+                        <td style="width: 8em;" class="p-text-center">
+                            <button pButton pRipple type="button" icon="pi pi-eye"(click)="loadBalance(index);op.toggle($event);" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Ver saldos" tooltipPosition="top" placeholder="Top"></button>
+                        </td>
+                        <td style="width: 8em;" class="p-text-center">
+                          <button pButton pRipple type="button" icon="pi pi-trash" (click)="onDeleted(employeeList);" class="p-button-rounded p-button-danger p-mr-2" 
+                                  pTooltip="Eliminar" tooltipPosition="top" placeholder="Top"></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="paginatorleft"></ng-template>
+                  <ng-template pTemplate="paginatorright"></ng-template>
+              </p-table>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                  <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                  <button pButton pRipple (click)="showModalEmployeeList()" icon="pi pi-external-link" label="Agregar trabajadores"></button>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button id="Agregar" pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </p-dialog>
+
+  <app-holiday-massive-programming-filter *ngIf="displayModal" [showPanel]="displayModal" [startDate]="startDate" [idCompany]="record.idCompany" [holidayEmployeeList]="employeeList" [idHolidayType]="holidayType" 
+  [idHolidayProgramation]="holidayProgramationType" [cycleHoliday]="record.cycleHolidays" [programationHolidayId]="record.idHolidayProgramation" (backUnChange)="onHideModal($event)" (returnList)="uploadListEmployee($event)"></app-holiday-massive-programming-filter>
+

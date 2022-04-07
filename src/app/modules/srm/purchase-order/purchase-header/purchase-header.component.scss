@@ -1,0 +1,36 @@
+:host ::ng-deep { 
+    .panelheader{
+        width: 100%; 
+        text-align: center; 
+        font-weight: bold;
+    }
+
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+    .button-radius button{
+        border-radius: 0px 4px 4px 0px;
+    }
+
+    .margin-top-generic
+    {
+        margin-top: -4rem;
+    }
+
+    // .max-height{
+    //     height: 100%;
+    // }
+
+    .fullheightcard .p-card
+    {
+        height: 100%!important;
+    }
+
+
+    @media only screen and (max-width: 540px) {
+        .margin-top-generic
+        {
+            margin-top: 0rem;
+        }
+     }
+}

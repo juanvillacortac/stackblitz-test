@@ -1,0 +1,91 @@
+
+<h2 class="p-m-0">Sala</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid"  [formGroup]="processingRoomForm">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input id="name" pInputText #name sentenceType maxlength="30" (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        [ngClass]="{'p-invalid':(processingRoomForm.controls.name.invalid && (processingRoomForm.controls.name.dirty || processingRoomForm.controls.name.touched || submitted))}" formControlName="name" required >  
+                        <div *ngIf="processingRoomForm.controls.name.invalid && (processingRoomForm.controls.name.dirty || processingRoomForm.controls.name.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="processingRoomForm.controls.name.errors?.required">
+                                El nombre es requerido.
+                            </div>
+                        </div>                      
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input">Descripción </label>
+                    <textarea rows="5" cols="30" maxlength="250" pInputTextarea formControlName="description"></textarea>
+                </div>     
+            
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Tipos de productos procesados <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="productType.value" [showClear]="true" optionLabel="name"
+                         [autoDisplayFirst]="false" formControlName="idProductType" 
+                         [class]="{'ng-dirty':(processingRoomForm.controls.idProductType.invalid && (processingRoomForm.controls.idProductType.dirty || processingRoomForm.controls.idProductType.touched || submitted))}"  required >                      
+                        </p-dropdown>
+                        <div *ngIf="processingRoomForm.controls.idProductType.invalid && (processingRoomForm.controls.idProductType.dirty || processingRoomForm.controls.idProductType.touched || submitted)"
+                          class="p-invalid">
+                            <div *ngIf="processingRoomForm.controls.idProductType.errors?.required">
+                                El tipo de producto procesado es requerido.
+                            </div>
+                        </div>     
+                </div>   
+
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Costo fabril </label>
+                    <p-inputNumber #factoryCost mode="decimal" maxlength="10"   [showButtons]="true" 
+                    suffix=" %" [step]="0.1" [min]="0" [max]="100" [minFractionDigits]="2" [maxFractionDigits]="2" 
+                    (keypress)="_validations.keyPressOnlyLetters($event);" 
+                    (paste)="_validations.noPaste($event)"                
+                    formControlName="factoryCost"></p-inputNumber>     
+                  </div>
+                  
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Mano de obra </label>
+                    <p-inputNumber #laborCost mode="decimal" maxlength="10"   [showButtons]="true" 
+                    suffix=" %" [step]="0.1" [min]="0" [max]="100" [minFractionDigits]="2" [maxFractionDigits]="2" 
+                    (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                    formControlName="laborCost"></p-inputNumber>     
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">                
+                    <label >Sala de derivados </label>
+                </div>
+                <div class="p-field p-col-6 p-md-6 p-sm-6">                
+                    <p-inputSwitch (onChange)="handleChange($event)"  formControlName="isDerived"></p-inputSwitch>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Tipos de animales procesados <span *ngIf="isDisabled" [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="animalType.value" [disabled]="!isDisabled" [showClear]="true" optionLabel="name" [required]="isDisabled"
+                        [class]="{'ng-dirty':validateAnimalType}"                          
+                        [autoDisplayFirst]="false" formControlName="idAnimalType">
+                        </p-dropdown>
+                        <div *ngIf="validateAnimalType"
+                        class="p-invalid">
+                          <div *ngIf="processingRoomForm.controls.idAnimalType.value === null && isDisabled">
+                            El tipo de animal procesado es requerido.
+                          </div>
+                      </div>     
+                </div>   
+
+            </div>
+
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span class="p-invalid">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2"(click)="onSave()"label="Guardar"></button>
+            </div> 
+        </div>
+    </div>
+    </div>
+    <p-toast position="top-right" key="tax"></p-toast>
+</div>
+

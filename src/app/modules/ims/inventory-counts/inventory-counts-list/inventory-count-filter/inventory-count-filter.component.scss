@@ -1,0 +1,11 @@
+.responsible {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+:host ::ng-deep {
+    .p-inputgroup-addon:first-child, .p-inputgroup button:first-child, .p-inputgroup input:first-child {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+  }
+}

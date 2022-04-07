@@ -1,0 +1,101 @@
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="card">
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText [(ngModel)]="bank.name" #name maxlength="150" lettersOnly required />
+                        <small class="p-invalid" *ngIf="submitted && (!bank.name || !bank.name.trim())">El campo nombre es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="input">Tipo de banco <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [(ngModel)]="selectedBankType" [options]="bankTypes.value" optionLabel="name" placeholder="Seleccionar tipo de banco" [showClear]="true"  appendTo="body" [autoDisplayFirst]="false">
+                        </p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && (!selectedBankType)">El campo tipo de banco es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="input">Código de banco <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText [(ngModel)]="bank.accountCode" #accountCode maxlength="5" noneSpecialCharacters required />
+                        <small class="p-invalid" *ngIf="submitted && (!bank.accountCode || !bank.accountCode.trim())">El campo código de banco es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="dropdown">País <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="selectedCountry" placeholder="Seleccionar país" [options]="countries.value"  optionLabel="name" [showClear]="true">
+                        </p-dropdown>
+                        <small class="p-invalid" *ngIf="submitted && (!selectedCountry)">El campo país es requerido</small>
+                    </div>
+
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="input">Código SWIFT <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText [(ngModel)]="bank.swiftCode" #sudebanCode minlength="8" maxlength="11" noneSpecialCharacters required />
+                        <small class="p-invalid" *ngIf="swiftCodeIsValid()">El campo código de swift debe tener 8 dígitos como mínimo</small>
+                        <small class="p-invalid" *ngIf="submitted && (!bank.swiftCode || !bank.swiftCode.trim())">El campo código de swift es requerido</small>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12 p-sm-12 img-container">
+                        <label>Logo <span [ngStyle]="{'color':'red'}">*</span> </label>
+                        <app-image-picker (selectImage)="selectImage($event)" [(imageSrc)] = "bank.binaryImage"></app-image-picker>
+                        <small class="p-invalid" *ngIf="submitted && (!bank.binaryImage || !bank.binaryImage.trim())">El campo logo es requerido</small>
+                    </div>
+
+                    <h2 class="p-m-0">Financiero</h2>
+                    <div class="p-grid p-align-center p-mt-4 p-p-3 vertical-container">
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+
+                            <label >Número de cuenta contable: <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <div class="p-inputgroup">
+                                <input type="text" [value]="formatCode(bank.accountingAccountCode||'')"  pInputText  placeholder="Cuenta" disabled>
+                                <p-button icon="pi pi-cog" (click)="showModalDialog()"></p-button>
+                            </div>
+                            <!-- <small class="p-invalid"
+                                *ngIf="submitted && (!bank.associatedAccount[0].accountingAccountCode|| !bank.associatedAccount[0].accountingAccountCode.trim())">El
+                                número de cuenta es requerido</small> -->
+                        </div>
+
+
+                        <div class="p-field p-col-12 p-md-6 p-sm-6">
+                            <label for="name">Nombre de cuenta contable: <span [ngStyle]="{'color':'red'}">*</span></label>
+                            <input  [value]="bank.accountingAccountName ||''" pInputText  type="text" placeholder="Nombre de la cuenta"
+
+                               disabled>
+
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12 p-sm-12">
+                        <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown appendTo="body" [autoDisplayFirst]="false" [(ngModel)]="bankActive" [options]="status"  placeholder="Seleccionar estatus" [disabled]="!isEdit" [showClear]="false">
+                        </p-dropdown>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton type="button" icon="pi pi-save" pRipple   class="p-button-info p-mr-2" [disabled]="loading" (click)="onSave()" label="Guardar"></button>
+                </div>
+            </div>
+        <p-toast position="top-right" key="bank"></p-toast>
+     </div>
+
+</div>
+
+
+<app-select-accounting-account-modal [(displayModal)]="displayModal" [viewMode]="viewMode"
+[(NombreCuenta)]="bank.accountingAccountName" [(Ncuenta)]="bank.accountingAccountCode" [(idCuentaContable)]="bank.accountingAccountId"
+    [indAuxiliar]="true" [filtrarCuenta]="false" [(indClasificacionArticulo)]="displayModal">
+</app-select-accounting-account-modal>
+
+

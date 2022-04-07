@@ -1,0 +1,45 @@
+<div class="card ">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4 p-mb-3 p-mb-lg-0">
+            <h4 *ngIf="!showFilters" id="filterTitle">Ajustes por cargo</h4>
+        </div>
+        <div [class]="showFilters ? 'p-mb-3' : ''">
+            <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_JOB_POSITION_ADJUSTMENT_HCM_PERMISSION_ID) && salaryTypesDropdown.length > 0" icon="pi pi-plus" class="p-button-success" pTooltip="Crear nuevo" tooltipPosition="top" (click)="createNew()" id="add"></button>
+            <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" 
+            (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+        </div>
+        
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid p-pl-0 p-pr-0" *ngIf="showFilters">
+        <div class="p-field p-col-12 p-md-6 p-lg-4">
+            <label for="dropdown">Nivel</label>
+            <p-dropdown  name="payrollType" [(ngModel)]="searchLevel" [options]="levelsDropdown" placeholder="Seleccionar..." emptyMessage="Sin resultados" 
+            (onChange)="onLoadJobPosition(searchLevel)" [class]="submitted && searchLevel == -1 ? 'ng-dirty ng-invalid' : ''" [filter]="true">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && searchLevel == -1">Debe completar el campo nivel</small>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-lg-4">
+            <label for="dropdown">Cargo</label>
+            <p-dropdown  name="jobPosition" [(ngModel)]="salaryAdjustmentJobPositionFilter.idJobPosition" [options]="jobpositionsDropdown" [filter]="true"
+            placeholder="Seleccionar..." emptyMessage="Sin resultados" [class]="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ? 'ng-dirty ng-invalid' : ''">
+            </p-dropdown>
+            <small class="p-invalid" *ngIf="submitted && salaryAdjustmentJobPositionFilter.idJobPosition == -1 ">Debe completar el campo cargo</small>
+        </div>
+        <div class="p-field p-col-12 p-md-6 p-lg-4">
+            <label for="float-input">Moneda</label>
+            <p-dropdown [(ngModel)]="coinOption" [options]="coinDropdown" id="TypesVarying"
+                placeholder="Seleccione..." emptyFilterMessage="Sin resultados"
+                emptyMessage="Sin resultados" (keyup.enter)="searchSalaryAdjustment()">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="p-col-12" *ngIf="showFilters" align="right">
+        <button pButton pRipple label="Buscar" (click)="searchSalaryAdjustment()" icon="pi pi-search" class="p-button-info button-search"></button>
+        <button pButton pRipple label="Limpiar" (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-ml-2"></button>
+    </div>
+</div>
+
+<app-salary-adjustment-table *ngIf="showTable" [salaryAdjustmentList]="listTable" [salaryAdjustmentType]="2" [companyId]="idCompany" [access]="access" (recordSave)="sendPanel($event)" (saveAdjustmentList)="saveListAdjustment($event)"></app-salary-adjustment-table>
+<app-salary-adjustment-job-position-panel *ngIf="showSidebar" [title]="panelTitle" [record]="newAdjustment" [showDialog]="showSidebar" [salaryTypesDropdown]="salaryTypesDropdown" [idJobPosition]="jobPositionSalary.idJobPosition" [companyId]="idCompany" (backUnChanges)="resetValues($event)" (recordSave)="saveAdjustment($event)">
+</app-salary-adjustment-job-position-panel>

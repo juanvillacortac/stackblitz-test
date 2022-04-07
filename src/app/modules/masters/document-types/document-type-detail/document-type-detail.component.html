@@ -1,0 +1,101 @@
+
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid"  [formGroup]="documentTypeForm">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText #name maxlength="30" sentenceType (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        [ngClass]="{'p-invalid':(documentTypeForm.controls.name.invalid && (documentTypeForm.controls.name.dirty || documentTypeForm.controls.name.touched || submitted))}"
+                        formControlName="name" required />                        
+                        <div *ngIf="documentTypeForm.controls.name.invalid && (documentTypeForm.controls.name.dirty || documentTypeForm.controls.name.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.name.errors?.required">
+                                El nombre es requerido.
+                            </div>
+                        </div>     
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="input">Identificador <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <input pInputText #name maxlength="1" onlyUpperCase
+                        (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" 
+                        [ngClass]="{'p-invalid':(documentTypeForm.controls.identifier.invalid && (documentTypeForm.controls.identifier.dirty || documentTypeForm.controls.identifier.touched || submitted))}"
+                        formControlName="identifier" required />
+
+                        <div *ngIf="documentTypeForm.controls.identifier.invalid && (documentTypeForm.controls.identifier.dirty || documentTypeForm.controls.identifier.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.identifier.errors?.required">
+                                El identificador es requerido.
+                            </div>
+                        </div>      
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Alfanumérico <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="alphanumeric" appendTo="body" [autoDisplayFirst]="false"  formControlName="indAlphanumeric"
+                        [class]="{'ng-dirty':(documentTypeForm.controls.indAlphanumeric.invalid && (documentTypeForm.controls.indAlphanumeric.dirty || documentTypeForm.controls.indAlphanumeric.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="documentTypeForm.controls.indAlphanumeric.invalid && (documentTypeForm.controls.indAlphanumeric.dirty || documentTypeForm.controls.indAlphanumeric.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.indAlphanumeric.errors?.required">
+                                El alfanumérico es requerido.
+                            </div>
+                        </div>  
+                </div>    
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="status" appendTo="body" [autoDisplayFirst]="false" [disabled]="!isEdit" formControlName="statusValue" 
+                        [class]="{'ng-dirty':(documentTypeForm.controls.statusValue.invalid && (documentTypeForm.controls.statusValue.dirty || documentTypeForm.controls.statusValue.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="documentTypeForm.controls.statusValue.invalid && (documentTypeForm.controls.statusValue.dirty || documentTypeForm.controls.statusValue.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.statusValue.errors?.required">
+                                El estatus es requerido.
+                            </div>
+                        </div>  
+                </div>       
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Tipo de entidad <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="entityTypes.value" appendTo="body" [showClear]="true" optionLabel="name"
+                         [autoDisplayFirst]="false" formControlName="selectedEntityType" 
+                         [class]="{'ng-dirty':(documentTypeForm.controls.selectedEntityType.invalid && (documentTypeForm.controls.selectedEntityType.dirty || documentTypeForm.controls.selectedEntityType.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="documentTypeForm.controls.selectedEntityType.invalid && (documentTypeForm.controls.selectedEntityType.dirty || documentTypeForm.controls.selectedEntityType.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.selectedEntityType.errors?.required">
+                                El tipo de entidad es requerido.
+                            </div>
+                        </div>  
+                </div>  
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">País <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="countries.value" appendTo="body" [showClear]="true" optionLabel="name"
+                         [autoDisplayFirst]="false" formControlName="selectedCountry"
+                         [class]="{'ng-dirty':(documentTypeForm.controls.selectedCountry.invalid && (documentTypeForm.controls.selectedCountry.dirty || documentTypeForm.controls.selectedCountry.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="documentTypeForm.controls.selectedCountry.invalid && (documentTypeForm.controls.selectedCountry.dirty || documentTypeForm.controls.selectedCountry.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="documentTypeForm.controls.selectedCountry.errors?.required">
+                                El país es requerido.
+                            </div>
+                        </div>  
+                </div>   
+
+            </div>
+
+        <div class="p-fluid p-grid p-formgrid">
+            <div class="p-field p-col-12 p-md-12 p-sm-12">
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+            </div> 
+            <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" (click)="onSave()"label="Guardar"></button>
+            </div> 
+        </div>
+    </div>
+    </div>
+    <p-toast position="top-right" key="document-type"></p-toast>
+</div>

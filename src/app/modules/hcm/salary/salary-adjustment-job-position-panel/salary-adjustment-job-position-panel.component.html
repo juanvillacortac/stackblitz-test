@@ -1,0 +1,161 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [baseZIndex]="1000">
+    <div class="p-grid" style="height: 30px;">
+      <div id="header" class="p-col-11" style="margin-top: 5px;">
+          <h5>{{title}}</h5>
+      </div>
+      <div class="p-col-1">
+          <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="outForm()"></button>
+      </div>
+    </div>    
+      <hr/>
+      <div class="p-col-12">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-grid p-col-12" *ngIf="record.salary.idSalaryByLaborRelationship == -1">
+            <div class="p-col-12">
+              <label class="title" for="">Tipo de sueldo</label>
+              <p-dropdown [(ngModel)]="record.salary.idSalaryType" [options]="salaryTypesDropdown" id="TypesVarying" (onChange)="loadSalaryRateExchange()" 
+                  placeholder="Seleccione..." emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados" class="typeSalary p-component p-element p-p-0"
+                  [class]="submitted && record.salary.idSalaryType == -1 ? 'ng-dirty ng-invalid' : ''">
+              </p-dropdown>
+              <small class="p-invalid" *ngIf="submitted && record.salary.idSalaryType == -1">El tipo de sueldo es requerido</small>
+            </div>
+          </div>  
+          <div class="p-col-12">
+              <h6 [class]="min == 0 ? 'p-mb-0':''">Banda salarial según el cargo</h6>
+          </div>
+          <div class="p-field p-grid p-col-12" *ngIf="min > 0">
+              <div class="p-col-12 p-lg-6 inside">
+                  <label for="active">Mínimo</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                      <input type="text" [(ngModel)]="min" pInputText maxlength="70" [disabled]="true"/> 
+                  </div>
+              </div>
+              <div class="p-col-12 p-lg-6">
+                  <label for="active">Máximo</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                      <input type="text" [(ngModel)]="max" pInputText maxlength="70" [disabled]="true"/> 
+                  </div>
+              </div>
+          </div>
+          <div style="width: 100%;" *ngIf="min == 0">
+              <p-messages severity="info">
+                  <ng-template pTemplate>
+                      <div class="p-ml-2">No existen bandas salariales para este tipo de sueldo.</div>
+                  </ng-template>
+              </p-messages>
+          </div>
+
+          <div class="p-field p-grid p-col-12 p-mb-0">
+            <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check" *ngIf="min > 0">
+              <p-radioButton name="min" value="val1" [(ngModel)]="opc" (onClick)="changeAmount()" [disabled]="opc == ''"></p-radioButton>
+              <label for="binary">Banda mínima</label>
+            </div>
+            <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check" *ngIf="min > 0">
+              <p-radioButton name="max" value="val2" [(ngModel)]="opc" (onClick)="changeAmount()" [disabled]="opc == ''"></p-radioButton>
+              <label for="binary">Banda máxima</label>
+            </div>
+            <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check">
+              <p-radioButton name="amount" value="val3" [(ngModel)]="opc" (onClick)="changeAmount()" [disabled]="opc == ''"></p-radioButton>
+              <label for="binary">Personalizada</label>
+            </div>
+            <div class="p-col-12 p-lg-6 p-field-radiobutton inter-check">
+              <p-radioButton name="percentage" value="val4" [(ngModel)]="opc" (onClick)="changeAmount()" [disabled]="lockedPercentage || opc == ''"></p-radioButton>
+              <label for="binary">Porcentaje</label>
+            </div>
+          </div>
+          
+            
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6 inside">
+              <label for="active">Monto <span [ngStyle]="{'color':'red'}" *ngIf="!selectedAmount && opc != ''">*</span></label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">{{symbolCoin1}}</span>
+                <p-inputNumber id="monto" mode="decimal" [(ngModel)]="amount" maxlength="19" (ngModelChange)="calculateValues(3)" [min]="0"
+                    [minFractionDigits]="2" [maxFractionDigits]="2" life="500" [disabled]="selectedAmount || opc == ''" [class]="submitted && opc != '' && !selectedAmount && (amount <= 0 || amount == undefined) ? 'ng-dirty ng-invalid' : ''">
+                </p-inputNumber>
+              </div>
+              <small class="p-invalid" *ngIf="submitted && opc != '' && !selectedAmount && (amount <= 0 || amount == undefined)"> El monto es requerido</small>
+            </div>
+            <div class="p-col-12 p-lg-6">
+              <label for="active">Porcentaje <span [ngStyle]="{'color':'red'}" *ngIf="!selectedPercentage && opc != ''">*</span></label>
+              <div class="p-inputgroup">
+                <p-inputNumber id="porcentaje" mode="decimal" [(ngModel)]="percentage" maxlength="19" (ngModelChange)="calculateValues(4)"
+                  [minFractionDigits]="0" [maxFractionDigits]="2" life="500" [disabled]="selectedPercentage || opc == ''" [class]="submitted && opc != '' && !selectedPercentage && (percentage <= 0 || percentage == undefined) ? 'ng-dirty ng-invalid' : ''">
+                </p-inputNumber>
+                <span class="p-inputgroup-addon">%</span>
+              </div>
+              <small class="p-invalid" *ngIf="submitted && opc != '' && !selectedPercentage && (percentage <= 0 || percentage == undefined)"> El porcentaje es requerido</small>
+            </div>
+          </div>
+
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12 p-lg-6 inside">
+              <label for="active">Factor</label>
+                <div class="p-col-12 p-pl-0 p-pr-0">
+                    <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                      <p-inputNumber id="factor" mode="decimal" [(ngModel)]="rateExchange" maxlength="19" 
+                           [disabled]="true" [minFractionDigits]="2" [maxFractionDigits]="2" life="500">
+                      </p-inputNumber>
+                      <span class="p-inputgroup-addon">x1{{symbolCoin1}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-6">
+                <label for="active">Conversión</label>
+                <div class="p-col-12 p-pl-0 p-pr-0">
+                  <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">{{symbolCoin2}}</span>
+                      <p-inputNumber id="conversion" mode="decimal" [(ngModel)]="conversion" maxlength="19" 
+                          [minFractionDigits]="0" [maxFractionDigits]="2" life="500" [disabled]="true">
+                      </p-inputNumber>
+                  </div>
+              </div>
+            </div>
+          </div>
+      
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                  <label for="active">Fecha de factor</label>
+                  <div class="p-col-12 p-pl-0 p-pr-0">
+                    <p-calendar [(ngModel)]="factorDate" dateFormat="dd/mm/yy" [showTime]="true" [showSeconds]="true" [hourFormat]="12" 
+                    [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" [disabled]="true"
+                    [class]="submitted && opc != '' && effectiveDateText != '' ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                    </p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && opc != '' && effectiveDateText != ''">{{effectiveDateText}}</small>
+                  </div>
+              </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+                <label for="active">Fecha de vigencia<span *ngIf="opc != ''" [ngStyle]="{'color':'red'}">*</span></label>
+                <div class="p-col-12 p-pl-0 p-pr-0">
+                  <p-calendar [(ngModel)]="effectiveDate" dateFormat="dd/mm/yy" yearRange="1900:2200" 
+                  [showIcon]="true" [monthNavigator]="true" [readonlyInput]="true" [yearNavigator]="true" [minDate]="today" [disabled]="opc == ''"
+                  [class]="submitted && opc != '' && effectiveDate == null ? 'ng-dirty ng-invalid' : ''" [baseZIndex]="1000000000" (keyup.enter)="submit()">
+                  </p-calendar>
+                  <small class="p-invalid" *ngIf="submitted && opc != '' && effectiveDate == null ">La fecha de vigencia es requerida</small>
+                </div>
+            </div>
+          </div>
+          <div class="p-field p-grid p-col-12">
+              <div class="p-col-12">
+                <label for="active">Motivo<span *ngIf="opc != ''" [ngStyle]="{'color':'red'}">*</span></label>
+                <p-dropdown [options]="motives" [(ngModel)]="selectMotive" placeholder="Seleccione..." optionLabel="label" [disabled]="opc == ''"
+                  [class]="submitted && opc != '' && selectMotive.value == -1 ? 'ng-dirty ng-invalid' : ''" (onChange)="changeMotive()" (keyup.enter)="submit()"></p-dropdown>
+                <small class="p-invalid" *ngIf="submitted && opc != '' && selectMotive.value == -1"> El motivo es requerido</small>
+              </div>
+          </div>
+
+          <div class="p-field p-col-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-grid p-col-12">
+            <div class="p-col-12">
+              <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-plus-circle"class="p-button-info p-m-0"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </p-sidebar>
+

@@ -1,0 +1,111 @@
+<p-dialog header="Lote y fecha de vencimeinto" [(visible)]="showModal" [modal]="true" [style]="{width: '60vw'}" >    
+        <div class="p-grid p-shadow-6" style="box-shadow: none; border-radius: 4px; border:0.5px solid rgba(204,204,204,0.5)">
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <!-- <p-avatar image="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" styleClass="p-mr-2" size="xlarge" shape="circle"></p-avatar> -->
+                <img [src]="'https://www.allianceplast.com/wp-content/uploads/no-image.png'" alt="no image" height="85%" width="85%" style="border-radius: 50%;" class="p-shadow-4 p-button-rounded" />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4 p-offset-1">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        Barra:
+                        <!-- {{_product.gtin}} -->
+                    </div>
+                    <div class="p-col-12 p-mt-1">
+                        Nombre:
+                         <!-- {{_product.product}} -->
+                    </div>
+                    <div class="p-col-12 p-mt-1">
+                         Área: 
+                         <!-- {{_product.area}} -->
+                    </div>      
+                                  
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4 p-offset-1">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        Marca:
+                         <!-- {{_product.brand}} -->
+                    </div>
+                    <div class="p-col-12 p-mt-1">
+                        Proveedor:
+                         <!-- {{_product.supplier}} -->
+                    </div>
+                    <div class="p-col-12 p-mt-1">
+                        Categoría:
+                         <!-- {{_product.category}} -->
+                   </div>
+                    <!-- <div class="p-col-12">
+                        ABC: {{_product.abc}}
+                    </div> -->
+                </div>
+            </div>            
+        </div>
+    <br/>
+    <div class="p-grid p-shadow-6" style="box-shadow: none; border-radius: 4px; border:0.5px solid rgba(204,204,204,0.5)">
+        <div class="p-grid" style="margin-top: 15px; margin-left: 10px;">
+            <div class="p-col-12 p-sm-12 p-md-6 p-lg-3 p-xl-3">
+                <label>Fecha de vencimiento</label>
+                <p-calendar dateFormat="dd/mm/yy" [showIcon]="true" [disabled]="true" ></p-calendar> 
+            </div>
+            <div class="p-col-12 p-sm-12 p-md-6 p-lg-3 p-xl-3">
+                <label>Número de lote</label>
+                <p-inputNumber min="0" mode="decimal" [minFractionDigits]="3" maxlength="22" [disabled]="true"></p-inputNumber>
+            </div>            
+            <div class="p-col-12 p-sm-12 p-md-6 p-lg-3 p-xl-3">
+                <label>Cantidad</label>
+                <p-inputNumber min="0" mode="decimal" [minFractionDigits]="3" maxlength="22"></p-inputNumber>
+            </div>
+            <div class="p-col-12 p-sm-12 p-md-6 p-lg-3 p-xl-3" style="padding-top: 25px;">
+                <p-button label="Aceptar" icon="pi pi-check"></p-button>
+            </div>   
+            <div class="p-grid">
+                <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12" style="padding-top: 25px;">
+                    <p-table #dt [columns]="displayedColumns" [rowHover]="true" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </ng-container>
+                                <th>                            
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-lotExpirationDate let-columns="columns">
+                            <tr>
+                                <ng-container *ngFor="let col of columns">
+                                    <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}">                                
+                                        <ng-template>
+                                            <span>{{col.template(lotExpirationDate)}}</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <td>                        
+                                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Editar"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                            <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length">No existen resultados</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="paginatorleft">
+                        </ng-template>
+                        <ng-template pTemplate="paginatorright">
+                        </ng-template>
+                    </p-table>
+                </div>                 
+            </div>          
+        </div>    
+              
+    </div>
+     
+        <ng-template pTemplate="footer">   
+            <p-button label="Save" icon="pi pi-check"></p-button>
+            <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button>   
+        </ng-template>
+</p-dialog>

@@ -1,0 +1,12 @@
+<p-dialog header="Instrucción" [(visible)]="displayModal" (onHide)="outForm()" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="p-col-12">
+        <app-companies-concept-payroll-instruction [editInstruction]="policiesEdit" [variables]="politicCalcDropdown" (returnJson)="newInstruction($event)"></app-companies-concept-payroll-instruction>
+    </div>
+    <div class="p-col-12 p-mt-4 p-mb-4">
+        <h5>Visualizar</h5>
+        <p>{{policiesEdit.string}}</p>
+    </div>
+    <div class="p-col-12">
+        <button id="Agregar" pButton pRipple label="Agregar" (click)="submit()" icon="pi pi-plus-circle" class="p-button-info"></button>
+    </div>
+</p-dialog>

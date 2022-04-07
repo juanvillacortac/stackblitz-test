@@ -1,0 +1,71 @@
+<div class="card p-m-0 p-pb-0">
+    <div class="p-grid p-jc-between">
+            <div class="p-col-6">
+                <div class="box">
+                    <h5 for="dropdown">{{ 'mrp.cutting_order.fields.animal_type' |  translate }} </h5>
+                    <div class="p-d-flex">
+                        <p-dropdown class="p-mr-2 p-dropdown-wide" emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate }}" [autoDisplayFirst]="true"  [options]="groupedRooms" [(ngModel)]="selectedItem" (onChange)="onRoomChanged()" placeholder="{{ 'selection_default' | translate }}" [group]="true" [showClear]="false">
+                            <ng-template let-group pTemplate="group">
+                                <div class="p-d-flex p-ai-center">
+                                    <i class="pi pi-th-large p-mr-2"></i>
+                                    <span>{{group.label}}</span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-4">
+                <div class="box"></div>
+            </div>
+            <div class="p-col-2">
+                <div class="p-d-flex">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-success p-mt-4 p-ml-auto" (click)="openNew()" pTooltip=" {{ 'add' | translate }}"></button>
+                </div>
+            </div>
+</div>
+
+    <div class="card p-m-0">
+        <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="orders" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">      
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                <ng-container *ngFor="let col of columns">  
+                    <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" >
+                      {{ col.header | translate }}
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+                    <th></th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-cuttingOrder let-columns="columns">
+            <tr>
+              <ng-container *ngFor="let col of columns">
+                  <td [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word' }">
+                        <div *ngIf="col.field === 'inventory' || col.field === 'expectedPerformance'; else textCell">
+                            {{(cuttingOrder[col.field])|number:'1.2-2'}} 
+                        </div>               
+                      <ng-template #textCell>
+                        {{cuttingOrder[col.field]}}
+                      </ng-template>
+                  </td>
+              </ng-container>
+                <td  *ngIf="this.userPermissions.allowed(this.permissionsIDs.UPDATE_CUTTING_ORDER_PERMISSION_ID)">                      
+                    <button  pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" (click)="editDetail(cuttingOrder)"></button>                   
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" style="text-align: center; font-weight: 600">{{ 'result_not_found' | translate }}</td>
+            </tr>
+        </ng-template>
+          <ng-template pTemplate="paginatorleft">
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                </ng-template>
+        </p-table>
+    </div>
+
+<app-cutting-orders-detail [(showPanel)]='showDialog' (hideDialogEvent)="onHideDialog($event)" [(cuttingOrder)]="cuttingOrder" [(processingRoom)]="selectedRoom"></app-cutting-orders-detail>

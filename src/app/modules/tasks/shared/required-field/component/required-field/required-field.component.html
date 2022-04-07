@@ -1,0 +1,109 @@
+<form [formGroup]="requiredFieldsForm">
+    <ng-container *ngFor="let field of requiredFields;">   
+    
+        <ng-container  [ngSwitch]="field.type">
+            <ng-container  *ngSwitchCase="type.input" >
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12 p-mt-2">
+                    <span class="p-float-label">
+                                <input 
+                                [formControlName]="field.name" 
+                                id="inputText"
+                                type="text" 
+                                maxlength="100" 
+                                pInputText
+                                [class]="isFormFieldValid(field.name) ? 'ng-invalid ng-dirty' : ''" 
+                                >
+                                <label>{{field.label}}</label>
+                            </span>
+                            <small for="inputText" *ngIf="isFormFieldValid(field.name)" class="p-error left-margined">{{field.label + ' es requerido'  }}</small>
+                    </div>
+                </div>
+            </ng-container >
+
+            <ng-container  *ngSwitchCase="type.dropDown">
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12 p-mt-2">
+                        <span class="p-float-label">               
+                            <p-dropdown [options]="data.value"
+                                id="dropdown"
+                                inputId="dropdown" 
+                                optionLabel="name"       
+                                optionValue="id" 
+                                [autoDisplayFirst]="false" 
+                                [value]="field.value"
+                                [formControlName]="field.name" 
+                                emptyFilterMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                                emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                                [class]="isFormFieldValid(field.name) ? 'ng-invalid ng-dirty' : ''" >
+                            </p-dropdown>
+                            <label for="dropdown">{{field.label}}</label>
+                        </span>    
+                        <small for="dropdown" *ngIf="isFormFieldValid(field.name)" class="p-error left-margined">{{field.label + ' es requerido'  }}</small>
+                    </div>
+                </div>
+            </ng-container >
+
+            <ng-container  *ngSwitchCase="type.calendar" >
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12 p-mt-2">
+                        <span class="p-float-label">
+                            <p-calendar 
+                            [formControlName]="field.name"  
+                            [maxDate]="maxDate"
+                            [class]="isFormFieldValid(field.name) ? 'ng-invalid ng-dirty' : ''" 
+                            readonlyInput="true" [showIcon]="true" type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy">
+                            </p-calendar>
+                            <label for="float-input">{{field.label}}</label>
+                        </span> 
+                        <small for="dropdown" *ngIf="isFormFieldValid(field.name)" class="p-error left-margined">{{field.label + ' es requerido'  }}</small>
+                    </div>
+                </div>             
+            </ng-container >
+
+            <ng-container  *ngSwitchCase="type.search" >
+                <div class="p-fluid p-grid p-formgrid">
+                    <div class="p-field p-col-12 p-md-12 p-sm-12 p-mt-2">
+                <span class="p-float-label">    
+                    <p-autoComplete 
+                        #autoComplete
+                        [formControlName]="field.name" 
+                        [suggestions]="data" 
+                        (completeMethod)="autoCompleteSearch($event, field.serviceCall)"                     
+                        [dropdown]="true" 
+                        [multiple]="false"                  
+                        [showEmptyMessage]="true"
+                        emptyMessage="{{ 'primeng.dropdownNoItemFilters' | translate}}"
+                        (onSelect)="onSelection($event)"
+                        field="name"
+                        id="search"
+                        [class]="isFormFieldValid(field.name) ? 'ng-invalid ng-dirty' : ''" 
+
+                        [minLength]="3"
+                        [dropdownMode]="'current'"
+                        [showTransitionOptions]="'0ms'" 
+                        [hideTransitionOptions]="'0ms'" 
+                                            >
+                    </p-autoComplete>
+                    <label for="search">{{field.label}}</label>
+                </span> 
+                <small for="search" *ngIf="isFormFieldValid(field.name)" class="p-error left-margined">{{field.label + ' es requerido'  }}</small>
+
+            </div>
+        </div>
+            </ng-container >
+
+            <!--default case when there are no matches -->
+            <ng-container  *ngSwitchDefault > 
+                <div class="p-grid p-fluid ">
+                    <div class="p-col-12 ">
+                        <div class="card ">
+                            Campo no encontrado
+                        </div>
+                    </div>
+                </div>
+            </ng-container >
+        </ng-container >
+    </ng-container>
+
+</form>

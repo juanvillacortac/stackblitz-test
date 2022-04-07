@@ -1,0 +1,72 @@
+<!-- Se comenta de manera temporal por pase a producción (Pendiente objetos de BD) -->
+<!-- <app-companies-employee-analytics class="custom"></app-companies-employee-analytics> -->
+<div class="card"> 
+  <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+    <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+      <!--<label *ngIf="!showFilters" id="filterTitle">Trabajadores</label>-->
+      <h4 *ngIf="!showFilters" id="filterTitle">Trabajadores</h4>
+    </div>
+    <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+    </span>
+
+    <div>
+      <button pButton pRipple icon="pi pi-filter" class="p-ml-2 p-button-help" [ngClass]="{'p-button-danger':showFilters}" (click)="showFilters=!showFilters" pTooltip="Filtros" tooltipPosition="top"></button>
+    </div>
+    <button pButton pRipple *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_EMPLOYEE_HCM_PERMISSION_ID)" icon="pi pi-plus" class="p-button-success p-ml-2" pTooltip="Crear nuevo" tooltipPosition="top" (click)="openNew()"></button>
+    <!-- <p-splitButton label="Exportar" class="p-button-info" icon="pi pi-file" [model]="items" styleClass="p-ml-2"></p-splitButton> -->
+  </div>
+  <companies-employee-filter *ngIf="showFilters" (onSearch)="searchLaborRelationshipMinimum($event)" (exportFormat)="ExportExcel($event)" (export)="ExporListExcel($event)" 
+    (import)="displayModal=true" [(filters)]="laborRelationshipMinimumFilters" [expanded]="showFilters" [loading]="loading" [branchOffices]="userOffices" class="p-mt-3"></companies-employee-filter>
+</div>
+<div class="card p-m-0">
+  <p-table #dt [columns]="displayedColumns" [rowHover]="true" [value]="_laborRelationshipService._laborRelationshipMinimumList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th [ngStyle]="{'display': col.display }" [pSortableColumn]="col.field" [style]="col.header == 'Foto'? 'width: 8%;':''" class="p-text-center">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" *ngIf="col.header != 'Foto'"></p-sortIcon>
+          </th>
+        </ng-container>
+        <th style="width: 6%;"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-laborRelationship let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td [ngStyle]="{'display': col.display,'overflow-wrap':'break-word'}" [style]="col.header == 'Foto'? 'width: 8%; padding: 1rem 0px':''" class="p-text-center">
+            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="laborRelationship[col.field]"></app-active-label>
+            <ng-template #textCell >
+              <img *ngIf="col.field === 'pictureSource' && laborRelationship[col.field] != ''" [src]="laborRelationship[col.field]" width="60" class="imgcatalog profileImg" style="border-radius: 50%; max-width: 60px; max-height: 60px; width: 60px; height: 60px;"/>
+              <img *ngIf="col.field === 'pictureSource' && laborRelationship[col.field] ==''" src="https://ui-avatars.com/api/?name={{laborRelationship['employeeName']}}&background=17a2b8&color=fff&rounded=true&bold=true&size=240"
+                   width="60" class="imgcatalog" />
+              <span *ngIf="col.field === 'employmentDate' || col.field === 'seniorityDate'">{{col.template(laborRelationship) == '1900-01-01' ? 'Sin asignar' : col.template(laborRelationship)|date: 'dd/MM/yyyy'}}</span>
+              <span *ngIf="col.field !== 'pictureSource' && col.field !== 'employmentDate' && col.field !== 'seniorityDate'" style="white-space: pre-wrap;">{{col.template(laborRelationship)}} </span>
+            </ng-template>
+          </td>
+        </ng-container>
+        <td style="width: 6%;">
+          <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary p-mr-2" pTooltip="Visualizar" (click)="onEdit(laborRelationship.idEmployee, laborRelationship.idLaborRelationship)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog header="Carga masiva" (onHide)="displayModal=false" [(visible)]="displayModal" [modal]="true" [style]="{width: '70vw'}" [draggable]="false" [resizable]="false">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <p-fileUpload styleClass="p-button-success p-ml-2 p-fileupload-choose" chooseIcon="pi pi-paperclip" name="myfile[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+        #fileUpload (onUpload)="prueba(1)" (onSend)="prueba(2)" (onBeforeUpload)="UploaderFile($event)" (onSelect)="hideFileupload($event)" chooseLabel="Seleccionar archivo"></p-fileUpload>
+      </div>  
+    </div>
+  </div>
+</p-dialog>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

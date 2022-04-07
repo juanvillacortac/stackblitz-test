@@ -1,0 +1,44 @@
+<!--<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow-y': 'scroll'}">-->
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" [blockScroll]="false" [showCloseIcon]="false" [dismissible]="false" position="right" styleClass="p-sidebar-md">
+  <!--<h5 class="p-m-0">Nivel</h5>-->
+  <div class="p-grid" style="height: 30px;">
+    <div class="p-col-11" style="margin-top: 5px;">
+      <h5>Nivel</h5>
+    </div>
+    <div class="p-col-1">
+      <button pButton pRipple type="button" icon="pi pi-times" label="X" class="p-button-rounded p-button-text p-mr-2 p-mb-2 p-ripple p-button p-component p-button-icon-only" (click)="hideDialog()"></button>
+    </div>
+  </div>
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="description">Descripción <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input type="text" (keyup.enter)="saveLevel()" maxlength="80" pInputText id="description" [(ngModel)]="levelin.description" [class]="submitted && (!levelin.description || !levelin.description.trim()) ? 'ng-dirty ng-invalid' : ''" />
+            <small *ngIf="submitted && (!levelin.description || !levelin.description.trim())" class="p-invalid">La descrípción es requerida</small>
+          </div>
+          <div class="p-field p-col-12 p-md-3 p-lg-3">
+            <label for="active">Nivel <span [ngStyle]="{'color':'red'}">*</span></label>
+            <p-inputNumber (keyup.enter)="saveLevel()" [(ngModel)]="levelin.level" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-info" [disabled]="levelNumber == 0 || levelin.id != -1"
+            incrementButtonClass="p-button-info" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="1" [maxlength]="5" [class]="submitted && levelin.level < 1 ? 'ng-dirty ng-invalid p-field p-col-12 p-text-center p-pr-0 p-pl-0' : 'p-field p-col-12 p-text-center p-pr-0 p-pl-0'" >
+            </p-inputNumber>
+            <small *ngIf="submitted && (!levelin.level || levelin.level < 1)" class="p-invalid">El nivel debe ser mayor a 0</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="input">Código nómina <span [ngStyle]="{'color':'red'}">*</span></label>
+            <input type="text" pInputText onlyUpperCase noneSpecialCharacters maxlength="10" (keyup.enter)="saveLevel()" id="payrollCode" [(ngModel)]="levelin.payrollCode" [class]="submitted && (!levelin.payrollCode || !levelin.payrollCode.trim()) ? 'ng-dirty ng-invalid' : ''" />
+            <small *ngIf="submitted && (!levelin.payrollCode || !levelin.payrollCode.trim())" class="p-invalid">El código de nómina es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-info p-mr-2" (click)="saveLevel()"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

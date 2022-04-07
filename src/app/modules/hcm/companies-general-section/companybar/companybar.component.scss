@@ -1,0 +1,29 @@
+:host ::ng-deep {
+        
+    #tagActiva > span {
+        background: #28a745;
+        border: 1px solid #28a745;
+        margin-top: 0.4rem;
+    }
+    
+    #tagInactiva > span {
+        background: #5E81AC; 
+        border: 1px solid #5E81AC;
+        margin-top: 0.4rem;
+    }
+
+}
+
+@media screen and (max-width:426px){
+    :host ::ng-deep {
+        
+        #companyImageContainer {
+            display: flex;
+        }
+    
+        #companyImageContainer > img {
+            margin: 0 auto !important;
+        }
+
+    }
+}

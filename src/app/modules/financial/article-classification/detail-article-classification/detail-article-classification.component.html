@@ -1,0 +1,131 @@
+<div class="menorMargen card" >
+
+   
+      <div class="p-fluid p-col-12 p-md-12 p-sm-12 p-lg-12">
+     
+        <div class="p-field p-grid">
+
+            <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-4" *ngIf="articleClassification.id>0">
+                <label for="active">Código: <span [ngStyle]="{'color':'red'}">*</span> </label>
+                <input  type="text"  [disabled]="true" [(ngModel)]="articleClassification.id" maxlength="9"
+                pInputText (keyup.enter)="send()" >
+               
+            </div>
+          <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-4">
+              <label for="active">Nombre: <span [ngStyle]="{'color':'red'}">*</span> </label>
+              <input  type="text"  [(ngModel)]="articleClassification.articleClassificationName" maxlength="55"
+              (input)="_validations.toCapitalizeSimbology($event)"
+              pInputText (keyup.enter)="send()" >
+              <small class="p-invalid" *ngIf="submitted && (!articleClassification.articleClassificationName|| !articleClassification.articleClassificationName.trim())">El nombre es requerido</small>
+          </div>
+          <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-4">
+            <label for="active">Descripción:</label>
+            <input  type="text" [(ngModel)]="articleClassification.descripcion" maxlength="255"
+            pInputText  (keyup.enter)="send()">
+            <!-- <small class="p-invalid" *ngIf="submitted && (!planName|| !planName.trim())">El nombre es requerido</small> -->
+          </div>
+
+          <div class="p-field p-col-12 p-md-4 p-lg-4 p-mt-4">
+            <label for="active">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+              <p-dropdown [options]="statuslist" [(ngModel)]="articleClassification.active"  placeholder="Estatus"
+              [disabled]="articleClassification.id <= -1"  (keyup.enter)="send()"></p-dropdown>
+          </div>
+         
+        
+        </div>
+
+        <div style="margin: 1rem 0; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+               
+            </div>
+            <div>
+                <button pButton type="button" icon="pi pi-plus" label="Agregar cuenta"  (click)="new()" class="p-button-success"></button>
+            </div>
+    
+        </div>
+      </div>
+
+    <div class="card">
+        <p-table [resizableColumns]="false"
+            styleClass="p-datatable-responsive-demo p-datatable p-component p-datatable-hoverable-rows" #dt
+            [columns]="displayedColumns" [rowHover]="true" [value]="articleClassification.associatedAccount" [paginator]="true" [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10,25,50]">
+    
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <th [ngStyle]="{'display': col.display, 'overflow-wrap': 'break-word','width': col.field === 'active' ? '110px' : '100%' }"
+                            pResizableColumn [pSortableColumn]="col.field">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container>
+                    <th style="width:60px"></th>
+                    <th style="width:60px"></th>
+                </tr>
+            </ng-template>
+    
+            <ng-template pTemplate="body" let-articleClassification let-columns="columns" let-rowData>
+                <tr>
+    
+                    <ng-container *ngFor="let col of columns">
+                       
+                        <td [ngStyle]="{'display': col.display,'overflow-wrap': 'break-word'}" class="ui-resizable-column">
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="articleClassification.active">
+                            </app-active-label>
+                            <span>{{col.template(articleClassification)}} </span>
+                        </td>
+                    </ng-container>
+                    <td>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                            (click)="edit(articleClassification)" pTooltip="Editar"></button>
+                    </td>
+                    <td>
+                        <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger p-mr-2"
+                            pTooltip="Quitar" (click)="delete(articleClassification)"></button>
+                    </td>
+                </tr>
+    
+    
+            </ng-template>
+            <ng-template pTemplate="footer" let-columns>
+                <ng-container *ngIf="articleClassification.associatedAccount.length ==0" >
+                 
+                  <tr>
+                    <td [ngStyle]="{'text-align': 'center'}" [attr.colspan]="columns.length+2">
+                
+                      <p-message severity="info" text="No existen registros." styleClass="p-col-12 p-mr-2"></p-message>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-template>
+       
+          
+        </p-table>
+    </div>
+
+  <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+  <router-outlet>
+
+      <div style="text-align:right">
+          <button pButton type="button" [disabled]="saving" style="margin-right: .50rem" class="p-button-secondary p-ml-4" icon=" pi pi-arrow-left"  label="Regresar"
+              *ngIf="showItems" (click)="back()"></button>
+          <button pButton pRipple label="Limpiar" [disabled]="saving" icon="pi pi-ban" style="margin-right: .50rem"
+              class="p-button-secondary" *ngIf="!showItems" (click)="cancel()"></button>
+    
+          <button pButton type="button" [disabled]="saving"  class="p-button-info p-mr-2" (click)="send()"  icon="pi pi-save" label="Guardar"
+              *ngIf="showPlan"></button>
+
+             
+      </div>
+
+  </router-outlet>
+
+</div>
+
+<app-article-classification-panel [(showDialog)]="showDialog" (onCreate)="onCreate($event)" (onUpdate)="onUpdate($event)" [viewMode]="viewMode" [_dataClasi]="articleClassification" [_data]="articleClassification">
+</app-article-classification-panel> 
+

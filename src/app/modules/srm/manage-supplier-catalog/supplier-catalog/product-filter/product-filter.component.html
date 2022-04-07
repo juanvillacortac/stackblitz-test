@@ -1,0 +1,94 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filtersprod.name" name="nam" id="nam" type="text" pInputText  maxlength="300" (keyup.enter)="searchprod()">
+                <label>Nombre del producto</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filtersprod.barcode" name="barra" id="barra" type="text" (keyup.enter)="searchprod()" (keypress)="_validations.keyPressForGtin($event);" (paste)="_validations.PasteOnlyNumbers($event)" pInputText maxlength="130">
+                <label>Barra</label>
+            </span>
+        </div>
+    </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filtersprod.internalRef" name="internalRef" id="internalRef" type="text" pInputText (keyup.enter)="searchprod()" maxlength="100">
+                <label>Referencia interna</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="searchprod()" disabled>
+            <p-button icon="pi pi-search" class="button-radius" [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }" (click)="op.toggle($event)"></p-button>
+        </div>
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{'width':'450px'}">
+           
+            <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex">
+                        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    
+                    <tr>
+                        <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'normal ', 'width': '100%' }">
+                            {{col.header}}
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'normal ', 'width': '100%' }">
+                            <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                            <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)"></p-treeTableCheckbox>
+                            <ng-template #textCell>
+                                {{rowData[col.field]}}
+                            </ng-template>
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </p-overlayPanel>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="heavylist" appendTo="body" [(ngModel)]="filtersprod.indHeavy" (keyup.enter)="searchprod()" placeholder="Ind. pesado" emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="typeslist" appendTo="body" [(ngModel)]="filtersprod.idTypePacking" (keyup.enter)="searchprod()" placeholder="Empaque" emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-multiSelect [options]="brandslist" [(ngModel)]="brandsselected" placeholder="Marca" (onChange)="ValidateChecksBrands()" display="chip" [selectionLimit]="5" (keyup.enter)="searchprod()" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+        <!-- <p-dropdown [options]="brandslist" appendTo="body" [(ngModel)]="filters.classificationId" placeholder="Marca">
+        </p-dropdown> -->
+    </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="classificationlist" appendTo="body" [(ngModel)]="filtersprod.classificationId" (keyup.enter)="searchprod()" placeholder="Clasificación" [filter]="true" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+    </div>
+    <div class="p-col-6 p-md-6 p-lg-6">
+        <small class="p-invalid">(*) Seleccione al menos un filtro</small>
+    </div>
+   
+    <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="searchprod()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+    </div>
+</div>

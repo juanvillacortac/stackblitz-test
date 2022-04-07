@@ -1,0 +1,140 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+   
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input  [(ngModel)]="filters.bar" name="Barra" id="bar" type="text" numbersOnly pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="search()">
+                <label>Barra</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input id="float-input" [(ngModel)]="filters.productname" type="text" maxlength="100" pInputText maxlength="50" [pKeyFilter]="valid" (keyup.enter)="search()">
+                <label for="float-input">Nombre del producto</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input id="float-input" [(ngModel)]="filters.reference" type="text" maxlength="100" pInputText [pKeyFilter]="valid"  (keyup.enter)="search()">
+                <label for="float-input">Referencia interna</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input id="float-input" [(ngModel)]="filters.factoryreference" type="text" maxlength="100" pInputText [pKeyFilter]="valid"  (keyup.enter)="search()">
+                <label for="float-input">Referencia de fábrica</label>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <span pTooltip="Fecha de inventario" tooltipPosition="right" class="p-float-label">
+            <p-calendar  [(ngModel)]="dateFilter" [maxDate]="maxDate" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+        </span>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="Categoría" [(ngModel)]="categoriesString" (keyup.enter)="search()" disabled>
+            <p-button icon="pi pi-search" (click)="op.toggle($event)"></p-button>
+        </div>
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+            <p-treeTable #dt [value]="_categoryservice._categoryList" [columns]="cols" selectionMode="checkbox" [style]="{'height': '300px', 'overflow-y': 'scroll'}" [(selection)]="selectedCategories">
+                <ng-template pTemplate="header" let-columns>
+                    
+                    <tr>
+                        <th *ngFor="let col of columns" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                            {{col.header}}
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns; let i = index" [ngStyle]="{'overflow-wrap': 'break-word', 'width': '100%' }">
+                            <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                            <p-treeTableCheckbox #something [value]="rowNode" (click)="ValidateCheckeds(something,rowData)"></p-treeTableCheckbox>
+                            <ng-template #textCell>
+                                {{rowData[col.field]}}
+                            </ng-template>
+                            <app-active-label *ngIf="col.field === 'active'; else textCell" [active]="rowData[col.field]"></app-active-label>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </p-overlayPanel>
+    </div>
+
+
+
+
+ <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input type="text" pInputText placeholder="Proveedor" [(ngModel)]="filters.supplierstring" (keyup.enter)="search()" disabled>
+            <p-button icon="pi pi-search" (click)="SupplierDialogVisible=true"></p-button>
+        </span>
+    </div>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input type="text" pInputText placeholder="Marca" [(ngModel)]="BrandsString" (keyup.enter)="search()" disabled>
+            <p-button icon="pi pi-search" (click)="BrandDialogVisible=true"></p-button>
+        </span>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input id="float-input" [(ngModel)]="filters.scalecode" type="text" maxlength="25" numbersOnly pInputText noneSpecialCharacters  (keyup.enter)="search()">
+            <label for="float-input">Código de balanza</label>
+        </span>
+    </div>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown  [options]="statuslist" [(ngModel)]="filters.idproductestatus" placeholder="Estatus del producto" (keyup.enter)="search()"></p-dropdown>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown  [options]="AreaList" [(ngModel)]="filters.inventoryarea" placeholder="Área" [filter]="true" (keyup.enter)="search()" emptyFilterMessage="Sin resultados." ></p-dropdown>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+    <p-dropdown  [options]="heavylist" [(ngModel)]="filters.indheavyproduct" placeholder="Indicador pesado" (keyup.enter)="search()"></p-dropdown>
+</div>
+
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2 ">
+    <p-dropdown  [options]="ExistenceList" [(ngModel)]="filters.existence" placeholder="Existencia" (keyup.enter)="search()"></p-dropdown>
+</div>
+
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <button pButton pRipple label="Exportar" (click)="exportExcel()" icon="pi pi-file-excel" class="p-button-success"></button>
+      
+    </div>
+</div>
+
+
+
+<app-brand-modal-list  (onToggle)="onToggleBrand($event)" [(BrandsString)]="BrandsString" [(filters)]="filters"  [visible]="BrandDialogVisible"></app-brand-modal-list>
+<app-supplier-modal-list  (onToggle)="onToggleSupplier($event)" (supplierinput)="supplierstring" [(filters)]="filters" [visible]="SupplierDialogVisible"></app-supplier-modal-list>

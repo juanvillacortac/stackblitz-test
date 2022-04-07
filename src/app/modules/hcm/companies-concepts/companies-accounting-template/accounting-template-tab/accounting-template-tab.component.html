@@ -1,0 +1,86 @@
+<p-card>
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row p-mb-3">
+        <div class="p-fluid p-col-12 p-md-4 p-lg-4">
+            <h4 class="p-card-title" id="filterTitle">Empresas</h4>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-9">
+                
+            </div>
+            <div class="p-col-3 p-d-flex p-jc-end">
+                <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Buscar..." />
+                </span>
+                <div>
+                    <button id="add" pButton pRipple icon="pi pi-save" class="p-button-info boton-crear" label="Guardar" (click)="savePayrollCompanies()"
+                    *ngIf="this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-table #table [value]="companiesList" sortField="idCompany" sortMode="single" dataKey="idCompany" rowGroupMode="subheader" groupRowsBy="idCompany" 
+    responsiveLayout="scroll" [scrollable]="true" scrollHeight="600px" [globalFilterFields]="['companyName']">
+        <ng-template pTemplate="body" let-companiesList let-expanded="expanded">
+            <tr>
+                <td colspan="7">
+                    <button type="button" pButton pRipple [pRowToggler]="companiesList" class="p-button-text p-button-rounded p-button-plain p-mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    <span class="p-text-bold p-ml-2">{{companiesList.companyName}}</span>
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- siguiente -->
+        <ng-template pTemplate="rowexpansion" let-companies>
+            <tr style="border: none;">
+                <td colspan="7" style="border: none;" class="p-pt-0 p-pb-0">
+                    <div class="p-pl-3 p-pr-3">
+                        <p-table [value]="companies.payrollTypes" dataKey="id" styleClass="p-datatable-responsive-demo" [rowHover]="true" 
+                        *ngIf="companies.payrollTypes && companies.payrollTypes.length > 0">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th></th>
+                                    <th pSortableColumn="abbreviation">Tipo <p-sortIcon field="abbreviation"></p-sortIcon></th>
+                                    <th pSortableColumn="payrollType">Descripción <p-sortIcon field="payrollType"></p-sortIcon></th>
+                                    <th pSortableColumn="coin">Moneda <p-sortIcon field="coin"></p-sortIcon></th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-payrollTypes>
+                                <tr>
+                                    <td></td>
+                                    <td>{{payrollTypes.abbreviation}}</td>
+                                    <td>{{payrollTypes.payrollType}}</td>
+                                    <td>{{payrollTypes.coin}}</td>
+                                    <td><p-checkbox [binary]="true" [(ngModel)]="payrollTypes.idContent" [disabled]="!this.userPermissions.allowed(this.permissionsIDs.MANAGE_CONCEPT_HCM_PERMISSION_ID)"></p-checkbox></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-messages severity="info" *ngIf="!(companies.payrollTypes && companies.payrollTypes.length > 0)">
+                            <ng-template pTemplate>
+                                <div class="p-ml-2">No existen tipos de nómina para esta empresa.</div>
+                            </ng-template>
+                        </p-messages>
+                    </div>
+                </td>
+            </tr>
+            <tr style="border: none;">
+                <td colspan="7" style="border: none;">
+                    <div class="p-p-3">
+                        <!-- <app-accounting-template-list [(accountList)]="companies.payrollTemplates" [(name)]="companies.companyName" [(id)]="" [(showList)]="showSidebar" (companyData)="loadCompanyData($event)" (accountRecord)="selectPanel($event)"></app-accounting-template-list> -->
+                        <app-accounting-template-table *ngIf="companies.accounts != null" [accountingList]="companies.payrollTemplates" [company]="companies" [visible]="showSideBar" (recordNew)="newDetail($event)" (recordEdit)="editDetail($event)" (recordEnd)="deleteDetail($event)"></app-accounting-template-table>
+                        <p-messages severity="info" *ngIf="companies.accounts == null">
+                            <ng-template pTemplate>
+                                <div class="p-ml-2">Debe configurar un plan de cuentas para añadir una aplicación contable.</div>
+                            </ng-template>
+                        </p-messages>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-accounting-template-panel *ngIf="showSideBar" [accountPlan]="accountingItem" [record]="accountingTemplate" [(showPanel)]="showSideBar" [(id)]="idCompany" [(name)]="company" (backUnChanged)="resetValues($event)" (recordSave)="saveAccountingDetail($event)"></app-accounting-template-panel>
+</p-card>
+
+

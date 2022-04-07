@@ -1,0 +1,31 @@
+<div class="p-grid p-align-center vertical-container p-p-3 p-fluid p-formgrid">
+    <div class="p-col-12 p-fluid p-mb-2">
+        <label>{{ 'srm.reception.document.supplier.document' | translate }} <span [ngStyle]="{'color':'red'}">*</span></label>
+        <div class="p-inputgroup">
+            <input type="text" pInputText placeholder="{{ 'srm.reception.document.supplier.document' | translate }}"
+                (keyup.enter)="onSave()" [(ngModel)]="supplier.document" disabled>
+                <button type="button" pButton pRipple icon="pi pi-search" (click)="showSupplierModal()" [disabled]="disabled"></button>      
+        </div>
+        <small class="p-invalid" *ngIf="!supplierIsvalid()">{{ 'srm.reception.document.validations.supplier_required' | translate }}</small>
+    </div>
+    <div class="p-col-12 p-fluid p-mb-2">
+        <label>{{ 'srm.reception.document.supplier.legal_name' | translate }} </label>
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="{{ 'srm.reception.document.supplier.legal_name' | translate }}"
+                    (keyup.enter)="onSave()" disabled [(ngModel)]="supplier.socialReason">
+            </div>
+    </div>
+    <div class="p-col-12 p-mb-2 p-fluid">
+      <label for="active">Teléfono de contacto</label>
+        <input type="text" pInputText disabled [(ngModel)]="supplier.phone">
+    </div>
+    <div class="p-col-12 p-fluid p-mb-2">
+        <label>{{ 'srm.reception.document.supplier.address' | translate }}</label>
+            <div class="p-inputgroup">
+                <textarea pInputTextarea rows="1" style="resize: none;" cols="30" pInputTextarea placeholder="{{ 'srm.reception.document.supplier.address' | translate }}"
+                maxlength="100"  disabled [(ngModel)]="supplier.direction"></textarea>
+            </div>
+    </div>
+</div>
+
+<app-supplier-common-modal (onToggle)="toggleSupplier($event)" (suppliermodalChange)="suppliermodalChange($event)" [visible]="supplierDialogVisible" [multiple]="false" ></app-supplier-common-modal>  

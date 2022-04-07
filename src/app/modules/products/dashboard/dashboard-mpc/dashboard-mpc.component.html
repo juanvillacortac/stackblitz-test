@@ -1,0 +1,46 @@
+
+
+
+<div class="card" style="align-content: center; padding-bottom: 0.2rem; background-color: ghostwhite; margin-bottom: 0.2rem;">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-5 p-lg-6" style="align-content: center; color: #5E81AC;">
+          <span>     
+              <h2 class="p-field title">PLM Dashboard </h2>        
+            
+          </span>
+        </div>
+       
+     <!--    <div class="p-col-12 p-md-7 p-lg-6" style="text-align: right;">
+            <p-selectButton StyleClass="pruebaestilo" [options]="optionsTime1"  [(ngModel)]="value2" optionLabel="title" optionValue="value">
+                  
+              </p-selectButton>
+         
+        </div> -->
+    </div>
+</div>   
+
+
+
+<div class="p-grid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+        
+      
+        <app-dashboard-layaout *ngIf="_dataCategoryUnitReceivedVsSalesMPC" [(dashboardData)]="dashboardDataProductos" [(titleout)]="titleout1"></app-dashboard-layaout>   
+     </div>
+   <!--  <div class="p-col-12 p-md-6 p-lg-4">
+        
+        <app-dashboard-layaout *ngIf="_dataCategoryUnitReceivedVsSalesMPC" [(dashboardData)]="dashboardDataOperacion" [(titleout)]="titleout2"></app-dashboard-layaout>
+    </div> -->
+    <div class="p-col-12 p-md-6 p-lg-4">
+       
+        <app-dashboard-layaout *ngIf="_dataInventoryActiveProducts" [(dashboardData)]="dashboardDataObjetivos" [(titleout)]="titleout3"></app-dashboard-layaout>
+    </div>
+</div>
+
+
+
+
+
+
+
+

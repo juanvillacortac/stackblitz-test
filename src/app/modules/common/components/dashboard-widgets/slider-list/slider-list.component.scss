@@ -1,0 +1,32 @@
+
+:host ::ng-deep .itemSlider.p-slider{
+    .p-slider-handle{
+    background: #968eff !important;
+    border: 2px solid #968eff !important;
+    border-radius: 15px;
+    height: 10px !important;
+    }
+}
+
+:host ::ng-deep .itemSlider.p-slider{
+    .p-slider-range{
+        background: #b186f1 !important;
+        height: 10px !important;
+    }
+}
+:host ::ng-deep .p-slider-handle{
+    border-radius: 10px;
+    display: none !important;
+}
+
+:host ::ng-deep .p-slider-horizontal{
+    height: 10px !important;  
+}
+
+.title{
+    
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
+    vertical-align: left;
+}

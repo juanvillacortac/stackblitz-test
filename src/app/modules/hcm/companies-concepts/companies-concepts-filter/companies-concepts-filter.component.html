@@ -1,0 +1,45 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-pl-0 p-pr-0">
+    <div class="p-col p-col-12">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.conceptCode" id="conceptCode" name="conceptCode" type="text" maxlength="25"
+                    numbersOnly pInputText (keyup.enter)="search()">
+                <label>Código</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col p-col-12">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.abbreviation" id="abbreviation" type="abbreviation" maxlength="25"
+                    pInputText (keyup.enter)="search()">
+                <label for="float-input">Abreviatura</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col p-col-12">
+        <div class="p-inputgroup">
+            <span class="p-float-label">
+                <input [(ngModel)]="filters.concept" id="description" name="description" type="text" maxlength="250"
+                    pInputText (keyup.enter)="search()">
+                <label for="float-input">Descripción</label>
+            </span>
+        </div>
+    </div>
+    <div class="p-col p-col-12">
+        <p-dropdown [(ngModel)]="filters.idConceptType" [options]="conceptsTypes" id="conceptsTypes"
+            placeholder="Tipo" (keyup.enter)="search()" [filter]="true" emptyFilterMessage="Sin resultados"
+            emptyMessage="Sin resultados"></p-dropdown>
+    </div>
+    <div class="p-col p-col-12">
+        <p-dropdown [(ngModel)]="filters.idGrouping" [options]="groupingConcepts" id="groupingConcepts"
+            placeholder="Agrupación" (keyup.enter)="search()" [filter]="true"
+            emptyFilterMessage="Sin resultados" emptyMessage="Sin resultados"></p-dropdown>
+    </div>
+    <div class="p-col-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+            class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar" [disabled]="loading" (click)="clearFilters()" icon="pi pi-ban"
+            class="p-button-secondary"></button>
+    </div>
+</div>

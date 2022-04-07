@@ -1,0 +1,24 @@
+:host ::ng-deep {    
+   .imgcatalog{
+    max-width: 100%;
+    max-height: 100%;
+   }
+}
+.container-img{
+  border-radius: 50%;
+  height: 75px;
+  display: flex;
+  width: 75px;
+  justify-content: center;
+  overflow: hidden;
+  align-items: center;
+}
+
+@media only screen and (max-width: 767px) {
+    :host ::ng-deep{
+        .hidden-mobile {
+            display: none;
+          }
+    }
+  
+  }

@@ -1,0 +1,90 @@
+<p-sidebar
+  [(visible)]="showDialog"
+  (onShow)="ngOnInit()"
+  (onHide)="hideDialog()"
+  [blockScroll]="false"
+  [showCloseIcon]="true"
+  [dismissible]="false"
+  position="right"
+  styleClass="p-sidebar-md"
+  [style]="{ overflow: 'scroll' }"
+>
+  <h5 class="p-m-0">Categoría</h5>
+  <hr />
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="showCategoryP">
+            <span>Categoría padre: {{ CategoryParent.name }}</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label>Nombre <span [ngStyle]="{ color: 'red' }">*</span></label>
+            <input
+              [(ngModel)]="_category.name"
+              [class]="
+                submitted && (!_category.name || !_category.name.trim())
+                  ? 'ng-dirty ng-invalid'
+                  : ''
+              "
+              name="name"
+              id="name"
+              (keypress)="_validations.keyPressForGtin($event)"
+              (input)="_validations.toUppercaseString($event)"
+              (paste)="_validations.noPaste($event)"
+              type="text"
+              maxlength="500"
+              pInputText
+              (keyup.enter)="saveCategory()"
+            />
+            <small
+              class="p-invalid"
+              *ngIf="submitted && (!_category.name || !_category.name.trim())"
+              >El nombre es requerido</small
+            >
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12" *ngIf="!_category.idParentCategory || _category.idCostCenter > 0">
+            <label
+              >Centro de costo
+              <span [ngStyle]="{ color: 'red' }">*</span></label
+            >
+            <p-dropdown
+              [options]="costCenters"
+              optionLabel="name"
+              optionValue="id"
+              appendTo="body"
+              [(ngModel)]="_category.idCostCenter"
+              placeholder="Centro de costo"
+            >
+            </p-dropdown>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <label for="active">Estatus</label>
+            <p-dropdown
+              [options]="status"
+              [disabled]="_category.id <= 0"
+              appendTo="body"
+              [(ngModel)]="_category.active"
+              placeholder="Estatus"
+            >
+            </p-dropdown>
+          </div>
+          <div class="p-field p-col-12 p-md-12 p-sm-12">
+            <span [ngStyle]="{ color: 'red' }">(*) Campos obligatorios</span>
+          </div>
+          <div class="p-field p-col-12 p-md-12">
+            <button
+              pButton
+              pRipple
+              label="Guardar"
+              (click)="saveCategory()"
+              [disabled]="loading"
+              icon="pi pi-save"
+              class="p-button-info p-mr-2"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

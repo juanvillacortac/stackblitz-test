@@ -1,0 +1,110 @@
+<p-sidebar [(visible)]="showDialog" (onShow)="ngOnInit()" (onHide)="hideDialog()" [blockScroll]="false" [showCloseIcon]="true"  [dismissible]="false" position="right" styleClass="p-sidebar-md" [style]="{'overflow': 'auto'}">
+    <h5 class="p-m-0">Conductores</h5>
+    <!-- <div class="p-sidebar-header">
+        <h5 class="p-m-0" style="justify-content: flex-start;">Conductores</h5>
+        <button type="button" pripple="" class="p-sidebar-close p-sidebar-icon p-link ng-tns-c132-38 p-ripple ng-star-inserted">
+            <span class="p-sidebar-close-icon pi pi-times ng-tns-c132-38"></span>
+        </button>
+    </div>     -->
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid">
+
+                <div *ngIf="showInput" class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Número de documento
+                        <!-- <span [ngStyle]="{'color':'red'}">*</span> -->
+                    </label>
+                    <input id="float-input"  [(ngModel)]="_driver.identifier + '-' +_driver.documentNumber" type="text" pInputText disabled>
+                    <!-- <small class="p-invalid" *ngIf="submitted && (!_driver.userDriver || !_driver.userDriver.trim())">El nombre es requerido</small> -->
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <div class="p-inputgroup">
+                      <span class="p-float-label">
+                        <input type="text" pInputText [(ngModel)]="_driver.userDriver" readonly="true" class="responsible">
+                        <p-button icon="pi pi-search" (click)="showmodal(multiples=false,model=false)" class="btresponsible"></p-button>                        
+                      </span>                      
+                    </div>
+                    <small class="p-invalid" *ngIf="submitted && (!_driver.userDriver || !_driver.userDriver.trim())">El nombre es requerido</small>
+                  </div>
+
+                
+
+                
+
+                  <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Tipo de conductor <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="typeDriverList" [(ngModel)]="_driver.idTypeDriver" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _driver.idTypeDriver <= 0">El tipo de conductor es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Certificado médico <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="medicalCertificateList" [(ngModel)]="_driver.indMedicalCertificate" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indMedicalCertificate == null">El certificado medico es requerido</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12" pTooltip="Fecha emisión"  tooltipPosition="left" life="500" >
+                    <label for="cci"> Fecha emisión de certificado médico<span *ngIf="submitted && _driver.indMedicalCertificate == true && _driver.ciDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'" [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar inputId="cci" id="cci" [(ngModel)]="_driver.ciDate" (onSelect)="onBlurMethodCCI($event)" [yearNavigator]="true" yearRange="1900:2050" dateFormat="dd/mm/yy" [showIcon]="true" [disabled]="_driver.indMedicalCertificate != true" ></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indMedicalCertificate == true && _driver.ciDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'">La Fecha de emisión es requerida</small>                      
+                    <small class="p-invalid" *ngIf="submitted && _driver.indMedicalCertificate == true && _driver.ciDate.toString() != 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)' &&  _driver.ciDate < validateDate" >La Fecha de emisión debe ser mayor a 01/01/1950</small>
+                </div> 
+                <div class="p-field p-col-12 p-md-12 p-sm-12" pTooltip="Fecha vencimiento" tooltipPosition="right"  life="500" >
+                    <label for="active"> Fecha vencimiento de certificado médico <span *ngIf="submitted && _driver.indMedicalCertificate == true && _driver.ceDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'" [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar   id="ccf" [minDate]="_driver.ciDate" [(ngModel)]="_driver.ceDate" [yearNavigator]="true" yearRange="1900:2050" dateFormat="dd/mm/yy" [showIcon]="true" [disabled]="_driver.indMedicalCertificate != true" ></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indMedicalCertificate == true && _driver.ceDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'">La Fecha de vecimiento es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Licencia de conducir <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown [options]="licenseDriverlist" [(ngModel)]="_driver.indDriverLicense" placeholder="Seleccione..." ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indDriverLicense == null">La licencia de conducir es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active"> Grado de licencia 
+                        <!-- <span [ngStyle]="{'color':'red'}">*</span> -->
+                    </label>
+                    <p-dropdown [options]="licenselevelList" [(ngModel)]="_driver.idLicenseLevel" placeholder="Seleccione..." [disabled]="_driver.indDriverLicense != true"  ></p-dropdown>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indDriverLicense == true && _driver.idLicenseLevel <=0">El grado de la licencia es requerida</small>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12" pTooltip="Fecha emisión"  tooltipPosition="left" life="500" >
+                    <label for="active"> Fecha emisión de licencia de conducir<span *ngIf="submitted && _driver.indDriverLicense == true && _driver.liDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'" [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar inputId="cli" id="cli" [(ngModel)]="_driver.liDate" (onSelect)="onBlurMethodCLI($event)" [yearNavigator]="true" yearRange="1900:2050" dateFormat="dd/mm/yy" [showIcon]="true" [disabled]="_driver.indDriverLicense != true" ></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indDriverLicense == true && _driver.liDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'">La Fecha de emisión es requerida</small>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indDriverLicense == true && _driver.liDate.toString() != 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)' &&  _driver.liDate < validateDate" >La Fecha de emisión debe ser mayor a 01/01/1950</small>
+                </div> 
+                <div class="p-field p-col-12 p-md-12 p-sm-12" pTooltip="Fecha vencimiento" tooltipPosition="right"  life="500" >
+                    <label for="active"> Fecha vencimiento de licencia de conducir<span *ngIf="submitted && _driver.indDriverLicense == true && _driver.leDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'" [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-calendar   id="clf" [minDate]="_driver.liDate" [(ngModel)]="_driver.leDate" [yearNavigator]="true" yearRange="1900:2050" dateFormat="dd/mm/yy" [showIcon]="true" [disabled]="_driver.indDriverLicense != true"></p-calendar>
+                    <small class="p-invalid" *ngIf="submitted && _driver.indDriverLicense == true && _driver.leDate.toString() == 'Mon Jan 01 1900 00:00:00 GMT-0427 (hora de Venezuela)'">La Fecha de vecimiento es requerida</small>
+                </div> 
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Estatus</label>                    
+                    <p-dropdown name="active"  [options]="statuslist" appendTo="body" [(ngModel)]="_driver.active" placeholder="Estatus" [disabled]="_driver.id<=0" (keyup.enter)="submit()" ></p-dropdown>
+                </div>
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="active">Observación: </label>
+                    <textarea [(ngModel)]="_driver.observations" [rows]="3" [cols]="60" maxlength="500" pInputTextarea></textarea>
+                </div>    
+                
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                        <button pButton pRipple label="Guardar" (click)="submit()" icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="loading"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</p-sidebar>
+<operator-modal-list [showDialog]="_showdialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [_status]="false" [multiples]="multiples"></operator-modal-list>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

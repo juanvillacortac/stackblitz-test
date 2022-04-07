@@ -1,0 +1,33 @@
+<p-dialog (onShow)="ngOnInit()" [(visible)]="showDialogWizard" [showHeader]="false" [modal]="true"  [closable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '80vw'}" 
+[draggable]="false" [resizable]="false">
+<div class="p-grid header" style="height: 40px;">
+    <div class="p-col-11" style="margin-top: 5px;">
+        <h5 class="headertext">Asociar productos por proveedores</h5>
+    </div>
+    <div class="p-col-1 ">
+        <button pButton pRipple type="button" icon="pi pi-times" label="X" class="btnclose p-button-rounded p-button-text p-mr-2 p-mb-2 p-ml-6 p-ripple p-button p-component p-button-icon-only" (click)="Cancel()"></button>
+    </div>
+</div>
+<div class="card">
+    <!-- <p-toast></p-toast> -->
+    <p-steps [model]="items" [(activeIndex)]="indmenu" [readonly]="true"></p-steps>
+</div>
+<router-outlet></router-outlet>
+<app-wizardsupplier [(suppliers)]="suppliers"  [(selectedSuppliersList)]="selectedSuppliersList" [(selectedProducts)]="selectedProducts" *ngIf="indmenu==menuwizard.suppliers"></app-wizardsupplier>
+<app-wizardproducts [(suppliers)]="suppliers" [(selectedSuppliersList)]="selectedSuppliersList" [(selectedProducts)]="selectedProducts"  [(selectedProdxSuppliersTemp)]="selectedProdxSuppliersTemp" [(filtersprod)]="filtersprod" *ngIf="indmenu==menuwizard.products"></app-wizardproducts>
+<app-wizardsupplierproducts [(suppliers)]="suppliers"*ngIf="indmenu==menuwizard.productsxsupppliers" [(selectedProducts)]="selectedProducts" [(selectedSuppliersList)]="selectedSuppliersList" [(selectedProdxSuppliersTemp)]="selectedProdxSuppliersTemp" [(ProdxSuppliersEditTemp)]="ProdxSuppliersEditTemp"></app-wizardsupplierproducts>
+
+         <div class="p-col-12 p-md-12 p-lg-12 p-sm-12">
+         <div class="p-grid p-nogutter p-justify-between">
+            <p-button label="Cancelar" (onClick)="Cancel()" pRipple icon="pi pi-ban" class="p-button-secondary p-mr-2"  styleClass="p-button-secondary p-mr-2"></p-button>     
+            <div class="groupbtn p-d-flex p-jc-end">  
+                <p-button label="Anterior" *ngIf="indmenu==menuwizard.products || indmenu==menuwizard.productsxsupppliers" (onClick)="back()" styleClass="p-button-secondary p-mr-2" icon="pi pi-angle-left" class="p-button-secondary p-mr-2" [style]="{'float': 'left'}"></p-button>  
+               <p-button label="Siguiente" *ngIf="indmenu==menuwizard.products || indmenu==menuwizard.suppliers" (onClick)="nextPage()" styleClass="p-button-secondary p-mr-2" icon="pi pi-angle-right"  class="p-button-secondary p-mr-2" iconPos="right"></p-button>
+               <p-button label="Finalizar" (onClick)="Save()" *ngIf="indmenu==menuwizard.productsxsupppliers" iconPos="right" icon="pi pi-save" styleClass="p-button-info p-mr-2" class="p-button-info p-mr-2"></p-button>
+            </div>  
+        </div>  
+        </div>  
+    <!-- </ng-template> -->
+</p-dialog>
+<p-confirmDialog id="cancel" [style]="{width: '30vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<!-- <app-wizardsupplier></app-wizardsupplier> -->

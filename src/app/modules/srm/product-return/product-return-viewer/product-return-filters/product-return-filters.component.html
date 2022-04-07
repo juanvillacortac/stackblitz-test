@@ -1,0 +1,181 @@
+<div class="p-grid p-mt-4 p-align-center vertical-container p-p-3" *ngIf="expanded">
+
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-multiSelect [options]="numbersOrdersList" [(ngModel)]="numOCselected" placeholder="Órdenes de compra"
+      (onChange)="ValidateChecksnumberOC()" display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true"
+      emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+     [max]="10"  [allowDuplicate]="false" separator="," [addOnTab]="true" [addOnBlur]="true" (keyup.enter)="search() 
+  </div> -->
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <span class="p-float-label">
+    <p-chips [allowDuplicate]="false" [max]="10" [addOnBlur]="true"  [addOnTab]="true"></p-chips>
+    <label> Número devolución</label>
+     </span>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Estatus devolución" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Estatus de la mercancia" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Tipo de devolución" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Proveedor" 
+          disabled>
+        <p-button icon="pi pi-search" class="button-radius" class="button-radius"
+        [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+     
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Acción operador" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Operador" 
+          disabled>
+        <p-button icon="pi pi-search" class="button-radius" class="button-radius"
+        [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+     
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Número de Nota de Crédito" 
+          disabled>
+    
+    </div>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Tipos de fechas" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+    <p-calendar  dateFormat="dd/mm/yy" 
+        readonlyInput="true" [showIcon]="true" [disabled]> 
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+    <p-calendar  dateFormat="dd/mm/yy"
+      readonlyInput="true" [showIcon]="true" [disabled]>
+    </p-calendar>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown 
+       placeholder="Area" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <p-checkbox name="fiscalizada" value="fiscalizada"  style="margin-left: 0.5rem;"></p-checkbox>
+    <label for="ny"> Fiscalizada</label>
+  </div>
+  <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton #focus pRipple label="Buscar" icon="pi pi-search"
+      class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar" icon="pi pi-ban"
+      class="p-button-secondary p-mr-2"></button>
+    <p-splitButton label="Exportar" icon="pi pi-file-o" class="p-button-info"></p-splitButton>
+  </div>
+
+
+ <!--  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeDistributionList"  [(ngModel)]="filters.idTypeDistribution"
+      (keyup.enter)="search()" placeholder="Estatus de la mercancia" emptyMessage="Sin resultados." [showClear]="filters.idTypeDistribution >0 ? true : false" >
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeDistributionList"  [(ngModel)]="filters.idTypeDistribution"
+      (keyup.enter)="search()" placeholder="Tipo de devolución" emptyMessage="Sin resultados." [showClear]="filters.idTypeDistribution >0 ? true : false" >
+    </p-dropdown>
+  </div> -->
+
+
+
+  <!-- <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="branchOfficeList" appendTo="body" [(ngModel)]="filters.idDestBranch" (keyup.enter)="search()"
+      placeholder="Sucursal destino" [filter]="true" [showClear]="filters.idDestBranch >0 ? true : false" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3">
+    <div class="p-inputgroup">
+     
+        <input type="text" pInputText placeholder="Proveedores" [(ngModel)]="this.supplierstring" (keyup.enter)="search()"
+          disabled>
+        <p-button icon="pi pi-search" (click)="SupplierDialogVisible=true" class="button-radius" class="button-radius"
+        [ngStyle]="{'border-radius:': '4px 0px 0px 4px' }"></p-button>
+     
+    </div>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeDistributionList"  [(ngModel)]="filters.idTypeDistribution"
+      (keyup.enter)="search()" placeholder="Tipo de distribución" emptyMessage="Sin resultados." [showClear]="filters.idTypeDistribution >0 ? true : false" >
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-multiSelect [options]="statusOCList" [(ngModel)]="statusselected" placeholder="Estatus"
+      (onChange)="ValidateChecksstatus()" display="chip" [selectionLimit]="5" (keyup.enter)="search()" [filter]="true"
+      emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados."></p-multiSelect>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="waytopayList" appendTo="body" [(ngModel)]="filters.idWayToPay" (keyup.enter)="search()"
+      placeholder="Forma de pago" [filter]="true" emptyFilterMessage="Sin resultados." [showClear]="filters.idWayToPay >0 ? true : false" emptyMessage="Sin resultados.">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typeDeliveryList" appendTo="body" [(ngModel)]="filters.indPartialdelivery"
+      (keyup.enter)="search()" placeholder="Tipos de entrega" emptyMessage="Sin resultados." [showClear]="filters.indPartialdelivery >0 ? true : false">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="coinsList" appendTo="body" [(ngModel)]="filters.idCoin" (keyup.enter)="search()"
+      placeholder="Moneda" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados." [filter]="true" [showClear]="filters.idCoin >0 ? true : false">
+    </p-dropdown>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <p-dropdown [options]="typedates" appendTo="body" [(ngModel)]="filters.idTypeDate" (keyup.enter)="search()"
+      placeholder="Tipos de fechas" [showClear]="filters.idTypeDate >0 ? true : false" >
+    </p-dropdown>
+  </div>
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha inicio" tooltipPosition="left" life="500">
+    <p-calendar id="ToD" [(ngModel)]="iDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      (onSelect)="onBlurMethod($event)"  readonlyInput="true" [showIcon]="true" [disabled]="filters.idTypeDate==-1">
+    </p-calendar>
+  </div>
+
+  <div class="p-col-12 p-md-4 p-lg-3 p-fluid" pTooltip="Fecha fin" tooltipPosition="right" life="500">
+    <p-calendar id="ToF" [minDate]="iDate" [(ngModel)]="fDate" dateFormat="dd/mm/yy" (keyup.enter)="search()"
+      readonlyInput="true" [showIcon]="true" [disabled]="filters.idTypeDate==-1">
+    </p-calendar>
+  </div>
+  <div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton #focus pRipple label="Buscar" [disabled]="loading" (click)="search()" icon="pi pi-search"
+      class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban"
+      class="p-button-secondary p-mr-2"></button>
+    <p-splitButton label="Exportar" icon="pi pi-file-o" [model]="items" class="p-button-info"></p-splitButton>
+  </div> -->
+</div>

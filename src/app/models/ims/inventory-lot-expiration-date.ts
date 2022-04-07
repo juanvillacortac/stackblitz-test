@@ -1,0 +1,26 @@
+export class InventoryLotExpirationDate {
+    id:number;
+    idBranchOffice:number;
+    idArea:number;
+    idSpace:number;
+    idProduct:number;
+    idPacking:number; 
+    lot:string;
+    branchOffice:string;
+    area:string;
+    space:string;
+    product:string;
+    packing:string;     
+    initialQuantity:number;
+    quantity:number;   
+    finalQuantity:number;
+    associatedDocument:string;
+    expirationDate:Date;
+    active:boolean;   
+    createdByUserId:number;
+    createdByUser:string;
+    createdDate:Date;
+    updatedByUserId:number;
+    updatedByUser:string;   
+    updatedDate:Date;     
+}

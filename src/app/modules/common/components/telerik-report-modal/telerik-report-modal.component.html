@@ -1,0 +1,27 @@
+<p-dialog
+  class="component-container"
+  [header]= this.name
+  (onShow)="onShow()"
+  [modal]="true"
+  [maximizable]="true"
+  [(visible)]="visible"
+  scrollDirection="both"
+  scrollHeight="400px"
+  [style]="{width:'70%'}"
+  [contentStyle]="{height: '450px'}">
+
+  <ng-container *ngIf="showReport">
+    <app-report-viewer #viewer
+                       [title]="title"
+                       [viewerContainerStyle]="viewerContainerStyle"
+                       [reportSource]="reportSource">
+    </app-report-viewer>
+  </ng-container>
+
+<ng-template pTemplate="footer">
+  <button pButton pRipple label="Aceptar" icon="pi pi-check" class="p-button-info p-mr-2"></button>
+</ng-template>
+</p-dialog>
+
+
+<!-- [reportSource]="{report: 'TransferenciaMercancia.trdp',parameters: { IdTransferenciaSucursal:2} }"   -->

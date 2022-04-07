@@ -1,0 +1,81 @@
+<div *ngIf="expanded" >
+    <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">    
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input  [(ngModel)]="filters.documentNumber" #documentNumber (keyup.enter)="onSearch()" type="text" pInputText [pKeyFilter]="valid" maxlength="50">
+                    <label> Número de documento</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.description" type="text" maxlength="100" pInputText maxlength="50" [pKeyFilter]="valid" (keyup.enter)="onSearch()">
+                    <label for="float-input">Descripción</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input  [(ngModel)]="filters.barcode" #barcode type="text" numbersOnly pInputText noneSpecialCharacters maxlength="20" (keyup.enter)="onSearch()">
+                    <label for="float-input">Barra</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3">
+            <div class="p-inputgroup">
+                <span class="p-float-label">
+                    <input id="float-input" [(ngModel)]="filters.productName" type="text" maxlength="100" pInputText maxlength="50" [pKeyFilter]="valid" (keyup.enter)="onSearch()">
+                    <label for="float-input">Producto</label>
+                </span>
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+            <p-dropdown [options]="statuslist" optionLabel="name" optionValue="id" [autoDisplayFirst]="false" [(ngModel)]="filters.statusId" (keyup.enter)="onSearch()" emptyFilterMessage="Sin resultados." placeholder="Estatus"></p-dropdown>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid p-mt-2">
+            <p-dropdown  [options]="areaList" optionLabel="name" optionValue="id"  [autoDisplayFirst]="false" [(ngModel)]="filters.areaId" [filter]="true" (keyup.enter)="onSearch()" emptyFilterMessage="Sin resultados."  placeholder="Área"></p-dropdown> 
+        </div>
+        
+        <!-- categories -->
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" id="categories" pInputText [(ngModel)]="categoriesString" (keyup.enter)="onSearch()" placeholder="Categorías" readonly="true">
+                <app-dropdown-tree [treeData]='categoryService._categoryList' [multiSelection]='selectedCategories' [isMultiSelect]="true"
+                [isDisabled]='false' 
+                (getResult)="ValidateCheckeds($event)"></app-dropdown-tree>
+            </div>
+        </div>
+        <!--End categories-->
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="Operador" [(ngModel)]="operatorSelected" readonly="true">
+                <button icon="pi pi-search" pButton pRipple (click)="showOperatorModal('operator')"></button>          
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <div class="p-inputgroup">
+                <input type="text" pInputText placeholder="Responsable" [(ngModel)]="responsibleSelected" readonly="true">
+                <button icon="pi pi-search" pButton pRipple (click)="showOperatorModal('responsible')"></button>          
+            </div>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <span pTooltip="Fecha inicio" tooltipPosition="right" class="p-float-label">
+                <p-calendar  inputId="calendar" [(ngModel)]="startDateFilter" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="endDateFilter"  readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+        <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+            <span pTooltip="Fecha fin" tooltipPosition="right" class="p-float-label">
+                <p-calendar inputId="endCalendar" [(ngModel)]="endDateFilter" [monthNavigator]="false" [yearNavigator]="false" yearRange="1950:2050" [maxDate]="maxDate" [minDate]="startDateFilter" readonlyInput="true"  [showIcon]="true"  type="text" datePattern="dd/mm/yy" dateFormat="dd/mm/yy"></p-calendar>
+            </span>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-8 p-lg-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Buscar" [disabled]="loading" (click)="onSearch()" icon="pi pi-search" class="p-button-info p-mr-2"></button>
+        <button pButton pRipple label="Limpiar"  (click)="clearFilters()" icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+        <app-excel-export-button  [disabled]="dataUnavailable" (click)="onExportExcel()"></app-excel-export-button>      
+    </div>
+</div>
+<operator-modal-list [showDialog]="showOperatorDialog" (onSubmit)="onSubmitOperator($event)" (onToggle)="onHideOperator($event)" [multiples]="false"></operator-modal-list>

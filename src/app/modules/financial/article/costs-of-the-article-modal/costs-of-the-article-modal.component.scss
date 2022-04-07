@@ -1,0 +1,23 @@
+:host ::ng-deep { 
+  
+ 
+
+    .p-dialog-content {
+        overflow-y: visible;
+    }
+
+ 
+    .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+        padding: 0rem 0.5rem;
+    }
+
+    .p-dialog {
+        min-width: 300px;
+    }
+
+    .card {
+        padding: 0px;
+    }
+
+}
+

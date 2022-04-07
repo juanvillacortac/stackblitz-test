@@ -1,0 +1,105 @@
+
+<h2 class="p-m-0">{{formTitle}}</h2>
+<hr/>
+<div class="p-grid">
+    <div class="p-col-12"> 
+        <div class="card">       
+            <div class="p-fluid p-grid p-formgrid"  [formGroup]="motivesTypeForm">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Nombre <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText #name maxlength="30" sentenceType 
+                    (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" formControlName="name" required 
+                    [ngClass]="{'p-invalid':(motivesTypeForm.controls.name.invalid && (motivesTypeForm.controls.name.dirty || motivesTypeForm.controls.name.touched || submitted))}"/>                     
+                    <div *ngIf="motivesTypeForm.controls.name.invalid && (motivesTypeForm.controls.name.dirty || motivesTypeForm.controls.name.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="motivesTypeForm.controls.name.errors?.required">
+                            El nombre es requerido.
+                        </div>
+                    </div> 
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">                
+                    <label for="input">Abreviatura <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <input pInputText #name maxlength="3" 
+                    onlyUpperCase
+                    (keypress)="_validations.keyPressOnlyLetters($event);" (paste)="_validations.noPaste($event)" formControlName="abbreviation" required 
+                    [ngClass]="{'p-invalid':(motivesTypeForm.controls.abbreviation.invalid && (motivesTypeForm.controls.abbreviation.dirty || motivesTypeForm.controls.abbreviation.touched || submitted))}"/>                     
+                    <div *ngIf="motivesTypeForm.controls.abbreviation.invalid && (motivesTypeForm.controls.abbreviation.dirty || motivesTypeForm.controls.abbreviation.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="motivesTypeForm.controls.abbreviation.errors?.required">
+                            La abreviatura es requerida.
+                        </div>
+                    </div> 
+                </div>
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Estatus <span [ngStyle]="{'color':'red'}">*</span></label>
+                        <p-dropdown [options]="status" appendTo="body" [autoDisplayFirst]="false" [disabled]="!isEdit" formControlName="statusValue"
+                        [class]="{'ng-dirty':(motivesTypeForm.controls.statusValue.invalid && (motivesTypeForm.controls.statusValue.dirty || motivesTypeForm.controls.statusValue.touched || submitted))}"  required >                                  
+                        </p-dropdown>
+                        <div *ngIf="motivesTypeForm.controls.statusValue.invalid && (motivesTypeForm.controls.statusValue.dirty || motivesTypeForm.controls.statusValue.touched || submitted)"
+                        class="p-invalid">
+                            <div *ngIf="motivesTypeForm.controls.statusValue.errors?.required">
+                                El estatus es requerido.
+                            </div>
+                        </div>  
+                </div>      
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Sistema <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown inputId="system" [autoDisplayFirst]="false" [options]="systems.value" formControlName="idSystem" optionLabel="name"   
+                        (onChange)="onSystemSelected($event.value)"
+                        [disabled]="isEdit" [showClear]="true" 
+                        [class]="{'ng-dirty':(motivesTypeForm.controls.idSystem.invalid && (motivesTypeForm.controls.idSystem.dirty || motivesTypeForm.controls.idSystem.touched || submitted))}"  required >                                  
+                    </p-dropdown>
+                    <div *ngIf="motivesTypeForm.controls.idSystem.invalid && (motivesTypeForm.controls.idSystem.dirty || motivesTypeForm.controls.idSystem.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="motivesTypeForm.controls.idSystem.errors?.required">
+                            El sistema es requerido.
+                        </div>
+                    </div>  
+                </div>   
+
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="dropdown">Aplicación <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <p-dropdown inputId="app" [autoDisplayFirst]="false" [options]="apps.value" formControlName="idApp" optionLabel="name" 
+                        (onChange)="onAppSelected($event.value)"
+                        [disabled]="isEdit || !systemSelected" [showClear]="true" 
+                        [class]="{'ng-dirty':(motivesTypeForm.controls.idApp.invalid && (motivesTypeForm.controls.idApp.dirty || motivesTypeForm.controls.idApp.touched || submitted))}"  required >                                  
+                    </p-dropdown>
+                    <div *ngIf="motivesTypeForm.controls.idApp.invalid && (motivesTypeForm.controls.idApp.dirty || motivesTypeForm.controls.idApp.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="motivesTypeForm.controls.idApp.errors?.required">
+                            La aplicación es requerida.
+                        </div>
+                    </div>  
+                </div> 
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <label for="module">Módulos <span [ngStyle]="{'color':'red'}">*</span></label>
+                    <div class="p-inputgroup">                      
+                        <input inputId="module" [value]="modulesTreeSelected ? modulesTreeSelected.label : null" type="text" [readOnly]="true" pInputText required
+                        [ngClass]="{'p-invalid':(motivesTypeForm.controls.idModule.invalid && (motivesTypeForm.controls.idModule.dirty || motivesTypeForm.controls.idModule.touched || submitted))}"/>                                             
+                        <app-dropdown-tree [treeData]='modulesTree' [(selection)]='modulesTreeSelected' 
+                        [formControlName]="'idModule'" [isDisabled]='isDisabled'>
+                        </app-dropdown-tree>
+                    </div>  
+                    <div *ngIf="motivesTypeForm.controls.idModule.invalid && (motivesTypeForm.controls.idModule.dirty || motivesTypeForm.controls.idModule.touched || submitted)"
+                    class="p-invalid">
+                        <div *ngIf="motivesTypeForm.controls.idModule.errors?.required">
+                            El módulo es requerido.
+                        </div>
+                    </div>  
+                </div>   
+
+            </div>
+
+            <div class="p-fluid p-grid p-formgrid">
+                <div class="p-field p-col-12 p-md-12 p-sm-12">
+                    <span [ngStyle]="{'color':'red'}">(*) Campos obligatorios</span>
+                </div> 
+                <div class="p-field p-col-12 p-md-12">
+                    <button pButton pRipple icon="pi pi-save" class="p-button-info p-mr-2" [disabled]="motivesTypeAdded" (click)="onSave()"label="Guardar"></button>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <p-toast position="top-right" key="motives-type"></p-toast>
+</div>

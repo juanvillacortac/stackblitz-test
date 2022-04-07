@@ -1,0 +1,154 @@
+<p-dialog (onShow)="onShow()" (onHide)="onHide()" header="Productos en catalogo en quiebre de inventario" [(visible)]="visible" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" 
+ [style]="{width:'75%'}" [modal]="true" class="address-dialog"  [draggable]="false" [resizable]="false">
+    <div class="p-d-flex p-ai-center p-jc-between p-flex-column p-flex-md-row">
+        <span class="p-input-icon-left p-ml-md-auto p-mr-md-3 p-mb-3 p-mb-md-0 p-mb-lg-0">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar..." />
+          </span>
+    </div>
+  
+  <div class="p-grid p-mt-4 p-align-center vertical-container p-p-3">
+   
+     
+      <div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+        <p-dropdown [options]="packingTypeslist" appendTo="body" [(ngModel)]="filters.idTypePacking"
+          placeholder="Tipo de empaque" emptyFilterMessage="Sin resultados." emptyMessage="Sin resultados.">
+        </p-dropdown>
+      </div>
+    <div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+        <!-- <label for="basic">Inicio</label> -->
+        <p-calendar id="ToD" [(ngModel)]="date1" placeholder="Inicio" dateFormat="dd/mm/yy"
+    [showIcon]="true">
+</p-calendar>
+      
+    </div>
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid"> 
+   <!--  <label for="basic">Fin</label> -->
+    <p-calendar id="ToD" [(ngModel)]="date2" dateFormat="dd/mm/yy" placeholder="Fin" 
+      [showIcon]="true">
+  </p-calendar>
+    <!-- <p-calendar inputId="basic" [(ngModel)]="date2"></p-calendar> -->
+</div>
+<div class="p-col-12 p-md-4 p-lg-3 p-fluid">
+    <div class="p-inputgroup">
+        <span class="p-float-label">
+            <input [(ngModel)]="inventoryday" type="number" pInputText maxlength="100">
+            <label>Días de inventario</label>
+        </span>
+    </div>
+</div>
+
+
+<div class="p-col-12 p-md-3 p-lg-12 p-d-flex p-jc-end">
+    <button pButton pRipple label="Buscar" [disabled]="loading"  icon="pi pi-search" class="p-button-info p-mr-2"></button>
+    <button pButton pRipple label="Limpiar"   icon="pi pi-ban" class="p-button-secondary p-mr-2"></button>
+</div>
+</div>
+
+
+    <div class="card p-m-0">
+        <p-table #dt [value]="listProduct" [(selection)]="selectedProducts" styleClass="p-datatable-sm"  [rowHover]="true" [rowsPerPageOptions]="[10,25,50]" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"   currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} registros" [scrollable]="true" scrollHeight="750px">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex">
+                    <!-- <p-tag styleClass="p-mr-2" [rounded]="true"  severity="success" value="disponible"></p-tag>
+                    <p-tag styleClass="p-mr-2" severity="warning" value="bajo stock" [rounded]="true"></p-tag>
+                    <p-tag styleClass="p-mr-2" severity="danger" [rounded]="true" value="sin stock"></p-tag> -->
+        
+                   
+                  </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup class="hidden-mobile">
+                    <col style="width:50px">
+                    <col style="width:60px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:120px">
+                    <col style="width:120px">
+                    <col style="width:120px">
+                    <col style="width:120px">
+                    <col style="width:120px">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th></th>
+                    <th>Producto</th>
+                    <th>Empaque</th>
+                    <th>Barra empaque</th>
+                    <th>Categoria</th>
+                    <th>Referencia interna</th>
+                    <th>Referencia proveedor</th>
+                    <th>Disponible</th>
+                    <th>Punto mínimo</th>
+                    <th>Punto medio</th>
+                    <th>Punto máximo</th>
+                    <th>Costo conversión</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-PoitnBreakSupplierCatalog>
+                <tr [ngStyle]="{'text-align': 'center'}" >
+                    <td>
+                      
+                        <p-tableCheckbox  [value]="PoitnBreakSupplierCatalog"></p-tableCheckbox>
+                      </td>
+                      <td>  
+                        <div class="container-img">
+                        <img [src]="PoitnBreakSupplierCatalog.image == null || PoitnBreakSupplierCatalog.image == ''  ?  defectImage.defectImage
+                        : PoitnBreakSupplierCatalog.image"  [alt]="PoitnBreakSupplierCatalog.name" width="32" style="vertical-align: middle"/>                  
+                        </div>
+                    </td>
+                    
+                    <td>  
+                        {{PoitnBreakSupplierCatalog.name}}
+                        <!-- <span class="image-text">{{PoitnBreakSupplierCatalog.name}}</span> -->
+                    </td>
+                    <td>{{PoitnBreakSupplierCatalog.presentationPacking}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.barra}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.category}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.internalRef}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.supplierRef}}</td>
+                   
+                       
+                    <td>
+                        <div [ngClass]="{'outofstock': (PoitnBreakSupplierCatalog.inventory===0) , 'lowstock': (PoitnBreakSupplierCatalog.inventory > 0 && PoitnBreakSupplierCatalog.pointMin >PoitnBreakSupplierCatalog.inventory),'instock': PoitnBreakSupplierCatalog.inventory >PoitnBreakSupplierCatalog.pointMin && PoitnBreakSupplierCatalog.inventory>0 }">
+                            
+                            {{PoitnBreakSupplierCatalog.inventory}}
+                        </div>
+                    </td>
+                    <td>{{PoitnBreakSupplierCatalog.pointMin}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.pointMedium}}</td>
+                    <td>{{PoitnBreakSupplierCatalog.pointMax}}</td>
+                    <!-- <td>
+                        <ng-container *ngIf="PoitnBreakSupplierCatalog.inventory===0 || PoitnBreakSupplierCatalog.inventory< PoitnBreakSupplierCatalog.pointMin">
+                         
+                          
+                            <button  type="button" pButton icon="pi pi-plus" class="p-button-success p-mr-2"
+                            pTooltip="Agregar" tooltipPosition="top" (click)="CreateOrder(0)"></button>
+                 
+                        </ng-container>
+                    </td> -->
+                    <td>{{PoitnBreakSupplierCatalog.conversionCost | currency:'USD'}}</td>
+                   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    Total de productos {{listProduct ? listProduct.length : 0 }}.
+                </div>
+            </ng-template>
+        </p-table>
+    <div class="p-field p-col-12 p-md-12 p-d-flex p-jc-end">
+        <button pButton pRipple label="Agregar" (click)="add()"  icon="pi pi-save"
+          class="p-button-info p-mr-2"></button>
+      </div>
+</div>
+</p-dialog>
+

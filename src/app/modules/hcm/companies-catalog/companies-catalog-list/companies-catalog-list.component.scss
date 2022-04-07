@@ -1,0 +1,36 @@
+:host ::ng-deep {
+
+    #filterTitle {
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    p-table {
+        word-break: break-word;
+    }
+
+    @media screen and (width: 992px) {
+        .p-datatable .p-datatable-tbody > tr > td {
+            padding: 1rem 0.8rem;
+        }
+    }
+
+    @media screen and (width: 768px) {
+        .p-datatable .p-datatable-tbody > tr > td {
+            padding: 1rem 0.3rem;
+        }
+    }
+
+    @media screen and (width: 641px) {
+        #tableDiv {
+            padding: 0.5rem;
+            font-size: 13px;
+        }
+
+        .p-datatable .p-datatable-tbody > tr > td,
+        .p-datatable .p-datatable-thead > tr > th {
+            padding: 1rem 0.3rem;
+            font-size: 13px;
+        }
+    }
+}
